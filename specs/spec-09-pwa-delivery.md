@@ -63,11 +63,30 @@ This is a placeholder in the sense that no visual identity exists yet, not in th
 
 ---
 
-## 5. Deployment
+## 5. Deployment — Vercel
 
-Any static host serves `.output/public` after `npm run generate`. Requirements: HTTPS, `.wasm` as `application/wasm`, SPA fallback to `index.html`.
+Any static host works, but the target is Vercel, configured in [vercel.json](../vercel.json). Requirements are the same everywhere: HTTPS, `.wasm` served as `application/wasm`, SPA fallback to `index.html`.
 
-Installation on iOS: open the URL **in Safari** (Chrome iOS cannot do this), Share → "Sur l'écran d'accueil".
+**The preset trap.** Nitro auto-detects the provider from the `VERCEL` environment variable and switches to the `vercel-static` preset, which writes to `.vercel/output` instead of `.output/public`. The build command therefore forces it:
+
+```
+NITRO_PRESET=static npm run generate
+```
+
+with `framework: null` and `outputDirectory: ".output/public"`. Without the override the deploy silently produces the wrong layout.
+
+**Headers** set in `vercel.json`:
+- `sw.js` and `manifest.webmanifest` — `max-age=0, must-revalidate`, so a new deploy is picked up rather than served from an old cache.
+- `*.wasm` — `application/wasm`, pinned rather than trusted to extension sniffing.
+- `_nuxt/*` and `_fonts/*` — immutable for a year; the filenames are content-hashed.
+
+The catch-all rewrite is safe because Vercel checks the filesystem before applying rewrites, so `/sw.js` and the assets are never swallowed.
+
+**Deploying**: connect the repository in the Vercel dashboard — `vercel.json` is read automatically, no dashboard settings needed — or run `npx vercel` locally, which requires an interactive login.
+
+Installation on iOS: open the deployed URL **in Safari** (Chrome iOS cannot do this), Share → "Sur l'écran d'accueil".
+
+**The app becomes publicly reachable.** That is harmless today: the datastore is per-device, so a stranger opening the URL gets an empty app. It stops being harmless the moment SPEC-06 lands — a Supabase key shipped in a static client bundle is readable by anyone who opens the URL. Backup credentials must not be embedded in the web build.
 
 ---
 

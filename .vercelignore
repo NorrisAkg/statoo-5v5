@@ -1,0 +1,7 @@
+# The deploy only needs the web build inputs.
+android
+capacitor.config.ts
+docs
+specs
+.agents
+dist
