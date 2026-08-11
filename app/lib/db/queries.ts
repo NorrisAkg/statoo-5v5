@@ -1,5 +1,13 @@
 import { SQLiteDBConnection } from '@capacitor-community/sqlite'
-import type { Player, PlayerStats, Session, Participation, TeamAssignment } from '~/types'
+import type {
+  Player,
+  PlayerStats,
+  Session,
+  Participation,
+  TeamAssignment,
+  GroupTotals,
+  EligibilityThreshold,
+} from '~/types'
 
 export async function fetchAllPlayers(db: SQLiteDBConnection): Promise<Player[]> {
   const res = await db.query('SELECT * FROM players ORDER BY is_active DESC, name ASC;')
@@ -331,4 +339,63 @@ export async function deleteSession(
   sessionId: string
 ): Promise<void> {
   await db.run(`DELETE FROM sessions WHERE id = ?;`, [sessionId])
+}
+
+// -----------------------------------------------------------------------------
+// Standings & group statistics (SPEC-05)
+// Every number below is read from a view. Nothing is computed here.
+// -----------------------------------------------------------------------------
+
+/** Standings ordered by total points. Ranked closed sessions only. */
+export async function fetchStandingsByPoints(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query('SELECT * FROM v_standings;')
+  return (res.values || []) as PlayerStats[]
+}
+
+/** Standings ordered by points per match — eligible players only. */
+export async function fetchStandingsPerMatch(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query('SELECT * FROM v_standings_per_match;')
+  return (res.values || []) as PlayerStats[]
+}
+
+/**
+ * Players who have played but sit below the threshold — the "SOUS LE SEUIL"
+ * block. Ordered by how close they are to qualifying.
+ */
+export async function fetchIneligiblePlayers(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query(
+    `SELECT * FROM v_player_stats
+     WHERE played > 0 AND is_eligible = 0
+     ORDER BY missing_sessions ASC, name ASC;`
+  )
+  return (res.values || []) as PlayerStats[]
+}
+
+/** How many ranked sessions qualify a player, per the configured setting. */
+export async function fetchEligibilityThreshold(
+  db: SQLiteDBConnection
+): Promise<EligibilityThreshold> {
+  const res = await db.query('SELECT * FROM v_eligibility_threshold;')
+  const row = res.values?.[0] as EligibilityThreshold | undefined
+  return row ?? { required_raw: 0, required_sessions: 0 }
+}
+
+export async function fetchTopScorers(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query('SELECT * FROM v_top_scorers;')
+  return (res.values || []) as PlayerStats[]
+}
+
+export async function fetchTopAssists(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query('SELECT * FROM v_top_assists;')
+  return (res.values || []) as PlayerStats[]
+}
+
+export async function fetchTopCards(db: SQLiteDBConnection): Promise<PlayerStats[]> {
+  const res = await db.query('SELECT * FROM v_top_cards;')
+  return (res.values || []) as PlayerStats[]
+}
+
+export async function fetchGroupTotals(db: SQLiteDBConnection): Promise<GroupTotals | null> {
+  const res = await db.query('SELECT * FROM v_group_totals;')
+  return (res.values?.[0] as GroupTotals) ?? null
 }

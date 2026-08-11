@@ -3,64 +3,84 @@ import type { PlayerStats } from '~/types'
 
 defineProps<{
   players: PlayerStats[]
-  activeTab?: 'points' | 'perMatch'
+  activeTab: 'points' | 'perMatch'
+  /** Players below the eligibility threshold — the "SOUS LE SEUIL" block. */
+  ineligiblePlayers?: PlayerStats[]
 }>()
+
+/** French decimals: 2,00 — never 2.00. */
+function ptsPerMatch(value: number | null | undefined): string {
+  return (value ?? 0).toFixed(2).replace('.', ',')
+}
+
+function missingLabel(n: number): string {
+  return `il manque ${n} ${n > 1 ? 'séances' : 'séance'}`
+}
 </script>
 
 <template>
-  <div class="w-full overflow-x-hidden">
-    <table class="w-full text-left border-collapse">
-      <thead>
-        <tr class="border-b border-pitch-700 text-[11px] font-sans font-semibold uppercase text-pitch-300 tracking-wider">
-          <th class="py-2 px-1 w-6 text-center">#</th>
-          <th class="py-2 px-2">Joueur</th>
-          <th class="py-2 px-1 text-right">J</th>
-          <th class="py-2 px-1 text-right">V</th>
-          <th class="py-2 px-1 text-right">N</th>
-          <th class="py-2 px-1 text-right">D</th>
-          <th class="py-2 px-1 text-right" :class="{ 'text-pitch-50': activeTab === 'points' }">PTS</th>
-          <th class="py-2 px-1 text-right" :class="{ 'text-pitch-50': activeTab === 'perMatch' }">PTS/M</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-pitch-800 text-sm">
-        <tr
-          v-for="(player, idx) in players"
-          :key="player.player_id"
-          class="hover:bg-pitch-900/50 transition-colors"
-        >
-          <!-- Rank -->
-          <td class="py-3 px-1 text-center font-display font-bold text-xs" :class="idx === 0 ? 'text-bib-400' : 'text-pitch-300'">
-            {{ idx + 1 }}
-          </td>
+  <div>
+    <!-- Column headers -->
+    <div class="standings-row h-9 text-[11px] font-semibold uppercase tracking-[0.08em] text-text-muted">
+      <span />
+      <span>Joueur</span>
+      <span class="text-right">J</span>
+      <span class="text-right">V</span>
+      <span class="text-right">N</span>
+      <span class="text-right">D</span>
+      <span class="text-right">Pts</span>
+      <span class="text-right">Pts/m</span>
+    </div>
 
-          <!-- Player Identity -->
-          <td class="py-3 px-2 font-medium text-pitch-50 truncate max-w-[120px]">
-            <NuxtLink :to="`/players/${player.player_id}`" class="hover:underline">
-              {{ player.name }}
-            </NuxtLink>
-          </td>
+    <div class="border-t border-hairline">
+      <NuxtLink
+        v-for="(player, idx) in players"
+        :key="player.player_id"
+        :to="`/players/${player.player_id}`"
+        class="standings-row h-12 border-b border-hairline font-display font-medium text-[15px] tnum text-text-muted"
+      >
+        <!-- Rank 1 is marked by color alone -->
+        <span :class="idx === 0 ? 'text-accent-text' : ''">{{ idx + 1 }}</span>
+        <span class="font-sans font-normal text-text truncate">{{ player.name }}</span>
+        <span class="text-right">{{ player.played }}</span>
+        <span class="text-right">{{ player.wins }}</span>
+        <span class="text-right">{{ player.draws }}</span>
+        <span class="text-right">{{ player.losses }}</span>
+        <span class="text-right" :class="activeTab === 'points' ? 'text-text' : ''">
+          {{ player.points }}
+        </span>
+        <span class="text-right" :class="activeTab === 'perMatch' ? 'text-text' : ''">
+          {{ ptsPerMatch(player.points_per_match) }}
+        </span>
+      </NuxtLink>
+    </div>
 
-          <!-- Numbers -->
-          <td class="py-3 px-1 text-right tnum font-display text-pitch-300">{{ player.played }}</td>
-          <td class="py-3 px-1 text-right tnum font-display text-pitch-300">{{ player.wins }}</td>
-          <td class="py-3 px-1 text-right tnum font-display text-pitch-300">{{ player.draws }}</td>
-          <td class="py-3 px-1 text-right tnum font-display text-pitch-300">{{ player.losses }}</td>
-
-          <td
-            class="py-3 px-1 text-right tnum font-display font-bold"
-            :class="activeTab === 'points' ? 'text-pitch-50' : 'text-pitch-300'"
-          >
-            {{ player.points }}
-          </td>
-
-          <td
-            class="py-3 px-1 text-right tnum font-display font-bold"
-            :class="activeTab === 'perMatch' ? 'text-pitch-50' : 'text-pitch-300'"
-          >
-            {{ player.points_per_match ? player.points_per_match.toFixed(2) : '0,00' }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Under threshold — shown alongside the Pts/match table -->
+    <div
+      v-if="ineligiblePlayers && ineligiblePlayers.length > 0"
+      class="flex flex-col gap-2.5 pt-4 text-text-muted"
+    >
+      <span class="text-[11px] font-semibold uppercase tracking-[0.08em]">Sous le seuil</span>
+      <NuxtLink
+        v-for="player in ineligiblePlayers"
+        :key="player.player_id"
+        :to="`/players/${player.player_id}`"
+        class="flex h-9 items-center gap-2.5 text-[15px] text-text-muted"
+      >
+        <span class="w-[18px]" />
+        <span>{{ player.name }} — {{ missingLabel(player.missing_sessions) }}</span>
+      </NuxtLink>
+    </div>
   </div>
 </template>
+
+<style scoped>
+/* Fixed grid so the columns line up across header and rows, and so the table
+ * fits 390px without horizontal scroll. J is never dropped. */
+.standings-row {
+  display: grid;
+  grid-template-columns: 18px 1fr 22px 22px 22px 22px 30px 42px;
+  column-gap: 6px;
+  align-items: center;
+}
+</style>

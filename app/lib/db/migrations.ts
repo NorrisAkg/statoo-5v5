@@ -108,6 +108,9 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
 const MIGRATION_002_VIEWS = `
 DROP VIEW IF EXISTS v_session_summary;
 DROP VIEW IF EXISTS v_group_totals;
+DROP VIEW IF EXISTS v_top_cards;
+DROP VIEW IF EXISTS v_top_assists;
+DROP VIEW IF EXISTS v_top_scorers;
 DROP VIEW IF EXISTS v_standings_per_match;
 DROP VIEW IF EXISTS v_standings;
 DROP VIEW IF EXISTS v_player_stats;
@@ -227,6 +230,27 @@ ORDER BY
   (goals + assists) DESC,
   name              ASC;
 
+CREATE VIEW v_top_scorers AS
+SELECT player_id, name, nickname, is_active, goals
+FROM v_player_stats
+WHERE goals > 0
+ORDER BY goals DESC, name ASC
+LIMIT 5;
+
+CREATE VIEW v_top_assists AS
+SELECT player_id, name, nickname, is_active, assists
+FROM v_player_stats
+WHERE assists > 0
+ORDER BY assists DESC, name ASC
+LIMIT 5;
+
+CREATE VIEW v_top_cards AS
+SELECT player_id, name, nickname, is_active, yellow_cards, red_cards
+FROM v_player_stats
+WHERE yellow_cards > 0 OR red_cards > 0
+ORDER BY red_cards DESC, yellow_cards DESC, name ASC
+LIMIT 5;
+
 CREATE VIEW v_group_totals AS
 SELECT
   (SELECT COUNT(*) FROM sessions WHERE status = 'CLOSED')                AS sessions_played,
@@ -241,6 +265,12 @@ SELECT
 
   (SELECT COALESCE(SUM(score_a + score_b), 0)
      FROM sessions WHERE status = 'CLOSED')                              AS total_goals,
+
+  MAX(
+    0,
+    (SELECT COALESCE(SUM(score_a + score_b), 0) FROM sessions WHERE status = 'CLOSED')
+      - COALESCE(SUM(cp.goals), 0)
+  )                                                                      AS unassigned_goals,
 
   ROUND(
     (SELECT COALESCE(SUM(score_a + score_b), 0) FROM sessions WHERE status = 'CLOSED') * 1.0

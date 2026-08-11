@@ -48,7 +48,7 @@ The goal of SPEC-05 is to implement:
 - `v_standings`: Consumes `v_player_stats` where `played > 0` ordered by total points.
 - `v_standings_per_match`: Consumes `v_player_stats` where `played > 0` and `is_eligible = 1` ordered by points per match.
 - `v_eligibility_threshold`: `required_sessions` — used verbatim in the footnote *"Il faut N séances pour figurer au classement."* (screen 12).
-- `v_group_totals`: Aggregated counts (`sessions_played`, `ranked_sessions`, `active_players`, `total_players`, `total_goals`, `assigned_goals`, `assists`, `yellow_cards`, `red_cards`, `goals_per_session`).
+- `v_group_totals`: Aggregated counts (`sessions_played`, `ranked_sessions`, `active_players`, `total_players`, `total_goals`, `assigned_goals`, `unassigned_goals`, `assists`, `yellow_cards`, `red_cards`, `goals_per_session`). `unassigned_goals` is the "Écart" row — derived, never subtracted in JS.
 
 ### 3.2 Secondary Ranking Views (to add to `002_views.sql`)
 Each reads `v_player_stats` (all closed sessions, friendlies included), filters out the zero rows and limits to 5:
@@ -71,7 +71,8 @@ Each reads `v_player_stats` (all closed sessions, friendlies included), filters 
   - Divider with header `"SOUS LE SEUIL"`.
   - Dimmed rows displaying player name and text *"il manque N séances"*.
 
-### 4.2 Secondary Rankings (`/standings` scrolled down)
+### 4.2 Secondary Rankings (`/standings`, third tab "Secondaires")
+Screen 14 is reached through a third segment of the control — `Points` · `Pts/match` · `Secondaires` — rather than by scrolling past the table, which would bury it under a long roster.
 - 3 Stacked Cards:
   1. **MEILLEURS BUTEURS**: Rank, Avatar, Name, Goals count.
   2. **MEILLEURS PASSEURS**: Rank, Avatar, Name, Assists count.
@@ -81,7 +82,8 @@ Each reads `v_player_stats` (all closed sessions, friendlies included), filters 
 ### 4.3 Group Statistics Screen (`/stats`)
 - 2-Column grid of KPI tiles:
   - `SÉANCES JOUÉES`, `DONT CLASSÉES`, `JOUEURS ACTIFS`, `JOUEURS AU TOTAL`, `BUTS TOTAUX`, `BUTS PAR SÉANCE`.
-- **Attribution Card**: Total goals vs assigned goals vs unassigned goals discrepancy (`flag-400` color).
+- **Attribution Card**: `Buts marqués` / `Buts attribués à un joueur` / `Écart` — the gap in `--danger-text` when non-zero. Footnote *"Buts marqués sans buteur identifié."*
+- **Discipline Card**: `Passes décisives`, `Cartons jaunes`, `Cartons rouges`.
 
 ---
 

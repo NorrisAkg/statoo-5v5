@@ -141,6 +141,33 @@ ORDER BY
   name              ASC;
 
 -- ---------------------------------------------------------------------------
+-- Secondary rankings (screen 14). These count EVERY closed session, friendlies
+-- included — unlike the standings above, which are ranked-only. Top 5, and a
+-- player with nothing to show never appears.
+-- ---------------------------------------------------------------------------
+CREATE VIEW v_top_scorers AS
+SELECT player_id, name, nickname, is_active, goals
+FROM v_player_stats
+WHERE goals > 0
+ORDER BY goals DESC, name ASC
+LIMIT 5;
+
+CREATE VIEW v_top_assists AS
+SELECT player_id, name, nickname, is_active, assists
+FROM v_player_stats
+WHERE assists > 0
+ORDER BY assists DESC, name ASC
+LIMIT 5;
+
+-- Reds outrank yellows: one red is worse than any number of yellows.
+CREATE VIEW v_top_cards AS
+SELECT player_id, name, nickname, is_active, yellow_cards, red_cards
+FROM v_player_stats
+WHERE yellow_cards > 0 OR red_cards > 0
+ORDER BY red_cards DESC, yellow_cards DESC, name ASC
+LIMIT 5;
+
+-- ---------------------------------------------------------------------------
 -- Global totals for the group.
 -- ---------------------------------------------------------------------------
 CREATE VIEW v_group_totals AS
@@ -158,6 +185,14 @@ SELECT
   -- Actual goals include the ones nobody claimed
   (SELECT COALESCE(SUM(score_a + score_b), 0)
      FROM sessions WHERE status = 'CLOSED')                              AS total_goals,
+
+  -- Goals with no identified scorer (own goals, forgotten entries).
+  -- Clamped: a session may be closed with more scorers than goals.
+  MAX(
+    0,
+    (SELECT COALESCE(SUM(score_a + score_b), 0) FROM sessions WHERE status = 'CLOSED')
+      - COALESCE(SUM(cp.goals), 0)
+  )                                                                      AS unassigned_goals,
 
   ROUND(
     (SELECT COALESCE(SUM(score_a + score_b), 0) FROM sessions WHERE status = 'CLOSED') * 1.0

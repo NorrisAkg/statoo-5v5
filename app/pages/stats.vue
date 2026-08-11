@@ -1,24 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useDb } from '~/composables/useDb'
+import { computed, onMounted } from 'vue'
+import { useStandings } from '~/composables/useStandings'
 
-const stats = ref<any>(null)
-const loading = ref(true)
-const { getDb } = useDb()
+const { groupTotals: stats, loading, fetchTotals } = useStandings()
 
-onMounted(async () => {
-  const db = getDb()
-  if (db) {
-    try {
-      const res = await db.query('SELECT * FROM v_group_totals;')
-      if (res.values && res.values.length > 0) {
-        stats.value = res.values[0]
-      }
-    } finally {
-      loading.value = false
-    }
-  }
-})
+onMounted(fetchTotals)
 
 function formatVal(val: number | null | undefined): string {
   if (val == null) return '0'
@@ -30,12 +16,8 @@ function formatFloat(val: number | null | undefined): string {
   return val.toFixed(2).replace('.', ',')
 }
 
-const goalGap = computed(() => {
-  if (!stats.value) return 0
-  const total = Number(stats.value.total_goals || 0)
-  const assigned = Number(stats.value.assigned_goals || 0)
-  return Math.max(0, total - assigned)
-})
+// The gap is derived by v_group_totals, not recomputed here.
+const goalGap = computed(() => Number(stats.value?.unassigned_goals ?? 0))
 </script>
 
 <template>
@@ -110,6 +92,26 @@ const goalGap = computed(() => {
         <span style="font:400 13px/1.4 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
           Buts marqués sans buteur identifié.
         </span>
+      </div>
+
+      <!-- Discipline card -->
+      <div style="margin-top:12px;margin-bottom:24px;background:#121B17;border:1px solid #2A3831;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;flex:none;">
+        <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;">Discipline</span>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;height:32px;">
+          <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Passes décisives</span>
+          <span style="font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ formatVal(stats?.assists) }}</span>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;height:32px;border-top:1px solid #2A3831;">
+          <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons jaunes</span>
+          <span style="font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ formatVal(stats?.yellow_cards) }}</span>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;height:32px;border-top:1px solid #2A3831;">
+          <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons rouges</span>
+          <span style="font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ formatVal(stats?.red_cards) }}</span>
+        </div>
       </div>
     </template>
   </div>

@@ -113,6 +113,8 @@ export interface GroupTotals {
   yellow_cards: number
   red_cards: number
   total_goals: number
+  /** Goals with no identified scorer — the "Écart" row of the stats screen. */
+  unassigned_goals: number
   goals_per_session: number
 }
 
