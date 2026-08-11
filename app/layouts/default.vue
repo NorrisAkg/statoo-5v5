@@ -14,14 +14,17 @@ function isActive(path: string) {
     <!-- Mobile Frame max 480px -->
     <div class="w-full max-w-[480px] min-h-screen flex flex-col relative bg-ground shadow-2xl border-x border-surface">
 
-      <!-- Main Content Area — pb-[64px] to clear fixed nav -->
-      <main class="flex-1 pb-[64px] overflow-y-auto">
+      <!-- Main Content Area — clears the fixed nav, plus the iOS home indicator
+           when installed as a PWA (env() is 0 everywhere else) -->
+      <main class="main-scroll flex-1 overflow-y-auto">
         <slot />
       </main>
 
-      <!-- Fixed Bottom Navigation Bar — 64px, exactly matching mockup -->
+      <!-- Fixed Bottom Navigation Bar — 64px tall, exactly matching mockup. The
+           safe-area inset is added as padding so the bar grows downwards rather
+           than squeezing its 64px of icons. -->
       <nav
-        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[64px] border-t z-50"
+        class="bottom-nav fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] border-t z-50"
         style="background:var(--ground); border-color:var(--hairline); display:grid; grid-template-columns:repeat(5,1fr);"
       >
         <!-- Accueil — carré 2px border-radius 2px -->
@@ -103,6 +106,17 @@ function isActive(path: string) {
 </template>
 
 <style scoped>
+.bottom-nav {
+  height: 64px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+
+.main-scroll {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}
+
 .nav-item {
   display: flex;
   flex-direction: column;

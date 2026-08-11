@@ -1,3 +1,16 @@
 node_modules
 .output
 .nuxt
+dist
+
+# Capacitor Android — the native project itself is worth committing, but not
+# its build output nor local.properties, which hardcodes this machine's SDK path
+android/build
+android/.gradle
+android/app/build
+android/local.properties
+android/capacitor-cordova-android-plugins/build
+
+# Signing material never belongs in the repo
+*.keystore
+*.jks

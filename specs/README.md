@@ -14,6 +14,7 @@ This directory contains the detailed technical and functional specifications for
 | **SPEC-06** | [Backup & Restoration](file:///c:/Users/ky-solutions/projects/persos/statoo%205v5/specs/spec-06-backup-restore.md) | **L5** | 📝 DRAFT | `lib/backup/`, `composables/useBackup.ts` |
 | **SPEC-07** | [Design System & UI Components](file:///c:/Users/ky-solutions/projects/persos/statoo%205v5/specs/spec-07-design-system-ui.md) | **L1-L6** | 📝 DRAFT | `assets/css/`, `components/ui/` |
 | **SPEC-08** | [First Launch, Onboarding & Settings](file:///c:/Users/ky-solutions/projects/persos/statoo%205v5/specs/spec-08-onboarding-settings.md) | **L1** | 📝 DRAFT | `pages/onboarding/`, `composables/useSettings.ts` |
+| **SPEC-09** | [PWA Delivery & iOS Installability](file:///c:/Users/ky-solutions/projects/persos/statoo%205v5/specs/spec-09-pwa-delivery.md) | **L6b** | 📝 DRAFT | `nuxt.config.ts`, `scripts/generate-icons.cjs` |
 
 ---
 
@@ -33,7 +34,9 @@ graph TD
 3. **L3 — Stats & Closure**: Score input, individual player `StatStepper` inputs (goals, assists, cards), unassigned goals, validation rules, closure & reopening.
 4. **L4 — Standings & Group Stats**: Standings table (Points & Pts/match with 50% eligibility threshold), secondary rankings (buteurs, passeurs, cartons), group totals.
 5. **L5 — Backup & Restore**: JSON snapshot generation, Supabase Storage integration, auto-backup after closure, offline retry queue, destructive restore.
-6. **L6 — APK Packaging & Verification**: Capacitor build, native SQLite plugin test on Android, offline end-to-end verification.
+6. **L6 — Packaging & Verification**, two delivery channels:
+   - **L6a — Android APK**: Capacitor build, native SQLite plugin test on Android, offline end-to-end verification.
+   - **L6b — iOS PWA** (SPEC-09): manifest, service worker, home-screen install from Safari. The only route to iOS without the App Store.
 
 ---
 

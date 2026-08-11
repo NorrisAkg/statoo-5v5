@@ -4,15 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**Statoo 5v5** — offline-first Android app (Nuxt 4 + Capacitor) for a single organizer to track 5-a-side football sessions: players, team draws, match stats, standings. Local SQLite is the only datastore; Supabase Storage is used solely for JSON backups (not yet implemented).
+**Statoo 5v5** — offline-first mobile app (Nuxt 4 + Capacitor) for a single organizer to track 5-a-side football sessions: players, team draws, match stats, standings. Local SQLite is the only datastore; Supabase Storage is used solely for JSON backups (not yet implemented).
+
+Two delivery channels from the same web build: an **Android APK** via Capacitor (native SQLite) and an **installable PWA** for iOS, where the App Store is the only alternative ([spec-09](specs/spec-09-pwa-delivery.md)). The PWA needs the shell hosted over HTTPS — session data still never leaves the device.
 
 ## Commands
 
 ```bash
 npm run dev        # Nuxt dev server (SPA, ssr: false)
 npm run build      # production build
-npm run generate   # static generation
+npm run generate   # static generation -> .output/public, what the PWA deploys
 npm run preview
+npm run icons      # regenerate the PWA/app icons into public/
 ```
 
 `postinstall` runs `nuxt prepare` and copies `sql-wasm.wasm` into `public/` and `public/assets/` — the web SQLite driver breaks without it, so re-run `npm install` if those files go missing.
@@ -60,7 +63,7 @@ The Pts/match eligibility threshold is **configurable, and interpreted only in S
 - Fonts: Archivo Expanded (`.font-display`) for titles and all numbers, with `.tnum` for tabular figures in columns; Instrument Sans for body.
 - Touch targets ≥ 44px, 52px for `StatStepper` +/− buttons. Stat entry must never open a virtual keyboard.
 - **No gamification** — no ratings, MVP votes, badges, streaks, trophies, or medals. Rank 1 is highlighted with color only.
-- Layout is a fixed 480px-max mobile frame with a 64px bottom nav ([app/layouts/default.vue](app/layouts/default.vue)); pages must keep `pb-[64px]` clearance.
+- Layout is a fixed 480px-max mobile frame with a 64px bottom nav ([app/layouts/default.vue](app/layouts/default.vue)). The scroll container already reserves that height **plus `env(safe-area-inset-bottom)`** for the iPhone home indicator, so pages no longer add their own `pb-[64px]`.
 
 ## Reference documents
 
@@ -71,7 +74,9 @@ The Pts/match eligibility threshold is **configurable, and interpreted only in S
 
 ## Known gaps
 
-- Lots L5 (Supabase backup/restore) and L6 (Capacitor APK packaging) are unimplemented — no `lib/backup/`, no `capacitor.config.ts`, no `android/` project despite the Capacitor dependencies.
+- Lot L5 (Supabase backup/restore) is unimplemented — no `lib/backup/`. On iOS this is the *only* real guarantee against storage eviction, so it is not optional there.
+- Lot **L6a** (Android APK) is unimplemented: no `capacitor.config.ts`, no `android/`, and `@capacitor/cli` is not even installed despite `@capacitor/core` and `@capacitor/android` being there. The machine is ready (JDK 17, SDK with platforms 31–36).
+- Lot **L6b** (PWA) is built but **never verified on a device**: manifest, service worker, icons and safe-area handling exist and the assets serve correctly locally, but nobody has installed it on an iPhone. The `appId` for the APK is also still undecided.
 - `nanoid` and `localforage` are imported in source but absent from `package.json` (resolved transitively). Add them explicitly before touching dependency versions.
 - `closeSession()` in `queries.ts` writes score-derived `result` but does not wrap the multi-table stat update in a transaction, contrary to the stated invariant.
 - The **layout** of the earlier Tailwind pages (home, players, settings) still does not match the template screens — cards where the mockup uses flat filet-separated lists, 56px round avatars instead of 36px rounded squares. Their colors are on the role tokens, so only the geometry is left to redo.
