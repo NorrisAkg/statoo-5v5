@@ -84,27 +84,27 @@ function getInitials(name: string): string {
 
 /* Team A — solid Bib Yellow */
 .team-column__header--a {
-  background: var(--color-bib-400);
+  background: var(--team-a);
 }
 .team-column__header--a .team-column__label,
 .team-column__header--a .team-column__count {
-  color: var(--color-pitch-950);
+  color: var(--ground);
 }
 
 /* Team B — hatched pattern */
 .team-column__header--b {
   background: repeating-linear-gradient(
     45deg,
-    var(--color-pitch-800),
-    var(--color-pitch-800) 4px,
+    var(--surface-2),
+    var(--surface-2) 4px,
     transparent 4px,
     transparent 10px
   );
-  border: 1.5px solid var(--color-pitch-600);
+  border: 1.5px solid var(--hairline-2);
 }
 .team-column__header--b .team-column__label,
 .team-column__header--b .team-column__count {
-  color: var(--color-pitch-100);
+  color: var(--text-strong);
 }
 
 .team-column__label {
@@ -134,8 +134,8 @@ function getInitials(name: string): string {
   align-items: center;
   gap: 8px;
   height: 44px;
-  background: var(--color-pitch-800);
-  border: 1px solid var(--color-pitch-700);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
   border-radius: 8px;
   padding: 0 8px 0 6px;
 }
@@ -154,15 +154,14 @@ function getInitials(name: string): string {
 }
 
 .player-chip__avatar--a {
-  background: rgba(255, 201, 79, 0.15);
-  color: var(--color-bib-400);
-  border: 1.5px solid rgba(255, 201, 79, 0.3);
+  color: var(--accent-text);
+  border: 1.5px solid var(--accent-text);
 }
 
 .player-chip__avatar--b {
-  background: var(--color-pitch-700);
-  color: var(--color-pitch-300);
-  border: 1.5px solid var(--color-pitch-600);
+  background: var(--hairline);
+  color: var(--text-muted);
+  border: 1.5px solid var(--hairline-2);
 }
 
 .player-chip__name {
@@ -170,7 +169,7 @@ function getInitials(name: string): string {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--color-pitch-100);
+  color: var(--text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -181,8 +180,8 @@ function getInitials(name: string): string {
   width: 30px;
   height: 30px;
   border-radius: 6px;
-  border: 1px solid var(--color-pitch-600);
-  background: var(--color-pitch-700);
+  border: 1px solid var(--hairline-2);
+  background: var(--hairline);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -192,13 +191,13 @@ function getInitials(name: string): string {
 }
 
 .player-chip__swap:active {
-  background: var(--color-pitch-600);
+  background: var(--hairline-2);
   scale: 0.92;
 }
 
 .swap-icon {
   font-size: 0.85rem;
-  color: var(--color-pitch-300);
+  color: var(--text-muted);
 }
 
 /* ---- Empty state ---- */
@@ -208,8 +207,8 @@ function getInitials(name: string): string {
   align-items: center;
   gap: 6px;
   padding: 24px 0;
-  color: var(--color-pitch-600);
-  border: 1.5px dashed var(--color-pitch-700);
+  color: var(--hairline-2);
+  border: 1.5px dashed var(--hairline);
   border-radius: 8px;
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.8rem;

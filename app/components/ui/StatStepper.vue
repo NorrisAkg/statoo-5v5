@@ -31,7 +31,7 @@ function increment() {
 
 <template>
   <div class="flex items-center justify-between py-1.5">
-    <span v-if="label" class="text-[13px] text-pitch-300 font-medium select-none">
+    <span v-if="label" class="text-[13px] text-text-muted font-medium select-none">
       {{ label }}
     </span>
     <div class="flex items-center space-x-1.5 ml-auto">
@@ -40,14 +40,14 @@ function increment() {
         type="button"
         @click="decrement"
         :disabled="modelValue <= min"
-        class="w-[52px] h-[44px] flex items-center justify-center rounded-md bg-pitch-800 border border-pitch-700 text-pitch-50 text-xl font-bold transition-opacity active:scale-95 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+        class="w-[52px] h-[44px] flex items-center justify-center rounded-md bg-surface-2 border border-hairline text-text text-xl font-bold transition-opacity active:scale-95 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
         aria-label="Diminuer"
       >
         −
       </button>
 
       <!-- Value container -->
-      <div class="w-[44px] h-[44px] flex items-center justify-center font-display text-[22px] font-bold text-pitch-50 tnum select-none">
+      <div class="w-[44px] h-[44px] flex items-center justify-center font-display text-[22px] font-bold text-text tnum select-none">
         {{ modelValue }}
       </div>
 
@@ -56,7 +56,7 @@ function increment() {
         type="button"
         @click="increment"
         :disabled="modelValue >= max"
-        class="w-[52px] h-[44px] flex items-center justify-center rounded-md bg-pitch-800 border border-pitch-700 text-pitch-50 text-xl font-bold transition-opacity active:scale-95 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+        class="w-[52px] h-[44px] flex items-center justify-center rounded-md bg-surface-2 border border-hairline text-text text-xl font-bold transition-opacity active:scale-95 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
         aria-label="Augmenter"
       >
         +

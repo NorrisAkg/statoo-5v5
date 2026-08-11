@@ -53,20 +53,20 @@ const scoreBarWidths = computed(() => {
 <template>
   <NuxtLink
     :to="`/sessions/${session.id}`"
-    style="display:block;background:#121B17;border:1px solid #2A3831;border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;"
+    style="display:block;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;"
   >
     <!-- ScoreBar 2px full-width en haut (avant padding) -->
     <template v-if="session.status === 'CLOSED' && session.score_a != null">
       <div style="display:flex;height:2px;">
-        <div :style="`width:${scoreBarWidths.a}%;background:#FFC94F`"></div>
+        <div :style="`width:${scoreBarWidths.a}%;background:var(--team-a)`"></div>
         <div
-          :style="`width:${scoreBarWidths.b}%;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 3px)`"
+          :style="`width:${scoreBarWidths.b}%;background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 3px)`"
         ></div>
       </div>
     </template>
     <!-- Brouillon : barre dashed -->
     <template v-else>
-      <div style="height:2px;border-top:1px dashed #3F4E48;"></div>
+      <div style="height:2px;border-top:1px dashed var(--hairline-2);"></div>
     </template>
 
     <!-- Contenu de la carte -->
@@ -74,7 +74,7 @@ const scoreBarWidths = computed(() => {
       <!-- Indicateur mismatch buts (point rouge) -->
       <span
         v-if="hasGoalMismatch"
-        style="width:6px;height:6px;border-radius:3px;background:#FF7361;flex:none;"
+        style="width:6px;height:6px;border-radius:3px;background:var(--danger-text);flex:none;"
       ></span>
 
       <!-- Date (+ heure si présente) -->
@@ -88,24 +88,24 @@ const scoreBarWidths = computed(() => {
       <!-- Badges: format + ranked/amical -->
       <template v-if="summary && session.status === 'CLOSED'">
         <span
-          style="border:1px solid #3F4E48;border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#D3DED8;"
+          style="border:1px solid var(--hairline-2);border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:var(--text-strong);"
         >{{ summary.format }}</span>
         <span
           v-if="!session.is_ranked"
-          style="border:1px solid #3F4E48;border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;"
+          style="border:1px solid var(--hairline-2);border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);"
         >Amical</span>
       </template>
       <template v-else>
         <!-- Brouillon badge -->
         <span
-          style="border:1px solid #3F4E48;border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:#8CA096;"
+          style="border:1px solid var(--hairline-2);border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);"
         >Brouillon</span>
       </template>
 
       <!-- Score -->
       <span
         style="margin-left:auto;font:600 18px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;"
-        :style="session.status === 'DRAFT' ? 'color:#556860' : 'color:#EAF0EC'"
+        :style="session.status === 'DRAFT' ? 'color:var(--text-faint)' : 'color:var(--text)'"
       >{{ scoreText }}</span>
     </div>
   </NuxtLink>

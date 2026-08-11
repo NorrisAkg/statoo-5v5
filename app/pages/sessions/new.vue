@@ -217,30 +217,30 @@ onMounted(async () => {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--color-pitch-800);
-  border: 1px solid var(--color-pitch-700);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
   text-decoration: none;
-  color: var(--color-pitch-200);
+  color: var(--text-strong);
   transition: background 0.15s ease;
 }
-.btn-back:active { background: var(--color-pitch-700); }
+.btn-back:active { background: var(--hairline); }
 
 .page-title {
   font-family: 'Archivo Expanded', sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-pitch-50);
+  color: var(--text);
   margin: 0;
 }
 
 /* Sections */
 .form-section {
-  background: var(--color-pitch-900);
-  border: 1px solid var(--color-pitch-800);
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
   border-radius: 14px;
   padding: 16px;
   margin-bottom: 14px;
@@ -259,14 +259,14 @@ onMounted(async () => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-pitch-500);
+  color: var(--text-faint);
   margin: 0 0 12px;
 }
 
 .section-count {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.75rem;
-  color: var(--color-bib-400);
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -278,21 +278,21 @@ onMounted(async () => {
   padding: 10px 0;
 }
 .field-row + .field-row {
-  border-top: 1px solid var(--color-pitch-800);
+  border-top: 1px solid var(--surface-2);
 }
 
 .field-label {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-pitch-200);
+  color: var(--text-strong);
 }
 
 .field-input {
-  background: var(--color-pitch-800);
-  border: 1px solid var(--color-pitch-700);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
   border-radius: 8px;
-  color: var(--color-pitch-100);
+  color: var(--text-strong);
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.9rem;
   padding: 8px 12px;
@@ -301,7 +301,7 @@ onMounted(async () => {
   outline: none;
 }
 .field-input:focus {
-  border-color: var(--color-bib-400);
+  border-color: var(--accent-text);
 }
 
 /* Attendees */
@@ -316,7 +316,7 @@ onMounted(async () => {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-bib-400);
+  color: var(--accent-text);
   background: none;
   border: none;
   cursor: pointer;
@@ -324,7 +324,7 @@ onMounted(async () => {
 }
 
 .divider {
-  color: var(--color-pitch-600);
+  color: var(--hairline-2);
 }
 
 .attendees-grid {
@@ -336,7 +336,7 @@ onMounted(async () => {
 .warning-text {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.8rem;
-  color: #F0503C;
+  color: var(--danger-text);
   margin: 10px 0 0;
 }
 
@@ -349,7 +349,7 @@ onMounted(async () => {
   gap: 12px;
 }
 .toggle-row + .toggle-row {
-  border-top: 1px solid var(--color-pitch-800);
+  border-top: 1px solid var(--surface-2);
 }
 
 .toggle-info {
@@ -362,13 +362,13 @@ onMounted(async () => {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-pitch-100);
+  color: var(--text-strong);
 }
 
 .toggle-hint {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.75rem;
-  color: var(--color-pitch-500);
+  color: var(--text-faint);
 }
 
 .toggle-switch {
@@ -376,7 +376,7 @@ onMounted(async () => {
   height: 28px;
   border-radius: 14px;
   border: none;
-  background: var(--color-pitch-700);
+  background: var(--hairline);
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
@@ -384,7 +384,7 @@ onMounted(async () => {
 }
 
 .toggle-switch--on {
-  background: var(--color-bib-400);
+  background: var(--team-a);
 }
 
 .toggle-knob {
@@ -413,8 +413,8 @@ onMounted(async () => {
   height: 56px;
   border-radius: 14px;
   border: none;
-  background: var(--color-bib-400);
-  color: var(--color-pitch-950);
+  background: var(--team-a);
+  color: var(--ground);
   font-family: 'Instrument Sans', sans-serif;
   font-size: 1rem;
   font-weight: 700;
@@ -427,21 +427,21 @@ onMounted(async () => {
 }
 
 .btn-create:disabled {
-  background: var(--color-pitch-700);
-  color: var(--color-pitch-500);
+  background: var(--hairline);
+  color: var(--text-faint);
   cursor: not-allowed;
 }
 
 .btn-create:not(:disabled):active {
-  background: var(--color-bib-300);
+  background: var(--team-a-press);
   scale: 0.98;
 }
 
 .btn-spinner {
   width: 20px;
   height: 20px;
-  border: 2.5px solid rgba(0,0,0,0.2);
-  border-top-color: var(--color-pitch-950);
+  border: 2.5px solid var(--hairline);
+  border-top-color: var(--ground);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }

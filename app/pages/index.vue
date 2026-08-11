@@ -62,10 +62,10 @@ const scoreBarWidths = computed(() => {
 
     <!-- Header -->
     <div style="height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;">
-      <span style="font:700 20px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;color:#EAF0EC;">Statoo</span>
+      <span style="font:700 20px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;color:var(--text);">Statoo</span>
       <NuxtLink
         to="/settings"
-        style="width:20px;height:20px;border:2px solid #8CA096;border-radius:10px;box-sizing:border-box;display:inline-block;"
+        style="width:20px;height:20px;border:2px solid var(--text-muted);border-radius:10px;box-sizing:border-box;display:inline-block;"
         title="Réglages"
       ></NuxtLink>
     </div>
@@ -74,53 +74,53 @@ const scoreBarWidths = computed(() => {
     <div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:8px 16px 16px;">
 
       <!-- Loading -->
-      <div v-if="loading" style="padding:24px 0;color:#8CA096;font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
+      <div v-if="loading" style="padding:24px 0;color:var(--text-muted);font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
         Chargement…
       </div>
 
       <template v-else>
         <!-- Card: Dernière séance -->
-        <div style="background:#121B17;border:1px solid #2A3831;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
-          <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;">Dernière séance</span>
+        <div style="background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+          <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);">Dernière séance</span>
 
           <template v-if="lastSession && lastSession.status === 'CLOSED'">
             <!-- ScoreBar 6px -->
             <div style="display:flex;height:6px;border-radius:1px;overflow:hidden;">
-              <div :style="`width:${scoreBarWidths.a}%;background:#FFC94F`"></div>
-              <div :style="`width:${scoreBarWidths.b}%;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 6px);box-shadow:inset 0 0 0 1px #2A3831`"></div>
+              <div :style="`width:${scoreBarWidths.a}%;background:var(--team-a)`"></div>
+              <div :style="`width:${scoreBarWidths.b}%;background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 6px);box-shadow:inset 0 0 0 1px var(--hairline)`"></div>
             </div>
 
             <!-- Scores row -->
             <div style="display:flex;justify-content:space-between;align-items:flex-start;">
               <div style="display:flex;flex-direction:column;gap:4px;">
-                <span style="font:700 32px/1.05 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:#EAF0EC;">{{ lastSession.score_a }}</span>
-                <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">Équipe A</span>
+                <span style="font:700 32px/1.05 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:var(--text);">{{ lastSession.score_a }}</span>
+                <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">Équipe A</span>
               </div>
               <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
-                <span style="font:700 32px/1.05 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:#EAF0EC;">{{ lastSession.score_b }}</span>
-                <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">Équipe B</span>
+                <span style="font:700 32px/1.05 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:var(--text);">{{ lastSession.score_b }}</span>
+                <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">Équipe B</span>
               </div>
             </div>
 
-            <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+            <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
               {{ formattedDate }} · {{ formattedTime }} · {{ lastSummary?.format || '5v5' }}
             </div>
           </template>
 
           <template v-else-if="lastSession">
             <!-- Draft Session Card preview -->
-            <div style="height:6px;border-top:1px dashed #3F4E48;"></div>
-            <div style="font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+            <div style="height:6px;border-top:1px dashed var(--hairline-2);"></div>
+            <div style="font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
               Séance en cours (brouillon) · {{ formattedDate }}
             </div>
             <NuxtLink
               :to="`/sessions/${lastSession.id}/stats`"
-              style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#FFC94F;text-decoration:none;"
+              style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--accent-text);text-decoration:none;"
             >Continuer la séance</NuxtLink>
           </template>
 
           <template v-else>
-            <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+            <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
               Aucune séance enregistrée pour l'instant.
             </div>
           </template>
@@ -129,16 +129,16 @@ const scoreBarWidths = computed(() => {
         <!-- Primary Action Button: Nouvelle séance -->
         <NuxtLink
           to="/sessions/new"
-          style="display:block;height:56px;flex:none;background:#FFC94F;border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:#0B120F;text-align:center;line-height:56px;text-decoration:none;"
+          style="display:block;height:56px;flex:none;background:var(--team-a);border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:var(--ground);text-align:center;line-height:56px;text-decoration:none;"
         >
           Nouvelle séance
         </NuxtLink>
 
         <!-- Card: Top 3 Classement -->
-        <div style="background:#121B17;border:1px solid #2A3831;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
-          <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;">Classement</span>
+        <div style="background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;">
+          <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);">Classement</span>
 
-          <div v-if="topPlayers.length === 0" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+          <div v-if="topPlayers.length === 0" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
             Le classement s'affichera après la première séance clôturée.
           </div>
 
@@ -150,14 +150,14 @@ const scoreBarWidths = computed(() => {
             >
               <span
                 style="width:16px;font:600 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;"
-                :style="idx === 0 ? 'color:#FFC94F;' : 'color:#8CA096;'"
+                :style="idx === 0 ? 'color:var(--accent-text);' : 'color:var(--text-muted);'"
               >{{ idx + 1 }}</span>
-              <span style="flex:1;font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;color:#EAF0EC;">{{ p.name }}</span>
-              <span style="font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:#EAF0EC;">{{ p.points }}</span>
+              <span style="flex:1;font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;color:var(--text);">{{ p.name }}</span>
+              <span style="font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;color:var(--text);">{{ p.points }}</span>
             </div>
 
-            <div style="padding-top:4px;border-top:1px solid #2A3831;margin-top:4px;">
-              <NuxtLink to="/standings" style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#FFC94F;text-decoration:none;">
+            <div style="padding-top:4px;border-top:1px solid var(--hairline);margin-top:4px;">
+              <NuxtLink to="/standings" style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--accent-text);text-decoration:none;">
                 Voir le classement
               </NuxtLink>
             </div>
@@ -165,7 +165,7 @@ const scoreBarWidths = computed(() => {
         </div>
 
         <!-- Footer Backup Status -->
-        <div style="margin-top:auto;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;padding:12px 0;">
+        <div style="margin-top:auto;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding:12px 0;">
           Sauvegardé récemment
         </div>
       </template>

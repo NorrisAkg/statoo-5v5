@@ -104,7 +104,7 @@ async function handleDelete() {
 </script>
 
 <template>
-  <div v-if="loading" style="padding:24px 16px;color:#8CA096;font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
+  <div v-if="loading" style="padding:24px 16px;color:var(--text-muted);font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
     Chargement…
   </div>
 
@@ -113,26 +113,26 @@ async function handleDelete() {
     <!-- Back button row -->
     <div style="height:56px;flex:none;display:flex;align-items:center;">
       <NuxtLink to="/sessions" style="display:flex;align-items:center;color:inherit;text-decoration:none;">
-        <span style="width:10px;height:10px;border-left:1.5px solid #EAF0EC;border-bottom:1.5px solid #EAF0EC;transform:rotate(45deg);margin-left:4px;display:inline-block;"></span>
+        <span style="width:10px;height:10px;border-left:1.5px solid var(--text);border-bottom:1.5px solid var(--text);transform:rotate(45deg);margin-left:4px;display:inline-block;"></span>
       </NuxtLink>
     </div>
 
     <!-- DRAFT mode -->
     <template v-if="session.status === 'DRAFT'">
       <div style="display:flex;flex-direction:column;gap:16px;padding-top:16px;">
-        <div style="height:40px;border:1px dashed #3F4E48;border-radius:2px;"></div>
+        <div style="height:40px;border:1px dashed var(--hairline-2);border-radius:2px;"></div>
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <span style="font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;color:#3F4E48;">— —</span>
-          <span style="border:1px solid #3F4E48;border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">Brouillon</span>
+          <span style="font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;color:var(--hairline-2);">— —</span>
+          <span style="border:1px solid var(--hairline-2);border-radius:4px;padding:3px 8px;font:500 13px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">Brouillon</span>
         </div>
-        <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+        <div style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
           {{ summary?.format ?? '?' }} · {{ summary?.attendance ?? 0 }} présents
         </div>
         <NuxtLink
           :to="`/sessions/${sessionId}/stats`"
-          style="display:block;height:56px;background:#FFC94F;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:#0B120F;text-align:center;line-height:56px;text-decoration:none;margin-top:16px;"
+          style="display:block;height:56px;background:var(--team-a);border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:var(--ground);text-align:center;line-height:56px;text-decoration:none;margin-top:16px;"
         >Saisir les stats</NuxtLink>
-        <button @click="handleDelete" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#FF7361;cursor:pointer;padding:0;text-align:left;">Supprimer</button>
+        <button @click="handleDelete" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--danger-text);cursor:pointer;padding:0;text-align:left;">Supprimer</button>
       </div>
     </template>
 
@@ -140,53 +140,53 @@ async function handleDelete() {
     <template v-else>
       <!-- ScoreBar 40px full-width (compensate padding) -->
       <div style="margin:0 -16px;display:flex;height:40px;">
-        <div :style="`width:${scoreBarWidths.a}%;background:#FFC94F`"></div>
-        <div :style="`width:${scoreBarWidths.b}%;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 7px);box-shadow:inset 0 0 0 1px #2A3831`"></div>
+        <div :style="`width:${scoreBarWidths.a}%;background:var(--team-a)`"></div>
+        <div :style="`width:${scoreBarWidths.b}%;background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 7px);box-shadow:inset 0 0 0 1px var(--hairline)`"></div>
       </div>
 
       <!-- Scores -->
       <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-top:12px;">
         <div style="display:flex;flex-direction:column;gap:4px;">
           <span style="font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ session.score_a }}</span>
-          <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">Équipe A</span>
+          <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">Équipe A</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
           <span style="font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ session.score_b }}</span>
-          <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">Équipe B</span>
+          <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">Équipe B</span>
         </div>
       </div>
 
-      <div style="padding-top:12px;font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">
+      <div style="padding-top:12px;font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
         {{ formattedDate }} · {{ formattedTime }} · {{ summary?.format ?? '?' }}
       </div>
 
       <!-- Teams columns -->
       <div style="display:flex;padding-top:24px;flex:1;">
         <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-right:12px;">
-          <span style="align-self:flex-start;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;background:#FFC94F;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#0B120F;">Équipe A</span>
+          <span style="align-self:flex-start;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;background:var(--team-a);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ground);">Équipe A</span>
           <div v-for="p in teamA" :key="p.id" style="display:flex;align-items:baseline;justify-content:space-between;min-height:32px;">
             <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-            <span v-if="statSummary(p)" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">{{ statSummary(p) }}</span>
+            <span v-if="statSummary(p)" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">{{ statSummary(p) }}</span>
           </div>
-          <div v-if="(session.unassigned_goals_a ?? 0) > 0" style="padding-top:8px;border-top:1px solid #2A3831;font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#556860;">Buts non attribués · {{ session.unassigned_goals_a }}</div>
+          <div v-if="(session.unassigned_goals_a ?? 0) > 0" style="padding-top:8px;border-top:1px solid var(--hairline);font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-faint);">Buts non attribués · {{ session.unassigned_goals_a }}</div>
         </div>
 
-        <div style="width:1px;background:#2A3831;"></div>
+        <div style="width:1px;background:var(--hairline);"></div>
 
         <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-left:12px;">
-          <span style="align-self:flex-end;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;border:1px solid #2A3831;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 6px);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#EAF0EC;box-sizing:border-box;">Équipe B</span>
+          <span style="align-self:flex-end;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;border:1px solid var(--hairline);background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 6px);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text);box-sizing:border-box;">Équipe B</span>
           <div v-for="p in teamB" :key="p.id" style="display:flex;align-items:baseline;justify-content:space-between;min-height:32px;">
             <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-            <span v-if="statSummary(p)" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">{{ statSummary(p) }}</span>
+            <span v-if="statSummary(p)" style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">{{ statSummary(p) }}</span>
           </div>
-          <div v-if="(session.unassigned_goals_b ?? 0) > 0" style="padding-top:8px;border-top:1px solid #2A3831;font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#556860;">Buts non attribués · {{ session.unassigned_goals_b }}</div>
+          <div v-if="(session.unassigned_goals_b ?? 0) > 0" style="padding-top:8px;border-top:1px solid var(--hairline);font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-faint);">Buts non attribués · {{ session.unassigned_goals_b }}</div>
         </div>
       </div>
 
       <!-- Actions bas de page -->
-      <div style="margin-top:auto;display:flex;flex-direction:column;gap:16px;padding:20px 0 24px;border-top:1px solid #2A3831;">
-        <button @click="handleReopen" :disabled="actionPending" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#EAF0EC;cursor:pointer;padding:0;text-align:left;">Rouvrir la séance</button>
-        <button @click="handleDelete" :disabled="actionPending" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:#FF7361;cursor:pointer;padding:0;text-align:left;">Supprimer</button>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:16px;padding:20px 0 24px;border-top:1px solid var(--hairline);">
+        <button @click="handleReopen" :disabled="actionPending" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--text);cursor:pointer;padding:0;text-align:left;">Rouvrir la séance</button>
+        <button @click="handleDelete" :disabled="actionPending" style="background:none;border:none;font:500 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--danger-text);cursor:pointer;padding:0;text-align:left;">Supprimer</button>
       </div>
     </template>
   </div>

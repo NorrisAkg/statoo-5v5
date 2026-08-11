@@ -140,7 +140,7 @@ export default defineAppConfig({
 ## 4. Layout & Navigation Specifications
 
 - **Bottom Navigation Bar**: Height 64px, 5 items (Accueil, Joueurs, Séances, Classement, Stats).
-- **Modal Sheets**: Bottom sheet with 14px top rounded corners, drag handle, backdrop blur disabled for performance. Primary action button placed at the very bottom.
+- **Modal Sheets**: Bottom sheet with 14px top rounded corners, drag handle, backdrop blur disabled for performance. Primary action button placed at the very bottom. Sheets are hand-rolled (`Teleport` + `Transition` + `--scrim`), **not** `UModal`: the Nuxt UI shell paints its backdrop and panel from the literal palettes mapped in `app.config.ts`, which do not follow the light theme.
 
 ---
 

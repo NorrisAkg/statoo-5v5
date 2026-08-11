@@ -80,10 +80,12 @@
 
   --danger-text:   #FF7361;
   --danger-solid:  #F0503C;
+  --danger-press:  #D43F2C;  /* destructive button, pressed                  */
   --danger-border: #A22C1E;
   --danger-bg:     #260907;
 
   --frame-border:  #2A3831;  /* the 480px mobile frame edge                  */
+  --scrim:         rgba(11, 18, 15, .6);   /* behind a bottom sheet          */
 }
 
 @media (prefers-color-scheme: light) {
@@ -110,10 +112,12 @@
 
     --danger-text:   #B02E1D;
     --danger-solid:  #D2402C;
+    --danger-press:  #B02E1D;
     --danger-border: #E4A99F;
     --danger-bg:     #FDECE9;
 
     --frame-border:  #C4CFC9;
+    --scrim:         rgba(22, 33, 28, .45);
   }
 }
 
@@ -131,11 +135,14 @@
   --color-text-muted:    var(--text-muted);
   --color-text-faint:    var(--text-faint);
   --color-team-a:        var(--team-a);
+  --color-team-a-press:  var(--team-a-press);
   --color-accent-text:   var(--accent-text);
   --color-on-accent:     var(--on-accent);
   --color-danger-text:   var(--danger-text);
   --color-danger-solid:  var(--danger-solid);
+  --color-danger-border: var(--danger-border);
   --color-danger-bg:     var(--danger-bg);
+  --color-scrim:         var(--scrim);
 }
 
 /* Custom Base Styles */

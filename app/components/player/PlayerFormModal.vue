@@ -68,69 +68,104 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <UModal :model-value="modelValue" @update:model-value="close">
-    <template #content>
-      <div class="p-5 bg-pitch-900 border border-pitch-800 rounded-t-2xl space-y-4">
-        <!-- Top Drag Handle -->
-        <div class="w-10 h-1 bg-pitch-700 rounded-full mx-auto mb-2" />
+  <!-- Hand-rolled bottom sheet rather than UModal: the Nuxt UI shell draws its
+       backdrop and panel from the literal palettes, which do not follow the
+       light theme. Same pattern as DrawConfirmModal, and closer to screen 4. -->
+  <Teleport to="body">
+    <Transition name="sheet">
+      <div
+        v-if="modelValue"
+        class="fixed inset-0 z-100 flex items-end bg-scrim"
+        @click.self="close"
+      >
+        <div
+          class="w-full max-w-120 mx-auto p-5 bg-surface border-t border-hairline rounded-t-2xl space-y-4"
+          role="dialog"
+          aria-modal="true"
+        >
+          <!-- Top Drag Handle -->
+          <div class="w-9 h-1 bg-hairline-2 rounded-full mx-auto mb-5" />
 
-        <h3 class="font-display text-xl font-bold text-pitch-50">
-          {{ playerToEdit ? 'Modifier le joueur' : 'Nouveau joueur' }}
-        </h3>
+          <h3 class="font-display text-xl font-bold text-text">
+            {{ playerToEdit ? 'Modifier le joueur' : 'Nouveau joueur' }}
+          </h3>
 
-        <form @submit.prevent="handleSubmit" class="space-y-4">
-          <!-- Nom Field -->
-          <div class="space-y-1">
-            <label class="text-xs font-semibold uppercase text-pitch-300 tracking-wider">
-              Nom <span class="text-bib-400">*</span>
-            </label>
-            <input
-              v-model="name"
-              type="text"
-              required
-              placeholder="Ex: Karim"
-              class="w-full h-[52px] px-4 rounded-md bg-pitch-800 border border-pitch-700 text-pitch-50 placeholder-pitch-400 focus:outline-none focus:border-bib-400 font-sans text-base transition-colors"
-            />
-            <!-- Duplicate name non-blocking warning -->
-            <p v-if="hasDuplicateName" class="text-[13px] text-flag-400 pt-1">
-              Un joueur porte déjà ce nom. Vous pouvez continuer.
-            </p>
-          </div>
+          <form @submit.prevent="handleSubmit" class="space-y-4">
+            <!-- Nom Field -->
+            <div class="space-y-1">
+              <label class="text-xs font-semibold uppercase text-text-muted tracking-wider">
+                Nom <span class="text-accent-text">*</span>
+              </label>
+              <input
+                v-model="name"
+                type="text"
+                required
+                placeholder="Ex: Karim"
+                class="w-full h-[52px] px-4 rounded-md bg-surface-2 border border-hairline text-text placeholder-text-muted focus:outline-none focus:border-accent-text font-sans text-base transition-colors"
+              />
+              <!-- Duplicate name non-blocking warning -->
+              <p v-if="hasDuplicateName" class="text-[13px] text-danger-text pt-1">
+                Un joueur porte déjà ce nom. Vous pouvez continuer.
+              </p>
+            </div>
 
-          <!-- Surnom Field -->
-          <div class="space-y-1">
-            <label class="text-xs font-semibold uppercase text-pitch-300 tracking-wider">
-              Surnom (optionnel)
-            </label>
-            <input
-              v-model="nickname"
-              type="text"
-              placeholder="Ex: Kaka"
-              class="w-full h-[52px] px-4 rounded-md bg-pitch-800 border border-pitch-700 text-pitch-50 placeholder-pitch-400 focus:outline-none focus:border-bib-400 font-sans text-base transition-colors"
-            />
-          </div>
+            <!-- Surnom Field -->
+            <div class="space-y-1">
+              <label class="text-xs font-semibold uppercase text-text-muted tracking-wider">
+                Surnom (optionnel)
+              </label>
+              <input
+                v-model="nickname"
+                type="text"
+                placeholder="Ex: Kaka"
+                class="w-full h-[52px] px-4 rounded-md bg-surface-2 border border-hairline text-text placeholder-text-muted focus:outline-none focus:border-accent-text font-sans text-base transition-colors"
+              />
+            </div>
 
-          <!-- Bottom Action Buttons Stack -->
-          <div class="pt-4 flex flex-col space-y-2">
-            <!-- Ghost Cancel button above -->
-            <button
-              type="button"
-              @click="close"
-              class="w-full h-[52px] rounded-md border border-pitch-700 text-pitch-100 font-medium text-base hover:bg-pitch-800 transition-colors"
-            >
-              Annuler
-            </button>
-            <!-- Primary Submit button below -->
-            <button
-              type="submit"
-              :disabled="!name.trim() || isSubmitting"
-              class="w-full h-[56px] rounded-md bg-bib-400 text-pitch-950 font-bold text-base hover:bg-bib-300 transition-colors disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-            >
-              {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer' }}
-            </button>
-          </div>
-        </form>
+            <!-- Bottom Action Buttons Stack -->
+            <div class="pt-4 flex flex-col space-y-2">
+              <!-- Ghost Cancel button above -->
+              <button
+                type="button"
+                @click="close"
+                class="w-full h-[52px] rounded-md border border-hairline text-text-strong font-medium text-base hover:bg-surface-2 transition-colors"
+              >
+                Annuler
+              </button>
+              <!-- Primary Submit button below -->
+              <button
+                type="submit"
+                :disabled="!name.trim() || isSubmitting"
+                class="w-full h-[56px] rounded-md bg-team-a text-on-accent font-bold text-base hover:bg-team-a-press transition-colors disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+              >
+                {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer' }}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </template>
-  </UModal>
+    </Transition>
+  </Teleport>
 </template>
+
+<style scoped>
+.sheet-enter-active,
+.sheet-leave-active {
+  transition: opacity 0.18s ease;
+}
+
+.sheet-enter-active > div,
+.sheet-leave-active > div {
+  transition: transform 0.18s ease;
+}
+
+.sheet-enter-from,
+.sheet-leave-to {
+  opacity: 0;
+}
+
+.sheet-enter-from > div,
+.sheet-leave-to > div {
+  transform: translateY(100%);
+}
+</style>

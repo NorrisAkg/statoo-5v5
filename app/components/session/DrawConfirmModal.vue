@@ -45,7 +45,7 @@ const titleId = useId()
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--scrim);
   z-index: 100;
   display: flex;
   align-items: flex-end;
@@ -53,18 +53,18 @@ const titleId = useId()
 
 .modal-sheet {
   width: 100%;
-  background: var(--color-pitch-900);
+  background: var(--surface);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 12px 20px 40px;
-  border-top: 1px solid var(--color-pitch-700);
+  border-top: 1px solid var(--hairline);
 }
 
 .modal-sheet__handle {
   width: 36px;
   height: 4px;
   border-radius: 2px;
-  background: var(--color-pitch-600);
+  background: var(--hairline-2);
   margin: 0 auto 20px;
 }
 
@@ -72,7 +72,7 @@ const titleId = useId()
   font-family: 'Archivo Expanded', sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--color-pitch-50);
+  color: var(--text);
   margin: 0 0 10px;
   text-align: center;
 }
@@ -80,7 +80,7 @@ const titleId = useId()
 .modal-sheet__description {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.875rem;
-  color: var(--color-pitch-400);
+  color: var(--text-muted);
   text-align: center;
   line-height: 1.5;
   margin: 0 0 24px;
@@ -106,21 +106,21 @@ const titleId = useId()
 
 .btn--ghost {
   background: transparent;
-  border: 1.5px solid var(--color-pitch-600);
-  color: var(--color-pitch-200);
+  border: 1.5px solid var(--hairline-2);
+  color: var(--text-strong);
 }
 
 .btn--ghost:active {
-  background: var(--color-pitch-700);
+  background: var(--hairline);
 }
 
 .btn--destructive {
-  background: #F0503C;
+  background: var(--danger-solid);
   color: #fff;
 }
 
 .btn--destructive:active {
-  background: #d43f2c;
+  background: var(--danger-press);
 }
 
 /* Sheet slide-up transition */

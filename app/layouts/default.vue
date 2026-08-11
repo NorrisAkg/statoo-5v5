@@ -10,9 +10,9 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-pitch-950 text-pitch-50 flex justify-center">
+  <div class="min-h-screen bg-ground text-text flex justify-center">
     <!-- Mobile Frame max 480px -->
-    <div class="w-full max-w-[480px] min-h-screen flex flex-col relative bg-pitch-950 shadow-2xl border-x border-pitch-900">
+    <div class="w-full max-w-[480px] min-h-screen flex flex-col relative bg-ground shadow-2xl border-x border-surface">
 
       <!-- Main Content Area — pb-[64px] to clear fixed nav -->
       <main class="flex-1 pb-[64px] overflow-y-auto">
@@ -22,13 +22,13 @@ function isActive(path: string) {
       <!-- Fixed Bottom Navigation Bar — 64px, exactly matching mockup -->
       <nav
         class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[64px] border-t z-50"
-        style="background:#0B120F; border-color:#2A3831; display:grid; grid-template-columns:repeat(5,1fr);"
+        style="background:var(--ground); border-color:var(--hairline); display:grid; grid-template-columns:repeat(5,1fr);"
       >
         <!-- Accueil — carré 2px border-radius 2px -->
         <NuxtLink
           to="/"
           class="nav-item"
-          :style="isActive('/') ? 'color:#FFC94F' : 'color:#8CA096'"
+          :style="isActive('/') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
           <span
             class="nav-icon"
@@ -41,7 +41,7 @@ function isActive(path: string) {
         <NuxtLink
           to="/players"
           class="nav-item"
-          :style="isActive('/players') ? 'color:#FFC94F' : 'color:#8CA096'"
+          :style="isActive('/players') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
           <span
             class="nav-icon"
@@ -54,7 +54,7 @@ function isActive(path: string) {
         <NuxtLink
           to="/sessions"
           class="nav-item"
-          :style="isActive('/sessions') ? 'color:#FFC94F' : 'color:#8CA096'"
+          :style="isActive('/sessions') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
           <span
             class="nav-icon"
@@ -67,7 +67,7 @@ function isActive(path: string) {
         <NuxtLink
           to="/standings"
           class="nav-item"
-          :style="isActive('/standings') ? 'color:#FFC94F' : 'color:#8CA096'"
+          :style="isActive('/standings') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
           <span
             class="nav-icon"
@@ -84,7 +84,7 @@ function isActive(path: string) {
         <NuxtLink
           to="/stats"
           class="nav-item"
-          :style="isActive('/stats') ? 'color:#FFC94F' : 'color:#8CA096'"
+          :style="isActive('/stats') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
           <span
             class="nav-icon"

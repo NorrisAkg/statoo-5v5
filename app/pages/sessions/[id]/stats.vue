@@ -187,7 +187,7 @@ const scoreBarWidths = computed(() => {
 </script>
 
 <template>
-  <div v-if="loading" style="padding:24px 16px;color:#8CA096;font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
+  <div v-if="loading" style="padding:24px 16px;color:var(--text-muted);font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;">
     Chargement…
   </div>
 
@@ -198,46 +198,46 @@ const scoreBarWidths = computed(() => {
       <!-- Back button row -->
       <div style="height:56px;flex:none;display:flex;align-items:center;">
         <NuxtLink :to="`/sessions/${sessionId}`" style="display:flex;align-items:center;color:inherit;text-decoration:none;">
-          <span style="width:10px;height:10px;border-left:1.5px solid #EAF0EC;border-bottom:1.5px solid #EAF0EC;transform:rotate(45deg);margin-left:4px;display:inline-block;"></span>
+          <span style="width:10px;height:10px;border-left:1.5px solid var(--text);border-bottom:1.5px solid var(--text);transform:rotate(45deg);margin-left:4px;display:inline-block;"></span>
         </NuxtLink>
       </div>
 
       <!-- SCORE SECTION -->
-      <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;padding-bottom:8px;">Score</span>
+      <span style="font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);padding-bottom:8px;">Score</span>
 
       <div style="display:flex;gap:12px;">
         <!-- Équipe A -->
         <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
-          <span style="align-self:flex-start;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;background:#FFC94F;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#0B120F;">Équipe A</span>
+          <span style="align-self:flex-start;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;background:var(--team-a);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ground);">Équipe A</span>
           <div style="display:flex;align-items:center;gap:2px;">
             <button
               @click="scoreA = Math.max(0, scoreA - 1)"
-              style="width:48px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
-              :style="scoreA === 0 ? 'color:#3F4E48' : ''"
+              style="width:48px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
+              :style="scoreA === 0 ? 'color:var(--hairline-2)' : ''"
               :disabled="scoreA === 0"
             >−</button>
             <span style="flex:1;text-align:center;font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ scoreA }}</span>
             <button
               @click="scoreA++"
-              style="width:48px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
+              style="width:48px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
             >+</button>
           </div>
         </div>
 
         <!-- Équipe B -->
         <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
-          <span style="align-self:flex-end;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;border:1px solid #2A3831;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 6px);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#EAF0EC;box-sizing:border-box;">Équipe B</span>
+          <span style="align-self:flex-end;display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:4px;border:1px solid var(--hairline);background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 6px);font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text);box-sizing:border-box;">Équipe B</span>
           <div style="display:flex;align-items:center;gap:2px;">
             <button
               @click="scoreB = Math.max(0, scoreB - 1)"
-              style="width:48px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
-              :style="scoreB === 0 ? 'color:#3F4E48' : ''"
+              style="width:48px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
+              :style="scoreB === 0 ? 'color:var(--hairline-2)' : ''"
               :disabled="scoreB === 0"
             >−</button>
             <span style="flex:1;text-align:center;font:700 44px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ scoreB }}</span>
             <button
               @click="scoreB++"
-              style="width:48px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
+              style="width:48px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
             >+</button>
           </div>
         </div>
@@ -245,81 +245,81 @@ const scoreBarWidths = computed(() => {
 
       <!-- ScoreBar 40px -->
       <div style="display:flex;height:40px;flex:none;margin:12px 0 14px;">
-        <div :style="`width:${scoreBarWidths.a}%;background:#FFC94F`"></div>
-        <div :style="`width:${scoreBarWidths.b}%;background-color:#1B2721;background-image:repeating-linear-gradient(45deg,#8CA096 0 1px,transparent 1px 7px);box-shadow:inset 0 0 0 1px #2A3831`"></div>
+        <div :style="`width:${scoreBarWidths.a}%;background:var(--team-a)`"></div>
+        <div :style="`width:${scoreBarWidths.b}%;background-color:var(--surface-2);background-image:repeating-linear-gradient(45deg,var(--hatch-line) 0 1px,transparent 1px 7px);box-shadow:inset 0 0 0 1px var(--hairline)`"></div>
       </div>
 
       <!-- PLAYER LIST ACCORDION — Équipe A then B -->
-      <div style="display:flex;flex-direction:column;border-top:1px solid #2A3831;flex:none;">
+      <div style="display:flex;flex-direction:column;border-top:1px solid var(--hairline);flex:none;">
 
         <!-- Équipe A players -->
         <template v-for="p in teamA" :key="p.id">
           <!-- Collapsed row -->
           <div
             v-if="!expanded[p.id]"
-            style="display:flex;align-items:center;gap:10px;height:44px;border-bottom:1px solid #2A3831;cursor:pointer;"
+            style="display:flex;align-items:center;gap:10px;height:44px;border-bottom:1px solid var(--hairline);cursor:pointer;"
             @click="toggleExpand(p.id)"
           >
-            <span style="width:28px;height:28px;border-radius:6px;background:#1B2721;display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;flex:none;">
+            <span style="width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);flex:none;">
               {{ p.name.slice(0,2).toUpperCase() }}
             </span>
             <span style="flex:1;font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-            <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">{{ statLabel(p) }}</span>
-            <span style="width:9px;height:9px;border-right:1.5px solid #8CA096;border-bottom:1.5px solid #8CA096;transform:rotate(-45deg);flex:none;"></span>
+            <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">{{ statLabel(p) }}</span>
+            <span style="width:9px;height:9px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(-45deg);flex:none;"></span>
           </div>
 
           <!-- Expanded row -->
-          <div v-else style="background:#121B17;border-bottom:1px solid #2A3831;padding:0 10px;">
+          <div v-else style="background:var(--surface);border-bottom:1px solid var(--hairline);padding:0 10px;">
             <div
               style="display:flex;align-items:center;gap:10px;height:44px;cursor:pointer;"
               @click="toggleExpand(p.id)"
             >
-              <span style="width:28px;height:28px;border-radius:6px;background:#1B2721;display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;flex:none;">
+              <span style="width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);flex:none;">
                 {{ p.name.slice(0,2).toUpperCase() }}
               </span>
               <span style="flex:1;font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-              <span style="width:9px;height:9px;border-right:1.5px solid #8CA096;border-bottom:1.5px solid #8CA096;transform:rotate(-135deg);flex:none;"></span>
+              <span style="width:9px;height:9px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(-135deg);flex:none;"></span>
             </div>
             <div style="display:flex;flex-direction:column;gap:2px;padding-bottom:6px;">
               <!-- Buts -->
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;">
-                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Buts</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;">
+                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Buts</span>
                 <div style="display:flex;align-items:center;gap:6px;">
                   <button
                     @click.stop="setStat(p.id, 'goals', -1)"
                     :disabled="(localStats[p.id]?.goals ?? 0) === 0"
-                    style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
-                    :style="(localStats[p.id]?.goals ?? 0) === 0 ? 'color:#3F4E48;cursor:default' : ''"
+                    style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;"
+                    :style="(localStats[p.id]?.goals ?? 0) === 0 ? 'color:var(--hairline-2);cursor:default' : ''"
                   >−</button>
                   <span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ localStats[p.id]?.goals ?? p.goals }}</span>
-                  <button @click.stop="setStat(p.id, 'goals', 1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+                  <button @click.stop="setStat(p.id, 'goals', 1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
                 </div>
               </div>
               <!-- Passes -->
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;">
-                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Passes</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;">
+                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Passes</span>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <button @click.stop="setStat(p.id, 'assists', -1)" :disabled="(localStats[p.id]?.assists ?? 0) === 0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.assists ?? 0) === 0 ? 'color:#3F4E48;cursor:default' : ''">−</button>
+                  <button @click.stop="setStat(p.id, 'assists', -1)" :disabled="(localStats[p.id]?.assists ?? 0) === 0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.assists ?? 0) === 0 ? 'color:var(--hairline-2);cursor:default' : ''">−</button>
                   <span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ localStats[p.id]?.assists ?? p.assists }}</span>
-                  <button @click.stop="setStat(p.id, 'assists', 1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+                  <button @click.stop="setStat(p.id, 'assists', 1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
                 </div>
               </div>
               <!-- Cartons jaunes -->
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;">
-                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons jaunes</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;">
+                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Cartons jaunes</span>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <button @click.stop="setStat(p.id, 'yellow_cards', -1)" :disabled="(localStats[p.id]?.yellow_cards ?? 0) === 0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.yellow_cards ?? 0) === 0 ? 'color:#3F4E48;cursor:default' : ''">−</button>
+                  <button @click.stop="setStat(p.id, 'yellow_cards', -1)" :disabled="(localStats[p.id]?.yellow_cards ?? 0) === 0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.yellow_cards ?? 0) === 0 ? 'color:var(--hairline-2);cursor:default' : ''">−</button>
                   <span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ localStats[p.id]?.yellow_cards ?? p.yellow_cards }}</span>
-                  <button @click.stop="setStat(p.id, 'yellow_cards', 1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+                  <button @click.stop="setStat(p.id, 'yellow_cards', 1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
                 </div>
               </div>
               <!-- Cartons rouges -->
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;">
-                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons rouges</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;">
+                <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Cartons rouges</span>
                 <div style="display:flex;align-items:center;gap:6px;">
-                  <button @click.stop="setStat(p.id, 'red_cards', -1)" :disabled="(localStats[p.id]?.red_cards ?? 0) === 0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.red_cards ?? 0) === 0 ? 'color:#3F4E48;cursor:default' : ''">−</button>
+                  <button @click.stop="setStat(p.id, 'red_cards', -1)" :disabled="(localStats[p.id]?.red_cards ?? 0) === 0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.red_cards ?? 0) === 0 ? 'color:var(--hairline-2);cursor:default' : ''">−</button>
                   <span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ localStats[p.id]?.red_cards ?? p.red_cards }}</span>
-                  <button @click.stop="setStat(p.id, 'red_cards', 1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+                  <button @click.stop="setStat(p.id, 'red_cards', 1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
                 </div>
               </div>
             </div>
@@ -328,62 +328,62 @@ const scoreBarWidths = computed(() => {
 
         <!-- Équipe B players — même pattern -->
         <template v-for="p in teamB" :key="p.id">
-          <div v-if="!expanded[p.id]" style="display:flex;align-items:center;gap:10px;height:44px;border-bottom:1px solid #2A3831;cursor:pointer;" @click="toggleExpand(p.id)">
-            <span style="width:28px;height:28px;border-radius:6px;background:#1B2721;display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;flex:none;">{{ p.name.slice(0,2).toUpperCase() }}</span>
+          <div v-if="!expanded[p.id]" style="display:flex;align-items:center;gap:10px;height:44px;border-bottom:1px solid var(--hairline);cursor:pointer;" @click="toggleExpand(p.id)">
+            <span style="width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);flex:none;">{{ p.name.slice(0,2).toUpperCase() }}</span>
             <span style="flex:1;font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-            <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;">{{ statLabel(p) }}</span>
-            <span style="width:9px;height:9px;border-right:1.5px solid #8CA096;border-bottom:1.5px solid #8CA096;transform:rotate(-45deg);flex:none;"></span>
+            <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">{{ statLabel(p) }}</span>
+            <span style="width:9px;height:9px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(-45deg);flex:none;"></span>
           </div>
-          <div v-else style="background:#121B17;border-bottom:1px solid #2A3831;padding:0 10px;">
+          <div v-else style="background:var(--surface);border-bottom:1px solid var(--hairline);padding:0 10px;">
             <div style="display:flex;align-items:center;gap:10px;height:44px;cursor:pointer;" @click="toggleExpand(p.id)">
-              <span style="width:28px;height:28px;border-radius:6px;background:#1B2721;display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;flex:none;">{{ p.name.slice(0,2).toUpperCase() }}</span>
+              <span style="width:28px;height:28px;border-radius:6px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);flex:none;">{{ p.name.slice(0,2).toUpperCase() }}</span>
               <span style="flex:1;font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;">{{ p.name }}</span>
-              <span style="width:9px;height:9px;border-right:1.5px solid #8CA096;border-bottom:1.5px solid #8CA096;transform:rotate(-135deg);flex:none;"></span>
+              <span style="width:9px;height:9px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(-135deg);flex:none;"></span>
             </div>
             <div style="display:flex;flex-direction:column;gap:2px;padding-bottom:6px;">
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Buts</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'goals',-1)" :disabled="(localStats[p.id]?.goals??0)===0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.goals??0)===0?'color:#3F4E48;cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.goals??p.goals}}</span><button @click.stop="setStat(p.id,'goals',1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Passes</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'assists',-1)" :disabled="(localStats[p.id]?.assists??0)===0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.assists??0)===0?'color:#3F4E48;cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.assists??p.assists}}</span><button @click.stop="setStat(p.id,'assists',1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons jaunes</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'yellow_cards',-1)" :disabled="(localStats[p.id]?.yellow_cards??0)===0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.yellow_cards??0)===0?'color:#3F4E48;cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.yellow_cards??p.yellow_cards}}</span><button @click.stop="setStat(p.id,'yellow_cards',1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#0B120F;border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Cartons rouges</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'red_cards',-1)" :disabled="(localStats[p.id]?.red_cards??0)===0" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.red_cards??0)===0?'color:#3F4E48;cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.red_cards??p.red_cards}}</span><button @click.stop="setStat(p.id,'red_cards',1)" style="width:52px;height:52px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Buts</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'goals',-1)" :disabled="(localStats[p.id]?.goals??0)===0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.goals??0)===0?'color:var(--hairline-2);cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.goals??p.goals}}</span><button @click.stop="setStat(p.id,'goals',1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Passes</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'assists',-1)" :disabled="(localStats[p.id]?.assists??0)===0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.assists??0)===0?'color:var(--hairline-2);cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.assists??p.assists}}</span><button @click.stop="setStat(p.id,'assists',1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Cartons jaunes</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'yellow_cards',-1)" :disabled="(localStats[p.id]?.yellow_cards??0)===0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.yellow_cards??0)===0?'color:var(--hairline-2);cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.yellow_cards??p.yellow_cards}}</span><button @click.stop="setStat(p.id,'yellow_cards',1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ground);border-radius:8px;padding:0 10px;"><span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Cartons rouges</span><div style="display:flex;align-items:center;gap:6px;"><button @click.stop="setStat(p.id,'red_cards',-1)" :disabled="(localStats[p.id]?.red_cards??0)===0" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="(localStats[p.id]?.red_cards??0)===0?'color:var(--hairline-2);cursor:default':''">−</button><span style="width:44px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{localStats[p.id]?.red_cards??p.red_cards}}</span><button @click.stop="setStat(p.id,'red_cards',1)" style="width:52px;height:52px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 22px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button></div></div>
             </div>
           </div>
         </template>
       </div>
 
       <!-- BUTS NON ATTRIBUÉS -->
-      <div style="padding:14px 0 8px;flex:none;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8CA096;">Buts non attribués</div>
+      <div style="padding:14px 0 8px;flex:none;font:600 11px/1 'Instrument Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);">Buts non attribués</div>
       <div style="display:flex;flex-direction:column;gap:4px;flex:none;padding-bottom:8px;">
         <!-- Équipe A -->
-        <div style="display:flex;align-items:center;justify-content:space-between;background:#121B17;border-radius:8px;padding:6px 10px;">
-          <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Équipe A</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:8px;padding:6px 10px;">
+          <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Équipe A</span>
           <div style="display:flex;align-items:center;gap:6px;">
-            <button @click="unassignedA = Math.max(0, unassignedA - 1)" :disabled="unassignedA === 0" style="width:44px;height:44px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="unassignedA===0?'color:#3F4E48;cursor:default':''">−</button>
+            <button @click="unassignedA = Math.max(0, unassignedA - 1)" :disabled="unassignedA === 0" style="width:44px;height:44px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="unassignedA===0?'color:var(--hairline-2);cursor:default':''">−</button>
             <span style="width:36px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ unassignedA }}</span>
-            <button @click="unassignedA++" style="width:44px;height:44px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+            <button @click="unassignedA++" style="width:44px;height:44px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
           </div>
         </div>
         <!-- Équipe B -->
-        <div style="display:flex;align-items:center;justify-content:space-between;background:#121B17;border-radius:8px;padding:6px 10px;">
-          <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#D3DED8;">Équipe B</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:8px;padding:6px 10px;">
+          <span style="font:500 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">Équipe B</span>
           <div style="display:flex;align-items:center;gap:6px;">
-            <button @click="unassignedB = Math.max(0, unassignedB - 1)" :disabled="unassignedB === 0" style="width:44px;height:44px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="unassignedB===0?'color:#3F4E48;cursor:default':''">−</button>
+            <button @click="unassignedB = Math.max(0, unassignedB - 1)" :disabled="unassignedB === 0" style="width:44px;height:44px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;" :style="unassignedB===0?'color:var(--hairline-2);cursor:default':''">−</button>
             <span style="width:36px;text-align:center;font:700 22px/1 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">{{ unassignedB }}</span>
-            <button @click="unassignedB++" style="width:44px;height:44px;background:#1B2721;border:1px solid #2A3831;border-radius:8px;color:#EAF0EC;font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
+            <button @click="unassignedB++" style="width:44px;height:44px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 18px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;">+</button>
           </div>
         </div>
-        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#8CA096;padding-top:4px;">Buts marqués sans buteur identifié (csc, oubli).</span>
+        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);padding-top:4px;">Buts marqués sans buteur identifié (csc, oubli).</span>
       </div>
     </div>
 
     <!-- BOTTOM BAR: warning + button -->
-    <div style="flex:none;padding:12px 16px 20px;border-top:1px solid #2A3831;display:flex;flex-direction:column;gap:12px;">
+    <div style="flex:none;padding:12px 16px 20px;border-top:1px solid var(--hairline);display:flex;flex-direction:column;gap:12px;">
       <!-- Goal mismatch warning -->
       <div
         v-if="goalMismatch.any"
-        style="background:#260907;border:1px solid #A22C1E;border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;"
+        style="background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;"
       >
-        <span style="font:600 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#FF7361;">Écart de buts</span>
-        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#EAF0EC;">
+        <span style="font:600 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--danger-text);">Écart de buts</span>
+        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--text);">
           <template v-if="goalMismatch.mismatchA">Équipe A : {{ scoreA }} marqués, {{ goalMismatch.sumA + unassignedA }} attribués. </template>
           <template v-if="goalMismatch.mismatchB">Équipe B : {{ scoreB }} marqués, {{ goalMismatch.sumB + unassignedB }} attribués. </template>
           Vous pouvez clore quand même.
@@ -393,16 +393,16 @@ const scoreBarWidths = computed(() => {
       <!-- Close error -->
       <div
         v-if="closeError"
-        style="background:#260907;border:1px solid #A22C1E;border-radius:8px;padding:12px 14px;"
+        style="background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:8px;padding:12px 14px;"
       >
-        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:#FF7361;">{{ closeError }}</span>
+        <span style="font:400 13px/1.3 'Instrument Sans',system-ui,sans-serif;color:var(--danger-text);">{{ closeError }}</span>
       </div>
 
       <!-- Clôturer button -->
       <button
         @click="handleClose"
         :disabled="closing"
-        style="width:100%;height:56px;background:#FFC94F;border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:#0B120F;cursor:pointer;"
+        style="width:100%;height:56px;background:var(--team-a);border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:var(--ground);cursor:pointer;"
         :style="closing ? 'opacity:0.6;cursor:not-allowed' : ''"
       >
         {{ closing ? 'Clôture en cours…' : 'Clôturer la séance' }}

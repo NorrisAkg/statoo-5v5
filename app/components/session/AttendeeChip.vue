@@ -45,8 +45,8 @@ const initials = computed(() => {
   height: 52px;
   padding: 0 12px;
   border-radius: 10px;
-  border: 1.5px solid var(--color-pitch-600);
-  background: var(--color-pitch-800);
+  border: 1.5px solid var(--hairline-2);
+  background: var(--surface-2);
   cursor: pointer;
   transition: all 0.15s ease;
   width: 100%;
@@ -55,8 +55,7 @@ const initials = computed(() => {
 }
 
 .attendee-chip--selected {
-  border-color: var(--color-bib-400);
-  background: rgba(255, 201, 79, 0.1);
+  border-color: var(--accent-text);
 }
 
 .attendee-chip:active {
@@ -67,36 +66,36 @@ const initials = computed(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--color-pitch-700);
-  border: 1.5px solid var(--color-pitch-600);
+  background: var(--hairline);
+  border: 1.5px solid var(--hairline-2);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Archivo Expanded', sans-serif;
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--color-pitch-300);
+  color: var(--text-muted);
   flex-shrink: 0;
   transition: all 0.15s ease;
 }
 
 .attendee-chip__avatar--selected {
-  background: var(--color-bib-400);
-  border-color: var(--color-bib-400);
-  color: var(--color-pitch-950);
+  background: var(--team-a);
+  border-color: var(--accent-text);
+  color: var(--ground);
 }
 
 .attendee-chip__name {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-pitch-100);
+  color: var(--text-strong);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .attendee-chip--selected .attendee-chip__name {
-  color: var(--color-bib-300);
+  color: var(--team-a-press);
 }
 </style>

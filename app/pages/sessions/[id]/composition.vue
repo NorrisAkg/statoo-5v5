@@ -174,17 +174,17 @@ onMounted(async () => {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--color-pitch-800);
-  border: 1px solid var(--color-pitch-700);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
   text-decoration: none;
-  color: var(--color-pitch-200);
+  color: var(--text-strong);
   transition: background 0.15s ease;
 }
-.btn-back:active { background: var(--color-pitch-700); }
+.btn-back:active { background: var(--hairline); }
 
 .header-badges {
   display: flex;
@@ -203,26 +203,24 @@ onMounted(async () => {
 }
 
 .badge--draft {
-  background: rgba(255, 201, 79, 0.12);
-  color: var(--color-bib-400);
-  border: 1px solid rgba(255, 201, 79, 0.3);
+  color: var(--accent-text);
+  border: 1px solid var(--accent-text);
 }
 
 .badge--format {
-  background: var(--color-pitch-800);
-  color: var(--color-pitch-200);
-  border: 1px solid var(--color-pitch-700);
+  background: var(--surface-2);
+  color: var(--text-strong);
+  border: 1px solid var(--hairline);
 }
 
 .badge--ranked {
-  background: rgba(255, 201, 79, 0.1);
-  color: var(--color-bib-400);
+  color: var(--accent-text);
 }
 
 .header-date {
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.85rem;
-  color: var(--color-pitch-400);
+  color: var(--text-muted);
   margin: 0 0 12px;
   text-transform: capitalize;
 }
@@ -230,12 +228,12 @@ onMounted(async () => {
 /* Score placeholder bar */
 .score-bar-placeholder {
   height: 40px;
-  border: 1.5px dashed var(--color-pitch-700);
+  border: 1.5px dashed var(--hairline);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-pitch-900);
+  background: var(--surface);
 }
 
 .score-placeholder-inner {
@@ -248,12 +246,12 @@ onMounted(async () => {
   font-family: 'Archivo Expanded', sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--color-pitch-700);
+  color: var(--hairline);
 }
 
 .score-sep {
   font-size: 0.7rem;
-  color: var(--color-pitch-700);
+  color: var(--hairline);
 }
 
 /* Loading */
@@ -266,8 +264,8 @@ onMounted(async () => {
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid var(--color-pitch-700);
-  border-top-color: var(--color-bib-400);
+  border: 3px solid var(--hairline);
+  border-top-color: var(--accent-text);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -284,7 +282,7 @@ onMounted(async () => {
 
 .composition-divider {
   width: 1px;
-  background: var(--color-pitch-700);
+  background: var(--hairline);
   align-self: stretch;
   margin: 0 10px;
   min-height: 200px;
@@ -295,7 +293,7 @@ onMounted(async () => {
   text-align: center;
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.75rem;
-  color: var(--color-pitch-500);
+  color: var(--text-faint);
   margin-bottom: 16px;
   padding: 4px 0;
 }
@@ -307,7 +305,7 @@ onMounted(async () => {
   left: 0;
   right: 0;
   padding: 12px 16px calc(70px + 12px); /* above bottom nav */
-  background: linear-gradient(to top, var(--color-pitch-950) 60%, transparent);
+  background: linear-gradient(to top, var(--ground) 60%, transparent);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -317,9 +315,9 @@ onMounted(async () => {
   width: 100%;
   height: 48px;
   border-radius: 12px;
-  border: 1.5px solid var(--color-pitch-600);
+  border: 1.5px solid var(--hairline-2);
   background: transparent;
-  color: var(--color-pitch-200);
+  color: var(--text-strong);
   font-family: 'Instrument Sans', sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
@@ -332,7 +330,7 @@ onMounted(async () => {
 }
 
 .btn-draw:not(:disabled):active {
-  background: var(--color-pitch-800);
+  background: var(--surface-2);
 }
 
 .btn-draw:disabled {
@@ -345,8 +343,8 @@ onMounted(async () => {
   height: 56px;
   border-radius: 14px;
   border: none;
-  background: var(--color-bib-400);
-  color: var(--color-pitch-950);
+  background: var(--team-a);
+  color: var(--ground);
   font-family: 'Instrument Sans', sans-serif;
   font-size: 1rem;
   font-weight: 700;
@@ -358,15 +356,15 @@ onMounted(async () => {
 }
 
 .btn-stats:active {
-  background: var(--color-bib-300);
+  background: var(--team-a-press);
   scale: 0.98;
 }
 
 .btn-spinner {
   width: 18px;
   height: 18px;
-  border: 2.5px solid rgba(255,255,255,0.3);
-  border-top-color: var(--color-pitch-200);
+  border: 2.5px solid var(--hairline);
+  border-top-color: var(--text-strong);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }

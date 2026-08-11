@@ -50,10 +50,10 @@ const percentages = computed(() => {
 
 <template>
   <div
-    class="w-full rounded-xs overflow-hidden relative border border-pitch-700 flex transition-all duration-300"
+    class="w-full rounded-xs overflow-hidden relative border border-hairline flex transition-all duration-300"
     :class="[
       heightClass,
-      isDraft ? 'border-dashed border-pitch-600 bg-pitch-900' : 'bg-pitch-900'
+      isDraft ? 'border-dashed border-hairline-2 bg-surface' : 'bg-surface'
     ]"
     role="img"
     :aria-label="`Équipe A ${scoreA ?? 0}, Équipe B ${scoreB ?? 0}`"
@@ -61,11 +61,11 @@ const percentages = computed(() => {
     <template v-if="!isDraft">
       <!-- Team A: Solid Bib Yellow -->
       <div
-        class="bg-bib-400 h-full transition-all duration-300"
+        class="bg-team-a h-full transition-all duration-300"
         :style="{ width: `${percentages.percentA}%` }"
       />
       <!-- Separator line -->
-      <div class="w-[1px] bg-pitch-950 h-full shrink-0" />
+      <div class="w-[1px] bg-ground h-full shrink-0" />
       <!-- Team B: 45° Diagonal Hatching -->
       <div
         class="bg-team-b-hatch h-full transition-all duration-300 flex-1"
