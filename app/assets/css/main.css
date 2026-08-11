@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  /* pitch — neutral, desaturated pitch under floodlight */
+  --color-pitch-50:  #EAF0EC;
+  --color-pitch-100: #D3DED8;
+  --color-pitch-200: #B0C0B8;
+  --color-pitch-300: #8CA096;
+  --color-pitch-400: #6E837A;
+  --color-pitch-500: #556860;
+  --color-pitch-600: #3F4E48;
+  --color-pitch-700: #2A3831;
+  --color-pitch-800: #1B2721;
+  --color-pitch-900: #121B17;
+  --color-pitch-950: #0B120F;
+
+  /* bib — high-visibility yellow bib, primary accent + team A */
+  --color-bib-50:  #FFF9EB;
+  --color-bib-100: #FFEFC7;
+  --color-bib-200: #FFE29E;
+  --color-bib-300: #FFD470;
+  --color-bib-400: #FFC94F;
+  --color-bib-500: #F5B32E;
+  --color-bib-600: #D9971C;
+  --color-bib-700: #AE7614;
+  --color-bib-800: #7C5310;
+  --color-bib-900: #4E340A;
+  --color-bib-950: #2B1D05;
+
+  /* flag — card, alert, destructive */
+  --color-flag-50:  #FFF1EE;
+  --color-flag-100: #FFDCD5;
+  --color-flag-200: #FFBCAF;
+  --color-flag-300: #FF9585;
+  --color-flag-400: #FF7361;
+  --color-flag-500: #F0503C;
+  --color-flag-600: #CB3A28;
+  --color-flag-700: #A22C1E;
+  --color-flag-800: #731F15;
+  --color-flag-900: #47130D;
+  --color-flag-950: #260907;
+
+  /* Typography */
+  --font-display: 'Archivo Expanded', 'Archivo', system-ui, sans-serif;
+  --font-sans: 'Instrument Sans', system-ui, sans-serif;
+
+  /* Radii & Spacing */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Role tokens — the only colors a component should reference.
+ *
+ * The palettes above stay literal (a hex is a hex); these say what a color is
+ * FOR, so the light theme is a value swap and nothing else. Substitution table
+ * transcribed from docs/design-mockup-template.html § "Substitutions".
+ *
+ * Light follows the OS only — there is no in-app toggle. Dark is the base.
+ * ------------------------------------------------------------------------ */
+:root {
+  --ground:        #0B120F;  /* page background                              */
+  --surface:       #121B17;  /* cards, raised blocks                         */
+  --surface-2:     #1B2721;  /* inputs, steppers, bottom sheets, avatars     */
+  --hairline:      #2A3831;  /* 1px separators and borders                   */
+  --hairline-2:    #3F4E48;  /* stronger borders, disabled glyphs, dashes    */
+
+  --text:          #EAF0EC;  /* primary text                                 */
+  --text-strong:   #D3DED8;  /* list labels sitting next to a value          */
+  --text-muted:    #8CA096;  /* secondary text, eyebrows, inactive nav       */
+  --text-faint:    #556860;  /* placeholders, em-dashes, "no value"          */
+
+  --team-a:        #FFC94F;  /* Team A solid — never a text color            */
+  --team-a-press:  #F5B32E;
+  --hatch-line:    #8CA096;  /* Team B 45° hatching over --surface-2         */
+  --accent-text:   #FFC94F;  /* accent applied to text, numbers, icons       */
+  --on-accent:     #0B120F;  /* text over a --team-a fill                    */
+
+  --danger-text:   #FF7361;
+  --danger-solid:  #F0503C;
+  --danger-border: #A22C1E;
+  --danger-bg:     #260907;
+
+  --frame-border:  #2A3831;  /* the 480px mobile frame edge                  */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --ground:        #F2F5F3;
+    --surface:       #FFFFFF;
+    --surface-2:     #E8EDEA;
+    --hairline:      #D3DCD7;
+    --hairline-2:    #AFBCB5;
+
+    --text:          #16211C;
+    --text-strong:   #33443C;
+    --text-muted:    #5B6E66;
+    --text-faint:    #8FA098;
+
+    /* The yellow fill is the one thing that does NOT move: Team A must read
+     * identically in both themes. But #FFC94F on #F2F5F3 is 1.6:1, so every
+     * TEXT use of the accent switches to #8A5E00 (5.7:1). Same for the alert. */
+    --team-a:        #FFC94F;
+    --team-a-press:  #F5B32E;
+    --hatch-line:    #5B6E66;
+    --accent-text:   #8A5E00;
+    --on-accent:     #16211C;
+
+    --danger-text:   #B02E1D;
+    --danger-solid:  #D2402C;
+    --danger-border: #E4A99F;
+    --danger-bg:     #FDECE9;
+
+    --frame-border:  #C4CFC9;
+  }
+}
+
+/* Expose the role tokens as Tailwind utilities: bg-ground, text-muted,
+ * border-hairline… `inline` keeps them resolving to the live var, so the
+ * media query above still applies. */
+@theme inline {
+  --color-ground:        var(--ground);
+  --color-surface:       var(--surface);
+  --color-surface-2:     var(--surface-2);
+  --color-hairline:      var(--hairline);
+  --color-hairline-2:    var(--hairline-2);
+  --color-text:          var(--text);
+  --color-text-strong:   var(--text-strong);
+  --color-text-muted:    var(--text-muted);
+  --color-text-faint:    var(--text-faint);
+  --color-team-a:        var(--team-a);
+  --color-accent-text:   var(--accent-text);
+  --color-on-accent:     var(--on-accent);
+  --color-danger-text:   var(--danger-text);
+  --color-danger-solid:  var(--danger-solid);
+  --color-danger-bg:     var(--danger-bg);
+}
+
+/* Custom Base Styles */
+html, body {
+  background-color: var(--ground);
+  color: var(--text);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Tabular figures for aligned data columns */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Display typography utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Team B 45-degree diagonal hatching background pattern.
+ * Same density in both themes — only the line color moves. */
+.bg-team-b-hatch {
+  background-color: var(--surface-2);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--hatch-line) 0,
+    var(--hatch-line) 2px,
+    transparent 0,
+    transparent 8px
+  );
+}
+
+/* Scrollbar customization for mobile aesthetics */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ground);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hairline);
+  border-radius: 4px;
+}
