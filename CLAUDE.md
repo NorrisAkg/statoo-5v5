@@ -18,7 +18,14 @@ npm run preview
 npm run icons      # regenerate the PWA/app icons into public/
 ```
 
-`postinstall` runs `nuxt prepare` and copies `sql-wasm.wasm` into `public/` and `public/assets/` — the web SQLite driver breaks without it, so re-run `npm install` if those files go missing.
+`postinstall` runs `nuxt prepare` then [scripts/copy-sql-wasm.cjs](scripts/copy-sql-wasm.cjs), which copies `sql-wasm.wasm` into `public/` and `public/assets/` — the web SQLite driver breaks without it, so re-run `npm install` if those files go missing. The script resolves sql.js with `require.resolve` and skips with a warning rather than failing the install, since the binaries are committed too.
+
+```bash
+npm run cap:copy           # generate + npx cap copy, after every web change
+npm run cap:build-android  # gradlew assembleDebug
+```
+
+`assembleDebug`, not `assembleRelease`: there is no `signingConfig` in `android/app/build.gradle`, so a release build produces an unsigned APK that Android refuses to install.
 
 There is no test runner, linter, or type-check script configured.
 
@@ -77,7 +84,7 @@ The Pts/match eligibility threshold is **configurable, and interpreted only in S
 - Lot L5 (Supabase backup/restore) is unimplemented — no `lib/backup/`. On iOS this is the *only* real guarantee against storage eviction, so it is not optional there.
 - Lot **L6a** (Android APK) is unimplemented: no `capacitor.config.ts`, no `android/`, and `@capacitor/cli` is not even installed despite `@capacitor/core` and `@capacitor/android` being there. The machine is ready (JDK 17, SDK with platforms 31–36).
 - Lot **L6b** (PWA) is built but **never verified on a device**: manifest, service worker, icons and safe-area handling exist and the assets serve correctly locally, but nobody has installed it on an iPhone. The `appId` for the APK is also still undecided.
-- `nanoid` and `localforage` are imported in source but absent from `package.json` (resolved transitively). Add them explicitly before touching dependency versions.
+- The Capacitor CLI, core and android packages must stay on the **same major** (6.x). A CLI on a different major can rewrite the native config incorrectly on `cap sync`.
 - `closeSession()` in `queries.ts` writes score-derived `result` but does not wrap the multi-table stat update in a transaction, contrary to the stated invariant.
 - The **layout** of the earlier Tailwind pages (home, players, settings) still does not match the template screens — cards where the mockup uses flat filet-separated lists, 56px round avatars instead of 36px rounded squares. Their colors are on the role tokens, so only the geometry is left to redo.
 - `composition.vue` uses 🎲 emoji on its draw button and split-mode badge, against the no-gamification rule, and its layout diverges from screen 7.
