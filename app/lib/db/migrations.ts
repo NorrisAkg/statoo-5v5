@@ -64,7 +64,9 @@ CREATE TABLE IF NOT EXISTS participations (
   session_id    TEXT NOT NULL REFERENCES sessions (id) ON DELETE CASCADE,
   player_id     TEXT NOT NULL REFERENCES players (id) ON DELETE RESTRICT,
 
-  team          TEXT NOT NULL CHECK (team IN ('A', 'B')),
+  -- NULL = present but not yet assigned to a team. Only reachable while the
+  -- session is a DRAFT: closure requires every attendee to be in A or B.
+  team          TEXT CHECK (team IS NULL OR team IN ('A', 'B')),
 
   goals         INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
   assists       INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
@@ -85,10 +87,13 @@ CREATE TABLE IF NOT EXISTS meta (
   value  TEXT NOT NULL
 );
 
-INSERT OR IGNORE INTO meta (key, value) VALUES ('schema_version', '2');
+-- A fresh install already has the nullable team column below, so it lands
+-- straight on v3 and migration 003 never runs for it.
+INSERT OR IGNORE INTO meta (key, value) VALUES ('schema_version', '3');
 
 -- Bring a v1 database up to v2: the settings table below is created
--- unconditionally, so the version can be bumped in the same pass.
+-- unconditionally, so the version can be bumped in the same pass. Going from
+-- v2 to v3 needs a table rebuild and is handled by MIGRATION_003 instead.
 UPDATE meta SET value = '2' WHERE key = 'schema_version' AND value = '1';
 
 CREATE TABLE IF NOT EXISTS settings (
@@ -105,7 +110,13 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
   ('onboarding_completed', '0');
 `
 
-const MIGRATION_002_VIEWS = `
+/**
+ * Views are dropped and recreated on every start, so a view change needs no
+ * migration. Shared with MIGRATION_003, which must clear them before rebuilding
+ * `participations`: ALTER TABLE ... RENAME re-parses the whole schema, and a
+ * view still pointing at the dropped table makes the rename fail.
+ */
+const DROP_ALL_VIEWS = `
 DROP VIEW IF EXISTS v_session_summary;
 DROP VIEW IF EXISTS v_group_totals;
 DROP VIEW IF EXISTS v_top_cards;
@@ -117,6 +128,10 @@ DROP VIEW IF EXISTS v_player_stats;
 DROP VIEW IF EXISTS v_eligibility_threshold;
 DROP VIEW IF EXISTS v_ranked_session_count;
 DROP VIEW IF EXISTS v_closed_participations;
+`
+
+const MIGRATION_002_VIEWS = `
+${DROP_ALL_VIEWS}
 
 CREATE VIEW v_closed_participations AS
 SELECT
@@ -133,6 +148,10 @@ SELECT
   s.result,
   CASE
     WHEN s.is_ranked = 0        THEN NULL
+    -- Unreachable while closure requires every attendee assigned, but an
+    -- unassigned player must never be scored as a loss: \`s.result = NULL\` is
+    -- NULL, not false, and would silently fall through to the ELSE.
+    WHEN p.team IS NULL         THEN NULL
     WHEN s.result = 'DRAW'      THEN 1
     WHEN s.result = p.team      THEN 3
     ELSE 0
@@ -293,6 +312,9 @@ SELECT
 
   COUNT(p.id) FILTER (WHERE p.team = 'A')  AS size_a,
   COUNT(p.id) FILTER (WHERE p.team = 'B')  AS size_b,
+  -- Attendees still waiting to be placed. Blocks closure; only ever > 0 on a
+  -- DRAFT composed by hand.
+  COUNT(p.id) FILTER (WHERE p.team IS NULL) AS unassigned_players,
   COUNT(p.id)                              AS attendance,
 
   COUNT(p.id) FILTER (WHERE p.team = 'A') || 'v' ||
@@ -315,7 +337,74 @@ LEFT JOIN participations p ON p.session_id = s.id
 GROUP BY s.id;
 `
 
+/**
+ * v2 -> v3: `participations.team` becomes nullable so an attendee can exist
+ * before a team is picked. SQLite cannot drop a NOT NULL or rewrite a CHECK in
+ * place, so the table is rebuilt. Mirrors docs/003_nullable_team.sql.
+ *
+ * No `PRAGMA foreign_keys` toggle: nothing references `participations`, so the
+ * drop and rename are safe with foreign keys on — and the pragma would be a
+ * no-op inside the transaction `execute()` opens anyway.
+ *
+ * The views MUST be dropped first (hence the prologue): ALTER TABLE ... RENAME
+ * re-parses every view, and one still referencing the dropped `participations`
+ * aborts the rename with "no such table: main.participations".
+ */
+const MIGRATION_003_NULLABLE_TEAM = `
+${DROP_ALL_VIEWS}
+
+CREATE TABLE participations_v3 (
+  id            TEXT PRIMARY KEY,
+  session_id    TEXT NOT NULL REFERENCES sessions (id) ON DELETE CASCADE,
+  player_id     TEXT NOT NULL REFERENCES players (id) ON DELETE RESTRICT,
+
+  team          TEXT CHECK (team IS NULL OR team IN ('A', 'B')),
+
+  goals         INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
+  assists       INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
+  yellow_cards  INTEGER NOT NULL DEFAULT 0 CHECK (yellow_cards >= 0),
+  red_cards     INTEGER NOT NULL DEFAULT 0 CHECK (red_cards >= 0),
+
+  created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at    TEXT NOT NULL DEFAULT (datetime('now')),
+
+  UNIQUE (session_id, player_id)
+);
+
+INSERT INTO participations_v3
+  (id, session_id, player_id, team, goals, assists, yellow_cards, red_cards, created_at, updated_at)
+SELECT
+  id, session_id, player_id, team, goals, assists, yellow_cards, red_cards, created_at, updated_at
+FROM participations;
+
+DROP TABLE participations;
+
+ALTER TABLE participations_v3 RENAME TO participations;
+
+CREATE INDEX IF NOT EXISTS idx_participations_player  ON participations (player_id);
+CREATE INDEX IF NOT EXISTS idx_participations_session ON participations (session_id, team);
+
+UPDATE meta SET value = '3' WHERE key = 'schema_version';
+`
+
+/** Reads the stored schema version; `null` when meta is unreadable. */
+async function readSchemaVersion(db: SQLiteDBConnection): Promise<string | null> {
+  try {
+    const res = await db.query(`SELECT value FROM meta WHERE key = 'schema_version';`)
+    return (res.values?.[0]?.value as string) ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function runMigrations(db: SQLiteDBConnection): Promise<void> {
   await db.execute(MIGRATION_001_INIT)
+
+  // Table rebuild, so it must run exactly once and before the views are
+  // recreated — they read the rebuilt table.
+  if ((await readSchemaVersion(db)) === '2') {
+    await db.execute(MIGRATION_003_NULLABLE_TEAM)
+  }
+
   await db.execute(MIGRATION_002_VIEWS)
 }

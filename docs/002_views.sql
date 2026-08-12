@@ -20,6 +20,10 @@ SELECT
   s.result,
   CASE
     WHEN s.is_ranked = 0        THEN NULL
+    -- Unreachable while closure requires every attendee assigned, but an
+    -- unassigned player must never be scored as a loss: `s.result = NULL` is
+    -- NULL, not false, and would silently fall through to the ELSE.
+    WHEN p.team IS NULL         THEN NULL
     WHEN s.result = 'DRAW'      THEN 1
     WHEN s.result = p.team      THEN 3
     ELSE 0
@@ -218,6 +222,9 @@ SELECT
 
   COUNT(p.id) FILTER (WHERE p.team = 'A')  AS size_a,
   COUNT(p.id) FILTER (WHERE p.team = 'B')  AS size_b,
+  -- Attendees still waiting to be placed. Blocks closure; only ever > 0 on a
+  -- DRAFT composed by hand.
+  COUNT(p.id) FILTER (WHERE p.team IS NULL) AS unassigned_players,
   COUNT(p.id)                              AS attendance,
 
   -- Derived format label, e.g. "5v5", "6v4"

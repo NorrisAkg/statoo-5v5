@@ -33,7 +33,7 @@
 
       <!-- Empty state -->
       <div v-if="players.length === 0" class="team-column__empty">
-        <span class="empty-icon">⬡</span>
+        <span class="empty-icon">⚽</span>
         <span>Aucun joueur</span>
       </div>
     </div>
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import type { TeamAssignment, Team } from '~/types'
+import { getInitials } from '~/lib/initials'
 
 const props = defineProps<{
   team: Team
@@ -53,14 +54,6 @@ defineEmits<{
 }>()
 
 const otherTeam = computed<Team>(() => (props.team === 'A' ? 'B' : 'A'))
-
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/)
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
-  }
-  return parts[0].slice(0, 2).toUpperCase()
-}
 </script>
 
 <style scoped>

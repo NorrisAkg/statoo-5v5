@@ -1,6 +1,8 @@
--- Statoo — schema v1
+-- Statoo — schema v3
 -- SQLite (@capacitor-community/sqlite)
--- schema_version: 1
+-- schema_version: 3
+--   v2: settings table (SPEC-08)
+--   v3: participations.team becomes nullable (unassigned attendee, SPEC-03)
 
 PRAGMA foreign_keys = ON;
 
@@ -75,7 +77,9 @@ CREATE TABLE participations (
   session_id    TEXT NOT NULL REFERENCES sessions (id) ON DELETE CASCADE,
   player_id     TEXT NOT NULL REFERENCES players (id) ON DELETE RESTRICT,
 
-  team          TEXT NOT NULL CHECK (team IN ('A', 'B')),
+  -- NULL = present but not yet assigned to a team. Only reachable while the
+  -- session is a DRAFT: closure requires every attendee to be in A or B.
+  team          TEXT CHECK (team IS NULL OR team IN ('A', 'B')),
 
   goals         INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
   assists       INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
@@ -120,7 +124,7 @@ CREATE TABLE meta (
   value  TEXT NOT NULL
 );
 
-INSERT INTO meta (key, value) VALUES ('schema_version', '2');
+INSERT INTO meta (key, value) VALUES ('schema_version', '3');
 
 -- ---------------------------------------------------------------------------
 -- settings — organizer preferences captured at onboarding (SPEC-08).

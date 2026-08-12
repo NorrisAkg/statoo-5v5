@@ -79,6 +79,8 @@ export interface SessionSummary {
   result?: SessionResult | null
   size_a: number
   size_b: number
+  /** Attendees not yet placed in a team. Blocks closure. */
+  unassigned_players: number
   attendance: number
   format: string // e.g. "5v5"
   accounted_goals_a: number
@@ -125,7 +127,8 @@ export interface TeamAssignment {
   player_id: string
   name: string
   nickname?: string | null
-  team: Team
+  /** `null` = present but not yet placed. Only possible on a DRAFT. */
+  team: Team | null
   goals: number
   assists: number
   yellow_cards: number

@@ -8,7 +8,7 @@
       <h1 class="page-title">Nouvelle séance</h1>
     </div>
 
-    <form @submit.prevent="handleCreate">
+    <form @submit.prevent="handleCreate('RANDOM')">
       <!-- Section: QUAND -->
       <section class="form-section">
         <h2 class="section-label">Quand</h2>
@@ -61,7 +61,7 @@
 
         <!-- Validation warning -->
         <p v-if="showMinWarning" class="warning-text">
-          ⚠️ Il faut au moins 4 joueurs pour créer une séance.
+          Il faut au moins {{ MIN_ATTENDEES }} joueurs présents pour créer une séance.
         </p>
       </section>
 
@@ -104,16 +104,28 @@
         </div>
       </section>
 
-      <!-- Submit -->
+      <!-- Submit: the draw is the wide path, hand composition the deliberate one -->
       <div class="form-footer">
         <button
           type="submit"
           class="btn-create"
-          :disabled="creating || selectedCount < 4"
+          :disabled="creating || !canCreate"
         >
-          <span v-if="creating" class="btn-spinner" />
-          <span v-else>Créer la séance</span>
+          <span v-if="creating === 'RANDOM'" class="btn-spinner" />
+          <span v-else>Créer et tirer au sort</span>
         </button>
+
+        <button
+          type="button"
+          class="btn-create-manual"
+          :disabled="creating || !canCreate"
+          @click="handleCreate('MANUAL')"
+        >
+          <span v-if="creating === 'MANUAL'" class="btn-spinner btn-spinner--ghost" />
+          <span v-else>Composer à la main</span>
+        </button>
+
+        <p v-if="createError" class="warning-text">{{ createError }}</p>
       </div>
     </form>
   </div>
@@ -121,7 +133,8 @@
 
 <script setup lang="ts">
 import { usePlayers } from '~/composables/usePlayers'
-import { useSessions } from '~/composables/useSessions'
+import { useSessions, MIN_ATTENDEES } from '~/composables/useSessions'
+import type { CreationSplit } from '~/composables/useSessions'
 import type { AttendeePlayer } from '~/types'
 
 useHead({ title: 'Nouvelle séance — Statoo' })
@@ -138,7 +151,9 @@ const timeValue = ref('19:00')
 
 const isRanked = ref(true)
 const allowUneven = ref(false)
-const creating = ref(false)
+// Holds which of the two buttons is busy, so only that one shows a spinner
+const creating = ref<CreationSplit | null>(null)
+const createError = ref<string | null>(null)
 
 // Build attendees list from players
 const attendees = ref<AttendeePlayer[]>([])
@@ -157,7 +172,11 @@ const selectedCount = computed(() =>
   attendees.value.filter((a) => a.selected).length
 )
 
-const showMinWarning = computed(() => selectedCount.value > 0 && selectedCount.value < 4)
+const canCreate = computed(() => selectedCount.value >= MIN_ATTENDEES)
+
+const showMinWarning = computed(
+  () => selectedCount.value > 0 && selectedCount.value < MIN_ATTENDEES
+)
 
 function toggleAttendee(id: string) {
   const a = attendees.value.find((p) => p.id === id)
@@ -172,11 +191,12 @@ function selectNone() {
   attendees.value.forEach((a) => (a.selected = false))
 }
 
-async function handleCreate() {
+async function handleCreate(split: CreationSplit) {
   const selected = attendees.value.filter((a) => a.selected)
-  if (selected.length < 4) return
+  if (selected.length < MIN_ATTENDEES || creating.value) return
 
-  creating.value = true
+  createError.value = null
+  creating.value = split
   try {
     const playedAt = `${dateValue.value}T${timeValue.value}:00`
     const sessionId = await createSession({
@@ -184,12 +204,13 @@ async function handleCreate() {
       is_ranked: isRanked.value,
       allow_uneven_teams: allowUneven.value,
       attendees: selected,
+      split,
     })
     router.push(`/sessions/${sessionId}/composition`)
-  } catch (e) {
-    console.error('Failed to create session:', e)
+  } catch (e: any) {
+    createError.value = e?.message || 'Erreur lors de la création de la séance.'
   } finally {
-    creating.value = false
+    creating.value = null
   }
 }
 
@@ -437,6 +458,37 @@ onMounted(async () => {
   scale: 0.98;
 }
 
+/* Secondary path: same size and target, no fill — the draw stays the wide one */
+.btn-create-manual {
+  width: 100%;
+  height: 52px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background: transparent;
+  border: 1px solid var(--hairline-2);
+  color: var(--text-strong);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-create-manual:disabled {
+  border-color: var(--hairline);
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.btn-create-manual:not(:disabled):active {
+  background: var(--surface-2);
+  scale: 0.98;
+}
+
 .btn-spinner {
   width: 20px;
   height: 20px;
@@ -444,6 +496,12 @@ onMounted(async () => {
   border-top-color: var(--ground);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+}
+
+/* On the ghost button the spinner sits on --surface, not on the yellow fill */
+.btn-spinner--ghost {
+  border-color: var(--hairline);
+  border-top-color: var(--text-strong);
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }

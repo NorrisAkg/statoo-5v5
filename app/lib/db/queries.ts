@@ -7,6 +7,7 @@ import type {
   TeamAssignment,
   GroupTotals,
   EligibilityThreshold,
+  SplitMode,
 } from '~/types'
 
 export async function fetchAllPlayers(db: SQLiteDBConnection): Promise<Player[]> {
@@ -128,16 +129,19 @@ export async function insertSession(
     played_at: string
     allow_uneven_teams: boolean
     is_ranked: boolean
+    /** 'RANDOM' when the session is created with an immediate draw. */
+    split_mode?: SplitMode
     notes?: string | null
   }
 ): Promise<void> {
   const now = new Date().toISOString()
   await db.run(
     `INSERT INTO sessions (id, played_at, status, split_mode, allow_uneven_teams, is_ranked, notes, created_at, updated_at)
-     VALUES (?, ?, 'DRAFT', 'MANUAL', ?, ?, ?, ?, ?);`,
+     VALUES (?, ?, 'DRAFT', ?, ?, ?, ?, ?, ?);`,
     [
       session.id,
       session.played_at,
+      session.split_mode || 'MANUAL',
       session.allow_uneven_teams ? 1 : 0,
       session.is_ranked ? 1 : 0,
       session.notes || null,
@@ -186,9 +190,10 @@ export async function fetchParticipationsBySession(
   return (res.values || []) as TeamAssignment[]
 }
 
+/** `team: null` records an attendee who is present but not yet placed. */
 export async function insertParticipation(
   db: SQLiteDBConnection,
-  data: { id: string; session_id: string; player_id: string; team: 'A' | 'B' }
+  data: { id: string; session_id: string; player_id: string; team: 'A' | 'B' | null }
 ): Promise<void> {
   const now = new Date().toISOString()
   await db.run(

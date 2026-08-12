@@ -28,41 +28,90 @@
       <div class="spinner" />
     </div>
 
-    <!-- Composition grid -->
-    <div v-else class="composition-grid">
-      <TeamColumn
-        team="A"
-        :players="teamA"
-        @swap="handleSwap"
-      />
+    <template v-else>
+      <!-- Attendees still to place — only on a hand-composed draft -->
+      <section v-if="unassigned.length > 0" class="unassigned">
+        <div class="unassigned__header">
+          <h2 class="unassigned__label">À placer</h2>
+          <span class="unassigned__count">{{ unassigned.length }}</span>
+        </div>
 
-      <!-- Vertical hairline -->
-      <div class="composition-divider" />
+        <div class="unassigned__list">
+          <div
+            v-for="player in unassigned"
+            :key="player.player_id"
+            class="unassigned__row"
+          >
+            <span class="unassigned__avatar">{{ getInitials(player.name) }}</span>
+            <span class="unassigned__name">{{ player.nickname || player.name }}</span>
+            <div class="unassigned__actions">
+              <button
+                class="place-btn place-btn--a"
+                type="button"
+                :aria-label="`Placer ${player.name} dans l'équipe A`"
+                @click="handleSwap(player.player_id, 'A')"
+              >
+                A
+              </button>
+              <button
+                class="place-btn place-btn--b"
+                type="button"
+                :aria-label="`Placer ${player.name} dans l'équipe B`"
+                @click="handleSwap(player.player_id, 'B')"
+              >
+                B
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <TeamColumn
-        team="B"
-        :players="teamB"
-        @swap="handleSwap"
-      />
-    </div>
+      <!-- Composition grid -->
+      <div class="composition-grid">
+        <TeamColumn
+          team="A"
+          :players="teamA"
+          @swap="handleSwap"
+        />
 
-    <!-- Split mode indicator -->
-    <div v-if="currentSession?.split_mode !== 'MANUAL'" class="split-mode-badge">
-      <span v-if="currentSession?.split_mode === 'RANDOM'">🎲 Tirage aléatoire</span>
-      <span v-else-if="currentSession?.split_mode === 'RANDOM_ADJUSTED'">🎲 Tirage ajusté</span>
-    </div>
+        <!-- Vertical hairline -->
+        <div class="composition-divider" />
 
-    <!-- Bottom actions -->
-    <div class="composition-footer">
-      <button class="btn-draw" type="button" :disabled="drawLoading" @click="handleDraw">
-        <span v-if="drawLoading" class="btn-spinner" />
-        <span v-else>🎲 Tirer au sort</span>
-      </button>
+        <TeamColumn
+          team="B"
+          :players="teamB"
+          @swap="handleSwap"
+        />
+      </div>
 
-      <button class="btn-stats" type="button" @click="goToStats">
-        Saisir les statistiques
-      </button>
-    </div>
+      <!-- Split mode indicator -->
+      <div v-if="currentSession?.split_mode !== 'MANUAL'" class="split-mode-badge">
+        <span v-if="currentSession?.split_mode === 'RANDOM'">🎲 Tirage aléatoire</span>
+        <span v-else-if="currentSession?.split_mode === 'RANDOM_ADJUSTED'">🎲 Tirage ajusté</span>
+      </div>
+
+      <!-- Bottom actions -->
+      <div class="composition-footer">
+        <button class="btn-draw" type="button" :disabled="drawLoading" @click="handleDraw">
+          <span v-if="drawLoading" class="btn-spinner" />
+          <span v-else>🎲 Tirer au sort</span>
+        </button>
+
+        <button
+          class="btn-stats"
+          type="button"
+          :disabled="unassigned.length > 0"
+          @click="goToStats"
+        >
+          Saisir les statistiques
+        </button>
+
+        <p v-if="unassigned.length > 0" class="footer-hint">
+          Placez les {{ unassigned.length }} joueur{{ unassigned.length > 1 ? 's' : '' }} restant{{ unassigned.length > 1 ? 's' : '' }} pour continuer.
+        </p>
+        <p v-if="drawError" class="footer-hint footer-hint--error">{{ drawError }}</p>
+      </div>
+    </template>
 
     <!-- Draw confirm modal -->
     <DrawConfirmModal
@@ -75,6 +124,7 @@
 
 <script setup lang="ts">
 import { useSessions } from '~/composables/useSessions'
+import { getInitials } from '~/lib/initials'
 import type { Team } from '~/types'
 
 useHead({ title: 'Composition — Statoo' })
@@ -87,6 +137,7 @@ const {
   currentSession,
   teamA,
   teamB,
+  unassigned,
   hasAssignments,
   format,
   loading,
@@ -96,7 +147,9 @@ const {
 } = useSessions()
 
 const drawLoading = ref(false)
+const drawError = ref<string | null>(null)
 const showConfirmModal = ref(false)
+
 
 const formattedDate = computed(() => {
   if (!currentSession.value) return ''
@@ -110,7 +163,7 @@ const formattedDate = computed(() => {
 })
 
 async function handleDraw() {
-  // If already has assignments, ask confirmation first
+  // Nothing to overwrite while every attendee is still unplaced
   if (hasAssignments.value) {
     showConfirmModal.value = true
     return
@@ -125,14 +178,13 @@ async function confirmDraw() {
 
 async function executeDraw() {
   drawLoading.value = true
+  drawError.value = null
   try {
-    const allPlayers = [...teamA.value, ...teamB.value].map((a) => ({
-      id: a.player_id,
-      name: a.name,
-    }))
-    await splitTeams(sessionId, allPlayers)
+    // splitTeams reads the session's own attendees, so players still waiting to
+    // be placed are drawn too — the caller cannot forget them.
+    await splitTeams(sessionId)
   } catch (e: any) {
-    console.error('Draw error:', e)
+    drawError.value = e?.message || 'Erreur lors du tirage.'
   } finally {
     drawLoading.value = false
   }
@@ -272,6 +324,119 @@ onMounted(async () => {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Attendees waiting for a team — a flat filet-separated list, not a card grid,
+   so it reads as a queue to empty rather than a third team. */
+.unassigned {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+
+.unassigned__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.unassigned__label {
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  margin: 0;
+}
+
+.unassigned__count {
+  font-family: 'Archivo Expanded', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-text);
+}
+
+.unassigned__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+}
+.unassigned__row + .unassigned__row {
+  border-top: 1px solid var(--hairline);
+}
+
+.unassigned__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline-2);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Archivo Expanded', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.unassigned__name {
+  flex: 1;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.unassigned__actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* 44px targets: placing a player is the primary gesture of this screen */
+.place-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Archivo Expanded', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.12s ease;
+}
+
+.place-btn:active { scale: 0.94; }
+
+/* Team A — solid fill, as everywhere else */
+.place-btn--a {
+  background: var(--team-a);
+  border: none;
+  color: var(--ground);
+}
+
+/* Team B — the 45° hatch, never a second solid colour */
+.place-btn--b {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--surface-2),
+    var(--surface-2) 4px,
+    transparent 4px,
+    transparent 10px
+  );
+  border: 1.5px solid var(--hairline-2);
+  color: var(--text-strong);
+}
+
 /* Composition grid */
 .composition-grid {
   display: flex;
@@ -355,9 +520,27 @@ onMounted(async () => {
   transition: all 0.15s ease;
 }
 
-.btn-stats:active {
+.btn-stats:disabled {
+  background: var(--hairline);
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.btn-stats:not(:disabled):active {
   background: var(--team-a-press);
   scale: 0.98;
+}
+
+.footer-hint {
+  margin: 8px 0 0;
+  text-align: center;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-hint--error {
+  color: var(--danger-text);
 }
 
 .btn-spinner {

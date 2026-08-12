@@ -154,8 +154,26 @@ async function handleClose() {
     return
   }
 
+  // Every blocking check below reads the summary view. Without it we cannot
+  // validate anything, so refuse rather than close an unvalidated session —
+  // a `sum && …` short-circuit would silently skip both checks.
   const sum = summary.value
-  if (sum && Math.abs(sum.size_a - sum.size_b) > 1 && !session.value?.allow_uneven_teams) {
+  if (!sum) {
+    closeError.value = 'Impossible de vérifier la séance pour le moment. Réessayez.'
+    return
+  }
+
+  // Blocking per the cahier des charges: every attendee must be in A or B.
+  // Reachable since `team` became nullable for hand-composed drafts.
+  if (sum.unassigned_players > 0) {
+    closeError.value =
+      sum.unassigned_players > 1
+        ? `${sum.unassigned_players} joueurs ne sont affectés à aucune équipe.`
+        : 'Un joueur n’est affecté à aucune équipe.'
+    return
+  }
+
+  if (Math.abs(sum.size_a - sum.size_b) > 1 && !session.value?.allow_uneven_teams) {
     closeError.value = `Écart d'effectif trop grand (${sum.size_a}v${sum.size_b}). Activez « Effectifs inégaux » ou ajustez les équipes.`
     return
   }
