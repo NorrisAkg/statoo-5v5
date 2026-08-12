@@ -6,7 +6,11 @@ const config: CapacitorConfig = {
   appName: 'Statoo 5v5',
   webDir: '.output/public',
   bundledWebRuntime: false,
-  plugins: {}
+  plugins: {
+    StatusBar: {
+      overlaysWebView: true,
+    },
+  },
 };
 
 export default config;

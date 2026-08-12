@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, nextTick } from 'vue'
 import { usePlayers } from '~/composables/usePlayers'
 import type { PlayerStats } from '~/types'
 
@@ -18,6 +18,8 @@ const { createPlayer, updatePlayer, checkDuplicateName } = usePlayers()
 const name = ref('')
 const nickname = ref('')
 const isSubmitting = ref(false)
+const successMessage = ref('')
+const nameInputRef = ref<HTMLInputElement | null>(null)
 
 watch(
   () => props.playerToEdit,
@@ -29,8 +31,23 @@ watch(
       name.value = ''
       nickname.value = ''
     }
+    successMessage.value = ''
   },
   { immediate: true }
+)
+
+watch(
+  () => props.modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      name.value = props.playerToEdit?.name || ''
+      nickname.value = props.playerToEdit?.nickname || ''
+      successMessage.value = ''
+      nextTick(() => {
+        nameInputRef.value?.focus()
+      })
+    }
+  }
 )
 
 const hasDuplicateName = computed(() => {
@@ -39,38 +56,60 @@ const hasDuplicateName = computed(() => {
 })
 
 function close() {
+  successMessage.value = ''
   emit('update:modelValue', false)
 }
 
-async function handleSubmit() {
+async function savePlayer(keepOpen = false) {
   if (!name.value.trim() || isSubmitting.value) return
   isSubmitting.value = true
   try {
+    const savedName = name.value.trim()
     if (props.playerToEdit) {
       await updatePlayer(props.playerToEdit.player_id, {
-        name: name.value,
-        nickname: nickname.value,
+        name: savedName,
+        nickname: nickname.value.trim() || undefined,
       })
     } else {
       await createPlayer({
-        name: name.value,
-        nickname: nickname.value,
+        name: savedName,
+        nickname: nickname.value.trim() || undefined,
       })
     }
     emit('saved')
-    close()
+
+    if (keepOpen) {
+      name.value = ''
+      nickname.value = ''
+      successMessage.value = `Joueur « ${savedName} » ajouté avec succès !`
+      setTimeout(() => {
+        if (successMessage.value.includes(savedName)) {
+          successMessage.value = ''
+        }
+      }, 3000)
+      nextTick(() => {
+        nameInputRef.value?.focus()
+      })
+    } else {
+      close()
+    }
   } catch (err) {
     console.error('Error saving player:', err)
   } finally {
     isSubmitting.value = false
   }
 }
+
+function handleSubmit() {
+  savePlayer(false)
+}
+
+function handleSaveAndAddAnother() {
+  savePlayer(true)
+}
 </script>
 
 <template>
-  <!-- Hand-rolled bottom sheet rather than UModal: the Nuxt UI shell draws its
-       backdrop and panel from the literal palettes, which do not follow the
-       light theme. Same pattern as DrawConfirmModal, and closer to screen 4. -->
   <Teleport to="body">
     <Transition name="sheet">
       <div
@@ -80,6 +119,7 @@ async function handleSubmit() {
       >
         <div
           class="w-full max-w-120 mx-auto p-5 bg-surface border-t border-hairline rounded-t-2xl space-y-4"
+          :style="{ paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))' }"
           role="dialog"
           aria-modal="true"
         >
@@ -90,6 +130,14 @@ async function handleSubmit() {
             {{ playerToEdit ? 'Modifier le joueur' : 'Nouveau joueur' }}
           </h3>
 
+          <!-- Success Notification Banner -->
+          <div
+            v-if="successMessage"
+            class="px-3 py-2.5 bg-surface-2 border border-team-a/40 rounded-lg text-team-a text-xs font-semibold flex items-center justify-between transition-all"
+          >
+            <span>✓ {{ successMessage }}</span>
+          </div>
+
           <form @submit.prevent="handleSubmit" class="space-y-4">
             <!-- Nom Field -->
             <div class="space-y-1">
@@ -97,6 +145,7 @@ async function handleSubmit() {
                 Nom <span class="text-accent-text">*</span>
               </label>
               <input
+                ref="nameInputRef"
                 v-model="name"
                 type="text"
                 required
@@ -123,22 +172,34 @@ async function handleSubmit() {
             </div>
 
             <!-- Bottom Action Buttons Stack -->
-            <div class="pt-4 flex flex-col space-y-2">
-              <!-- Ghost Cancel button above -->
+            <div class="pt-2 flex flex-col space-y-2">
+              <!-- Save and Add Another (creation mode only) -->
               <button
+                v-if="!playerToEdit"
                 type="button"
-                @click="close"
-                class="w-full h-[52px] rounded-md border border-hairline text-text-strong font-medium text-base hover:bg-surface-2 transition-colors"
+                :disabled="!name.trim() || isSubmitting"
+                @click="handleSaveAndAddAnother"
+                class="w-full h-[48px] rounded-md bg-surface-2 border border-hairline text-text-strong font-semibold text-base hover:bg-surface-3 transition-colors disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
-                Annuler
+                {{ isSubmitting ? 'Enregistrement…' : 'Enregistrer et ajouter un autre' }}
               </button>
-              <!-- Primary Submit button below -->
+
+              <!-- Primary Submit button -->
               <button
                 type="submit"
                 :disabled="!name.trim() || isSubmitting"
-                class="w-full h-[56px] rounded-md bg-team-a text-on-accent font-bold text-base hover:bg-team-a-press transition-colors disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                class="w-full h-[52px] rounded-md bg-team-a text-on-accent font-bold text-base hover:bg-team-a-press transition-colors disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
-                {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer' }}
+                {{ isSubmitting ? 'Enregistrement…' : (playerToEdit ? 'Enregistrer' : 'Enregistrer et fermer') }}
+              </button>
+
+              <!-- Cancel button -->
+              <button
+                type="button"
+                @click="close"
+                class="w-full h-[44px] rounded-md border border-hairline text-text-muted font-medium text-sm hover:bg-surface-2 transition-colors cursor-pointer"
+              >
+                {{ successMessage ? 'Terminer' : 'Annuler' }}
               </button>
             </div>
           </form>

@@ -65,9 +65,12 @@ const scoreBarWidths = computed(() => {
       <span style="font:700 20px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;color:var(--text);">Statoo</span>
       <NuxtLink
         to="/settings"
-        style="width:20px;height:20px;border:2px solid var(--text-muted);border-radius:10px;box-sizing:border-box;display:inline-block;"
+        class="w-11 h-11 flex items-center justify-center -mr-2 text-text-muted hover:text-text transition-colors"
         title="Réglages"
-      ></NuxtLink>
+        aria-label="Réglages"
+      >
+        <UIcon name="i-heroicons-cog-6-tooth" class="w-6 h-6" />
+      </NuxtLink>
     </div>
 
     <!-- Content Area -->

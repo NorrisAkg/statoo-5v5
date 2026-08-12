@@ -56,7 +56,7 @@ const titleId = useId()
   background: var(--surface);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  padding: 12px 20px 40px;
+  padding: 12px 20px calc(24px + env(safe-area-inset-bottom, 16px));
   border-top: 1px solid var(--hairline);
 }
 

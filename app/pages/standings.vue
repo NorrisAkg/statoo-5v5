@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useStandings } from '~/composables/useStandings'
 import StandingsTable from '~/components/ui/StandingsTable.vue'
 import RankingCard from '~/components/ui/RankingCard.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
 
 type Tab = 'points' | 'perMatch' | 'secondary'
 const activeTab = ref<Tab>('points')
@@ -81,9 +82,32 @@ const noneEligible = computed(
     </div>
 
     <!-- Empty state — covers all three tabs -->
-    <div v-else-if="isEmpty" class="py-12 text-center text-[15px] text-text-muted">
-      Le classement apparaîtra après la première séance close.
-    </div>
+    <EmptyState
+      v-else-if="isEmpty"
+      text="Le classement s'affiche après la première séance close."
+    >
+      <template #illustration>
+        <!-- Blank scoreboard with dashes -->
+        <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Board frame -->
+          <rect x="8" y="16" width="80" height="56" rx="4" stroke="currentColor" stroke-width="2.5" fill="none"/>
+          <!-- Stand -->
+          <path d="M48 72 L48 84 M36 84 L60 84" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Dashed lines (empty scores) -->
+          <line x1="20" y1="38" x2="36" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <line x1="20" y1="50" x2="36" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <line x1="20" y1="62" x2="36" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <!-- Score dashes right column -->
+          <line x1="58" y1="38" x2="76" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <line x1="58" y1="50" x2="76" y2="50" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <line x1="58" y1="62" x2="76" y2="62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <!-- Header line -->
+          <line x1="8" y1="28" x2="88" y2="28" stroke="currentColor" stroke-width="1.5"/>
+          <!-- ? in center divider -->
+          <text x="48" y="58" text-anchor="middle" font-family="Instrument Sans, system-ui, sans-serif" font-size="18" font-weight="700" fill="currentColor" opacity="0.4">—</text>
+        </svg>
+      </template>
+    </EmptyState>
 
     <!-- Tabs 1 & 2: standings table -->
     <template v-else-if="activeTab === 'points' || activeTab === 'perMatch'">

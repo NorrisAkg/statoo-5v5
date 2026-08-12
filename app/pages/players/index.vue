@@ -2,12 +2,19 @@
 import { ref, computed, onMounted } from 'vue'
 import { useDb } from '~/composables/useDb'
 import PlayerFormModal from '~/components/player/PlayerFormModal.vue'
+import PlayerActionsSheet, { type SheetMode } from '~/components/player/PlayerActionsSheet.vue'
+import PlayerRow from '~/components/player/PlayerRow.vue'
+import EmptyState from '~/components/ui/EmptyState.vue'
 import type { PlayerStats } from '~/types'
 
 const { getDb } = useDb()
 const players = ref<PlayerStats[]>([])
 const searchQuery = ref('')
 const showModal = ref(false)
+const playerToEdit = ref<PlayerStats | null>(null)
+
+const selectedPlayerForActions = ref<PlayerStats | null>(null)
+const sheetInitialMode = ref<SheetMode>('menu')
 const showArchived = ref(false)
 const loading = ref(true)
 
@@ -49,15 +56,32 @@ const filteredArchivedPlayers = computed(() => {
   )
 })
 
-function initials(name: string): string {
-  const parts = name.trim().split(/\s+/)
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
-  return name.slice(0, 2).toUpperCase()
+function handleNewPlayer() {
+  playerToEdit.value = null
+  showModal.value = true
 }
 
-function statVal(val: number | null | undefined): string {
-  if (val == null || val === 0) return '—'
-  return String(val)
+function handleOpenActions(player: PlayerStats) {
+  sheetInitialMode.value = 'menu'
+  selectedPlayerForActions.value = player
+}
+
+function handleOpenArchiveConfirm(player: PlayerStats) {
+  sheetInitialMode.value = 'confirm-archive'
+  selectedPlayerForActions.value = player
+}
+
+function handleOpenDeleteConfirm(player: PlayerStats) {
+  sheetInitialMode.value = 'confirm-delete'
+  selectedPlayerForActions.value = player
+}
+
+function handleEditFromSheet() {
+  if (selectedPlayerForActions.value) {
+    playerToEdit.value = selectedPlayerForActions.value
+    selectedPlayerForActions.value = null
+    showModal.value = true
+  }
 }
 </script>
 
@@ -68,7 +92,7 @@ function statVal(val: number | null | undefined): string {
     <div style="height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;">
       <span style="font:600 20px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;">Joueurs</span>
       <button
-        @click="showModal = true"
+        @click="handleNewPlayer"
         style="width:44px;height:44px;background:transparent;border:1px solid var(--hairline);border-radius:8px;color:var(--text);font:400 20px/1 'Instrument Sans',system-ui,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;"
       >+</button>
     </div>
@@ -87,20 +111,30 @@ function statVal(val: number | null | undefined): string {
     </div>
 
     <!-- Empty State -->
-    <div
+    <EmptyState
       v-else-if="activePlayers.length === 0 && archivedPlayers.length === 0"
-      style="padding:48px 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;"
+      text="Le vestiaire est vide. Ajoutez vos coéquipiers !"
     >
-      <p style="font:400 15px/1.45 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">
-        Ajoutez les joueurs du groupe pour commencer.
-      </p>
-      <button
-        @click="showModal = true"
-        style="padding:14px 24px;background:var(--team-a);border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:var(--ground);cursor:pointer;"
-      >
-        Nouveau joueur
-      </button>
-    </div>
+      <template #illustration>
+        <!-- Jersey with a question mark -->
+        <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Jersey body -->
+          <path d="M28 24 L14 38 L24 42 L24 78 L72 78 L72 42 L82 38 L68 24 C64 30 52 32 48 32 C44 32 32 30 28 24Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+          <!-- Collar -->
+          <path d="M38 24 C38 30 58 30 58 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- ? mark -->
+          <text x="48" y="63" text-anchor="middle" font-family="Instrument Sans, system-ui, sans-serif" font-size="26" font-weight="700" fill="currentColor">?</text>
+        </svg>
+      </template>
+      <template #action>
+        <button
+          @click="handleNewPlayer"
+          style="padding:14px 24px;background:var(--team-a);border:none;border-radius:8px;font:600 15px/1 'Instrument Sans',system-ui,sans-serif;color:var(--ground);cursor:pointer;min-height:44px;"
+        >
+          Nouveau joueur
+        </button>
+      </template>
+    </EmptyState>
 
     <template v-else>
       <!-- Column Header right-aligned (J, Pts, Buts) -->
@@ -112,30 +146,14 @@ function statVal(val: number | null | undefined): string {
 
       <!-- Active Players List -->
       <div style="display:flex;flex-direction:column;border-top:1px solid var(--hairline);">
-        <NuxtLink
+        <PlayerRow
           v-for="p in filteredActivePlayers"
           :key="p.player_id"
-          :to="`/players/${p.player_id}`"
-          style="display:flex;align-items:center;gap:12px;min-height:60px;border-bottom:1px solid var(--hairline);text-decoration:none;color:inherit;"
-        >
-          <!-- Initials square avatar -->
-          <div style="width:36px;height:36px;flex:none;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 13px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">
-            {{ initials(p.name) }}
-          </div>
-
-          <!-- Name & Nickname -->
-          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">
-            <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text);">{{ p.name }}</span>
-            <span v-if="p.nickname" style="font:400 13px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ p.nickname }}</span>
-          </div>
-
-          <!-- Right numeric columns -->
-          <div style="display:flex;gap:20px;font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">
-            <span style="width:32px;text-align:right;" :style="p.appearances === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.appearances) }}</span>
-            <span style="width:32px;text-align:right;" :style="p.points === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.points) }}</span>
-            <span style="width:32px;text-align:right;" :style="p.goals === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.goals) }}</span>
-          </div>
-        </NuxtLink>
+          :player="p"
+          @actions="handleOpenActions"
+          @archive-confirm="handleOpenArchiveConfirm"
+          @delete-confirm="handleOpenDeleteConfirm"
+        />
       </div>
 
       <!-- Archived Section Accordion -->
@@ -152,30 +170,34 @@ function statVal(val: number | null | undefined): string {
         </div>
 
         <div v-if="showArchived" style="display:flex;flex-direction:column;border-top:1px solid var(--hairline);">
-          <NuxtLink
+          <PlayerRow
             v-for="p in filteredArchivedPlayers"
             :key="p.player_id"
-            :to="`/players/${p.player_id}`"
-            style="display:flex;align-items:center;gap:12px;min-height:60px;border-bottom:1px solid var(--hairline);text-decoration:none;color:inherit;opacity:0.6;"
-          >
-            <div style="width:36px;height:36px;flex:none;border-radius:8px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;font:600 13px/1 'Instrument Sans',system-ui,sans-serif;color:var(--text-strong);">
-              {{ initials(p.name) }}
-            </div>
-            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">
-              <span style="font:400 15px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--text);">{{ p.name }}</span>
-              <span v-if="p.nickname" style="font:400 13px/1.2 'Instrument Sans',system-ui,sans-serif;color:var(--text-muted);">{{ p.nickname }}</span>
-            </div>
-            <div style="display:flex;gap:20px;font:500 15px/1.2 'Archivo',system-ui,sans-serif;font-stretch:125%;font-variant-numeric:tabular-nums;">
-              <span style="width:32px;text-align:right;" :style="p.appearances === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.appearances) }}</span>
-              <span style="width:32px;text-align:right;" :style="p.points === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.points) }}</span>
-              <span style="width:32px;text-align:right;" :style="p.goals === 0 ? 'color:var(--text-faint);' : 'color:var(--text-muted);'">{{ statVal(p.goals) }}</span>
-            </div>
-          </NuxtLink>
+            :player="p"
+            @actions="handleOpenActions"
+            @archive-confirm="handleOpenArchiveConfirm"
+            @delete-confirm="handleOpenDeleteConfirm"
+          />
         </div>
       </div>
     </template>
 
-    <!-- Create Player Modal -->
-    <PlayerFormModal v-model="showModal" @saved="fetchPlayers" />
+    <!-- Player Actions Sheet (Long press / Swipe / More) -->
+    <PlayerActionsSheet
+      :player="selectedPlayerForActions"
+      :initial-mode="sheetInitialMode"
+      @close="selectedPlayerForActions = null"
+      @edit="handleEditFromSheet"
+      @updated="fetchPlayers"
+    />
+
+    <!-- Create / Edit Player Modal -->
+    <PlayerFormModal
+      v-model="showModal"
+      :player-to-edit="playerToEdit"
+      @saved="fetchPlayers"
+    />
   </div>
 </template>
+
+
