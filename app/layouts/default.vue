@@ -27,76 +27,53 @@ function isActive(path: string) {
         class="bottom-nav fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] border-t z-50"
         style="background:var(--ground); border-color:var(--hairline); display:grid; grid-template-columns:repeat(5,1fr);"
       >
-        <!-- Accueil — carré 2px border-radius 2px -->
+        <!-- Accueil -->
         <NuxtLink
           to="/"
           class="nav-item"
           :style="isActive('/') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
-          <span
-            class="nav-icon"
-            :style="`width:18px;height:18px;border:2px solid currentColor;border-radius:2px;box-sizing:border-box;flex-shrink:0`"
-          ></span>
+          <UIcon name="i-heroicons-home" class="w-5 h-5 flex-shrink-0" />
           <span class="nav-label">Accueil</span>
         </NuxtLink>
 
-        <!-- Joueurs — cercle 2px -->
+        <!-- Joueurs -->
         <NuxtLink
           to="/players"
           class="nav-item"
           :style="isActive('/players') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
-          <span
-            class="nav-icon"
-            :style="`width:18px;height:18px;border:2px solid currentColor;border-radius:9px;box-sizing:border-box;flex-shrink:0`"
-          ></span>
+          <UIcon name="i-heroicons-user-group" class="w-5 h-5 flex-shrink-0" />
           <span class="nav-label">Joueurs</span>
         </NuxtLink>
 
-        <!-- Séances — losange 45° (carré tourné) -->
+        <!-- Séances -->
         <NuxtLink
           to="/sessions"
           class="nav-item"
           :style="isActive('/sessions') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
-          <span
-            class="nav-icon"
-            :style="`width:18px;height:18px;border:2px solid currentColor;box-sizing:border-box;transform:rotate(45deg);flex-shrink:0`"
-          ></span>
+          <UIcon name="i-heroicons-calendar-days" class="w-5 h-5 flex-shrink-0" />
           <span class="nav-label">Séances</span>
         </NuxtLink>
 
-        <!-- Classement — 3 barres horizontales empilées -->
+        <!-- Classement -->
         <NuxtLink
           to="/standings"
           class="nav-item"
           :style="isActive('/standings') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
-          <span
-            class="nav-icon"
-            style="width:18px;height:18px;display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0"
-          >
-            <span style="height:2px;background:currentColor"></span>
-            <span style="height:2px;background:currentColor"></span>
-            <span style="height:2px;background:currentColor"></span>
-          </span>
+          <UIcon name="i-heroicons-trophy" class="w-5 h-5 flex-shrink-0" />
           <span class="nav-label">Classement</span>
         </NuxtLink>
 
-        <!-- Stats — 3 barreaux de hauteur variable (histogramme) -->
+        <!-- Stats -->
         <NuxtLink
           to="/stats"
           class="nav-item"
           :style="isActive('/stats') ? 'color:var(--accent-text)' : 'color:var(--text-muted)'"
         >
-          <span
-            class="nav-icon"
-            style="width:18px;height:18px;display:flex;align-items:flex-end;gap:3px;flex-shrink:0"
-          >
-            <span style="width:4px;height:8px;background:currentColor"></span>
-            <span style="width:4px;height:14px;background:currentColor"></span>
-            <span style="width:4px;height:11px;background:currentColor"></span>
-          </span>
+          <UIcon name="i-heroicons-chart-bar" class="w-5 h-5 flex-shrink-0" />
           <span class="nav-label">Stats</span>
         </NuxtLink>
       </nav>
@@ -114,6 +91,7 @@ function isActive(path: string) {
 }
 
 .main-scroll {
+  padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 

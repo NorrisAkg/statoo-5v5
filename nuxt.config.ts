@@ -36,11 +36,21 @@ export default defineNuxtConfig({
         // and Safari's "Add to Home Screen" should not depend on hydration.
         { rel: 'manifest', href: '/manifest.webmanifest' },
       ],
+      script: [
+        {
+          // Runs before first paint so a forced theme does not flash the other
+          // one while the bundle boots. useTheme takes over afterwards.
+          innerHTML:
+            "try{var t=localStorage.getItem('statoo:theme');" +
+            "if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}",
+          tagPosition: 'head',
+        },
+      ],
     },
   },
 
   pwa: {
-    registerType: 'autoUpdate',
+    disable: true, // Native Capacitor serves files directly from local APK assets, Service Worker causes stale cache on APK update
     manifest: {
       name: 'Statoo',
       short_name: 'Statoo',
@@ -58,15 +68,38 @@ export default defineNuxtConfig({
         { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
       ],
     },
-    workbox: {
-      // .wasm is not in the default glob, and without it the SQLite driver
-      // cannot boot offline — the app would be a blank screen on a plane.
-      globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2,wasm}'],
-      maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-      // SPA: any deep link resolves to the shell
-      navigateFallback: '/',
-    },
     devOptions: { enabled: false },
+  },
+
+  // Without a local collection, @nuxt/icon resolves `i-heroicons-*` by fetching
+  // api.iconify.design at runtime. With ssr: false, inside a capacitor:// WebView
+  // and offline by design, that fetch fails silently and every icon renders as an
+  // empty span — which is exactly how the bottom nav went blank.
+  icon: {
+    clientBundle: {
+      // Listed explicitly rather than left to `scan`, because a missing icon
+      // raises nothing at runtime — it renders an empty span, which is how the
+      // nav went blank unnoticed. An explicit list fails loudly at build time.
+      // Note the `collection:name` form: the module splits on ':', so the
+      // template-style 'i-heroicons-home' is read as an unknown collection.
+      // Keep in sync with `grep -rho "i-heroicons-[a-z0-9-]*" app/`.
+      icons: [
+        'heroicons:home',
+        'heroicons:user-group',
+        'heroicons:calendar-days',
+        'heroicons:trophy',
+        'heroicons:chart-bar',
+        'heroicons:cog-6-tooth',
+        'heroicons:arrow-left',
+        'heroicons:arrow-path',
+        'heroicons:pencil-square',
+        'heroicons:trash',
+        'heroicons:archive-box',
+        'heroicons:archive-box-x-mark',
+      ],
+    },
+    // ssr: false — nothing is ever resolved server-side
+    serverBundle: false,
   },
 
   fonts: {
