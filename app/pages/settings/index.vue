@@ -1,8 +1,18 @@
 <script setup lang="ts">
+import { useTheme } from '~/composables/useTheme'
+import type { ThemeMode } from '~/composables/useTheme'
+
+const { mode, setMode } = useTheme()
+
+const OPTIONS: { id: ThemeMode; label: string }[] = [
+  { id: 'system', label: 'Système' },
+  { id: 'light', label: 'Clair' },
+  { id: 'dark', label: 'Sombre' },
+]
 </script>
 
 <template>
-  <div class="space-y-5">
+  <div class="space-y-5 p-4">
     <div class="flex items-center space-x-2">
       <NuxtLink to="/" class="text-text-muted hover:text-text">
         <UIcon name="i-heroicons-arrow-left" class="w-5 h-5" />
@@ -23,6 +33,37 @@
       <button class="w-full text-left text-sm text-text-muted hover:text-text-strong pt-1">
         Restaurer une sauvegarde →
       </button>
+    </div>
+
+    <!-- Appearance Group -->
+    <div class="p-4 rounded-lg bg-surface border border-hairline space-y-3">
+      <div class="text-[11px] font-semibold uppercase text-text-muted tracking-wider">Apparence</div>
+
+      <div
+        class="grid grid-cols-3 gap-0.75 rounded-md bg-surface-2 p-0.75"
+        role="radiogroup"
+        aria-label="Thème"
+      >
+        <button
+          v-for="option in OPTIONS"
+          :key="option.id"
+          type="button"
+          role="radio"
+          :aria-checked="mode === option.id"
+          class="flex h-9 flex-col items-center justify-center gap-0.75 rounded text-[13px]"
+          :class="mode === option.id
+            ? 'bg-surface font-semibold text-text'
+            : 'font-medium text-text-muted'"
+          @click="setMode(option.id)"
+        >
+          <span>{{ option.label }}</span>
+          <span v-if="mode === option.id" class="h-0.5 w-6 bg-team-a" />
+        </button>
+      </div>
+
+      <p class="text-xs text-text-muted">
+        « Système » suit le réglage clair ou sombre du téléphone.
+      </p>
     </div>
 
     <!-- Data Group -->

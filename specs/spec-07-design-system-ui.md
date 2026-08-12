@@ -10,7 +10,11 @@
 
 ## 1. Context & Goals
 
-Statoo uses a distinct dark design theme ("Terrain de nuit") inspired by night football fields under floodlights. Dark is the base and the reference; a **light theme follows the OS setting** (`prefers-color-scheme`) as a pure value swap — same grid, same sizes, same components. There is **no in-app theme toggle**, so no theme preference is stored.
+Statoo uses a distinct dark design theme ("Terrain de nuit") inspired by night football fields under floodlights. Dark is the base and the reference; the light theme is a pure value swap — same grid, same sizes, same components.
+
+The theme has **three modes**, chosen in Réglages: `Système` (default, follows `prefers-color-scheme`), `Clair` and `Sombre`. The two explicit modes stamp `data-theme` on `<html>`, which outranks the media query.
+
+The choice is stored in **localStorage**, not in the `settings` table, against the general rule of SPEC-08. Two reasons: it must be readable synchronously before the database opens, or the splash paints in one theme and snaps to the other; and it is a per-device choice that has no business travelling inside a backup restored onto another phone.
 
 The goal of SPEC-07 is to implement:
 - CSS token system in Tailwind CSS v4 (`assets/css/main.css`), split into literal palettes and **role tokens**.
@@ -88,6 +92,8 @@ The palettes above stay literal. Components MUST reference **role tokens** (`var
 | Accent as text/number/icon | `--accent-text` | `#FFC94F` | `#8A5E00` |
 | Alert as text | `--danger-text` | `#FF7361` | `#B02E1D` |
 | Destructive fill | `--danger-solid` | `#F0503C` | `#D2402C` |
+
+The light hexes are declared once as `--l-*` in `:root`; the two blocks that apply them — `@media (prefers-color-scheme: light) { :root:not([data-theme='dark']) }` and `:root[data-theme='light']` — only map roles onto those variables, so the palette cannot drift between the OS-driven and the forced path. An inline script in `nuxt.config` stamps `data-theme` before first paint so a forced theme never flashes the other one, and `useTheme` rewrites the `theme-color` metas rather than trusting their media queries, which would otherwise keep the iOS status bar on the OS theme.
 
 Two invariants carried over from the template:
 
