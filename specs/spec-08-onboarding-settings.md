@@ -30,7 +30,7 @@ The goal of SPEC-08 is to implement:
 3. **Onboarding is skippable, not repeatable**: `onboarding_completed` flips to `'1'` on "Terminer" *or* "Plus tard", and the flow never shows again. Everything it sets stays editable in Réglages.
 4. **Defaults are pre-fills, not constraints**: `default_format` and `default_is_ranked` only seed the "Nouvelle séance" form. They never constrain a session already created, and never take part in any calculation — the `"5v5"` label of a session remains derived from the actual team sizes by `v_session_summary`.
 5. **The threshold is read from SQL, never from JS**: `v_eligibility_threshold` is the only place the setting is interpreted. See SPEC-05 §2.3.
-6. **No gamification**: onboarding shows no progress score, no reward, no celebration on completion.
+6. **Tone**: onboarding may be warm and playful — an illustration, an emoji, a small completion flourish are all fine. What it must not do is invent data: no score, no unlockable reward, nothing stored beyond the `settings` rows it is there to write.
 7. **Nothing leaves the device**: the group name is local. It appears in backup filenames (SPEC-06) but is not an account or an identifier.
 
 ---
@@ -75,7 +75,7 @@ Schema version moves to **2**. `meta.schema_version` is bumped in the same pass 
 ### 4.3 Onboarding 2 · Les joueurs (screen 24)
 - Title *"Les joueurs"*, body *"Un prénom suffit. Vous pourrez en ajouter à tout moment."*
 - Field *"Prénom"* + `+` button; each add appends to a list headed *"Ajoutés · N"* with 28px initials avatars.
-- Footnote *"Il faut au moins quatre joueurs pour créer une séance."* — informative, never blocking.
+- Footnote *"Il faut au moins six joueurs pour créer une séance."* — informative here, never blocking. The blocking check lives in SPEC-03 §2 rule 2 (`MIN_ATTENDEES = 6`), and applies to attendees of a session, not to the roster being built here.
 - Secondary *"Plus tard"* / primary *"Continuer"*. Players created here are ordinary `players` rows.
 
 ### 4.4 Onboarding 3 · Le format (screen 25)

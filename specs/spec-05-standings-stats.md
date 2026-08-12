@@ -37,7 +37,7 @@ The goal of SPEC-05 is to implement:
    - Main table displays eligible players sorted by `points_per_match` DESC.
    - Players below the threshold are listed in a separate bottom block titled *"SOUS LE SEUIL"* with exact missing count: *"Éric — il manque 3 séances"*, read from `v_player_stats.missing_sessions`.
 4. **Secondary Rankings Scope**: Goalscorers, assist providers, and cards count across ALL closed sessions (ranked or unranked/friendly).
-5. **No Visual Badges / Medals**: Rank 1 is indicated solely by `#FFC94F` colored rank number. No trophies, crowns, or medals.
+5. **Podium markers**: Ranks 1-3 show a medal (🥇🥈🥉) **in place of** the rank number, never beside it — the rank column is 18px and must not widen (see invariant 6). Rank 1 keeps `#FFC94F` as well. This also closes an accessibility gap: `docs/statoo-design-system.md` §7 requires that colour never be the sole carrier of meaning, and rank 1 used to be marked by colour alone.
 6. **No Horizontal Scroll**: `StandingsTable` MUST fit screen width without horizontal scrolling. `J` (Played) column is ALWAYS visible.
 
 ---

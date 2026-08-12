@@ -1,5 +1,13 @@
 # Statoo — Prompts pour Claude Design
 
+> **Révision du 12/08/2026 — l'interdit de gamification énoncé dans ces prompts
+> est levé pour tout ce qui relève du décor.** Emoji, icônes expressives,
+> illustrations, médailles au classement et micro-animations sont désormais
+> permis. Seules les mécaniques de **données** restent exclues : note de joueur,
+> vote du homme du match, badge / série / niveau stocké. La règle en vigueur est
+> la section *Ton* de `CLAUDE.md`. Ces prompts sont conservés en l'état comme
+> archive de la génération des maquettes — ne pas les prendre pour la règle.
+
 **Ce qui change par rapport à Stitch.** Claude Design produit du code (HTML/CSS)
 et non une image : les hachures à 45°, `tabular-nums`, les cibles de 52 px et les
 valeurs hexadécimales exactes sont tenables au pixel près. Il lit aussi un

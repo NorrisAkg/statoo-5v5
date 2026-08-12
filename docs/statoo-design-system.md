@@ -1,5 +1,15 @@
 # Statoo — Design system
 
+> **Révision du 12/08/2026 — l'interdit de gamification décrit plus bas est levé
+> pour tout ce qui relève du décor.** Emoji, icônes expressives, illustrations
+> d'états vides, médailles au classement et micro-animations sont désormais
+> permis. Seules les mécaniques de **données** restent hors périmètre : note de
+> joueur, vote du homme du match, badge / série / niveau stocké — l'argument
+> d'origine étant le caractère mono-utilisateur de l'app, qui lui n'a pas changé.
+> La règle en vigueur est la section *Ton* de `CLAUDE.md`. Le texte ci-dessous
+> est conservé tel quel : il documente le raisonnement initial, pas la règle
+> actuelle.
+
 **Version** 1.0 · **Cible** V1 (APK Android) · **Base** Nuxt UI + Tailwind v4
 
 ---

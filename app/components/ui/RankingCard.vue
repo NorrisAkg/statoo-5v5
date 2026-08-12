@@ -4,7 +4,8 @@ import type { PlayerStats } from '~/types'
 /**
  * A secondary ranking card (screen 14): top scorers, top assists, or cards.
  * `variant` picks what sits on the right of each row — a single number, or the
- * yellow/red pair. Rank 1 is coloured, nothing else marks it.
+ * yellow/red pair. Rank 1 shows a 🥇 in place of its digit, and keeps the accent
+ * colour — the medal replaces the number so the 16px rank column stays put.
  */
 defineProps<{
   title: string
@@ -36,7 +37,7 @@ defineProps<{
       <span
         class="w-4 font-display text-[15px] font-medium tnum"
         :class="idx === 0 ? 'text-accent-text' : 'text-text-muted'"
-      >{{ idx + 1 }}</span>
+      >{{ idx === 0 ? '🥇' : idx + 1 }}</span>
 
       <span class="flex-1 truncate text-[15px] text-text">{{ player.name }}</span>
 

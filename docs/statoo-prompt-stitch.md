@@ -1,5 +1,13 @@
 # Statoo — Prompt Google Stitch
 
+> **Révision du 12/08/2026 — l'interdit de gamification énoncé dans ce prompt
+> est levé pour tout ce qui relève du décor.** Emoji, icônes expressives,
+> illustrations, médailles au classement et micro-animations sont désormais
+> permis. Seules les mécaniques de **données** restent exclues : note de joueur,
+> vote du homme du match, badge / série / niveau stocké. La règle en vigueur est
+> la section *Ton* de `CLAUDE.md`. Ce prompt est conservé en l'état comme archive
+> de la génération des maquettes — ne pas le prendre pour la règle.
+
 **Mode** : Mobile (Android) · **Thème** : sombre uniquement · 18 écrans
 
 ---

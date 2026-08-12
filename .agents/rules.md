@@ -30,7 +30,7 @@
   - Titles & Numbers: **Archivo Expanded** (700 weight, `tabular-nums` for columns).
   - UI Text: **Instrument Sans**.
 - **Touch Targets**: Minimum 44px for buttons, 52px for `StatStepper` (+/- counters).
-- **No Gamification**: No stars, badges, MVP votes, player ratings, levels, or streaks. The app counts, it does not judge.
+- **Tone**: The app may be fun — emoji, expressive icons, illustrated empty states, medals on the standings, micro-animations are all allowed. Only data mechanics stay out: no player ratings, no MVP vote, no stored badge, streak or level (single-user app, and no stored aggregates).
 
 ## 4. Backup & Restoration
 - **Automated Backup**: JSON snapshot sent to private Supabase Storage bucket automatically after every session closure.

@@ -55,7 +55,7 @@ This skill details the "Terrain de nuit" design system for Statoo, an Android mo
 
 4. **`StandingsTable`**:
    - Columns: Rank, Player, **J** (always visible), V, N, D, PTS, PTS/M.
-   - Rank 1 highlighted with `#FFC94F` rank number only (no icons, trophies, or medals).
+   - Ranks 1-3 carry a medal (🥇🥈🥉) in place of the rank number; rank 1 also uses `#FFC94F`. The medal replaces the digit rather than sitting beside it, so the 18px rank column does not widen.
    - Right-aligned numbers in `Archivo Expanded` with `tabular-nums`.
    - Strict horizontal layout (no horizontal scrollbar).
 

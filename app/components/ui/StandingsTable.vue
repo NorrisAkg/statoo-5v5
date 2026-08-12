@@ -16,6 +16,17 @@ function ptsPerMatch(value: number | null | undefined): string {
 function missingLabel(n: number): string {
   return `il manque ${n} ${n > 1 ? 'séances' : 'séance'}`
 }
+
+const MEDALS = ['🥇', '🥈', '🥉'] as const
+
+/**
+ * The medal REPLACES the rank digit rather than sitting next to it: the rank
+ * column is 18px and the table must fit 390px without horizontal scrolling.
+ * It also stops rank 1 from being carried by colour alone.
+ */
+function rankLabel(idx: number): string {
+  return MEDALS[idx] ?? String(idx + 1)
+}
 </script>
 
 <template>
@@ -39,8 +50,8 @@ function missingLabel(n: number): string {
         :to="`/players/${player.player_id}`"
         class="standings-row h-12 border-b border-hairline font-display font-medium text-[15px] tnum text-text-muted"
       >
-        <!-- Rank 1 is marked by color alone -->
-        <span :class="idx === 0 ? 'text-accent-text' : ''">{{ idx + 1 }}</span>
+        <!-- Podium: medal instead of the digit, rank 1 keeps the accent too -->
+        <span :class="idx === 0 ? 'text-accent-text' : ''">{{ rankLabel(idx) }}</span>
         <span class="font-sans font-normal text-text truncate">{{ player.name }}</span>
         <span class="text-right">{{ player.played }}</span>
         <span class="text-right">{{ player.wins }}</span>
