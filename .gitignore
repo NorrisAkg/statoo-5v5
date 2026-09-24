@@ -1,16 +1,48 @@
-node_modules
-.output
-.nuxt
-dist
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
 
-# Capacitor Android — the native project itself is worth committing, but not
-# its build output nor local.properties, which hardcodes this machine's SDK path
-android/build
-android/.gradle
-android/app/build
-android/local.properties
-android/capacitor-cordova-android-plugins/build
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
 
-# Signing material never belongs in the repo
-*.keystore
-*.jks
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Widget Preview related
+.widget_preview/
