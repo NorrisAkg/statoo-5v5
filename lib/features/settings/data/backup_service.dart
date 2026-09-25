@@ -139,7 +139,7 @@ class BackupService {
         }
 
         for (final s in payload.sessions) {
-          await txn.insert('sessions', s);
+          await txn.insert('sessions', _withValidStatus(s));
         }
 
         for (final pt in payload.participations) {
@@ -262,7 +262,7 @@ class BackupService {
           }
 
           // Insérer la séance
-          await txn.insert('sessions', bs);
+          await txn.insert('sessions', _withValidStatus(bs));
           existingSessionIds.add(bsId);
           if (bsPlayedAt != null) existingPlayedAt.add(bsPlayedAt);
           importedSessionsCount++;
@@ -301,5 +301,12 @@ class BackupService {
         );
       }
     });
+  }
+
+  /// Same rule as the v5 migration: a backup taken before it may still hold CLOSED
+  /// sessions without score, which would count as played matches worth 0 pts (CDC §4.2).
+  Map<String, dynamic> _withValidStatus(Map<String, dynamic> session) {
+    final unscored = session['score_a'] == null || session['score_b'] == null || session['result'] == null;
+    return session['status'] == 'CLOSED' && unscored ? {...session, 'status': 'DRAFT'} : session;
   }
 }

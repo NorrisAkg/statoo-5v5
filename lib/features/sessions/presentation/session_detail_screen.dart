@@ -12,6 +12,7 @@ import '../../../core/widgets/status_badge.dart';
 import '../application/sessions_provider.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
+import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 
 class SessionDetailScreen extends ConsumerWidget {
@@ -247,7 +248,7 @@ class SessionDetailScreen extends ConsumerWidget {
                 context,
                 ref,
                 title: 'Équipe A',
-                score: scoreA,
+                score: session.scoreA,
                 color: context.colors.accent500,
                 isDraft: isCurrentActive,
                 onScoreChanged: (newScore) {
@@ -271,7 +272,7 @@ class SessionDetailScreen extends ConsumerWidget {
                 context,
                 ref,
                 title: 'Équipe B',
-                score: scoreB,
+                score: session.scoreB,
                 color: context.colors.secondary500,
                 isDraft: isCurrentActive,
                 onScoreChanged: (newScore) {
@@ -295,7 +296,7 @@ class SessionDetailScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref, {
     required String title,
-    required int score,
+    required int? score,
     required Color color,
     required bool isDraft,
     required ValueChanged<int> onScoreChanged,
@@ -304,7 +305,8 @@ class SessionDetailScreen extends ConsumerWidget {
       children: [
         Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
-        Text('$score', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
+        // Null = not entered yet: showing 0 would pass an unrecorded score off as a real 0.
+        Text(score?.toString() ?? '–', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
         if (isDraft) ...[
           const SizedBox(height: 8),
           Row(
@@ -314,13 +316,13 @@ class SessionDetailScreen extends ConsumerWidget {
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Remix.subtract_line),
                 color: context.colors.foreground400,
-                onPressed: score > 0 ? () => onScoreChanged(score - 1) : null,
+                onPressed: score != null && score > 0 ? () => onScoreChanged(score - 1) : null,
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Remix.add_line),
                 color: color,
-                onPressed: () => onScoreChanged(score + 1),
+                onPressed: () => onScoreChanged((score ?? 0) + 1),
               ),
             ],
           ),
@@ -744,45 +746,93 @@ class SessionDetailScreen extends ConsumerWidget {
     Session session,
     List<SessionParticipantDetail> participants,
   ) async {
-    final countA = participants.where((p) => p.participation.team == Team.a).length;
-    final countB = participants.where((p) => p.participation.team == Team.b).length;
+    final controller = ref.read(sessionsControllerProvider);
+    final blockers = closeBlockers(
+      session: session,
+      teamACount: participants.where((p) => p.participation.team == Team.a).length,
+      teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+    );
 
-    if (!session.allowUnevenTeams && (countA - countB).abs() > 1) {
+    if (blockers.contains(CloseBlocker.unevenTeams)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.")),
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.unevenTeams))),
       );
       return;
     }
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Clôturer la séance ?'),
-        content: const Text(
-          'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Annuler'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Clôturer'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true && context.mounted) {
-      await ref.read(sessionsControllerProvider).closeSession(session.id);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Séance clôturée avec succès !')),
-        );
-      }
+    final neverScored = session.scoreA == null && session.scoreB == null;
+    if (blockers.contains(CloseBlocker.missingScore) && !neverScored) {
+      // Partial score row: offering 0-0 here would overwrite what was entered.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore))),
+      );
+      return;
     }
+
+    final bool? confirmed;
+    if (neverScored) {
+      // An untouched score is not a 0-0: ask rather than guess.
+      confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Score non saisi'),
+          content: const Text(
+            "Aucun score n'a été saisi pour cette séance. S'il s'agit d'un match nul 0 - 0, vous pouvez clôturer directement.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Saisir le score'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Clôturer à 0 - 0'),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true) {
+        await controller.updateScore(sessionId: session.id, scoreA: 0, scoreB: 0);
+      }
+    } else {
+      confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Clôturer la séance ?'),
+          content: const Text(
+            'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Annuler'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Clôturer'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (confirmed != true) return;
+    String message;
+    try {
+      final remaining = await controller.closeSession(session.id);
+      message = remaining.isEmpty ? 'Séance clôturée avec succès !' : _closeBlockerMessage(remaining.first);
+    } on SessionCloseException {
+      message = "La séance n'a pas pu être clôturée. Rechargez-la et réessayez.";
+    }
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
+
+  String _closeBlockerMessage(CloseBlocker blocker) => switch (blocker) {
+    CloseBlocker.missingScore => 'Clôture impossible : renseignez le score de la séance.',
+    CloseBlocker.unevenTeams =>
+      "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
+  };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
     final activeId = ref.read(activeSessionIdProvider).value;

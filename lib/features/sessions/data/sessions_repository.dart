@@ -31,7 +31,8 @@ abstract class SessionsRepository {
     required int yellowCards,
     required int redCards,
   });
-  Future<void> closeSession(String sessionId, {required String teamId});
+  /// Returns false when nothing was closed (unknown session, other team, or no score).
+  Future<bool> closeSession(String sessionId, {required String teamId});
   Future<void> reopenSession(String sessionId);
   Future<void> deleteSession(String sessionId, {required String teamId});
 }
@@ -346,21 +347,24 @@ class SqliteSessionsRepository implements SessionsRepository {
   }
 
   @override
-  Future<void> closeSession(String sessionId, {required String teamId}) async {
+  Future<bool> closeSession(String sessionId, {required String teamId}) async {
     final db = await _appDatabase.database;
     final key = _activeSessionKey(teamId);
-    await db.transaction((txn) async {
-      await txn.update(
+    return await db.transaction((txn) async {
+      // A CLOSED session must carry a score and a result (CDC §4.2), whatever the caller checked.
+      final updated = await txn.update(
         'sessions',
         {'status': 'CLOSED'},
-        where: 'id = ? AND team_id = ?',
+        where: 'id = ? AND team_id = ? AND score_a IS NOT NULL AND score_b IS NOT NULL AND result IS NOT NULL',
         whereArgs: [sessionId, teamId],
       );
+      if (updated == 0) return false;
       await txn.delete(
         'meta',
         where: 'key = ? AND value = ?',
         whereArgs: [key, sessionId],
       );
+      return true;
     });
   }
 

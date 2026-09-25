@@ -6,6 +6,7 @@ import '../../team/application/team_provider.dart';
 import '../data/sessions_repository.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
+import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 
 final Provider<SessionsRepository> sessionsRepositoryProvider = Provider<SessionsRepository>((ref) {
@@ -184,11 +185,27 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
-  Future<void> closeSession(String sessionId) async {
+  /// Closes the session if no blocking rule applies. Returns the blockers found
+  /// (empty when closed), re-checked on fresh data rather than on what the screen showed.
+  Future<List<CloseBlocker>> closeSession(String sessionId) async {
     final teamId = _ref.read(activeTeamIdProvider);
-    if (teamId == null) return;
-    await _repo.closeSession(sessionId, teamId: teamId);
+    if (teamId == null) throw StateError('No active team selected');
+
+    final session = await _repo.getSession(sessionId);
+    if (session == null) throw SessionCloseException('Session $sessionId not found');
+    final participants = await _repo.getSessionParticipants(sessionId);
+
+    final blockers = closeBlockers(
+      session: session,
+      teamACount: participants.where((p) => p.participation.team == Team.a).length,
+      teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+    );
+    if (blockers.isNotEmpty) return blockers;
+
+    final closed = await _repo.closeSession(sessionId, teamId: teamId);
+    if (!closed) throw SessionCloseException('Session $sessionId could not be closed');
     _invalidateAll(sessionId);
+    return const [];
   }
 
   Future<void> reopenSession(String sessionId) async {

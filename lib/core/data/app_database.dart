@@ -21,7 +21,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -41,6 +41,14 @@ class AppDatabase {
               await db.rawUpdate('UPDATE sessions SET team_id = ? WHERE team_id IS NULL', [defaultTeamId]);
             }
           }
+        }
+        if (oldVersion < 5) {
+          // Sessions could be closed without a score, counting as a played match worth 0 pts.
+          // The real score is unknown: send them back to draft so it gets entered, rather than invent a 0-0.
+          await db.rawUpdate(
+            "UPDATE sessions SET status = 'DRAFT' "
+            "WHERE status = 'CLOSED' AND (score_a IS NULL OR score_b IS NULL OR result IS NULL)",
+          );
         }
         await _dropViews(db);
         await _createViews(db);
