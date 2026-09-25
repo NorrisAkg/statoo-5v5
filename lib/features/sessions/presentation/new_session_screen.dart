@@ -520,6 +520,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
             final countA = _playerTeamAssignments.values.where((v) => v == 'A').length;
             final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
+            final unassignedCount = _selectedPlayerIds.length - (countA + countB);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -544,7 +545,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
@@ -563,6 +564,33 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                         ),
                       ),
                     ),
+                    if (unassignedCount > 0) ...[
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: context.colors.warning.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: context.colors.warning.withValues(alpha: 0.4)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.warning, shape: BoxShape.circle)),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  'À placer: $unassignedCount',
+                                  style: TextStyle(color: context.colors.warning, fontWeight: FontWeight.bold, fontSize: 13),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -590,6 +618,15 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                           },
                         ),
                       ),
+                    if (_playerTeamAssignments.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Remix.refresh_line),
+                        tooltip: 'Réinitialiser les équipes',
+                        color: context.colors.foreground500,
+                        onPressed: () => setState(_playerTeamAssignments.clear),
+                      ),
+                    ],
                     if (_selectedPlayerIds.isNotEmpty) const SizedBox(width: 8),
                     IconButton(
                       icon: const Icon(Remix.user_add_line),
@@ -613,18 +650,53 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                   final isSelected = _selectedPlayerIds.contains(player.id);
                   final team = _playerTeamAssignments[player.id];
 
+                  Color avatarBg;
+                  Color avatarFg;
+                  if (team == 'A') {
+                    avatarBg = context.colors.accent500.withValues(alpha: 0.2);
+                    avatarFg = context.colors.accent400;
+                  } else if (team == 'B') {
+                    avatarBg = context.colors.secondary500.withValues(alpha: 0.2);
+                    avatarFg = context.colors.secondary400;
+                  } else if (isSelected) {
+                    avatarBg = context.colors.warning.withValues(alpha: 0.2);
+                    avatarFg = context.colors.warning;
+                  } else {
+                    avatarBg = context.colors.primary500.withValues(alpha: 0.15);
+                    avatarFg = context.colors.primary400;
+                  }
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: AppCard(
+                    child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: team == 'A'
+                            ? context.colors.accent500.withValues(alpha: 0.05)
+                            : team == 'B'
+                                ? context.colors.secondary500.withValues(alpha: 0.05)
+                                : isSelected
+                                    ? context.colors.warning.withValues(alpha: 0.05)
+                                    : context.colors.background900,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: team == 'A'
+                              ? context.colors.accent500.withValues(alpha: 0.35)
+                              : team == 'B'
+                                  ? context.colors.secondary500.withValues(alpha: 0.35)
+                                  : isSelected
+                                      ? context.colors.warning.withValues(alpha: 0.35)
+                                      : context.colors.background700,
+                        ),
+                      ),
                       child: Row(
                         children: [
                           CircleAvatar(
                             radius: 18,
-                            backgroundColor: context.colors.primary500.withValues(alpha: 0.2),
+                            backgroundColor: avatarBg,
                             backgroundImage: player.avatarUrl != null ? NetworkImage(player.avatarUrl!) : null,
                             child: player.avatarUrl == null
-                                ? Text(player.name.substring(0, 1).toUpperCase(), style: TextStyle(color: context.colors.primary500, fontWeight: FontWeight.bold, fontSize: 13))
+                                ? Text(player.name.substring(0, 1).toUpperCase(), style: TextStyle(color: avatarFg, fontWeight: FontWeight.bold, fontSize: 13))
                                 : null,
                           ),
                           const SizedBox(width: 12),
@@ -634,7 +706,9 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                               children: [
                                 Text(player.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                                 if (player.nickname != null)
-                                  Text('« ${player.nickname} »', style: TextStyle(color: context.colors.foreground500, fontSize: 12)),
+                                  Text('« ${player.nickname} »', style: TextStyle(color: context.colors.foreground500, fontSize: 12))
+                                else if (isSelected && team == null)
+                                  Text('Choisir A ou B', style: TextStyle(color: context.colors.warning, fontSize: 11, fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ),
@@ -650,9 +724,6 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                               onPressed: () {
                                 setState(() {
                                   _selectedPlayerIds.add(player.id);
-                                  final aCount = _playerTeamAssignments.values.where((v) => v == 'A').length;
-                                  final bCount = _playerTeamAssignments.values.where((v) => v == 'B').length;
-                                  _playerTeamAssignments[player.id] = aCount <= bCount ? 'A' : 'B';
                                 });
                               },
                             )
