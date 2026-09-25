@@ -1,13 +1,27 @@
+import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
 import '../domain/player.dart';
+import '../domain/player_detail_data.dart';
 
 abstract class PlayersRepository {
-  Future<List<Player>> getPlayers();
+  Future<List<Player>> getPlayers({String? teamId});
+  Future<Player?> getPlayer(String id);
+  Future<PlayerDetailStats> getPlayerStats(String id);
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id);
   Future<Player> createPlayer({
     required String name,
     String? nickname,
     String? avatarUrl,
+    String? teamId,
   });
+  Future<void> updatePlayer({
+    required String id,
+    required String name,
+    String? nickname,
+  });
+  Future<void> togglePlayerActive({required String id, required bool isActive});
+  Future<bool> canDeletePlayer(String id);
+  Future<Set<String>> getDeletablePlayerIds();
   Future<void> deletePlayer(String id);
 }
 
@@ -17,13 +31,19 @@ class SqlitePlayersRepository implements PlayersRepository {
   final AppDatabase _appDatabase;
 
   @override
-  Future<List<Player>> getPlayers() async {
+  Future<List<Player>> getPlayers({String? teamId}) async {
     final db = await _appDatabase.database;
-    final rows = await db.query('players', orderBy: 'is_active DESC, name ASC');
+    final rows = await db.query(
+      'players',
+      where: teamId != null ? 'team_id = ?' : null,
+      whereArgs: teamId != null ? [teamId] : null,
+      orderBy: 'is_active DESC, name ASC',
+    );
 
     return rows.map((row) {
       return Player(
         id: row['id']! as String,
+        teamId: row['team_id']! as String,
         name: row['name']! as String,
         nickname: row['nickname'] as String?,
         avatarUrl: row['avatar_url'] as String?,
@@ -35,15 +55,95 @@ class SqlitePlayersRepository implements PlayersRepository {
   }
 
   @override
+  Future<Player?> getPlayer(String id) async {
+    final db = await _appDatabase.database;
+    final rows = await db.query('players', where: 'id = ?', whereArgs: [id], limit: 1);
+    if (rows.isEmpty) return null;
+    final row = rows.first;
+    return Player(
+      id: row['id']! as String,
+      teamId: row['team_id']! as String,
+      name: row['name']! as String,
+      nickname: row['nickname'] as String?,
+      avatarUrl: row['avatar_url'] as String?,
+      isActive: (row['is_active'] as int?) == 1,
+      createdAt: DateTime.parse(row['created_at']! as String),
+      updatedAt: DateTime.parse(row['updated_at']! as String),
+    );
+  }
+
+  @override
+  Future<PlayerDetailStats> getPlayerStats(String id) async {
+    final db = await _appDatabase.database;
+    final rows = await db.rawQuery('''
+      SELECT 
+        COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 1 THEN 1 END) AS matches_played,
+        COALESCE(SUM(is_win), 0) AS wins,
+        COALESCE(SUM(is_draw), 0) AS draws,
+        COALESCE(SUM(is_loss), 0) AS losses,
+        COALESCE(SUM(points), 0) AS total_points,
+        COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN goals ELSE 0 END), 0) AS goals,
+        COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN assists ELSE 0 END), 0) AS assists,
+        COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN yellow_cards ELSE 0 END), 0) AS yellow_cards,
+        COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN red_cards ELSE 0 END), 0) AS red_cards,
+        COUNT(CASE WHEN status = 'CLOSED' THEN 1 END) AS appearances
+      FROM v_player_match_results
+      WHERE player_id = ?
+    ''', [id]);
+
+    if (rows.isEmpty) {
+      return const PlayerDetailStats.empty();
+    }
+    return PlayerDetailStats.fromMap(rows.first);
+  }
+
+  @override
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id) async {
+    final db = await _appDatabase.database;
+    final rows = await db.rawQuery('''
+      SELECT 
+        pt.id AS participation_id,
+        pt.session_id,
+        pt.player_id,
+        pt.team,
+        pt.goals,
+        pt.assists,
+        pt.yellow_cards,
+        pt.red_cards,
+        s.played_at,
+        s.status,
+        s.is_ranked,
+        s.score_a,
+        s.score_b,
+        s.result
+      FROM participations pt
+      JOIN sessions s ON s.id = pt.session_id
+      WHERE pt.player_id = ?
+      ORDER BY s.played_at DESC
+    ''', [id]);
+
+    return rows.map(PlayerMatchHistoryItem.fromMap).toList();
+  }
+
+  @override
   Future<Player> createPlayer({
     required String name,
     String? nickname,
     String? avatarUrl,
+    String? teamId,
   }) async {
     final db = await _appDatabase.database;
     final now = DateTime.now();
+
+    var resolvedTeamId = teamId ?? '';
+    if (resolvedTeamId.isEmpty) {
+      final teams = await db.query('teams', limit: 1);
+      resolvedTeamId = teams.isNotEmpty ? teams.first['id']! as String : 'team_1';
+    }
+
     final player = Player(
       id: 'p_${now.millisecondsSinceEpoch}',
+      teamId: resolvedTeamId,
       name: name.trim(),
       nickname: nickname?.trim().isNotEmpty == true ? nickname!.trim() : null,
       avatarUrl: avatarUrl,
@@ -53,6 +153,7 @@ class SqlitePlayersRepository implements PlayersRepository {
 
     await db.insert('players', {
       'id': player.id,
+      'team_id': player.teamId,
       'name': player.name,
       'nickname': player.nickname,
       'avatar_url': player.avatarUrl,
@@ -62,6 +163,59 @@ class SqlitePlayersRepository implements PlayersRepository {
     });
 
     return player;
+  }
+
+  @override
+  Future<void> updatePlayer({
+    required String id,
+    required String name,
+    String? nickname,
+  }) async {
+    final db = await _appDatabase.database;
+    await db.update(
+      'players',
+      {
+        'name': name.trim(),
+        'nickname': (nickname != null && nickname.trim().isNotEmpty) ? nickname.trim() : null,
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<void> togglePlayerActive({required String id, required bool isActive}) async {
+    final db = await _appDatabase.database;
+    await db.update(
+      'players',
+      {
+        'is_active': isActive ? 1 : 0,
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<bool> canDeletePlayer(String id) async {
+    final db = await _appDatabase.database;
+    final count = Sqflite.firstIntValue(await db.rawQuery(
+      'SELECT COUNT(*) FROM participations WHERE player_id = ?',
+      [id],
+    )) ?? 0;
+    return count == 0;
+  }
+
+  @override
+  Future<Set<String>> getDeletablePlayerIds() async {
+    final db = await _appDatabase.database;
+    final rows = await db.rawQuery('''
+      SELECT id FROM players 
+      WHERE id NOT IN (SELECT DISTINCT player_id FROM participations)
+    ''');
+    return rows.map((r) => r['id']! as String).toSet();
   }
 
   @override

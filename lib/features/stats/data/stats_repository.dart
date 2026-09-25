@@ -2,7 +2,7 @@ import '../../../core/data/app_database.dart';
 import '../domain/group_totals.dart';
 
 abstract class StatsRepository {
-  Future<GroupTotals> getGroupTotals();
+  Future<GroupTotals> getGroupTotals({String? teamId});
 }
 
 class SqliteStatsRepository implements StatsRepository {
@@ -11,9 +11,12 @@ class SqliteStatsRepository implements StatsRepository {
   final AppDatabase _appDatabase;
 
   @override
-  Future<GroupTotals> getGroupTotals() async {
+  Future<GroupTotals> getGroupTotals({String? teamId}) async {
     final db = await _appDatabase.database;
-    final results = await db.rawQuery('SELECT * FROM v_group_totals LIMIT 1');
+    final sql = teamId != null
+        ? 'SELECT * FROM v_group_totals WHERE team_id = ? LIMIT 1'
+        : 'SELECT * FROM v_group_totals LIMIT 1';
+    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
     if (results.isEmpty) {
       return const GroupTotals(
         totalSessions: 0,

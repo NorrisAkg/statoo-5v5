@@ -6,11 +6,11 @@ import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
 
 abstract class RankingRepository {
-  Future<List<StandingEntry>> getStandings();
-  Future<List<StandingPerMatchEntry>> getStandingsPerMatch();
-  Future<List<ScorerEntry>> getTopScorers();
-  Future<List<AssistEntry>> getTopAssists();
-  Future<List<CardEntry>> getTopCards({String sortBy = 'all'});
+  Future<List<StandingEntry>> getStandings({String? teamId});
+  Future<List<StandingPerMatchEntry>> getStandingsPerMatch({String? teamId});
+  Future<List<ScorerEntry>> getTopScorers({String? teamId});
+  Future<List<AssistEntry>> getTopAssists({String? teamId});
+  Future<List<CardEntry>> getTopCards({String? teamId, String sortBy = 'all'});
 }
 
 class SqliteRankingRepository implements RankingRepository {
@@ -19,41 +19,54 @@ class SqliteRankingRepository implements RankingRepository {
   final AppDatabase _appDatabase;
 
   @override
-  Future<List<StandingEntry>> getStandings() async {
+  Future<List<StandingEntry>> getStandings({String? teamId}) async {
     final db = await _appDatabase.database;
-    final results = await db.rawQuery('SELECT * FROM v_standings');
+    final sql = teamId != null
+        ? 'SELECT * FROM v_standings WHERE team_id = ?'
+        : 'SELECT * FROM v_standings';
+    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
     return results.map(StandingEntry.fromMap).toList();
   }
 
   @override
-  Future<List<StandingPerMatchEntry>> getStandingsPerMatch() async {
+  Future<List<StandingPerMatchEntry>> getStandingsPerMatch({String? teamId}) async {
     final db = await _appDatabase.database;
-    final results = await db.rawQuery('SELECT * FROM v_standings_per_match');
+    final sql = teamId != null
+        ? 'SELECT * FROM v_standings_per_match WHERE team_id = ?'
+        : 'SELECT * FROM v_standings_per_match';
+    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
     return results.map(StandingPerMatchEntry.fromMap).toList();
   }
 
   @override
-  Future<List<ScorerEntry>> getTopScorers() async {
+  Future<List<ScorerEntry>> getTopScorers({String? teamId}) async {
     final db = await _appDatabase.database;
-    final results = await db.rawQuery('SELECT * FROM v_top_scorers');
+    final sql = teamId != null
+        ? 'SELECT * FROM v_top_scorers WHERE team_id = ?'
+        : 'SELECT * FROM v_top_scorers';
+    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
     return results.map(ScorerEntry.fromMap).toList();
   }
 
   @override
-  Future<List<AssistEntry>> getTopAssists() async {
+  Future<List<AssistEntry>> getTopAssists({String? teamId}) async {
     final db = await _appDatabase.database;
-    final results = await db.rawQuery('SELECT * FROM v_top_assists');
+    final sql = teamId != null
+        ? 'SELECT * FROM v_top_assists WHERE team_id = ?'
+        : 'SELECT * FROM v_top_assists';
+    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
     return results.map(AssistEntry.fromMap).toList();
   }
 
   @override
-  Future<List<CardEntry>> getTopCards({String sortBy = 'all'}) async {
+  Future<List<CardEntry>> getTopCards({String? teamId, String sortBy = 'all'}) async {
     final db = await _appDatabase.database;
     final orderBy = switch (sortBy) {
       'yellow' => 'yellow_cards DESC, red_cards DESC, matches_played ASC, name ASC',
       'red' => 'red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC',
       _ => '(red_cards * 3 + yellow_cards) DESC, red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC',
     };
+    final whereClause = teamId != null ? 'WHERE team_id = ?' : '';
     final results = await db.rawQuery('''
       SELECT 
         ROW_NUMBER() OVER (ORDER BY $orderBy) AS rank,
@@ -66,8 +79,9 @@ class SqliteRankingRepository implements RankingRepository {
         red_cards,
         total_cards
       FROM v_top_cards
+      $whereClause
       ORDER BY rank
-    ''');
+    ''', teamId != null ? [teamId] : null);
     return results.map(CardEntry.fromMap).toList();
   }
 }

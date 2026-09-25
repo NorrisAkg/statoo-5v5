@@ -7,6 +7,7 @@ part 'player.g.dart';
 sealed class Player with _$Player {
   const factory Player({
     required String id,
+    required String teamId,
     required String name,
     required DateTime createdAt,
     required DateTime updatedAt,
