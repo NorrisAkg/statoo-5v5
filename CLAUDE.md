@@ -19,12 +19,12 @@ flutter pub get
 dart run build_runner build --delete-conflicting-outputs   # après toute modif @riverpod / @freezed / @JsonSerializable
 dart analyze <fichiers>          # ciblé, ~4 s — à privilégier
 flutter analyze                  # projet entier, lent
-flutter test                     # ~30 s, 19 tests
+flutter test                     # ~30 s
 flutter test test/features/<feature>/
 flutter run
 ```
 
-État de base connu (2026-09-25) : `dart analyze lib test` remonte **70 infos préexistantes** ; 59 fichiers sur 75 ne sont pas au format `dart format`. Ne compter que les infos **introduites** par un changement, et **ne pas reformater en masse** des fichiers non touchés (diffs illisibles).
+État de base connu (2026-09-25) : `dart analyze lib test` remonte **69 problèmes préexistants** — 14 erreurs, toutes dans `lib/core/data/mock_repository.dart` (fichier mort, importé nulle part), 2 avertissements (`_dropAllTables`, `_seedDemoData` inutilisés), le reste en infos ; 59 fichiers sur 75 ne sont pas au format `dart format`. Ne compter que les infos **introduites** par un changement, et **ne pas reformater en masse** des fichiers non touchés (diffs illisibles).
 
 ## Architecture
 
