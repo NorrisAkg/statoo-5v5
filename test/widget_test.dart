@@ -40,7 +40,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Accueil'), findsNWidgets(2));
+    expect(find.text('Accueil'), findsOneWidget);
+    expect(find.text('Nouvelle séance'), findsOneWidget);
   });
 }
-

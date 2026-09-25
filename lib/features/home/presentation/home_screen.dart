@@ -10,6 +10,8 @@ import '../../players/application/players_provider.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
+import '../../team/application/team_provider.dart';
+import '../../team/presentation/team_switcher_bottom_sheet.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -18,13 +20,45 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final activeDraftAsync = ref.watch(activeDraftSessionProvider);
     final sessionsAsync = ref.watch(sessionsListProvider);
+    final activeTeam = ref.watch(activeTeamProvider).value;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accueil'),
+        title: InkWell(
+          onTap: () => showTeamSwitcher(context),
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: context.colors.primary500.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(Remix.shield_user_line, size: 16, color: context.colors.primary500),
+                ),
+                const SizedBox(width: 8),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 180),
+                  child: Text(
+                    activeTeam?.name ?? 'Mon groupe',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Icon(Remix.arrow_down_s_line, size: 18, color: context.colors.foreground400),
+              ],
+            ),
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Remix.settings_4_line),
+            tooltip: 'Réglages',
             onPressed: () => context.push('/reglages'),
           ),
         ],

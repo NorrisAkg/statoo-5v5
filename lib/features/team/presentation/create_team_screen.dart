@@ -36,7 +36,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
     try {
       final team = TeamInfo(
-        id: 'team_1', // Using a default global team ID for now
+        id: 'team_${DateTime.now().millisecondsSinceEpoch}',
         name: _nameController.text.trim(),
         format: _selectedFormat,
         location: _locationController.text.trim().isNotEmpty
@@ -59,6 +59,8 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final hasTeam = ref.watch(hasTeamProvider);
+
     return Scaffold(
       backgroundColor: context.colors.background950,
       appBar: AppBar(
@@ -81,7 +83,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
             ),
           ),
           child: Text(
-            'Étape 1 sur 2 · Votre équipe',
+            hasTeam ? 'Nouveau groupe' : 'Étape 1 sur 2 · Votre équipe',
             style: TextStyle(
               color: context.colors.primary400,
               fontSize: 12,

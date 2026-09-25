@@ -6,6 +6,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/status_badge.dart';
+import '../../team/application/team_provider.dart';
+import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/sessions_provider.dart';
 import '../domain/session_summary.dart';
 
@@ -17,19 +19,29 @@ class SessionsScreen extends ConsumerWidget {
     final activeFilter = ref.watch(sessionsFilterProvider);
     final sessionsAsync = ref.watch(sessionsListProvider);
     final allSessionsAsync = ref.watch(allSessionsProvider);
+    final activeTeam = ref.watch(activeTeamProvider).value;
 
     final totalCount = allSessionsAsync.value?.length ?? 0;
 
-    final subtitleText = switch (activeFilter) {
+    final filterText = switch (activeFilter) {
       'ranked' => '${sessionsAsync.value?.length ?? 0} classée(s)',
       'friendly' => '${sessionsAsync.value?.length ?? 0} amicale(s)',
       'draft' => '${sessionsAsync.value?.length ?? 0} brouillon(s)',
       _ => '$totalCount au total',
     };
 
+    final subtitleText = '$filterText${activeTeam != null ? ' · ${activeTeam.name}' : ''}';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Séances'),
+        actions: [
+          IconButton(
+            icon: const Icon(Remix.arrow_left_right_line),
+            tooltip: 'Changer de groupe',
+            onPressed: () => showTeamSwitcher(context),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(24),
           child: Container(

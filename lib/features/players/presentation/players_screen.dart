@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../team/application/team_provider.dart';
+import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/players_provider.dart';
 import '../domain/player.dart';
 import 'edit_player_bottom_sheet.dart';
@@ -18,10 +20,18 @@ class PlayersScreen extends ConsumerWidget {
     final playersAsync = ref.watch(playersListProvider);
     final deletableIdsAsync = ref.watch(deletablePlayerIdsProvider);
     final deletableIds = deletableIdsAsync.value ?? const <String>{};
+    final activeTeam = ref.watch(activeTeamProvider).value;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Joueurs'),
+        actions: [
+          IconButton(
+            icon: const Icon(Remix.arrow_left_right_line),
+            tooltip: 'Changer de groupe',
+            onPressed: () => showTeamSwitcher(context),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(20),
           child: Container(
@@ -29,7 +39,7 @@ class PlayersScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: playersAsync.when(
               data: (players) => Text(
-                '${players.where((p) => p.isActive).length} actifs',
+                '${players.where((p) => p.isActive).length} actifs${activeTeam != null ? ' · ${activeTeam.name}' : ''}',
                 style: TextStyle(color: context.colors.foreground400, fontSize: 14),
               ),
               loading: () => const SizedBox(),

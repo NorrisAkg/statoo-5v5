@@ -11,6 +11,7 @@ import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../team/application/team_provider.dart';
+import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/settings_provider.dart';
 import '../data/backup_service.dart';
 import '../domain/backup_payload.dart';
@@ -38,6 +39,9 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          _buildSectionTitle(context, 'Groupe & Équipes'),
+          _buildTeamSection(context, ref),
+          const SizedBox(height: 24),
           _buildSectionTitle(context, 'Séances & Matchs'),
           AppCard(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -714,6 +718,133 @@ class SettingsScreen extends ConsumerWidget {
         ),
       );
     }
+  }
+
+  Widget _buildTeamSection(BuildContext context, WidgetRef ref) {
+    final activeTeam = ref.watch(activeTeamProvider).value;
+    final allTeams = ref.watch(allTeamsProvider).value ?? const [];
+    final countsAsync = activeTeam != null ? ref.watch(teamCountsProvider(activeTeam.id)) : null;
+
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: context.colors.primary500.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: context.colors.primary500.withValues(alpha: 0.3)),
+                ),
+                child: Center(
+                  child: Text(
+                    activeTeam?.name.isNotEmpty == true ? activeTeam!.name.substring(0, 1).toUpperCase() : 'E',
+                    style: TextStyle(
+                      color: context.colors.primary500,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            activeTeam?.name ?? 'Aucun groupe sélectionné',
+                            style: TextStyle(
+                              color: context.colors.foreground50,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: context.colors.primary500.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            'Actif',
+                            style: TextStyle(
+                              color: context.colors.primary400,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${activeTeam?.format ?? "5v5"}${activeTeam?.location != null ? " · ${activeTeam!.location}" : ""}',
+                      style: TextStyle(color: context.colors.foreground400, fontSize: 13),
+                    ),
+                    if (countsAsync != null)
+                      countsAsync.maybeWhen(
+                        data: (counts) => Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            '${counts['players'] ?? 0} joueurs · ${counts['sessions'] ?? 0} séances enregistrées',
+                            style: TextStyle(color: context.colors.foreground500, fontSize: 12),
+                          ),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Divider(color: context.colors.background700, height: 1),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  icon: const Icon(Remix.arrow_left_right_line, size: 16),
+                  label: Text(allTeams.length > 1 ? 'Changer (${allTeams.length})' : 'Changer'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: context.colors.primary400,
+                    side: BorderSide(color: context.colors.primary500.withValues(alpha: 0.4)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () => unawaited(showTeamSwitcher(context)),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  icon: const Icon(Remix.add_line, size: 16),
+                  label: const Text('Nouveau'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: context.colors.background950,
+                    backgroundColor: context.colors.primary500,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () => unawaited(context.push('/creer-equipe')),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
