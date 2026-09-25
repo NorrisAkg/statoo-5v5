@@ -267,6 +267,15 @@ void main() {
       expect(find.text('Lucas'), findsOneWidget);
       expect(find.text('« Lulu »'), findsOneWidget);
 
+      // Verify focus is brought back to the name field
+      final nameEditable = tester.widget<EditableText>(
+        find.descendant(
+          of: find.byType(TextFormField).first,
+          matching: find.byType(EditableText),
+        ),
+      );
+      expect(nameEditable.focusNode.hasFocus, isTrue);
+
       // Add a second player
       await tester.enterText(find.byType(TextFormField).first, 'Karim');
       await tester.tap(find.text('Ajouter ce joueur'));
@@ -274,6 +283,7 @@ void main() {
 
       expect(find.text('EFFECTIF ACTUEL (2)'), findsOneWidget);
       expect(find.text('Karim'), findsOneWidget);
+      expect(nameEditable.focusNode.hasFocus, isTrue);
     });
   });
 }

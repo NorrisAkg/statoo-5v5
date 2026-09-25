@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ class NewPlayerBottomSheet extends ConsumerStatefulWidget {
 class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
+  final _nameFocusNode = FocusNode();
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
@@ -35,6 +37,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
     setState(() {
       _imageFile = null;
     });
+    _nameFocusNode.requestFocus();
   }
 
   Future<void> _submit({required bool createAnother}) async {
@@ -65,6 +68,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   void dispose() {
     _nameController.dispose();
     _nicknameController.dispose();
+    _nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -129,6 +133,10 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             const SizedBox(height: 8),
             TextField(
               controller: _nameController,
+              focusNode: _nameFocusNode,
+              autofocus: true,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.next,
               decoration: InputDecoration(
                 hintText: 'Karim Benali',
                 hintStyle: TextStyle(color: context.colors.foreground600),
@@ -154,6 +162,13 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             const SizedBox(height: 8),
             TextField(
               controller: _nicknameController,
+              textCapitalization: TextCapitalization.words,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) {
+                if (isFormValid) {
+                  unawaited(_submit(createAnother: true));
+                }
+              },
               decoration: InputDecoration(
                 hintText: 'Kaka',
                 hintStyle: TextStyle(color: context.colors.foreground600),

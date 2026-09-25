@@ -19,6 +19,7 @@ class AddTeamPlayersScreen extends ConsumerStatefulWidget {
 class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
+  final _nameFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
   bool _isAdding = false;
 
@@ -26,6 +27,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
   void dispose() {
     _nameController.dispose();
     _nicknameController.dispose();
+    _nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -43,6 +45,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
 
       _nameController.clear();
       _nicknameController.clear();
+      _nameFocusNode.requestFocus();
     } finally {
       if (mounted) {
         setState(() => _isAdding = false);
@@ -207,7 +210,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                             const SizedBox(height: 14),
                             TextFormField(
                               controller: _nameController,
+                              focusNode: _nameFocusNode,
                               textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
                               style: TextStyle(color: context.colors.foreground50),
                               decoration: InputDecoration(
                                 hintText: 'Nom ou prénom (ex: Lucas, Karim...) *',
@@ -244,6 +249,12 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                             TextFormField(
                               controller: _nicknameController,
                               textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                if (!_isAdding) {
+                                  unawaited(_addPlayer());
+                                }
+                              },
                               style: TextStyle(color: context.colors.foreground50),
                               decoration: InputDecoration(
                                 hintText: 'Surnom (facultatif, ex: Lulu)',
