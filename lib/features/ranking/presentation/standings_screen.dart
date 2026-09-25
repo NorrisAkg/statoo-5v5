@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../application/ranking_providers.dart';
 import '../domain/assist_entry.dart';
+import '../domain/card_entry.dart';
 import '../domain/scorer_entry.dart';
 import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
@@ -16,7 +17,7 @@ class StandingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Classement'),
@@ -35,6 +36,7 @@ class StandingsScreen extends ConsumerWidget {
               Tab(text: 'Pts / Match'),
               Tab(text: 'Buteurs'),
               Tab(text: 'Passeurs'),
+              Tab(text: 'Cartons'),
             ],
           ),
         ),
@@ -44,6 +46,7 @@ class StandingsScreen extends ConsumerWidget {
             _PointsPerMatchTab(),
             _ScorersTab(),
             _AssistsTab(),
+            _CardsTab(),
           ],
         ),
       ),
@@ -702,6 +705,265 @@ class _AssistsTab extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CardsTab extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cardsAsync = ref.watch(topCardsProvider);
+    final activeFilter = ref.watch(cardsFilterProvider);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(topCardsProvider);
+      },
+      color: context.colors.primary500,
+      backgroundColor: context.colors.background900,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: Row(
+              children: [
+                _buildFilterChip(
+                  context,
+                  label: 'Tous',
+                  isSelected: activeFilter == 'all',
+                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'all',
+                ),
+                const SizedBox(width: 8),
+                _buildFilterChip(
+                  context,
+                  label: 'Cartons jaunes',
+                  cardColor: context.colors.card,
+                  isSelected: activeFilter == 'yellow',
+                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'yellow',
+                ),
+                const SizedBox(width: 8),
+                _buildFilterChip(
+                  context,
+                  label: 'Cartons rouges',
+                  cardColor: context.colors.danger,
+                  isSelected: activeFilter == 'red',
+                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'red',
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: cardsAsync.when(
+              data: (cards) {
+                if (cards.isEmpty) {
+                  return _buildEmptyState(context, 'Aucun carton enregistré');
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: cards.length,
+                  itemBuilder: (context, index) {
+                    final entry = cards[index];
+                    return _buildCardItem(context, entry);
+                  },
+                );
+              },
+              loading: () => Center(
+                child: CircularProgressIndicator(color: context.colors.primary500),
+              ),
+              error: (err, stack) => _buildErrorState(context, err.toString(), () {
+                ref.invalidate(topCardsProvider);
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(
+    BuildContext context, {
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+    Color? cardColor,
+  }) {
+    final bg = isSelected
+        ? (cardColor != null
+            ? cardColor.withValues(alpha: 0.18)
+            : context.colors.primary500.withValues(alpha: 0.18))
+        : context.colors.background800;
+    final borderColor = isSelected
+        ? (cardColor ?? context.colors.primary500)
+        : context.colors.background700;
+    final textColor = isSelected
+        ? (cardColor ?? context.colors.primary400)
+        : context.colors.foreground400;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(9999),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(9999),
+          border: Border.all(color: borderColor),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (cardColor != null) ...[
+              Container(
+                width: 8,
+                height: 11,
+                margin: const EdgeInsets.only(right: 6),
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCardItem(BuildContext context, CardEntry entry) {
+    final avatarColor = _getPlayerColor(context, entry.playerId);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: context.colors.background900,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.colors.background700),
+          ),
+          child: Row(
+            children: [
+              _buildRankBadge(context, entry.rank),
+              const SizedBox(width: 10),
+              InitialAvatar(
+                initial: entry.name.isNotEmpty ? entry.name[0] : '?',
+                baseColor: avatarColor,
+                size: 42,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            entry.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                          const SizedBox(width: 6),
+                          Text(
+                            '« ${entry.nickname} »',
+                            style: TextStyle(
+                              color: context.colors.foreground500,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'J ${entry.matchesPlayed} match${entry.matchesPlayed > 1 ? 's' : ''}',
+                      style: TextStyle(
+                        color: context.colors.foreground400,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildMiniCardBadge(
+                    context,
+                    color: context.colors.card,
+                    count: entry.yellowCards,
+                  ),
+                  const SizedBox(width: 6),
+                  _buildMiniCardBadge(
+                    context,
+                    color: context.colors.danger,
+                    count: entry.redCards,
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMiniCardBadge(
+    BuildContext context, {
+    required Color color,
+    required int count,
+  }) {
+    final hasCards = count > 0;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+      decoration: BoxDecoration(
+        color: hasCards ? color.withValues(alpha: 0.15) : context.colors.background800,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: hasCards ? color.withValues(alpha: 0.4) : context.colors.background700,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 9,
+            height: 13,
+            decoration: BoxDecoration(
+              color: hasCards ? color : context.colors.foreground600,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            '$count',
+            style: TextStyle(
+              color: hasCards ? color : context.colors.foreground500,
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }

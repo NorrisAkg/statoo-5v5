@@ -263,6 +263,39 @@ class AppDatabase {
     ''');
 
     await db.execute('''
+      CREATE VIEW IF NOT EXISTS v_top_cards AS
+      WITH card_aggregates AS (
+        SELECT 
+          pl.id AS player_id,
+          pl.name,
+          pl.nickname,
+          pl.avatar_url,
+          COUNT(CASE WHEN s.status = 'CLOSED' THEN 1 END) AS matches_played,
+          COALESCE(SUM(CASE WHEN s.status = 'CLOSED' THEN pt.yellow_cards ELSE 0 END), 0) AS yellow_cards,
+          COALESCE(SUM(CASE WHEN s.status = 'CLOSED' THEN pt.red_cards ELSE 0 END), 0) AS red_cards,
+          COALESCE(SUM(CASE WHEN s.status = 'CLOSED' THEN (pt.yellow_cards + pt.red_cards) ELSE 0 END), 0) AS total_cards
+        FROM players pl
+        LEFT JOIN participations pt ON pt.player_id = pl.id
+        LEFT JOIN sessions s ON s.id = pt.session_id
+        WHERE pl.is_active = 1
+        GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url
+      )
+      SELECT 
+        ROW_NUMBER() OVER (ORDER BY (red_cards * 3 + yellow_cards) DESC, red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC) AS rank,
+        player_id,
+        name,
+        nickname,
+        avatar_url,
+        matches_played,
+        yellow_cards,
+        red_cards,
+        total_cards
+      FROM card_aggregates
+      WHERE total_cards > 0 OR matches_played > 0
+      ORDER BY rank;
+    ''');
+
+    await db.execute('''
       CREATE VIEW IF NOT EXISTS v_group_totals AS
       WITH session_counts AS (
         SELECT 
@@ -361,19 +394,19 @@ class AppDatabase {
 
     // Participations
     int partCount = 1;
-    void addP(String sid, String pid, String team, int g, int a) {
+    void addP(String sid, String pid, String team, int g, int a, [int y = 0, int r = 0]) {
       batch.rawInsert(
-        'INSERT INTO participations (id, session_id, player_id, team, goals, assists) VALUES (?, ?, ?, ?, ?, ?)',
-        ['part_$partCount', sid, pid, team, g, a],
+        'INSERT INTO participations (id, session_id, player_id, team, goals, assists, yellow_cards, red_cards) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        ['part_$partCount', sid, pid, team, g, a, y, r],
       );
       partCount++;
     }
 
-    // Lucas (p1): 14 matches, 9 wins, 3 draws, 2 losses = 30 pts, 9 goals, 11 assists
+    // Lucas (p1): 14 matches, 9 wins, 3 draws, 2 losses = 30 pts, 9 goals, 11 assists, 1 yellow, 0 red
     final lucasGoals = [1, 2, 0, 1, 0, 1, 1, 0, 2, 1, 0, 0, 0, 0];
     final lucasAssists = [1, 1, 0, 2, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0];
     for (int i = 0; i < sessionsMeta.length; i++) {
-      addP(sessionsMeta[i][0] as String, 'p1', 'A', lucasGoals[i], lucasAssists[i]);
+      addP(sessionsMeta[i][0] as String, 'p1', 'A', lucasGoals[i], lucasAssists[i], i == 3 ? 1 : 0);
     }
 
     // Yassine (p6): 14 matches, 9 wins, 3 draws, 2 losses = 30 pts
@@ -387,18 +420,18 @@ class AppDatabase {
       addP(sessionsMeta[i][0] as String, 'p4', team, i.isOdd ? 1 : 0, 0);
     }
 
-    // Karim (p2): 8 matches, 5 wins, 3 draws = 18 pts
+    // Karim (p2): 8 matches, 5 wins, 3 draws = 18 pts, 2 yellows, 1 red
     for (int i = 0; i < 8; i++) {
       final sid = sessionsMeta[i][0] as String;
       final team = (sid == 's3' || sid == 's8') ? 'B' : 'A';
-      addP(sid, 'p2', team, i.isEven ? 1 : 0, 1);
+      addP(sid, 'p2', team, i.isEven ? 1 : 0, 1, (i == 1 || i == 5) ? 1 : 0, i == 5 ? 1 : 0);
     }
 
-    // Sofiane (p3): 10 matches
+    // Sofiane (p3): 10 matches, 1 yellow
     for (int i = 0; i < 10; i++) {
       final sid = sessionsMeta[i][0] as String;
       final team = i < 7 ? 'A' : 'B';
-      addP(sid, 'p3', team, 0, i % 3 == 0 ? 1 : 0);
+      addP(sid, 'p3', team, 0, i % 3 == 0 ? 1 : 0, i == 2 ? 1 : 0);
     }
 
     // Hugo (p5): 9 matches
@@ -408,10 +441,10 @@ class AppDatabase {
       addP(sid, 'p5', team, i == 1 ? 1 : 0, 0);
     }
 
-    // Benjamin (p8): 8 matches
+    // Benjamin (p8): 8 matches, 1 yellow
     for (int i = 0; i < 8; i++) {
       final sid = sessionsMeta[i][0] as String;
-      addP(sid, 'p8', 'B', i == 2 ? 1 : 0, 0);
+      addP(sid, 'p8', 'B', i == 2 ? 1 : 0, 0, i == 4 ? 1 : 0);
     }
 
     // Théo (p7): 7 matches
@@ -426,10 +459,10 @@ class AppDatabase {
       addP(sid, 'p9', 'A', 1, 0);
     }
 
-    // Enzo (p10): 5 matches (< 50% threshold)
+    // Enzo (p10): 5 matches (< 50% threshold), 1 red
     for (int i = 9; i < 14; i++) {
       final sid = sessionsMeta[i][0] as String;
-      addP(sid, 'p10', 'A', 1, 0);
+      addP(sid, 'p10', 'A', 1, 0, 0, i == 10 ? 1 : 0);
     }
 
     // Thomas (p11): 4 matches (< 50% threshold)

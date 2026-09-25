@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:statoo/features/ranking/domain/assist_entry.dart';
+import 'package:statoo/features/ranking/domain/card_entry.dart';
 import 'package:statoo/features/ranking/domain/scorer_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_per_match_entry.dart';
@@ -118,6 +119,30 @@ void main() {
       final entry = AssistEntry.fromMap(map);
       expect(entry.rank, 1);
       expect(entry.assists, 11);
+    });
+
+    test('CardEntry parses correctly from v_top_cards row', () {
+      final map = {
+        'rank': 1,
+        'player_id': 'p2',
+        'name': 'Karim Benali',
+        'nickname': 'Kaka',
+        'avatar_url': null,
+        'matches_played': 8,
+        'yellow_cards': 2,
+        'red_cards': 1,
+        'total_cards': 3,
+      };
+
+      final entry = CardEntry.fromMap(map);
+      expect(entry.rank, 1);
+      expect(entry.playerId, 'p2');
+      expect(entry.name, 'Karim Benali');
+      expect(entry.nickname, 'Kaka');
+      expect(entry.matchesPlayed, 8);
+      expect(entry.yellowCards, 2);
+      expect(entry.redCards, 1);
+      expect(entry.totalCards, 3);
     });
   });
 }
