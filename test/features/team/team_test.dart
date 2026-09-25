@@ -7,6 +7,7 @@ import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/players/application/players_provider.dart';
 import 'package:statoo/features/players/data/players_repository.dart';
 import 'package:statoo/features/players/domain/player.dart';
+import 'package:statoo/features/players/domain/player_detail_data.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 import 'package:statoo/features/team/data/team_repository.dart';
 import 'package:statoo/features/team/domain/team_info.dart';
@@ -15,32 +16,87 @@ import 'package:statoo/features/team/presentation/create_team_screen.dart';
 
 class _MockTeamRepository implements TeamRepository {
   TeamInfo? _team;
+  final List<TeamInfo> _teams = [];
 
   @override
   Future<TeamInfo?> getTeamInfo() async => _team;
 
   @override
+  Future<List<TeamInfo>> getAllTeams() async => _teams;
+
+  @override
+  Future<TeamInfo?> getTeamById(String id) async =>
+      _teams.cast<TeamInfo?>().firstWhere((t) => t?.id == id, orElse: () => null);
+
+  @override
+  Future<TeamInfo?> getActiveTeam() async => _team;
+
+  @override
+  Future<String?> getActiveTeamId() async => _team?.id;
+
+  @override
+  Future<void> setActiveTeamId(String id) async {
+    _team = _teams.cast<TeamInfo?>().firstWhere((t) => t?.id == id, orElse: () => null);
+  }
+
+  @override
   Future<void> saveTeamInfo(TeamInfo team) async {
     _team = team;
+    final idx = _teams.indexWhere((t) => t.id == team.id);
+    if (idx >= 0) {
+      _teams[idx] = team;
+    } else {
+      _teams.add(team);
+    }
   }
+
+  @override
+  Future<void> deleteTeam(String id) async {
+    _teams.removeWhere((t) => t.id == id);
+    if (_team?.id == id) _team = null;
+  }
+
+  @override
+  Future<Map<String, int>> getTeamCounts(String teamId) async => {
+        'players': 0,
+        'sessions': 0,
+      };
 }
 
 class _MockPlayersRepository implements PlayersRepository {
   final List<Player> _players = [];
 
   @override
-  Future<List<Player>> getPlayers() async => List.unmodifiable(_players);
+  Future<List<Player>> getPlayers({String? teamId}) async {
+    if (teamId != null) {
+      return List.unmodifiable(_players.where((p) => p.teamId == teamId));
+    }
+    return List.unmodifiable(_players);
+  }
+
+  @override
+  Future<Player?> getPlayer(String id) async =>
+      _players.cast<Player?>().firstWhere((p) => p?.id == id, orElse: () => null);
+
+  @override
+  Future<PlayerDetailStats> getPlayerStats(String id) async =>
+      const PlayerDetailStats.empty();
+
+  @override
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id) async =>
+      const [];
 
   @override
   Future<Player> createPlayer({
     required String name,
     String? nickname,
     String? avatarUrl,
+    String? teamId,
   }) async {
     final now = DateTime.now();
     final player = Player(
       id: 'p_${_players.length + 1}',
-      teamId: 'team_1',
+      teamId: teamId ?? 'team_1',
       name: name,
       nickname: nickname,
       avatarUrl: avatarUrl,
@@ -50,6 +106,36 @@ class _MockPlayersRepository implements PlayersRepository {
     _players.add(player);
     return player;
   }
+
+  @override
+  Future<void> updatePlayer({
+    required String id,
+    required String name,
+    String? nickname,
+  }) async {
+    final idx = _players.indexWhere((p) => p.id == id);
+    if (idx >= 0) {
+      _players[idx] = _players[idx].copyWith(name: name, nickname: nickname);
+    }
+  }
+
+  @override
+  Future<void> togglePlayerActive({
+    required String id,
+    required bool isActive,
+  }) async {
+    final idx = _players.indexWhere((p) => p.id == id);
+    if (idx >= 0) {
+      _players[idx] = _players[idx].copyWith(isActive: isActive);
+    }
+  }
+
+  @override
+  Future<bool> canDeletePlayer(String id) async => true;
+
+  @override
+  Future<Set<String>> getDeletablePlayerIds() async =>
+      _players.map((p) => p.id).toSet();
 
   @override
   Future<void> deletePlayer(String id) async {

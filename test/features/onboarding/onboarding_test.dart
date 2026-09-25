@@ -21,7 +21,8 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('Suivez vos matchs 5v5'), findsOneWidget);
       expect(find.text('Passer'), findsOneWidget);
@@ -37,16 +38,19 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
       // Tap Suivant -> Page 2
       await tester.tap(find.text('Suivant'));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
       expect(find.text('Tirage rapide & équilibré'), findsOneWidget);
 
       // Tap Suivant -> Page 3
       await tester.tap(find.text('Suivant'));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
       expect(find.text('Classement & Statistiques'), findsOneWidget);
       expect(find.text('Commencer'), findsOneWidget);
       expect(find.text('Passer'), findsNothing);
