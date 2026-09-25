@@ -1,18 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../application/players_provider.dart';
 
-class NewPlayerBottomSheet extends StatefulWidget {
+class NewPlayerBottomSheet extends ConsumerStatefulWidget {
   const NewPlayerBottomSheet({super.key});
 
   @override
-  State<NewPlayerBottomSheet> createState() => _NewPlayerBottomSheetState();
+  ConsumerState<NewPlayerBottomSheet> createState() => _NewPlayerBottomSheetState();
 }
 
-class _NewPlayerBottomSheetState extends State<NewPlayerBottomSheet> {
+class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
   File? _imageFile;
@@ -35,15 +37,27 @@ class _NewPlayerBottomSheetState extends State<NewPlayerBottomSheet> {
     });
   }
 
-  void _submit({required bool createAnother}) {
-    // TODO: Implémenter l'ajout de joueur (Riverpod / SQLite)
-    if (createAnother) {
-      _clearForm();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Joueur ajouté avec succès !')),
-      );
-    } else {
-      Navigator.pop(context);
+  Future<void> _submit({required bool createAnother}) async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
+
+    await ref.read(playersListProvider.notifier).addPlayer(
+      name: name,
+      nickname: _nicknameController.text.trim().isNotEmpty
+          ? _nicknameController.text.trim()
+          : null,
+      avatarUrl: _imageFile?.path,
+    );
+
+    if (mounted) {
+      if (createAnother) {
+        _clearForm();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Joueur ajouté avec succès !')),
+        );
+      } else {
+        Navigator.pop(context);
+      }
     }
   }
 

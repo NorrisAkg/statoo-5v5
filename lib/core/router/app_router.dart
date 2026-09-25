@@ -13,6 +13,8 @@ import '../../features/sessions/presentation/session_detail_screen.dart';
 import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stats/presentation/stats_screen.dart';
+import '../../features/team/presentation/add_team_players_screen.dart';
+import '../../features/team/presentation/create_team_screen.dart';
 import 'app_scaffold.dart';
 
 part 'app_router.g.dart';
@@ -78,6 +80,16 @@ GoRouter appRouter(Ref ref) {
         parentNavigatorKey: _rootNavigatorKey,
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/creer-equipe',
+        builder: (context, state) => const CreateTeamScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/ajouter-joueurs-initiaux',
+        builder: (context, state) => const AddTeamPlayersScreen(),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,

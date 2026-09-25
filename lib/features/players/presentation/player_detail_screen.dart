@@ -5,9 +5,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
 
 class PlayerDetailScreen extends StatelessWidget {
-  final String playerId;
+  const PlayerDetailScreen({required this.playerId, super.key});
 
-  const PlayerDetailScreen({super.key, required this.playerId});
+  final String playerId;
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +55,11 @@ class PlayerDetailScreen extends StatelessWidget {
     return Row(
       children: [
         InitialAvatar(initial: 'KB', baseColor: context.colors.primary500, size: 80),
-        SizedBox(width: 24),
+        const SizedBox(width: 24),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Karim Benali', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text('Karim Benali', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             Text('Kaka', style: TextStyle(color: context.colors.foreground400, fontSize: 16)),
           ],
         ),
@@ -140,7 +140,7 @@ class PlayerDetailScreen extends StatelessWidget {
   Widget _buildHistoryList(BuildContext context) {
     return Column(
       children: [
-        _buildHistoryItem(context, 'Aujourd\'hui', '4 - 3', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
+        _buildHistoryItem(context, "Aujourd'hui", '4 - 3', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
         const SizedBox(height: 8),
         _buildHistoryItem(context, 'mar. 22', '7 - 2', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
         const SizedBox(height: 8),

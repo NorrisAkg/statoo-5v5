@@ -43,10 +43,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
-  Future<void> _completeOnboarding() async {
+  Future<void> _completeOnboarding({bool toTeamCreation = true}) async {
     await ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
     if (mounted) {
-      context.go('/');
+      if (toTeamCreation) {
+        context.go('/creer-equipe');
+      } else {
+        context.go('/');
+      }
     }
   }
 
