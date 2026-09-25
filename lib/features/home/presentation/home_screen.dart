@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Remix.settings_4_line),
-            onPressed: () => context.go('/reglages'),
+            onPressed: () => context.push('/reglages'),
           ),
         ],
       ),
@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
           PrimaryButton(
             label: 'Nouvelle séance',
             icon: Remix.add_line,
-            onPressed: () => context.go('/seances/nouvelle'),
+            onPressed: () => context.push('/seances/nouvelle'),
           ),
           const SizedBox(height: 32),
           _buildSectionHeader(context, 'Classement', '/classement'),
@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildLastSession(BuildContext context) {
     return AppCard(
-      onTap: () => context.go('/seances/s9'),
+      onTap: () => context.push('/seances/s9'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -141,7 +141,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildRankingRow(BuildContext context, int rank, String initial, String name, String nickname, int pts, int games, Color medalColor) {
     return InkWell(
-      onTap: () => context.go('/joueurs/p$rank'),
+      onTap: () => context.push('/joueurs/p$rank'),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(

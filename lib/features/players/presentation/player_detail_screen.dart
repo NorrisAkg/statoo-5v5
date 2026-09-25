@@ -15,7 +15,13 @@ class PlayerDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Remix.arrow_left_s_line),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/joueurs');
+            }
+          },
         ),
         title: const Text('Karim Benali'),
         actions: [

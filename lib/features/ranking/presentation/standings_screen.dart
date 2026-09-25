@@ -92,7 +92,7 @@ class _PointsTab extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () => context.go('/joueurs/${entry.playerId}'),
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(14),
@@ -306,7 +306,7 @@ class _PointsPerMatchTab extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () => context.go('/joueurs/${entry.playerId}'),
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(14),
@@ -386,7 +386,7 @@ class _PointsPerMatchTab extends ConsumerWidget {
       child: Opacity(
         opacity: 0.6,
         child: InkWell(
-          onTap: () => context.go('/joueurs/${entry.playerId}'),
+          onTap: () => context.push('/joueurs/${entry.playerId}'),
           borderRadius: BorderRadius.circular(16),
           child: Container(
             padding: const EdgeInsets.all(14),
@@ -532,7 +532,7 @@ class _ScorersTab extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () => context.go('/joueurs/${entry.playerId}'),
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(14),
@@ -640,7 +640,7 @@ class _AssistsTab extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
-        onTap: () => context.go('/joueurs/${entry.playerId}'),
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(14),

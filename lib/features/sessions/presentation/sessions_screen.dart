@@ -38,7 +38,7 @@ class SessionsScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.go('/seances/nouvelle'),
+        onPressed: () => context.push('/seances/nouvelle'),
         backgroundColor: context.colors.primary500,
         foregroundColor: context.colors.background950,
         child: const Icon(Remix.add_line),
@@ -87,7 +87,7 @@ class SessionsScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: InkWell(
-        onTap: () => context.go('/seances/s9'),
+        onTap: () => context.push('/seances/s9'),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),

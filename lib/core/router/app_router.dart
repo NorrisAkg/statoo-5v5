@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,9 +15,12 @@ import 'app_scaffold.dart';
 
 part 'app_router.g.dart';
 
+final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+
 @riverpod
 GoRouter appRouter(Ref ref) {
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     routes: [
       StatefulShellRoute.indexedStack(
@@ -29,12 +33,6 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: '/',
                 builder: (context, state) => const HomeScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'reglages',
-                    builder: (context, state) => const SettingsScreen(),
-                  ),
-                ],
               ),
             ],
           ),
@@ -43,12 +41,6 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: '/joueurs',
                 builder: (context, state) => const PlayersScreen(),
-                routes: [
-                  GoRoute(
-                    path: ':id',
-                    builder: (context, state) => PlayerDetailScreen(playerId: state.pathParameters['id']!),
-                  ),
-                ],
               ),
             ],
           ),
@@ -57,16 +49,6 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: '/seances',
                 builder: (context, state) => const SessionsScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'nouvelle',
-                    builder: (context, state) => const NewSessionScreen(),
-                  ),
-                  GoRoute(
-                    path: ':id',
-                    builder: (context, state) => SessionDetailScreen(sessionId: state.pathParameters['id']!),
-                  ),
-                ],
               ),
             ],
           ),
@@ -87,6 +69,26 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/reglages',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/joueurs/:id',
+        builder: (context, state) => PlayerDetailScreen(playerId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/seances/nouvelle',
+        builder: (context, state) => const NewSessionScreen(),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/seances/:id',
+        builder: (context, state) => SessionDetailScreen(sessionId: state.pathParameters['id']!),
       ),
     ],
   );
