@@ -185,6 +185,32 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
+  Future<void> addLatePlayers({
+    required String sessionId,
+    required Map<String, Team> playerTeamAssignments,
+  }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+
+    if (playerTeamAssignments.isEmpty) return;
+
+    final participations = playerTeamAssignments.entries.map((e) {
+      final partId = 'p_${sessionId}_${e.key}';
+      return Participation(
+        id: partId,
+        sessionId: sessionId,
+        playerId: e.key,
+        team: e.value,
+      );
+    }).toList();
+
+    await _repo.addParticipations(
+      sessionId: sessionId,
+      participations: participations,
+    );
+    _invalidateAll(sessionId);
+  }
+
   /// Closes the session if no blocking rule applies. Returns the blockers found
   /// (empty when closed), re-checked on fresh data rather than on what the screen showed.
   Future<List<CloseBlocker>> closeSession(String sessionId) async {

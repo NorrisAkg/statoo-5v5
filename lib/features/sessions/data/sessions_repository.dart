@@ -31,6 +31,10 @@ abstract class SessionsRepository {
     required int yellowCards,
     required int redCards,
   });
+  Future<void> addParticipations({
+    required String sessionId,
+    required List<Participation> participations,
+  });
   /// Returns false when nothing was closed (unknown session, other team, or no score).
   Future<bool> closeSession(String sessionId, {required String teamId});
   Future<void> reopenSession(String sessionId);
@@ -344,6 +348,32 @@ class SqliteSessionsRepository implements SessionsRepository {
       where: 'id = ?',
       whereArgs: [participationId],
     );
+  }
+
+  @override
+  Future<void> addParticipations({
+    required String sessionId,
+    required List<Participation> participations,
+  }) async {
+    final db = await _appDatabase.database;
+    await db.transaction((txn) async {
+      for (final p in participations) {
+        await txn.insert(
+          'participations',
+          {
+            'id': p.id,
+            'session_id': p.sessionId,
+            'player_id': p.playerId,
+            'team': _teamToString(p.team),
+            'goals': p.goals,
+            'assists': p.assists,
+            'yellow_cards': p.yellowCards,
+            'red_cards': p.redCards,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
+    });
   }
 
   @override

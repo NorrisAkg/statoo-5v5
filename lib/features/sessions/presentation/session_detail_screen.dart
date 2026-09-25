@@ -14,6 +14,7 @@ import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
+import 'add_late_players_bottom_sheet.dart';
 
 class SessionDetailScreen extends ConsumerWidget {
   const SessionDetailScreen({
@@ -143,9 +144,39 @@ class SessionDetailScreen extends ConsumerWidget {
           _buildWarningBanner(context, goalsAssignedA + goalsAssignedB, scoreA + scoreB),
         ],
         const SizedBox(height: 24),
-        Text('Composition & Équipes', style: Theme.of(context).textTheme.titleMedium),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Composition & Équipes', style: Theme.of(context).textTheme.titleMedium),
+            if (isDraft)
+              TextButton.icon(
+                icon: const Icon(Remix.user_add_line, size: 16),
+                label: const Text('Ajouter un joueur'),
+                style: TextButton.styleFrom(
+                  foregroundColor: context.colors.primary400,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  visualDensity: VisualDensity.compact,
+                ),
+                onPressed: () => _openAddLatePlayers(context, session, participants),
+              ),
+          ],
+        ),
         const SizedBox(height: 12),
         _buildTeamsSection(context, ref, session, teamAPlayers, teamBPlayers, isCurrentActive),
+        if (isDraft) ...[
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            icon: const Icon(Remix.user_add_line, size: 16),
+            label: const Text('Ajouter des joueurs (retardataires)'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: context.colors.primary400,
+              side: BorderSide(color: context.colors.primary500.withValues(alpha: 0.35)),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () => _openAddLatePlayers(context, session, participants),
+          ),
+        ],
         const SizedBox(height: 24),
         _buildActions(
           context,
@@ -896,5 +927,29 @@ class SessionDetailScreen extends ConsumerWidget {
         }
       }
     }
+  }
+
+  void _openAddLatePlayers(
+    BuildContext context,
+    Session session,
+    List<SessionParticipantDetail> participants,
+  ) {
+    final teamAPlayers = participants.where((p) => p.participation.team == Team.a).toList();
+    final teamBPlayers = participants.where((p) => p.participation.team == Team.b).toList();
+    final alreadyAssignedIds = participants.map((p) => p.participation.playerId).toSet();
+
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (ctx) => AddLatePlayersBottomSheet(
+          sessionId: session.id,
+          currentTeamACount: teamAPlayers.length,
+          currentTeamBCount: teamBPlayers.length,
+          alreadyAssignedPlayerIds: alreadyAssignedIds,
+        ),
+      ),
+    );
   }
 }
