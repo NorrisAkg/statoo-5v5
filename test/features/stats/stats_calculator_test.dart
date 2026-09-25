@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
+import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/stats/domain/stats_calculator.dart';
 
 void main() {
@@ -24,8 +24,7 @@ void main() {
         Session(
           id: 's3',
           playedAt: DateTime.now(),
-          status: SessionStatus.draft, // Non classé (brouillon), ignoré
-          isRanked: true,
+          // Non classé (brouillon par défaut), ignoré
         ),
       ];
 

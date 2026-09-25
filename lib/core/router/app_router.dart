@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/onboarding/application/onboarding_provider.dart';
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/players/presentation/player_detail_screen.dart';
 import '../../features/players/presentation/players_screen.dart';
 import '../../features/ranking/presentation/standings_screen.dart';
@@ -19,9 +21,11 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 @riverpod
 GoRouter appRouter(Ref ref) {
+  final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
+
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/',
+    initialLocation: hasSeenOnboarding ? '/' : '/onboarding',
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -69,6 +73,11 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
