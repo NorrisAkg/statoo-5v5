@@ -1,5 +1,6 @@
 class TeamInfo {
   const TeamInfo({
+    required this.id,
     required this.name,
     this.format = '5v5',
     this.location,
@@ -8,6 +9,7 @@ class TeamInfo {
 
   factory TeamInfo.fromMap(Map<String, dynamic> map) {
     return TeamInfo(
+      id: map['id'] as String,
       name: map['name'] as String,
       format: (map['format'] as String?) ?? '5v5',
       location: map['location'] as String?,
@@ -17,6 +19,7 @@ class TeamInfo {
     );
   }
 
+  final String id;
   final String name;
   final String format;
   final String? location;
@@ -24,6 +27,7 @@ class TeamInfo {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'format': format,
       'location': location,

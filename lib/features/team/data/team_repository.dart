@@ -5,7 +5,14 @@ import '../domain/team_info.dart';
 
 abstract class TeamRepository {
   Future<TeamInfo?> getTeamInfo();
+  Future<List<TeamInfo>> getAllTeams();
+  Future<TeamInfo?> getTeamById(String id);
+  Future<TeamInfo?> getActiveTeam();
+  Future<String?> getActiveTeamId();
+  Future<void> setActiveTeamId(String id);
   Future<void> saveTeamInfo(TeamInfo team);
+  Future<void> deleteTeam(String id);
+  Future<Map<String, int>> getTeamCounts(String teamId);
 }
 
 class SqliteTeamRepository implements TeamRepository {
@@ -14,77 +21,134 @@ class SqliteTeamRepository implements TeamRepository {
   final AppDatabase _appDatabase;
 
   @override
-  Future<TeamInfo?> getTeamInfo() async {
-    final db = await _appDatabase.database;
-    final results = await db.query(
-      'meta',
-      where: 'key IN (?, ?, ?, ?)',
-      whereArgs: ['team_name', 'team_format', 'team_location', 'team_created_at'],
-    );
+  Future<TeamInfo?> getTeamInfo() => getActiveTeam();
 
-    if (results.isEmpty) {
-      final prefs = await SharedPreferences.getInstance();
-      final name = prefs.getString('team_name');
-      if (name == null || name.isEmpty) return null;
-      return TeamInfo(
-        name: name,
-        format: prefs.getString('team_format') ?? '5v5',
-        location: prefs.getString('team_location'),
-      );
+  @override
+  Future<List<TeamInfo>> getAllTeams() async {
+    final db = await _appDatabase.database;
+    final results = await db.query('teams', orderBy: 'created_at ASC');
+    return results.map(TeamInfo.fromMap).toList();
+  }
+
+  @override
+  Future<TeamInfo?> getTeamById(String id) async {
+    final db = await _appDatabase.database;
+    final results = await db.query('teams', where: 'id = ?', whereArgs: [id], limit: 1);
+    if (results.isEmpty) return null;
+    return TeamInfo.fromMap(results.first);
+  }
+
+  @override
+  Future<String?> getActiveTeamId() async {
+    final db = await _appDatabase.database;
+    final results = await db.query('meta', where: 'key = ?', whereArgs: ['active_team_id'], limit: 1);
+    if (results.isNotEmpty) {
+      final val = results.first['value'] as String?;
+      if (val != null && val.isNotEmpty) return val;
     }
 
-    final map = {
-      for (final row in results) row['key']! as String: row['value'] as String?,
-    };
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('active_team_id');
+  }
 
-    final name = map['team_name'];
-    if (name == null || name.isEmpty) return null;
-
-    return TeamInfo(
-      name: name,
-      format: map['team_format'] ?? '5v5',
-      location: map['team_location'],
-      createdAt: map['team_created_at'] != null
-          ? DateTime.tryParse(map['team_created_at']!)
-          : null,
+  @override
+  Future<void> setActiveTeamId(String id) async {
+    final db = await _appDatabase.database;
+    await db.insert(
+      'meta',
+      {'key': 'active_team_id', 'value': id},
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('active_team_id', id);
+  }
+
+  @override
+  Future<TeamInfo?> getActiveTeam() async {
+    final activeId = await getActiveTeamId();
+    if (activeId != null) {
+      final team = await getTeamById(activeId);
+      if (team != null) return team;
+    }
+
+    // Si aucun ID actif ou équipe introuvable, prendre la première équipe
+    final allTeams = await getAllTeams();
+    if (allTeams.isNotEmpty) {
+      final first = allTeams.first;
+      await setActiveTeamId(first.id);
+      return first;
+    }
+
+    // Rétrocompatibilité avec SharedPreferences si migration
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('team_name');
+    if (name == null || name.isEmpty) return null;
+    final fallback = TeamInfo(
+      id: 'team_1',
+      name: name,
+      format: prefs.getString('team_format') ?? '5v5',
+      location: prefs.getString('team_location'),
+      createdAt: DateTime.now(),
+    );
+    await saveTeamInfo(fallback);
+    return fallback;
   }
 
   @override
   Future<void> saveTeamInfo(TeamInfo team) async {
     final db = await _appDatabase.database;
-    final batch = db.batch()
-      ..insert(
-        'meta',
-        {'key': 'team_name', 'value': team.name},
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      )
-      ..insert(
-        'meta',
-        {'key': 'team_format', 'value': team.format},
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-
-    if (team.location != null) {
-      batch.insert(
-        'meta',
-        {'key': 'team_location', 'value': team.location},
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    }
-    batch.insert(
-      'meta',
-      {'key': 'team_created_at', 'value': (team.createdAt ?? DateTime.now()).toIso8601String()},
+    await db.insert(
+      'teams',
+      team.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
-    await batch.commit(noResult: true);
+    // Mettre cette équipe comme active si aucune n'est active
+    final currentActiveId = await getActiveTeamId();
+    if (currentActiveId == null) {
+      await setActiveTeamId(team.id);
+    }
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('team_name', team.name);
     await prefs.setString('team_format', team.format);
     if (team.location != null) {
       await prefs.setString('team_location', team.location!);
+    } else {
+      await prefs.remove('team_location');
     }
+  }
+
+  @override
+  Future<void> deleteTeam(String id) async {
+    final db = await _appDatabase.database;
+    await db.delete('teams', where: 'id = ?', whereArgs: [id]);
+
+    final currentActiveId = await getActiveTeamId();
+    if (currentActiveId == id) {
+      final all = await getAllTeams();
+      if (all.isNotEmpty) {
+        await setActiveTeamId(all.first.id);
+      } else {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('active_team_id');
+        await db.delete('meta', where: 'key = ?', whereArgs: ['active_team_id']);
+      }
+    }
+  }
+
+  @override
+  Future<Map<String, int>> getTeamCounts(String teamId) async {
+    final db = await _appDatabase.database;
+    final pRes = await db.rawQuery('SELECT COUNT(*) as c FROM players WHERE team_id = ?', [teamId]);
+    final sRes = await db.rawQuery('SELECT COUNT(*) as c FROM sessions WHERE team_id = ?', [teamId]);
+
+    final playersCount = Sqflite.firstIntValue(pRes) ?? 0;
+    final sessionsCount = Sqflite.firstIntValue(sRes) ?? 0;
+
+    return {
+      'players': playersCount,
+      'sessions': sessionsCount,
+    };
   }
 }

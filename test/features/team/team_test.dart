@@ -40,6 +40,7 @@ class _MockPlayersRepository implements PlayersRepository {
     final now = DateTime.now();
     final player = Player(
       id: 'p_${_players.length + 1}',
+      teamId: 'team_1',
       name: name,
       nickname: nickname,
       avatarUrl: avatarUrl,
@@ -63,10 +64,13 @@ void main() {
 
   group('TeamInfo domain model', () {
     test('serializes and deserializes correctly', () {
-      const team = TeamInfo(
+      final now = DateTime.now();
+      final team = TeamInfo(
+        id: 'team_1',
         name: 'FC Urban',
         format: '7v7',
         location: 'Urban Soccer',
+        createdAt: now,
       );
 
       final map = team.toMap();
@@ -147,7 +151,7 @@ void main() {
     testWidgets('renders player input form and allows adding players', (tester) async {
       final playersRepo = _MockPlayersRepository();
       final teamRepo = _MockTeamRepository();
-      await teamRepo.saveTeamInfo(const TeamInfo(name: 'FC Urban'));
+      await teamRepo.saveTeamInfo(const TeamInfo(id: 'team_1', name: 'FC Urban'));
 
       await tester.pumpWidget(
         ProviderScope(

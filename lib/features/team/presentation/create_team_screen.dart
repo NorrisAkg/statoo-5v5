@@ -36,6 +36,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
     try {
       final team = TeamInfo(
+        id: 'team_1', // Using a default global team ID for now
         name: _nameController.text.trim(),
         format: _selectedFormat,
         location: _locationController.text.trim().isNotEmpty
@@ -47,7 +48,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       await ref.read(teamInfoProvider.notifier).saveTeam(team);
 
       if (mounted) {
-        await context.push('/ajouter-joueurs-initiaux');
+        context.go('/ajouter-joueurs-initiaux');
       }
     } finally {
       if (mounted) {
