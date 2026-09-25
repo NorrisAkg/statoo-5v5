@@ -35,6 +35,14 @@ void main() {
       id: 'p2',
       teamId: 't1',
       name: 'Bob',
+      nickname: 'Bobby',
+      createdAt: now,
+      updatedAt: now,
+    ),
+    Player(
+      id: 'p3',
+      teamId: 't1',
+      name: 'Charlie',
       createdAt: now,
       updatedAt: now,
     ),
@@ -62,57 +70,149 @@ void main() {
     );
   }
 
-  testWidgets('Checking player as present does not automatically assign team', (tester) async {
-    await tester.pumpWidget(createWidget());
-    await tester.pumpAndSettle();
+  group('NewSessionScreen', () {
+    testWidgets('Checking player as present does not automatically assign team', (tester) async {
+      tester.view.physicalSize = const Size(800, 1400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
-    // Step 1 -> Click Continuer to go to Step 2
-    expect(find.text('Continuer'), findsOneWidget);
-    await tester.tap(find.text('Continuer'));
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(createWidget());
+      await tester.pumpAndSettle();
 
-    // In Step 2, players are listed with "Présent" buttons
-    expect(find.text('Alice'), findsOneWidget);
-    expect(find.text('Bob'), findsOneWidget);
-    expect(find.text('Présent'), findsNWidgets(2));
+      // Step 1 -> Click Continuer to go to Step 2
+      expect(find.text('Continuer'), findsOneWidget);
+      await tester.tap(find.text('Continuer'));
+      await tester.pumpAndSettle();
 
-    // Tap "Présent" on Alice
-    await tester.tap(find.text('Présent').first);
-    await tester.pumpAndSettle();
+      // In Step 2, players are listed with "Présent" buttons
+      expect(find.text('Alice'), findsOneWidget);
+      expect(find.text('Bob'), findsOneWidget);
+      expect(find.text('Charlie'), findsOneWidget);
+      expect(find.text('Présent'), findsNWidgets(3));
 
-    // Alice is now present, showing segmented button A/B and unassigned badge
-    expect(find.text('À placer: 1'), findsOneWidget);
-    expect(find.text('Choisir A ou B'), findsOneWidget);
-    expect(find.text('Équipe A: 0'), findsOneWidget);
-    expect(find.text('Équipe B: 0'), findsOneWidget);
+      // Tap "Présent" on Alice
+      await tester.tap(find.text('Présent').first);
+      await tester.pumpAndSettle();
 
-    // Manually assign Alice to Team A
-    final segmentA = find.descendant(
-      of: find.byType(SegmentedButton<String>),
-      matching: find.text('A'),
-    );
-    await tester.tap(segmentA);
-    await tester.pumpAndSettle();
+      // Alice is now present, showing segmented button A/B and unassigned badge
+      expect(find.text('À placer: 1'), findsOneWidget);
+      expect(find.text('Choisir A ou B'), findsOneWidget);
+      expect(find.text('Équipe A: 0'), findsOneWidget);
+      expect(find.text('Équipe B: 0'), findsOneWidget);
 
-    expect(find.text('Équipe A: 1'), findsOneWidget);
-    expect(find.text('À placer: 1'), findsNothing);
+      // Manually assign Alice to Team A
+      final segmentA = find.descendant(
+        of: find.byType(SegmentedButton<String>),
+        matching: find.text('A'),
+      );
+      await tester.tap(segmentA);
+      await tester.pumpAndSettle();
 
-    // Mark Bob as present
-    await tester.tap(find.text('Présent'));
-    await tester.pumpAndSettle();
+      expect(find.text('Équipe A: 1'), findsOneWidget);
+      expect(find.text('À placer: 1'), findsNothing);
 
-    // Bob is present but not assigned yet
-    expect(find.text('Équipe A: 1'), findsOneWidget);
-    expect(find.text('Équipe B: 0'), findsOneWidget);
-    expect(find.text('À placer: 1'), findsOneWidget);
+      // Mark Bob as present
+      await tester.tap(find.text('Présent').first);
+      await tester.pumpAndSettle();
 
-    // Now test "Tirer au sort"
-    await tester.tap(find.text('Tirer au sort'));
-    await tester.pumpAndSettle();
+      // Bob is present but not assigned yet
+      expect(find.text('Équipe A: 1'), findsOneWidget);
+      expect(find.text('Équipe B: 0'), findsOneWidget);
+      expect(find.text('À placer: 1'), findsOneWidget);
 
-    // Both players should now be assigned (one to A, one to B)
-    expect(find.text('Équipe A: 1'), findsOneWidget);
-    expect(find.text('Équipe B: 1'), findsOneWidget);
-    expect(find.text('À placer: 1'), findsNothing);
+      // Now test "Tirer au sort"
+      await tester.tap(find.text('Tirer au sort'));
+      await tester.pumpAndSettle();
+
+      // Both players should now be assigned (one to A, one to B)
+      expect(find.text('Équipe A: 1'), findsOneWidget);
+      expect(find.text('Équipe B: 1'), findsOneWidget);
+      expect(find.text('À placer: 1'), findsNothing);
+    });
+
+    testWidgets('Search filters player list by name or nickname', (tester) async {
+      tester.view.physicalSize = const Size(800, 1400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(createWidget());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Continuer'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Alice'), findsOneWidget);
+      expect(find.text('Bob'), findsOneWidget);
+      expect(find.text('Charlie'), findsOneWidget);
+
+      // Search by nickname 'Bobby'
+      final searchInput = find.byType(TextField);
+      await tester.enterText(searchInput, 'Bobby');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bob'), findsOneWidget);
+      expect(find.text('Alice'), findsNothing);
+      expect(find.text('Charlie'), findsNothing);
+
+      // Search non-existent player
+      await tester.enterText(searchInput, 'Zinedine');
+      await tester.pumpAndSettle();
+
+      expect(find.text('Aucun joueur ne correspond à « Zinedine »'), findsOneWidget);
+      expect(find.text('Effacer la recherche'), findsOneWidget);
+
+      // Tap clear search
+      await tester.tap(find.text('Effacer la recherche'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Alice'), findsOneWidget);
+      expect(find.text('Bob'), findsOneWidget);
+      expect(find.text('Charlie'), findsOneWidget);
+    });
+
+    testWidgets('Toggle all presence checks and unchecks all players', (tester) async {
+      tester.view.physicalSize = const Size(800, 1400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(createWidget());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Continuer'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('0/3 présents'), findsOneWidget);
+      expect(find.text('Tout cocher'), findsOneWidget);
+
+      // Tap 'Tout cocher'
+      await tester.tap(find.text('Tout cocher'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('3/3 présents'), findsOneWidget);
+      expect(find.text('Tout décocher'), findsOneWidget);
+      expect(find.text('À placer: 3'), findsOneWidget);
+
+      // Random draw assigns them to A and B
+      await tester.tap(find.text('Tirer au sort'));
+      await tester.pumpAndSettle();
+      expect(find.text('À placer: 3'), findsNothing);
+
+      // Tap 'Tout décocher'
+      await tester.tap(find.text('Tout décocher'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('0/3 présents'), findsOneWidget);
+      expect(find.text('Tout cocher'), findsOneWidget);
+      expect(find.text('Présent'), findsNWidgets(3));
+    });
   });
 }

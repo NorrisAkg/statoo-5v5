@@ -31,7 +31,15 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   // Step 2 State: Player team assignments (playerId -> 'A' or 'B')
   final Set<String> _selectedPlayerIds = {};
   final Map<String, String> _playerTeamAssignments = {};
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
   bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void _nextStep() {
     if (_currentStep == 1) {
@@ -522,6 +530,21 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
             final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
             final unassignedCount = _selectedPlayerIds.length - (countA + countB);
 
+            final isSearching = _searchQuery.trim().isNotEmpty;
+            final filteredPlayers = !isSearching
+                ? activePlayers
+                : activePlayers.where((p) {
+                    final query = _searchQuery.trim().toLowerCase();
+                    final matchName = p.name.toLowerCase().contains(query);
+                    final matchNickname = p.nickname?.toLowerCase().contains(query) ?? false;
+                    return matchName || matchNickname;
+                  }).toList();
+
+            final allSelected = activePlayers.isNotEmpty &&
+                activePlayers.every((p) => _selectedPlayerIds.contains(p.id));
+            final allFilteredSelected = filteredPlayers.isNotEmpty &&
+                filteredPlayers.every((p) => _selectedPlayerIds.contains(p.id));
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -599,7 +622,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                     if (_selectedPlayerIds.isNotEmpty)
                       Expanded(
                         child: OutlinedButton.icon(
-                          icon: const Icon(Remix.shuffle_line, size: 16),
+                           icon: const Icon(Remix.shuffle_line, size: 16),
                           label: const Text('Tirer au sort'),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: context.colors.primary400,
@@ -645,8 +668,158 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                ...activePlayers.map((player) {
+                const SizedBox(height: 14),
+
+                // Search bar
+                TextField(
+                  controller: _searchController,
+                  style: TextStyle(color: context.colors.foreground50, fontSize: 14),
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher un joueur par nom...',
+                    hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
+                    prefixIcon: Icon(Remix.search_line, size: 18, color: context.colors.foreground400),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Remix.close_circle_fill, size: 18),
+                            color: context.colors.foreground500,
+                            tooltip: 'Effacer la recherche',
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _searchQuery = '';
+                              });
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: context.colors.background900,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: context.colors.background700),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: context.colors.background700),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: context.colors.primary500),
+                    ),
+                  ),
+                  onChanged: (val) => setState(() => _searchQuery = val),
+                ),
+                const SizedBox(height: 10),
+
+                // Presence counter & Toggle all (cocher/décocher tout)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Remix.user_follow_line, size: 16, color: context.colors.primary400),
+                        const SizedBox(width: 6),
+                        Text(
+                          isSearching
+                              ? '${filteredPlayers.where((p) => _selectedPlayerIds.contains(p.id)).length}/${filteredPlayers.length} affichés présents (${_selectedPlayerIds.length} au total)'
+                              : '${_selectedPlayerIds.length}/${activePlayers.length} présents',
+                          style: TextStyle(
+                            color: context.colors.foreground300,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                    TextButton.icon(
+                      icon: Icon(
+                        (isSearching ? allFilteredSelected : allSelected)
+                            ? Remix.checkbox_blank_circle_line
+                            : Remix.checkbox_circle_line,
+                        size: 16,
+                      ),
+                      label: Text(
+                        (isSearching ? allFilteredSelected : allSelected)
+                            ? 'Tout décocher'
+                            : 'Tout cocher',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                      ),
+                      style: TextButton.styleFrom(
+                        foregroundColor: (isSearching ? allFilteredSelected : allSelected)
+                            ? context.colors.foreground400
+                            : context.colors.primary400,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          if (isSearching) {
+                            if (allFilteredSelected) {
+                              for (final p in filteredPlayers) {
+                                _selectedPlayerIds.remove(p.id);
+                                _playerTeamAssignments.remove(p.id);
+                              }
+                            } else {
+                              for (final p in filteredPlayers) {
+                                _selectedPlayerIds.add(p.id);
+                              }
+                            }
+                          } else {
+                            if (allSelected) {
+                              _selectedPlayerIds.clear();
+                              _playerTeamAssignments.clear();
+                            } else {
+                              _selectedPlayerIds.addAll(activePlayers.map((p) => p.id));
+                            }
+                          }
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                if (filteredPlayers.isEmpty)
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: context.colors.background900,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: context.colors.background700),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Remix.user_search_line, size: 40, color: context.colors.foreground500),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Aucun joueur ne correspond à « $_searchQuery »',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: context.colors.foreground300, fontSize: 14),
+                          ),
+                          const SizedBox(height: 12),
+                          OutlinedButton.icon(
+                            icon: const Icon(Remix.close_line, size: 16),
+                            label: const Text('Effacer la recherche'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: context.colors.foreground200,
+                              side: BorderSide(color: context.colors.background700),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _searchQuery = '';
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  ...filteredPlayers.map((player) {
                   final isSelected = _selectedPlayerIds.contains(player.id);
                   final team = _playerTeamAssignments[player.id];
 
