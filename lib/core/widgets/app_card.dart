@@ -18,9 +18,9 @@ class AppCard extends StatelessWidget {
     Widget card = Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: AppColors.background900,
+        color: context.colors.background900,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.background700, width: 1),
+        border: Border.all(color: context.colors.background700, width: 1),
       ),
       child: child,
     );

@@ -23,16 +23,17 @@ Utilise la convention **Conventional Commits** :
 - `test` : Ajout ou modification de tests
 
 ### Règles de la description :
-- Écrire en français.
-- Utiliser l'impératif, temps présent (ex: "ajoute", "corrige", "modifie").
+- Écrire en anglais.
+- Utiliser l'impératif, temps présent (ex: "add", "fix", "modify").
 - Ne pas mettre de majuscule à la première lettre.
 - Ne pas mettre de point à la fin.
 - Être concis et précis.
 
 ### Exemples
-- `feat(ui): ajoute l'écran de liste des joueurs`
-- `fix(router): corrige la navigation vers le détail de la séance`
-- `chore: met à jour les dépendances Flutter`
+- `feat(ui): adds the player list screen`
+- `fix(router): fixes the navigation to the session detail`
+- `chore: updates the Flutter dependencies`
 
 ## Exécution
-Pour commiter, exécute d'abord `git add <fichiers>` (ou `git add .`) puis `git commit -m "<message>"`.
+1. Exécute d'abord `git add <fichiers>` (ou `git add .`)
+2. Puis `git commit -m "<message>"`

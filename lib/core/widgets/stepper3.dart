@@ -26,16 +26,16 @@ class Stepper3 extends StatelessWidget {
       height: 24,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isActive ? AppColors.primary500 : AppColors.background800,
+        color: isActive ? context.colors.primary500 : context.colors.background800,
         shape: BoxShape.circle,
         border: Border.all(
-          color: isActive ? AppColors.primary500 : AppColors.foreground600,
+          color: isActive ? context.colors.primary500 : context.colors.foreground600,
         ),
       ),
       child: Text(
         '$step',
         style: TextStyle(
-          color: isActive ? AppColors.background950 : AppColors.foreground600,
+          color: isActive ? context.colors.background950 : context.colors.foreground600,
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
@@ -47,7 +47,7 @@ class Stepper3 extends StatelessWidget {
     return Container(
       width: 40,
       height: 2,
-      color: isActive ? AppColors.primary500 : AppColors.background800,
+      color: isActive ? context.colors.primary500 : context.colors.background800,
     );
   }
 }

@@ -27,10 +27,10 @@ class AppScaffold extends StatelessWidget {
         child: BottomNavigationBar(
           currentIndex: navigationShell.currentIndex,
           onTap: (index) => _onTap(context, index),
-          backgroundColor: AppColors.background900,
+          backgroundColor: context.colors.background900,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: AppColors.primary500,
-          unselectedItemColor: AppColors.foreground500,
+          selectedItemColor: context.colors.primary500,
+          unselectedItemColor: context.colors.foreground500,
           selectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
           unselectedLabelStyle: const TextStyle(fontSize: 11),
           items: const [

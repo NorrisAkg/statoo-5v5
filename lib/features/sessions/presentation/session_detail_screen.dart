@@ -28,16 +28,16 @@ class SessionDetailScreen extends StatelessWidget {
           const SizedBox(height: 32),
           Text('Composition', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 16),
-          _buildCompositions(),
+          _buildCompositions(context),
           const SizedBox(height: 32),
           Text('Statistiques joueurs', style: Theme.of(context).textTheme.titleMedium),
-          const Text('buts · passes · cartons', style: TextStyle(color: AppColors.foreground500, fontSize: 12)),
+          Text('buts · passes · cartons', style: TextStyle(color: context.colors.foreground500, fontSize: 12)),
           const SizedBox(height: 16),
-          _buildPlayerStats(),
+          _buildPlayerStats(context),
           const SizedBox(height: 32),
           _buildUnassignedGoals(context),
           const SizedBox(height: 32),
-          _buildActions(),
+          _buildActions(context),
           const SizedBox(height: 32),
         ],
       ),
@@ -54,23 +54,23 @@ class SessionDetailScreen extends StatelessWidget {
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(color: AppColors.background800, borderRadius: BorderRadius.circular(9999)),
+              decoration: BoxDecoration(color: context.colors.background800, borderRadius: BorderRadius.circular(9999)),
               child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
             ),
           ],
         ),
         const SizedBox(height: 12),
-        const Text('mer. 9 sept. 2026 · 20h30', style: TextStyle(color: AppColors.foreground400, fontSize: 14)),
+        Text('mer. 9 sept. 2026 · 20h30', style: TextStyle(color: context.colors.foreground400, fontSize: 14)),
         const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTeamScore('Équipe A', 5, AppColors.accent500),
+            _buildTeamScore('Équipe A', 5, context.colors.accent500),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Text('-', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: AppColors.foreground600)),
+              child: Text('-', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: context.colors.foreground600)),
             ),
-            _buildTeamScore('Équipe B', 3, AppColors.secondary500),
+            _buildTeamScore('Équipe B', 3, context.colors.secondary500),
           ],
         ),
       ],
@@ -87,18 +87,18 @@ class SessionDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCompositions() {
+  Widget _buildCompositions(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: _buildTeamList('Équipe A', AppColors.accent500, ['Lucas', 'Karim', 'Sofiane', 'Mehdi', 'Hugo'])),
+        Expanded(child: _buildTeamList(context, 'Équipe A', context.colors.accent500, ['Lucas', 'Karim', 'Sofiane', 'Mehdi', 'Hugo'])),
         const SizedBox(width: 16),
-        Expanded(child: _buildTeamList('Équipe B', AppColors.secondary500, ['Yassine', 'Théo', 'Benjamin', 'Nicolas', 'Enzo'])),
+        Expanded(child: _buildTeamList(context, 'Équipe B', context.colors.secondary500, ['Yassine', 'Théo', 'Benjamin', 'Nicolas', 'Enzo'])),
       ],
     );
   }
 
-  Widget _buildTeamList(String title, Color color, List<String> players) {
+  Widget _buildTeamList(BuildContext context, String title, Color color, List<String> players) {
     return AppCard(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -112,13 +112,13 @@ class SessionDetailScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text('${players.length} joueurs', style: const TextStyle(color: AppColors.foreground500, fontSize: 12)),
+          Text('${players.length} joueurs', style: TextStyle(color: context.colors.foreground500, fontSize: 12)),
           const SizedBox(height: 16),
           ...players.map((p) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
               children: [
-                InitialAvatar(initial: p[0], baseColor: AppColors.foreground300, size: 24),
+                InitialAvatar(initial: p[0], baseColor: context.colors.foreground300, size: 24),
                 const SizedBox(width: 8),
                 Text(p, style: const TextStyle(fontSize: 14)),
               ],
@@ -129,22 +129,22 @@ class SessionDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerStats() {
+  Widget _buildPlayerStats(BuildContext context) {
     return AppCard(
       padding: EdgeInsets.zero,
       child: Column(
         children: [
-          _buildStatRow('Lucas', AppColors.accent500, 2, 1, 0, 0),
-          const Divider(color: AppColors.background700, height: 1),
-          _buildStatRow('Mehdi', AppColors.accent500, 1, 0, 1, 0),
-          const Divider(color: AppColors.background700, height: 1),
-          _buildStatRow('Yassine', AppColors.secondary500, 3, 0, 0, 0),
+          _buildStatRow(context, 'Lucas', context.colors.accent500, 2, 1, 0, 0),
+          Divider(color: context.colors.background700, height: 1),
+          _buildStatRow(context, 'Mehdi', context.colors.accent500, 1, 0, 1, 0),
+          Divider(color: context.colors.background700, height: 1),
+          _buildStatRow(context, 'Yassine', context.colors.secondary500, 3, 0, 0, 0),
         ],
       ),
     );
   }
 
-  Widget _buildStatRow(String name, Color teamColor, int goals, int assists, int yellows, int reds) {
+  Widget _buildStatRow(BuildContext context, String name, Color teamColor, int goals, int assists, int yellows, int reds) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
@@ -152,16 +152,16 @@ class SessionDetailScreen extends StatelessWidget {
           Container(width: 8, height: 8, decoration: BoxDecoration(color: teamColor, shape: BoxShape.circle)),
           const SizedBox(width: 12),
           Expanded(child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500))),
-          if (goals > 0) _buildStatPill('$goals', Remix.football_line, AppColors.foreground200),
-          if (assists > 0) _buildStatPill('$assists', Remix.arrow_right_up_line, AppColors.accent400),
-          if (yellows > 0) _buildStatPill('$yellows', null, AppColors.card, isCard: true),
-          if (reds > 0) _buildStatPill('$reds', null, AppColors.danger, isCard: true),
+          if (goals > 0) _buildStatPill(context, '$goals', Remix.football_line, context.colors.foreground200),
+          if (assists > 0) _buildStatPill(context, '$assists', Remix.arrow_right_up_line, context.colors.accent400),
+          if (yellows > 0) _buildStatPill(context, '$yellows', null, context.colors.card, isCard: true),
+          if (reds > 0) _buildStatPill(context, '$reds', null, context.colors.danger, isCard: true),
         ],
       ),
     );
   }
 
-  Widget _buildStatPill(String val, IconData? icon, Color color, {bool isCard = false}) {
+  Widget _buildStatPill(BuildContext context, String val, IconData? icon, Color color, {bool isCard = false}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8),
       child: Row(
@@ -183,16 +183,16 @@ class SessionDetailScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Row(
           children: [
-            Expanded(child: AppCard(padding: const EdgeInsets.all(16), child: const Center(child: Text('Équipe A : 2', style: TextStyle(color: AppColors.accent400))))),
+            Expanded(child: AppCard(padding: EdgeInsets.all(16), child: Center(child: Text('Équipe A : 2', style: TextStyle(color: context.colors.accent400))))),
             const SizedBox(width: 16),
-            Expanded(child: AppCard(padding: const EdgeInsets.all(16), child: const Center(child: Text('Équipe B : 0', style: TextStyle(color: AppColors.secondary400))))),
+            Expanded(child: AppCard(padding: EdgeInsets.all(16), child: Center(child: Text('Équipe B : 0', style: TextStyle(color: context.colors.secondary400))))),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildActions() {
+  Widget _buildActions(BuildContext context) {
     return Column(
       children: [
         SizedBox(
@@ -200,8 +200,8 @@ class SessionDetailScreen extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () {},
             style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.foreground50,
-              side: const BorderSide(color: AppColors.background700),
+              foregroundColor: context.colors.foreground50,
+              side: BorderSide(color: context.colors.background700),
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
             ),
@@ -214,7 +214,7 @@ class SessionDetailScreen extends StatelessWidget {
           child: TextButton(
             onPressed: () {},
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.danger,
+              foregroundColor: context.colors.danger,
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
             child: const Text('Supprimer', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),

@@ -8,6 +8,7 @@ import '../../features/players/presentation/player_detail_screen.dart';
 import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/sessions/presentation/session_detail_screen.dart';
 import '../../features/sessions/presentation/new_session_screen.dart';
+import '../../features/settings/presentation/settings_screen.dart';
 import '../widgets/placeholder_screen.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,7 @@ GoRouter appRouter(Ref ref) {
                 routes: [
                   GoRoute(
                     path: 'reglages',
-                    builder: (context, state) => const PlaceholderScreen(title: 'Réglages'),
+                    builder: (context, state) => const SettingsScreen(),
                   ),
                 ],
               ),

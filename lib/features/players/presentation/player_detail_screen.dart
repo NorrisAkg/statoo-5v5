@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
-import '../../../core/widgets/status_badge.dart';
 
 class PlayerDetailScreen extends StatelessWidget {
   final String playerId;
@@ -16,27 +14,31 @@ class PlayerDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Remix.arrow_left_line),
+          icon: const Icon(Remix.arrow_left_s_line),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Lucas'),
+        title: const Text('Karim Benali'),
+        actions: [
+          IconButton(
+            icon: const Icon(Remix.pencil_line),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           _buildProfileHeader(context),
           const SizedBox(height: 32),
-          Text('Synthèse', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16),
           _buildSynthesis(context),
-          const SizedBox(height: 32),
-          Text('Statistiques brutes', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           _buildRawStats(context),
           const SizedBox(height: 32),
-          Text('Historique des séances', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16),
+          Text('HISTORIQUE (10)', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
           _buildHistoryList(context),
+          const SizedBox(height: 24),
+          _buildActionButtons(context),
           const SizedBox(height: 32),
         ],
       ),
@@ -44,61 +46,47 @@ class PlayerDetailScreen extends StatelessWidget {
   }
 
   Widget _buildProfileHeader(BuildContext context) {
-    return Column(
+    return const Row(
       children: [
-        const InitialAvatar(initial: 'L', baseColor: AppColors.primary500, size: 80),
-        const SizedBox(height: 16),
-        const Text('Lucas', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        const Text('« Lulu »', style: TextStyle(color: AppColors.foreground400, fontSize: 16)),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        InitialAvatar(initial: 'KB', baseColor: context.colors.primary500, size: 80),
+        SizedBox(width: 24),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildPill('J 14', AppColors.background800),
-            const SizedBox(width: 8),
-            _buildPill('30 pts', AppColors.primary500.withOpacity(0.15), textColor: AppColors.primary400),
-            const SizedBox(width: 8),
-            _buildPill('9 buts', AppColors.background800),
+            Text('Karim Benali', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text('Kaka', style: TextStyle(color: context.colors.foreground400, fontSize: 16)),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildPill(String text, Color bgColor, {Color? textColor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(9999)),
-      child: Text(text, style: TextStyle(color: textColor ?? AppColors.foreground50, fontSize: 12, fontWeight: FontWeight.bold)),
-    );
-  }
-
   Widget _buildSynthesis(BuildContext context) {
-    return AppCard(
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.background700),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('SYNTHÈSE', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildSynthesisItem('Matchs joués', '14')),
-              Expanded(child: _buildSynthesisItem('V / N / D', '9 / 3 / 2')),
+              Expanded(child: _buildSynthesisItem('MATCHS (J)', '8')),
+              Expanded(child: _buildSynthesisItem('V / N / D', '6 / 0 / 2')),
+              Expanded(child: _buildSynthesisItem('POINTS', '18')),
             ],
           ),
-          const SizedBox(height: 16),
-          const Divider(color: AppColors.background700, height: 1),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildSynthesisItem('Points', '30', valueColor: AppColors.primary400)),
-              Expanded(child: _buildSynthesisItem('Pts / match', '2.14')),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Divider(color: AppColors.background700, height: 1),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(child: _buildSynthesisItem('% victoires', '64 %')),
-              Expanded(child: _buildSynthesisItem('Format préféré', '5v5')),
+              Expanded(child: _buildSynthesisItem('PTS/MATCH', '2.25')),
+              Expanded(child: _buildSynthesisItem('% VICTOIRES', '75 %')),
+              Expanded(child: _buildSynthesisItem('APPARITIONS', '9')),
             ],
           ),
         ],
@@ -106,54 +94,38 @@ class PlayerDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSynthesisItem(String label, String value, {Color? valueColor}) {
+  Widget _buildSynthesisItem(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: AppColors.foreground400, fontSize: 12)),
+        Text(label, style: TextStyle(color: context.colors.foreground400, fontSize: 10)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: valueColor ?? AppColors.foreground50, fontSize: 16, fontWeight: FontWeight.bold)),
+        Text(value, style: TextStyle(color: context.colors.foreground50, fontSize: 20, fontWeight: FontWeight.bold)),
       ],
     );
   }
 
   Widget _buildRawStats(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              _buildStatTile(Remix.football_line, 'Buts', '9', AppColors.foreground50),
-              const SizedBox(height: 12),
-              _buildStatTile(Remix.file_warning_line, 'C. Jaunes', '1', AppColors.card),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            children: [
-              _buildStatTile(Remix.arrow_right_up_line, 'Passes déc.', '11', AppColors.accent400),
-              const SizedBox(height: 12),
-              _buildStatTile(Remix.alarm_warning_line, 'C. Rouges', '0', AppColors.danger),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatTile(IconData icon, String label, String value, Color color) {
-    return AppCard(
-      padding: const EdgeInsets.all(16),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.background700),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 24),
-          const SizedBox(height: 12),
-          Text(label, style: const TextStyle(color: AppColors.foreground400, fontSize: 12)),
-          const SizedBox(height: 4),
-          Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text('STATISTIQUES BRUTES', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(child: _buildSynthesisItem('BUTS', '11')),
+              Expanded(child: _buildSynthesisItem('PASSES', '2')),
+              Expanded(child: _buildSynthesisItem('JAUNES', '2')),
+              Expanded(child: _buildSynthesisItem('ROUGES', '1')),
+            ],
+          ),
         ],
       ),
     );
@@ -162,84 +134,122 @@ class PlayerDetailScreen extends StatelessWidget {
   Widget _buildHistoryList(BuildContext context) {
     return Column(
       children: [
-        _buildHistoryItem(context, '9 sept.', BadgeStatus.win, '5v5', '5', '3', '2 buts, 1 passe', AppColors.primary500),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '5 sept.', BadgeStatus.draw, '5v5', '4', '4', '1 but', AppColors.foreground400),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '2 sept.', BadgeStatus.draw, '4v4', '0', '0', '', AppColors.foreground400),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '29 août', BadgeStatus.win, '5v5', '6', '4', '3 buts', AppColors.primary500),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '22 août', BadgeStatus.loss, '5v5', '2', '3', '1 passe, 1 jaune', AppColors.danger),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '15 août', BadgeStatus.friendly, '6v6', '7', '6', '3 buts, 2 passes', AppColors.warning),
-        const SizedBox(height: 12),
-        _buildHistoryItem(context, '8 août', BadgeStatus.draw, '5v5', '5', '5', '2 buts', AppColors.foreground400),
+        _buildHistoryItem(context, 'Aujourd\'hui', '4 - 3', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 22', '7 - 2', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 15 sept.', '7 - 4', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '0', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 8 sept.', '4 - 1', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '1', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 1 sept.', '6 - 4', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 25 août.', '4 - 2', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '2', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 18 août.', '6 - 6', 'Nul', context.colors.foreground300, context.colors.background800, '2', '2'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 11 août.', '5 - 2', 'Victoire', context.colors.primary500, context.colors.primary500.withValues(alpha: 0.1), '0', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 4 août.', '5 - 6', 'Défaite', context.colors.danger, context.colors.danger.withValues(alpha: 0.1), '0', '0'),
+        const SizedBox(height: 8),
+        _buildHistoryItem(context, 'mar. 28 juil.', '3 - 4', 'Défaite', context.colors.danger, context.colors.danger.withValues(alpha: 0.1), '2', '0'),
       ],
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, String date, BadgeStatus status, String format, String score1, String score2, String stats, Color statusColor) {
+  Widget _buildHistoryItem(BuildContext context, String date, String score, String statusText, Color statusColor, Color statusBgColor, String goals, String assists) {
     return Container(
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.background900,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.background700, width: 1),
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.colors.background700),
       ),
-      clipBehavior: Clip.antiAlias,
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Container(width: 4, color: statusColor),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
+      child: Row(
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(color: context.colors.accent500, shape: BoxShape.circle),
+            alignment: Alignment.center,
+            child: const Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(date, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(height: 4),
+                Row(
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(date, style: const TextStyle(fontWeight: FontWeight.w600)),
-                          const SizedBox(height: 8),
-                          StatusBadge(status: status),
-                        ],
+                    Icon(Remix.football_line, size: 14, color: context.colors.foreground400),
+                    const SizedBox(width: 4),
+                    Text(goals, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
+                    const SizedBox(width: 8),
+                    Text('·', style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: context.colors.background700,
+                        borderRadius: BorderRadius.circular(4),
                       ),
+                      child: Text('A', style: TextStyle(color: context.colors.foreground400, fontSize: 10, fontWeight: FontWeight.bold)),
                     ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: AppColors.background800, borderRadius: BorderRadius.circular(4)),
-                            child: Text(format, style: const TextStyle(fontSize: 10, color: AppColors.foreground400)),
-                          ),
-                          const SizedBox(height: 8),
-                          Text('$score1 - $score2', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: statusColor)),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (stats.isNotEmpty)
-                            Text(stats, textAlign: TextAlign.right, style: const TextStyle(color: AppColors.foreground400, fontSize: 11)),
-                        ],
-                      ),
-                    ),
+                    const SizedBox(width: 4),
+                    Text(assists, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Text(score, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(width: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: statusBgColor,
+              borderRadius: BorderRadius.circular(9999),
+            ),
+            child: Text(statusText, style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.w600)),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () {},
+            icon: const Icon(Remix.pencil_line, size: 18),
+            label: const Text('Éditer'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: context.colors.foreground50,
+              side: BorderSide(color: context.colors.background700),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: OutlinedButton.icon(
+            onPressed: () {},
+            icon: const Icon(Remix.archive_drawer_line, size: 18),
+            label: const Text('Archiver'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: context.colors.foreground50,
+              side: BorderSide(color: context.colors.background700),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -17,66 +17,66 @@ class SessionsScreen extends StatelessWidget {
           child: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: const Text('10 au total', style: TextStyle(color: AppColors.foreground400, fontSize: 14)),
+            child: Text('10 au total', style: TextStyle(color: context.colors.foreground400, fontSize: 14)),
           ),
         ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildFilters(),
+          _buildFilters(context),
           const SizedBox(height: 24),
-          const Text('SEPTEMBRE 2026', style: TextStyle(color: AppColors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
+          Text('SEPTEMBRE 2026', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _buildSessionCard(context, 'jeu. 10 sept. · 20h30', true, true, 4, 3),
           _buildSessionCard(context, 'mar. 8 sept. · 20h30', false, false, 7, 2),
           _buildSessionCard(context, 'mar. 1 sept. · 20h30', false, false, 7, 4),
           const SizedBox(height: 24),
-          const Text('AOÛT 2026', style: TextStyle(color: AppColors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
+          Text('AOÛT 2026', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           _buildSessionCard(context, 'mar. 25 août. · 20h30', false, false, 4, 1),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.go('/seances/nouvelle'),
-        backgroundColor: AppColors.primary500,
-        foregroundColor: AppColors.background950,
+        backgroundColor: context.colors.primary500,
+        foregroundColor: context.colors.background950,
         child: const Icon(Remix.add_line),
       ),
     );
   }
 
-  Widget _buildFilters() {
+  Widget _buildFilters(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildChip('Toutes', true),
+          _buildChip(context, 'Toutes', true),
           const SizedBox(width: 8),
-          _buildChip('Classées', false),
+          _buildChip(context, 'Classées', false),
           const SizedBox(width: 8),
-          _buildChip('Amicales', false),
+          _buildChip(context, 'Amicales', false),
           const SizedBox(width: 8),
-          _buildChip('Brouillons', false),
+          _buildChip(context, 'Brouillons', false),
         ],
       ),
     );
   }
 
-  Widget _buildChip(String label, bool isActive) {
+  Widget _buildChip(BuildContext context, String label, bool isActive) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isActive ? AppColors.primary500.withOpacity(0.1) : AppColors.background800,
+        color: isActive ? context.colors.primary500.withOpacity(0.1) : context.colors.background800,
         borderRadius: BorderRadius.circular(9999),
         border: Border.all(
-          color: isActive ? AppColors.primary500 : Colors.transparent,
+          color: isActive ? context.colors.primary500 : Colors.transparent,
         ),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: isActive ? AppColors.primary500 : AppColors.foreground300,
+          color: isActive ? context.colors.primary500 : context.colors.foreground300,
           fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
         ),
       ),
@@ -92,25 +92,25 @@ class SessionsScreen extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.background900,
+            color: context.colors.background900,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.background700),
+            border: Border.all(color: context.colors.background700),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(datetime, style: const TextStyle(color: AppColors.foreground400)),
+                  Text(datetime, style: TextStyle(color: context.colors.foreground400)),
                   const SizedBox(width: 8),
                   if (isDraft)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.foreground600),
+                        border: Border.all(color: context.colors.foreground600),
                         borderRadius: BorderRadius.circular(9999),
                       ),
-                      child: const Text('BROUILLON', style: TextStyle(color: AppColors.foreground400, fontSize: 10, fontWeight: FontWeight.bold)),
+                      child: Text('BROUILLON', style: TextStyle(color: context.colors.foreground400, fontSize: 10, fontWeight: FontWeight.bold)),
                     )
                   else
                     const StatusBadge(status: BadgeStatus.closed),
@@ -118,9 +118,9 @@ class SessionsScreen extends StatelessWidget {
                   if (hasWarning)
                     const Row(
                       children: [
-                        Icon(Remix.error_warning_line, color: AppColors.warning, size: 14),
+                        Icon(Remix.error_warning_line, color: context.colors.warning, size: 14),
                         SizedBox(width: 4),
-                        Text('Buts', style: TextStyle(color: AppColors.warning, fontSize: 12, fontWeight: FontWeight.bold)),
+                        Text('Buts', style: TextStyle(color: context.colors.warning, fontSize: 12, fontWeight: FontWeight.bold)),
                       ],
                     ),
                 ],
@@ -128,24 +128,24 @@ class SessionsScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  _buildTeamDot(AppColors.accent500, 'A'),
+                  _buildTeamDot(context, context.colors.accent500, 'A'),
                   const SizedBox(width: 12),
                   Text('$scoreA', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text('-', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.foreground600)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text('-', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: context.colors.foreground600)),
                   ),
                   Text('$scoreB', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 12),
-                  _buildTeamDot(AppColors.secondary500, 'B'),
+                  _buildTeamDot(context, context.colors.secondary500, 'B'),
                   const Spacer(),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(color: AppColors.background800, borderRadius: BorderRadius.circular(9999)),
+                    decoration: BoxDecoration(color: context.colors.background800, borderRadius: BorderRadius.circular(9999)),
                     child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
                   ),
                   const SizedBox(width: 8),
-                  const Text('10 joueurs', style: TextStyle(color: AppColors.foreground400, fontSize: 12)),
+                  Text('10 joueurs', style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
                 ],
               ),
             ],
@@ -155,13 +155,13 @@ class SessionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamDot(Color color, String label) {
+  Widget _buildTeamDot(BuildContext context, Color color, String label) {
     return Container(
       width: 24,
       height: 24,
       alignment: Alignment.center,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      child: Text(label, style: const TextStyle(color: AppColors.foreground50, fontSize: 12, fontWeight: FontWeight.bold)),
+      child: Text(label, style: TextStyle(color: context.colors.foreground50, fontSize: 12, fontWeight: FontWeight.bold)),
     );
   }
 }

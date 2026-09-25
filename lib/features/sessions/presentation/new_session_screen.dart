@@ -72,7 +72,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
         const SizedBox(height: 8),
         const Text(
           'On pré-remplit à maintenant. Ajuste si besoin.',
-          style: TextStyle(color: AppColors.foreground400),
+          style: TextStyle(color: context.colors.foreground400),
         ),
         const SizedBox(height: 24),
         AppCard(
@@ -87,8 +87,8 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
                 child: OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.foreground50,
-                    side: const BorderSide(color: AppColors.background700),
+                    foregroundColor: context.colors.foreground50,
+                    side: BorderSide(color: context.colors.background700),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
                   ),
@@ -103,13 +103,13 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.primary500.withOpacity(0.15),
+            color: context.colors.primary500.withOpacity(0.15),
             borderRadius: BorderRadius.circular(16),
           ),
           child: const Center(
             child: Text(
               'jeu. 24 sept. 2026 · 17h38',
-              style: TextStyle(color: AppColors.primary500, fontWeight: FontWeight.bold),
+              style: TextStyle(color: context.colors.primary500, fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -124,15 +124,15 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: AppColors.background800,
+            color: context.colors.background800,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.background700),
+            border: Border.all(color: context.colors.background700),
           ),
           child: Row(
             children: [
               Text(value, style: const TextStyle(fontSize: 16)),
               const SizedBox(width: 32),
-              Icon(icon, color: AppColors.foreground500, size: 20),
+              Icon(icon, color: context.colors.foreground500, size: 20),
             ],
           ),
         ),
@@ -146,11 +146,11 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
       children: [
         const Text('Composition', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        const Text('Sélectionnez les présents et répartissez les équipes.', style: TextStyle(color: AppColors.foreground400)),
+        Text('Sélectionnez les présents et répartissez les équipes.', style: TextStyle(color: context.colors.foreground400)),
         const SizedBox(height: 24),
         const AppCard(
           child: Center(
-            child: Text('Placeholder Étape 2\n(Liste des joueurs et brouillon RandomSplitter)', textAlign: TextAlign.center, style: TextStyle(color: AppColors.foreground400)),
+            child: Text('Placeholder Étape 2\n(Liste des joueurs et brouillon RandomSplitter)', textAlign: TextAlign.center, style: TextStyle(color: context.colors.foreground400)),
           ),
         ),
       ],
@@ -163,11 +163,11 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
       children: [
         const Text('Résultat', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        const Text('Saisissez le score final et les statistiques individuelles.', style: TextStyle(color: AppColors.foreground400)),
+        Text('Saisissez le score final et les statistiques individuelles.', style: TextStyle(color: context.colors.foreground400)),
         const SizedBox(height: 24),
         const AppCard(
           child: Center(
-            child: Text('Placeholder Étape 3\n(Score et Stats)', textAlign: TextAlign.center, style: TextStyle(color: AppColors.foreground400)),
+            child: Text('Placeholder Étape 3\n(Score et Stats)', textAlign: TextAlign.center, style: TextStyle(color: context.colors.foreground400)),
           ),
         ),
       ],

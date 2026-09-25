@@ -16,23 +16,23 @@ class StatusBadge extends StatelessWidget {
     switch (status) {
       case BadgeStatus.closed:
         label = 'Clôturée';
-        color = AppColors.primary500;
+        color = context.colors.primary500;
         break;
       case BadgeStatus.win:
         label = 'Victoire';
-        color = AppColors.primary500;
+        color = context.colors.primary500;
         break;
       case BadgeStatus.draw:
         label = 'Nul';
-        color = AppColors.foreground400;
+        color = context.colors.foreground400;
         break;
       case BadgeStatus.loss:
         label = 'Défaite';
-        color = AppColors.danger;
+        color = context.colors.danger;
         break;
       case BadgeStatus.friendly:
         label = 'Amical';
-        color = AppColors.warning;
+        color = context.colors.warning;
         break;
     }
 
