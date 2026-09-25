@@ -30,6 +30,9 @@ class AppDatabase {
         await _createViews(db);
         await _seedDemoData(db);
       },
+      onOpen: (db) async {
+        await _createViews(db);
+      },
     );
   }
 
@@ -257,6 +260,49 @@ class AppDatabase {
       FROM assist_aggregates
       WHERE assists > 0 OR matches_played > 0
       ORDER BY rank;
+    ''');
+
+    await db.execute('''
+      CREATE VIEW IF NOT EXISTS v_group_totals AS
+      WITH session_counts AS (
+        SELECT 
+          COUNT(*) AS total_sessions,
+          COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 1 THEN 1 END) AS ranked_sessions,
+          COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 0 THEN 1 END) AS friendly_sessions,
+          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN score_a + score_b ELSE 0 END), 0) AS total_score_goals,
+          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN unassigned_goals_a + unassigned_goals_b ELSE 0 END), 0) AS explicit_unassigned_goals
+        FROM sessions
+      ),
+      player_counts AS (
+        SELECT 
+          COUNT(*) AS total_players,
+          COUNT(CASE WHEN is_active = 1 THEN 1 END) AS active_players
+        FROM players
+      ),
+      part_counts AS (
+        SELECT 
+          COALESCE(SUM(pt.goals), 0) AS total_player_goals,
+          COALESCE(SUM(pt.assists), 0) AS total_assists,
+          COALESCE(SUM(pt.yellow_cards), 0) AS total_yellow_cards,
+          COALESCE(SUM(pt.red_cards), 0) AS total_red_cards
+        FROM participations pt
+        JOIN sessions s ON s.id = pt.session_id
+        WHERE s.status = 'CLOSED'
+      )
+      SELECT 
+        sc.total_sessions,
+        sc.ranked_sessions,
+        sc.friendly_sessions,
+        pc.total_players,
+        pc.active_players,
+        sc.total_score_goals AS total_goals,
+        ROUND(CASE WHEN sc.total_sessions > 0 THEN CAST(sc.total_score_goals AS REAL) / sc.total_sessions ELSE 0.0 END, 2) AS avg_goals_per_session,
+        pt.total_assists,
+        pt.total_yellow_cards,
+        pt.total_red_cards,
+        pt.total_player_goals,
+        MAX(0, sc.total_score_goals - pt.total_player_goals) AS unassigned_goals_difference
+      FROM session_counts sc, player_counts pc, part_counts pt;
     ''');
   }
 

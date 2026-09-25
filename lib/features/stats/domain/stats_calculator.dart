@@ -1,5 +1,5 @@
-import '../../sessions/domain/session.dart';
 import '../../sessions/domain/participation.dart';
+import '../../sessions/domain/session.dart';
 import 'stats_models.dart';
 
 class StatsCalculator {

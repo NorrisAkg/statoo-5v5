@@ -1,18 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'app_scaffold.dart';
-import '../../features/home/presentation/home_screen.dart';
-import '../../features/players/presentation/players_screen.dart';
-import '../../features/players/presentation/player_detail_screen.dart';
-import '../../features/sessions/presentation/sessions_screen.dart';
-import '../../features/sessions/presentation/session_detail_screen.dart';
-import '../../features/sessions/presentation/new_session_screen.dart';
-import '../../features/settings/presentation/settings_screen.dart';
-import '../../features/ranking/presentation/standings_screen.dart';
-import '../widgets/placeholder_screen.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../features/home/presentation/home_screen.dart';
+import '../../features/players/presentation/player_detail_screen.dart';
+import '../../features/players/presentation/players_screen.dart';
+import '../../features/ranking/presentation/standings_screen.dart';
+import '../../features/sessions/presentation/new_session_screen.dart';
+import '../../features/sessions/presentation/session_detail_screen.dart';
+import '../../features/sessions/presentation/sessions_screen.dart';
+import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/stats/presentation/stats_screen.dart';
+import 'app_scaffold.dart';
 
 part 'app_router.g.dart';
 
@@ -84,7 +82,7 @@ GoRouter appRouter(Ref ref) {
             routes: [
               GoRoute(
                 path: '/stats',
-                builder: (context, state) => const PlaceholderScreen(title: 'Statistiques globales'),
+                builder: (context, state) => const StatsScreen(),
               ),
             ],
           ),
