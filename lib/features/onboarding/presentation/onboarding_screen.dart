@@ -122,43 +122,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget _buildPage(BuildContext context, _OnboardingPageData data, int index) {
     return Column(
       children: [
-        // Top 60%: Graphic placeholder with smooth gradient fade
+        // Top 60%: Graphic placeholder
         Expanded(
           flex: 6,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: context.colors.background900,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: context.colors.background700),
-                ),
-                child: Center(
-                  child: _buildVisualGraphic(context, index),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: 120,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        context.colors.background950.withValues(alpha: 0.7),
-                        context.colors.background950,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: context.colors.background900,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: context.colors.background700),
+            ),
+            child: Center(
+              child: _buildVisualGraphic(context, index),
+            ),
           ),
         ),
 
@@ -203,14 +179,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: context.colors.primary500.withValues(alpha: 0.15),
-              shape: BoxShape.circle,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              'assets/images/logo.jpg',
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
             ),
-            child: Icon(Remix.football_line, size: 54, color: context.colors.primary400),
           ),
           const SizedBox(height: 24),
           Row(
