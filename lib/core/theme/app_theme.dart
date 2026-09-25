@@ -7,7 +7,7 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     final base = ThemeData.dark();
-    final colors = AppColors.dark;
+    const colors = AppColors.dark;
     return base.copyWith(
       scaffoldBackgroundColor: colors.background950,
       primaryColor: colors.primary500,
@@ -24,21 +24,26 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: colors.foreground50),
+        titleTextStyle: GoogleFonts.dmSans(
+          color: colors.foreground50,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       extensions: [colors],
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        titleLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 14),
-        bodyMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 12),
-        labelSmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 11),
+      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
+        titleLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
+        titleMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
+        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
+        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
+        labelSmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 11),
       ),
     );
   }
 
   static ThemeData get lightTheme {
     final base = ThemeData.light();
-    final colors = AppColors.light;
+    const colors = AppColors.light;
     return base.copyWith(
       scaffoldBackgroundColor: colors.background950,
       primaryColor: colors.primary500,
@@ -55,15 +60,19 @@ class AppTheme {
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: colors.foreground50),
-        titleTextStyle: GoogleFonts.inter(color: colors.foreground50, fontSize: 20, fontWeight: FontWeight.w500),
+        titleTextStyle: GoogleFonts.dmSans(
+          color: colors.foreground50,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       extensions: [colors],
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        titleLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 14),
-        bodyMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 12),
-        labelSmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 11),
+      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
+        titleLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
+        titleMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
+        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
+        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
+        labelSmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 11),
       ),
     );
   }

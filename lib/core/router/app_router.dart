@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/application/onboarding_provider.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/onboarding/presentation/splash_screen.dart';
 import '../../features/players/presentation/player_detail_screen.dart';
 import '../../features/players/presentation/players_screen.dart';
 import '../../features/ranking/presentation/standings_screen.dart';
@@ -13,6 +14,7 @@ import '../../features/sessions/presentation/session_detail_screen.dart';
 import '../../features/sessions/presentation/sessions_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/stats/presentation/stats_screen.dart';
+import '../../features/team/application/team_provider.dart';
 import '../../features/team/presentation/add_team_players_screen.dart';
 import '../../features/team/presentation/create_team_screen.dart';
 import 'app_scaffold.dart';
@@ -21,13 +23,55 @@ part 'app_router.g.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
+class RouterNotifier extends ChangeNotifier {
+  RouterNotifier(this._ref) {
+    _ref.listen(hasSeenOnboardingProvider, (_, _) => notifyListeners());
+    _ref.listen(hasTeamProvider, (_, _) => notifyListeners());
+  }
+
+  final Ref _ref;
+}
+
+@riverpod
+RouterNotifier routerNotifier(Ref ref) => RouterNotifier(ref);
+
 @riverpod
 GoRouter appRouter(Ref ref) {
-  final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
-
+  final notifier = ref.watch(routerProvider);
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: hasSeenOnboarding ? '/' : '/onboarding',
+    initialLocation: '/splash',
+    refreshListenable: notifier,
+    redirect: (context, state) {
+      final loc = state.matchedLocation;
+      if (loc == '/splash') {
+        return null;
+      }
+
+      final seenOnboarding = ref.read(hasSeenOnboardingProvider);
+      final teamCreated = ref.read(hasTeamProvider);
+
+      final isOnboarding = loc == '/onboarding';
+      final isCreatingTeam = loc == '/creer-equipe';
+      final isAddingPlayers = loc == '/ajouter-joueurs-initiaux';
+
+      if (!seenOnboarding) {
+        return isOnboarding ? null : '/onboarding';
+      }
+
+      if (!teamCreated) {
+        if (isCreatingTeam || isAddingPlayers) {
+          return null;
+        }
+        return '/creer-equipe';
+      }
+
+      if (isOnboarding) {
+        return '/';
+      }
+
+      return null;
+    },
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -75,6 +119,11 @@ GoRouter appRouter(Ref ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,

@@ -21,25 +21,77 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 4,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
       onCreate: (db, version) async {
         await _createSchema(db);
         await _createViews(db);
-        await _seedDemoData(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 4) {
+          final columns = await db.rawQuery('PRAGMA table_info(sessions)');
+          final hasTeamId = columns.any((c) => c['name'] == 'team_id');
+          if (!hasTeamId) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN team_id TEXT REFERENCES teams(id) ON DELETE CASCADE;');
+            final teams = await db.query('teams', limit: 1);
+            if (teams.isNotEmpty) {
+              final defaultTeamId = teams.first['id'] as String;
+              await db.rawUpdate('UPDATE sessions SET team_id = ? WHERE team_id IS NULL', [defaultTeamId]);
+            }
+          }
+        }
+        await _dropViews(db);
+        await _createViews(db);
       },
       onOpen: (db) async {
+        await _dropViews(db);
         await _createViews(db);
       },
     );
   }
 
+  Future<void> _dropViews(Database db) async {
+    final views = [
+      'v_standings_per_match',
+      'v_standings',
+      'v_player_match_results',
+      'v_top_scorers',
+      'v_top_assists',
+      'v_top_cards',
+      'v_group_totals',
+    ];
+    for (final view in views) {
+      await db.execute('DROP VIEW IF EXISTS $view');
+    }
+  }
+
+  Future<void> _dropAllTables(Database db) async {
+    await db.execute('PRAGMA foreign_keys = OFF;');
+    await _dropViews(db);
+    final tables = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+    for (final table in tables) {
+      await db.execute('DROP TABLE IF EXISTS ${table['name']}');
+    }
+    await db.execute('PRAGMA foreign_keys = ON;');
+  }
+
   Future<void> _createSchema(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS teams (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        format TEXT NOT NULL DEFAULT '5v5',
+        location TEXT,
+        created_at TEXT NOT NULL
+      );
+    ''');
+
     await db.execute('''
       CREATE TABLE IF NOT EXISTS players (
         id TEXT PRIMARY KEY,
+        team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
         name TEXT NOT NULL,
         nickname TEXT,
         avatar_url TEXT,
@@ -52,6 +104,7 @@ class AppDatabase {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS sessions (
         id TEXT PRIMARY KEY,
+        team_id TEXT REFERENCES teams(id) ON DELETE CASCADE,
         played_at TEXT NOT NULL,
         status TEXT NOT NULL CHECK(status IN ('DRAFT', 'CLOSED')),
         split_mode TEXT CHECK(split_mode IN ('RANDOM', 'RANDOM_ADJUSTED', 'MANUAL')),
@@ -104,6 +157,7 @@ class AppDatabase {
         pt.assists,
         pt.yellow_cards,
         pt.red_cards,
+        s.team_id,
         s.is_ranked,
         s.status,
         CASE 
@@ -136,6 +190,7 @@ class AppDatabase {
       WITH player_aggregates AS (
         SELECT 
           pl.id AS player_id,
+          pl.team_id,
           pl.name,
           pl.nickname,
           pl.avatar_url,
@@ -150,11 +205,12 @@ class AppDatabase {
         FROM players pl
         LEFT JOIN v_player_match_results pm ON pm.player_id = pl.id
         WHERE pl.is_active = 1
-        GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url, pl.is_active
+        GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url, pl.is_active
       )
       SELECT 
-        ROW_NUMBER() OVER (ORDER BY points DESC, wins DESC, matches_played DESC, name ASC) AS rank,
+        ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY points DESC, wins DESC, matches_played DESC, name ASC) AS rank,
         player_id,
+        team_id,
         name,
         nickname,
         avatar_url,
@@ -173,20 +229,22 @@ class AppDatabase {
     await db.execute('''
       CREATE VIEW IF NOT EXISTS v_standings_per_match AS
       WITH total_ranked AS (
-        SELECT COUNT(*) as total_sessions FROM sessions WHERE status = 'CLOSED' AND is_ranked = 1
+        SELECT team_id, COUNT(*) as total_sessions FROM sessions WHERE status = 'CLOSED' AND is_ranked = 1 GROUP BY team_id
       ),
       standings_base AS (
         SELECT 
           s.*,
-          tr.total_sessions,
+          COALESCE(tr.total_sessions, 0) AS total_sessions,
           ROUND(CASE WHEN s.matches_played > 0 THEN CAST(s.points AS REAL) / s.matches_played ELSE 0.0 END, 2) AS points_per_match,
-          CASE WHEN s.matches_played >= (CAST(tr.total_sessions AS REAL) / 2.0) THEN 1 ELSE 0 END AS is_eligible,
-          MAX(0, CAST((tr.total_sessions + 1) / 2 AS INTEGER) - s.matches_played) AS missing_matches
-        FROM v_standings s, total_ranked tr
+          CASE WHEN s.matches_played >= (CAST(COALESCE(tr.total_sessions, 0) AS REAL) / 2.0) THEN 1 ELSE 0 END AS is_eligible,
+          MAX(0, CAST((COALESCE(tr.total_sessions, 0) + 1) / 2 AS INTEGER) - s.matches_played) AS missing_matches
+        FROM v_standings s
+        LEFT JOIN total_ranked tr ON tr.team_id = s.team_id
       )
       SELECT 
-        ROW_NUMBER() OVER (ORDER BY is_eligible DESC, points_per_match DESC, points DESC, matches_played DESC, name ASC) AS rank,
+        ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY is_eligible DESC, points_per_match DESC, points DESC, matches_played DESC, name ASC) AS rank,
         player_id,
+        team_id,
         name,
         nickname,
         avatar_url,
@@ -209,6 +267,7 @@ class AppDatabase {
       WITH scorer_aggregates AS (
         SELECT 
           pl.id AS player_id,
+          pl.team_id,
           pl.name,
           pl.nickname,
           pl.avatar_url,
@@ -218,11 +277,12 @@ class AppDatabase {
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
         WHERE pl.is_active = 1
-        GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url
+        GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
-        ROW_NUMBER() OVER (ORDER BY goals DESC, matches_played ASC, name ASC) AS rank,
+        ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY goals DESC, matches_played ASC, name ASC) AS rank,
         player_id,
+        team_id,
         name,
         nickname,
         avatar_url,
@@ -238,6 +298,7 @@ class AppDatabase {
       WITH assist_aggregates AS (
         SELECT 
           pl.id AS player_id,
+          pl.team_id,
           pl.name,
           pl.nickname,
           pl.avatar_url,
@@ -247,11 +308,12 @@ class AppDatabase {
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
         WHERE pl.is_active = 1
-        GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url
+        GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
-        ROW_NUMBER() OVER (ORDER BY assists DESC, matches_played ASC, name ASC) AS rank,
+        ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY assists DESC, matches_played ASC, name ASC) AS rank,
         player_id,
+        team_id,
         name,
         nickname,
         avatar_url,
@@ -267,6 +329,7 @@ class AppDatabase {
       WITH card_aggregates AS (
         SELECT 
           pl.id AS player_id,
+          pl.team_id,
           pl.name,
           pl.nickname,
           pl.avatar_url,
@@ -278,11 +341,12 @@ class AppDatabase {
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
         WHERE pl.is_active = 1
-        GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url
+        GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
-        ROW_NUMBER() OVER (ORDER BY (red_cards * 3 + yellow_cards) DESC, red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC) AS rank,
+        ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY (red_cards * 3 + yellow_cards) DESC, red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC) AS rank,
         player_id,
+        team_id,
         name,
         nickname,
         avatar_url,
@@ -299,21 +363,26 @@ class AppDatabase {
       CREATE VIEW IF NOT EXISTS v_group_totals AS
       WITH session_counts AS (
         SELECT 
+          team_id,
           COUNT(*) AS total_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 1 THEN 1 END) AS ranked_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 0 THEN 1 END) AS friendly_sessions,
           COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN score_a + score_b ELSE 0 END), 0) AS total_score_goals,
           COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN unassigned_goals_a + unassigned_goals_b ELSE 0 END), 0) AS explicit_unassigned_goals
         FROM sessions
+        GROUP BY team_id
       ),
       player_counts AS (
         SELECT 
+          team_id,
           COUNT(*) AS total_players,
           COUNT(CASE WHEN is_active = 1 THEN 1 END) AS active_players
         FROM players
+        GROUP BY team_id
       ),
       part_counts AS (
         SELECT 
+          s.team_id,
           COALESCE(SUM(pt.goals), 0) AS total_player_goals,
           COALESCE(SUM(pt.assists), 0) AS total_assists,
           COALESCE(SUM(pt.yellow_cards), 0) AS total_yellow_cards,
@@ -321,26 +390,38 @@ class AppDatabase {
         FROM participations pt
         JOIN sessions s ON s.id = pt.session_id
         WHERE s.status = 'CLOSED'
+        GROUP BY s.team_id
       )
       SELECT 
-        sc.total_sessions,
-        sc.ranked_sessions,
-        sc.friendly_sessions,
-        pc.total_players,
-        pc.active_players,
-        sc.total_score_goals AS total_goals,
-        ROUND(CASE WHEN sc.total_sessions > 0 THEN CAST(sc.total_score_goals AS REAL) / sc.total_sessions ELSE 0.0 END, 2) AS avg_goals_per_session,
-        pt.total_assists,
-        pt.total_yellow_cards,
-        pt.total_red_cards,
-        pt.total_player_goals,
-        MAX(0, sc.total_score_goals - pt.total_player_goals) AS unassigned_goals_difference
-      FROM session_counts sc, player_counts pc, part_counts pt;
+        t.id AS team_id,
+        COALESCE(sc.total_sessions, 0) AS total_sessions,
+        COALESCE(sc.ranked_sessions, 0) AS ranked_sessions,
+        COALESCE(sc.friendly_sessions, 0) AS friendly_sessions,
+        COALESCE(pc.total_players, 0) AS total_players,
+        COALESCE(pc.active_players, 0) AS active_players,
+        COALESCE(sc.total_score_goals, 0) AS total_goals,
+        ROUND(CASE WHEN COALESCE(sc.total_sessions, 0) > 0 THEN CAST(COALESCE(sc.total_score_goals, 0) AS REAL) / sc.total_sessions ELSE 0.0 END, 2) AS avg_goals_per_session,
+        COALESCE(pt.total_assists, 0) AS total_assists,
+        COALESCE(pt.total_yellow_cards, 0) AS total_yellow_cards,
+        COALESCE(pt.total_red_cards, 0) AS total_red_cards,
+        COALESCE(pt.total_player_goals, 0) AS total_player_goals,
+        MAX(0, COALESCE(sc.total_score_goals, 0) - COALESCE(pt.total_player_goals, 0)) AS unassigned_goals_difference
+      FROM teams t
+      LEFT JOIN session_counts sc ON sc.team_id = t.id
+      LEFT JOIN player_counts pc ON pc.team_id = t.id
+      LEFT JOIN part_counts pt ON pt.team_id = t.id;
     ''');
   }
 
   Future<void> _seedDemoData(Database db) async {
     final batch = db.batch();
+
+    // 1 Global Team
+    final teamId = 'team_1';
+    batch.rawInsert(
+      'INSERT INTO teams (id, name, format, location, created_at) VALUES (?, ?, ?, ?, ?)',
+      [teamId, 'FC Urban', '5v5', 'Le Five', '2026-09-01 12:00:00'],
+    );
 
     // 14 players
     final players = [
@@ -362,8 +443,8 @@ class AppDatabase {
 
     for (final p in players) {
       batch.rawInsert(
-        'INSERT INTO players (id, name, nickname, is_active, created_at, updated_at) VALUES (?, ?, ?, 1, ?, ?)',
-        [p[0], p[1], p[2], '2026-09-01 12:00:00', '2026-09-01 12:00:00'],
+        'INSERT INTO players (id, team_id, name, nickname, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, ?)',
+        [p[0], teamId, p[1], p[2], '2026-09-01 12:00:00', '2026-09-01 12:00:00'],
       );
     }
 
