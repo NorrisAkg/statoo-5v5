@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import 'new_player_bottom_sheet.dart';
 
 class PlayersScreen extends StatelessWidget {
   const PlayersScreen({super.key});
@@ -24,7 +25,7 @@ class PlayersScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildSearchBar(),
+          _buildSearchBar(context),
           const SizedBox(height: 24),
           Text('ACTIFS (12)', style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
@@ -34,11 +35,18 @@ class PlayersScreen extends StatelessWidget {
           _buildPlayerCard(context, 'Karim Benali', 'Kaka', 'K', context.colors.primary400, 8, 18),
           _buildPlayerCard(context, 'Mehdi Ouali', '', 'M', context.colors.danger, 7, 15),
           const SizedBox(height: 16),
-          _buildArchivedSection(),
+          _buildArchivedSection(context),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) => const NewPlayerBottomSheet(),
+          );
+        },
         backgroundColor: context.colors.primary500,
         foregroundColor: context.colors.background950,
         child: const Icon(Remix.add_line),
@@ -46,7 +54,7 @@ class PlayersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
@@ -54,10 +62,10 @@ class PlayersScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: context.colors.background700),
       ),
-      child: const Row(
+      child: Row(
         children: [
           Icon(Remix.search_line, color: context.colors.foreground500),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Text('Rechercher un joueur', style: TextStyle(color: context.colors.foreground500, fontSize: 16)),
         ],
       ),
@@ -100,7 +108,7 @@ class PlayersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildArchivedSection() {
+  Widget _buildArchivedSection(BuildContext context) {
     return Row(
       children: [
         Icon(Remix.arrow_right_s_line, color: context.colors.foreground500),

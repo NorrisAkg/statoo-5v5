@@ -46,7 +46,7 @@ class PlayerDetailScreen extends StatelessWidget {
   }
 
   Widget _buildProfileHeader(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         InitialAvatar(initial: 'KB', baseColor: context.colors.primary500, size: 80),
         SizedBox(width: 24),
@@ -76,17 +76,17 @@ class PlayerDetailScreen extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildSynthesisItem('MATCHS (J)', '8')),
-              Expanded(child: _buildSynthesisItem('V / N / D', '6 / 0 / 2')),
-              Expanded(child: _buildSynthesisItem('POINTS', '18')),
+              Expanded(child: _buildSynthesisItem(context, 'MATCHS (J)', '8')),
+              Expanded(child: _buildSynthesisItem(context, 'V / N / D', '6 / 0 / 2')),
+              Expanded(child: _buildSynthesisItem(context, 'POINTS', '18')),
             ],
           ),
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildSynthesisItem('PTS/MATCH', '2.25')),
-              Expanded(child: _buildSynthesisItem('% VICTOIRES', '75 %')),
-              Expanded(child: _buildSynthesisItem('APPARITIONS', '9')),
+              Expanded(child: _buildSynthesisItem(context, 'PTS/MATCH', '2.25')),
+              Expanded(child: _buildSynthesisItem(context, '% VICTOIRES', '75 %')),
+              Expanded(child: _buildSynthesisItem(context, 'APPARITIONS', '9')),
             ],
           ),
         ],
@@ -94,7 +94,7 @@ class PlayerDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSynthesisItem(String label, String value) {
+  Widget _buildSynthesisItem(BuildContext context, String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,10 +120,10 @@ class PlayerDetailScreen extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              Expanded(child: _buildSynthesisItem('BUTS', '11')),
-              Expanded(child: _buildSynthesisItem('PASSES', '2')),
-              Expanded(child: _buildSynthesisItem('JAUNES', '2')),
-              Expanded(child: _buildSynthesisItem('ROUGES', '1')),
+              Expanded(child: _buildSynthesisItem(context, 'BUTS', '11')),
+              Expanded(child: _buildSynthesisItem(context, 'PASSES', '2')),
+              Expanded(child: _buildSynthesisItem(context, 'JAUNES', '2')),
+              Expanded(child: _buildSynthesisItem(context, 'ROUGES', '1')),
             ],
           ),
         ],

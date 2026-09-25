@@ -70,7 +70,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'On pré-remplit à maintenant. Ajuste si besoin.',
           style: TextStyle(color: context.colors.foreground400),
         ),
@@ -103,10 +103,10 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
           width: double.infinity,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: context.colors.primary500.withOpacity(0.15),
+            color: context.colors.primary500.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
               'jeu. 24 sept. 2026 · 17h38',
               style: TextStyle(color: context.colors.primary500, fontWeight: FontWeight.bold),
@@ -148,7 +148,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
         const SizedBox(height: 8),
         Text('Sélectionnez les présents et répartissez les équipes.', style: TextStyle(color: context.colors.foreground400)),
         const SizedBox(height: 24),
-        const AppCard(
+        AppCard(
           child: Center(
             child: Text('Placeholder Étape 2\n(Liste des joueurs et brouillon RandomSplitter)', textAlign: TextAlign.center, style: TextStyle(color: context.colors.foreground400)),
           ),
@@ -165,7 +165,7 @@ class _NewSessionScreenState extends State<NewSessionScreen> {
         const SizedBox(height: 8),
         Text('Saisissez le score final et les statistiques individuelles.', style: TextStyle(color: context.colors.foreground400)),
         const SizedBox(height: 24),
-        const AppCard(
+        AppCard(
           child: Center(
             child: Text('Placeholder Étape 3\n(Score et Stats)', textAlign: TextAlign.center, style: TextStyle(color: context.colors.foreground400)),
           ),

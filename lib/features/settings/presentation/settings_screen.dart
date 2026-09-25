@@ -11,7 +11,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeNotifierProvider);
+    final themeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                 ],
                 onChanged: (mode) {
                   if (mode != null) {
-                    ref.read(themeModeNotifierProvider.notifier).setThemeMode(mode);
+                    ref.read(themeModeProvider.notifier).setThemeMode(mode);
                   }
                 },
               ),
@@ -57,14 +57,14 @@ class SettingsScreen extends ConsumerWidget {
               children: [
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(Remix.cloud_upload_line, color: context.colors.foreground50),
+                  leading: Icon(Remix.upload_cloud_2_line, color: context.colors.foreground50),
                   title: Text('Sauvegarder les données', style: TextStyle(color: context.colors.foreground50)),
                   onTap: () {},
                 ),
                 Divider(color: context.colors.background700, height: 1),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(Remix.cloud_download_line, color: context.colors.foreground50),
+                  leading: Icon(Remix.download_cloud_2_line, color: context.colors.foreground50),
                   title: Text('Restaurer une sauvegarde', style: TextStyle(color: context.colors.foreground50)),
                   onTap: () {},
                 ),

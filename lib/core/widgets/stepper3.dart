@@ -11,16 +11,16 @@ class Stepper3 extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildStep(1, currentStep >= 1),
-        _buildLine(currentStep >= 2),
-        _buildStep(2, currentStep >= 2),
-        _buildLine(currentStep >= 3),
-        _buildStep(3, currentStep >= 3),
+        _buildStep(context, 1, currentStep >= 1),
+        _buildLine(context, currentStep >= 2),
+        _buildStep(context, 2, currentStep >= 2),
+        _buildLine(context, currentStep >= 3),
+        _buildStep(context, 3, currentStep >= 3),
       ],
     );
   }
 
-  Widget _buildStep(int step, bool isActive) {
+  Widget _buildStep(BuildContext context, int step, bool isActive) {
     return Container(
       width: 24,
       height: 24,
@@ -43,7 +43,7 @@ class Stepper3 extends StatelessWidget {
     );
   }
 
-  Widget _buildLine(bool isActive) {
+  Widget _buildLine(BuildContext context, bool isActive) {
     return Container(
       width: 40,
       height: 2,

@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _buildRanking(context),
           const SizedBox(height: 32),
-          _buildTiles(),
+          _buildTiles(context),
           const SizedBox(height: 32),
           _buildFooter(context),
         ],
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: context.colors.primary500.withOpacity(0.15),
+                  color: context.colors.primary500.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(9999),
                 ),
                 child: Text('Clôturée', style: TextStyle(color: context.colors.primary500, fontSize: 11, fontWeight: FontWeight.bold)),
@@ -70,8 +70,8 @@ class HomeScreen extends StatelessWidget {
               _buildTeamDot(context.colors.accent500),
               const SizedBox(width: 12),
               const Text('5', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900)),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text('-', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: context.colors.foreground600)),
               ),
               const Text('3', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900)),
@@ -157,7 +157,7 @@ class HomeScreen extends StatelessWidget {
               height: 32,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: context.colors.primary500.withOpacity(0.15),
+                color: context.colors.primary500.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Text(initial, style: TextStyle(color: context.colors.primary500, fontWeight: FontWeight.bold)),
@@ -185,19 +185,19 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTiles() {
+  Widget _buildTiles(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _buildTile(Remix.user_line, 'Joueurs', '14')),
+        Expanded(child: _buildTile(context, Remix.user_line, 'Joueurs', '14')),
         const SizedBox(width: 12),
-        Expanded(child: _buildTile(Remix.calendar_event_line, 'Séances', '7')),
+        Expanded(child: _buildTile(context, Remix.calendar_event_line, 'Séances', '7')),
         const SizedBox(width: 12),
-        Expanded(child: _buildTile(Remix.pie_chart_line, 'Stats', '')),
+        Expanded(child: _buildTile(context, Remix.pie_chart_line, 'Stats', '')),
       ],
     );
   }
 
-  Widget _buildTile(IconData icon, String title, String value) {
+  Widget _buildTile(BuildContext context, IconData icon, String title, String value) {
     return AppCard(
       padding: const EdgeInsets.all(12),
       child: Column(

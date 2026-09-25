@@ -116,10 +116,10 @@ class SessionsScreen extends StatelessWidget {
                     const StatusBadge(status: BadgeStatus.closed),
                   const Spacer(),
                   if (hasWarning)
-                    const Row(
+                    Row(
                       children: [
                         Icon(Remix.error_warning_line, color: context.colors.warning, size: 14),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         Text('Buts', style: TextStyle(color: context.colors.warning, fontSize: 12, fontWeight: FontWeight.bold)),
                       ],
                     ),

@@ -66,8 +66,8 @@ class SessionDetailScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildTeamScore('Équipe A', 5, context.colors.accent500),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text('-', style: TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: context.colors.foreground600)),
             ),
             _buildTeamScore('Équipe B', 3, context.colors.secondary500),
