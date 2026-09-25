@@ -32,3 +32,15 @@ Architecture feature-first, inspirée Clean Architecture :
 
 ## 5. Workflow & Agents
 - **Revue de Code Systématique :** Dorénavant, dès que les actions d'implémentation d'une tâche sont terminées, il faut **obligatoirement** utiliser un agent dédié (via la CLI `agy run` ou un sous-agent) pour effectuer une **revue de code minutieuse** des modifications. Le commit final ne doit être réalisé qu'une fois la revue validée.
+
+## 6. Analyse Statique
+- Pour vérifier des fichiers ciblés rapidement : `dart analyze <fichier1> <fichier2>` (~5-10s).
+- Réserver `flutter analyze` à une vérification complète du projet (~100s+, lente).
+- Toujours corriger les `info` lint avant de committer (pas seulement les `error` et `warning`).
+
+## 7. Architecture Multi-tenant (groupes)
+- Toutes les données (joueurs, séances, stats, classements) sont scopées à un `team_id`.
+- La session active est stockée dans la table `meta` avec une clé composite : `active_session_id_<teamId>`.
+- Les providers Riverpod lisent `activeTeamIdProvider` et retournent `null` / `[]` si aucun groupe actif.
+- Les vues SQL (`v_standings`, `v_top_scorers`, etc.) partitionnent par `team_id`.
+- Le `SessionsController` lit `activeTeamIdProvider` avant toute opération write et lève une `StateError` si null.
