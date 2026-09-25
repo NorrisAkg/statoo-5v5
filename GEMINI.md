@@ -29,3 +29,6 @@ Architecture feature-first, inspirée Clean Architecture :
 - Clôture non bloquante avec avertissement si somme des buts diffère du score.
 - Classement : se base sur `status = 'CLOSED'` et `is_ranked = true`.
 - Archivage : `is_active = false` (pas de suppression stricte des joueurs ayant joué).
+
+## 5. Workflow & Agents
+- **Revue de Code Systématique :** Dorénavant, dès que les actions d'implémentation d'une tâche sont terminées, il faut **obligatoirement** utiliser un agent dédié (via la CLI `agy run` ou un sous-agent) pour effectuer une **revue de code minutieuse** des modifications. Le commit final ne doit être réalisé qu'une fois la revue validée.

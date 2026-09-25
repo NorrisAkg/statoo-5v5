@@ -10,10 +10,12 @@ import '../../features/sessions/presentation/session_detail_screen.dart';
 import '../../features/sessions/presentation/new_session_screen.dart';
 import '../widgets/placeholder_screen.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'app_router.g.dart';
 
 @riverpod
-GoRouter appRouter(AppRouterRef ref) {
+GoRouter appRouter(Ref ref) {
   return GoRouter(
     initialLocation: '/',
     routes: [
