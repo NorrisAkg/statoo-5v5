@@ -117,6 +117,9 @@ class SessionsController {
       playedAt: playedAt,
       isRanked: isRanked,
       allowUnevenTeams: allowUnevenTeams,
+      scoreA: 0,
+      scoreB: 0,
+      result: MatchResult.draw,
     );
 
     final participations = playerTeamAssignments.entries.map((e) {
@@ -148,6 +151,11 @@ class SessionsController {
     final currentActiveId = await _repo.getActiveSessionId(teamId: teamId);
     if (currentActiveId != null && currentActiveId != sessionId) {
       return false; // Another session is already running
+    }
+    final session = await _repo.getSession(sessionId);
+    if (session != null &&
+        (session.scoreA == null || session.scoreB == null || session.result == null)) {
+      await _repo.updateSessionScore(sessionId: sessionId, scoreA: 0, scoreB: 0);
     }
     await _repo.setActiveSessionId(sessionId, teamId: teamId);
     _invalidateAll(sessionId);

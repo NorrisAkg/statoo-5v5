@@ -15,12 +15,43 @@ class _FakeSessionsRepository implements SessionsRepository {
   final List<SessionParticipantDetail> participants;
   int closeCalls = 0;
   bool closeSucceeds = true;
+  void Function(Session)? onSaveSession;
 
   @override
   Future<Session?> getSession(String id) async => id == session.id ? session : null;
 
   @override
   Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId) async => participants;
+
+  @override
+  Future<String?> getActiveSessionId({required String teamId}) async => null;
+
+  @override
+  Future<void> setActiveSessionId(String? sessionId, {required String teamId}) async {}
+
+  @override
+  Future<void> saveSession(
+    Session session,
+    List<Participation> participations, {
+    required String teamId,
+  }) async {
+    this.session = session;
+    onSaveSession?.call(session);
+  }
+
+  @override
+  Future<void> updateSessionScore({
+    required String sessionId,
+    required int scoreA,
+    required int scoreB,
+  }) async {
+    final res = scoreA > scoreB
+        ? MatchResult.teamA
+        : scoreB > scoreA
+            ? MatchResult.teamB
+            : MatchResult.draw;
+    session = session.copyWith(scoreA: scoreA, scoreB: scoreB, result: res);
+  }
 
   @override
   Future<bool> closeSession(String sessionId, {required String teamId}) async {
@@ -122,6 +153,73 @@ void main() {
 
       await expectLater(controller.closeSession('s1'), throwsA(isA<SessionCloseException>()));
       expect(repo.session.status, SessionStatus.draft);
+    });
+
+    test('closes a session on a 0-0 goalless draw (score nul et vierge)', () async {
+      final zeroZeroDraw = unscored.copyWith(scoreA: 0, scoreB: 0, result: MatchResult.draw);
+      final repo = _FakeSessionsRepository(zeroZeroDraw, _balancedTeams);
+      final blockers = await containerFor(repo).read(sessionsControllerProvider).closeSession('s1');
+
+      expect(blockers, isEmpty);
+      expect(repo.closeCalls, 1);
+      expect(repo.session.status, SessionStatus.closed);
+    });
+  });
+
+  group('SessionsController.createDraftSession', () {
+    ProviderContainer containerFor(SessionsRepository repo) {
+      final container = ProviderContainer(
+        overrides: [
+          sessionsRepositoryProvider.overrideWithValue(repo),
+          activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+        ],
+      );
+      addTearDown(container.dispose);
+      return container;
+    }
+
+    test('initializes new session score to 0 - 0 with draw result', () async {
+      Session? savedSession;
+      final repo = _FakeSessionsRepository(unscored, _balancedTeams)
+        ..onSaveSession = (s) => savedSession = s;
+      final container = containerFor(repo);
+
+      await container.read(sessionsControllerProvider).createDraftSession(
+        playedAt: playedAt,
+        isRanked: true,
+        allowUnevenTeams: false,
+        playerTeamAssignments: {'a1': 'A', 'b1': 'B'},
+      );
+
+      expect(savedSession, isNotNull);
+      expect(savedSession!.scoreA, 0);
+      expect(savedSession!.scoreB, 0);
+      expect(savedSession!.result, MatchResult.draw);
+    });
+  });
+
+  group('SessionsController.startSession', () {
+    ProviderContainer containerFor(SessionsRepository repo) {
+      final container = ProviderContainer(
+        overrides: [
+          sessionsRepositoryProvider.overrideWithValue(repo),
+          activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+        ],
+      );
+      addTearDown(container.dispose);
+      return container;
+    }
+
+    test('initializes unscored session to 0 - 0 with draw when starting', () async {
+      final repo = _FakeSessionsRepository(unscored, _balancedTeams);
+      final container = containerFor(repo);
+
+      final success = await container.read(sessionsControllerProvider).startSession('s1');
+
+      expect(success, isTrue);
+      expect(repo.session.scoreA, 0);
+      expect(repo.session.scoreB, 0);
+      expect(repo.session.result, MatchResult.draw);
     });
   });
 }

@@ -286,7 +286,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 context,
                 ref,
                 title: 'Équipe A',
-                score: session.scoreA,
+                score: scoreA,
                 color: context.colors.accent500,
                 isDraft: isCurrentActive,
                 onScoreChanged: (newScore) {
@@ -310,7 +310,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 context,
                 ref,
                 title: 'Équipe B',
-                score: session.scoreB,
+                score: scoreB,
                 color: context.colors.secondary500,
                 isDraft: isCurrentActive,
                 onScoreChanged: (newScore) {
@@ -339,12 +339,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     required bool isDraft,
     required ValueChanged<int> onScoreChanged,
   }) {
+    final displayScore = score ?? 0;
     return Column(
       children: [
         Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
         const SizedBox(height: 8),
-        // Null = not entered yet: showing 0 would pass an unrecorded score off as a real 0.
-        Text(score?.toString() ?? '–', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
+        Text('$displayScore', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
         if (isDraft) ...[
           const SizedBox(height: 8),
           Row(
@@ -354,13 +354,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Remix.subtract_line),
                 color: context.colors.foreground400,
-                onPressed: score != null && score > 0 ? () => onScoreChanged(score - 1) : null,
+                onPressed: displayScore > 0 ? () => onScoreChanged(displayScore - 1) : null,
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Remix.add_line),
                 color: color,
-                onPressed: () => onScoreChanged((score ?? 0) + 1),
+                onPressed: () => onScoreChanged(displayScore + 1),
               ),
             ],
           ),
@@ -915,48 +915,20 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       return;
     }
 
-    final neverScored = session.scoreA == null && session.scoreB == null;
-    if (blockers.contains(CloseBlocker.missingScore) && !neverScored) {
-      // Partial score row: offering 0-0 here would overwrite what was entered.
+    if (blockers.contains(CloseBlocker.missingScore)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore))),
       );
       return;
     }
 
-    final bool? confirmed;
-    if (neverScored) {
-      // An untouched score is not a 0-0: ask rather than guess.
-      confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Score non saisi'),
-          content: const Text(
-            "Aucun score n'a été saisi pour cette séance. S'il s'agit d'un match nul 0 - 0, vous pouvez clôturer directement.",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Saisir le score'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Clôturer à 0 - 0'),
-            ),
-          ],
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Clôturer la séance ?'),
+        content: const Text(
+          'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
         ),
-      );
-      if (confirmed == true) {
-        await controller.updateScore(sessionId: session.id, scoreA: 0, scoreB: 0);
-      }
-    } else {
-      confirmed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Clôturer la séance ?'),
-          content: const Text(
-            'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
-          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
@@ -969,7 +941,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ],
         ),
       );
-    }
 
     if (confirmed != true) return;
     String message;

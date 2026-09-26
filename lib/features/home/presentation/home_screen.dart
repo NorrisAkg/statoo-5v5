@@ -130,12 +130,12 @@ class HomeScreen extends ConsumerWidget {
               children: [
                 Text('Équipe A', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.bold)),
                 const SizedBox(width: 12),
-                Text('${activeDraft.scoreA ?? '–'}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
+                Text('${activeDraft.scoreA ?? 0}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text('-', style: TextStyle(fontSize: 28, color: context.colors.foreground600)),
                 ),
-                Text('${activeDraft.scoreB ?? '–'}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
+                Text('${activeDraft.scoreB ?? 0}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
                 const SizedBox(width: 12),
                 Text('Équipe B', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.bold)),
               ],
@@ -185,12 +185,12 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Text('Équipe A', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.w600)),
                   const SizedBox(width: 12),
-                  Text('${s.scoreA ?? '–'}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+                  Text('${s.scoreA ?? 0}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text('-', style: TextStyle(fontSize: 24, color: context.colors.foreground600)),
                   ),
-                  Text('${s.scoreB ?? '–'}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+                  Text('${s.scoreB ?? 0}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
                   const SizedBox(width: 12),
                   Text('Équipe B', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.w600)),
                 ],

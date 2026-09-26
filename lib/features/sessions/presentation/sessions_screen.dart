@@ -396,7 +396,7 @@ class SessionsScreen extends ConsumerWidget {
                   _buildTeamDot(context, context.colors.accent500, 'A'),
                   const SizedBox(width: 12),
                   Text(
-                    '${session.scoreA ?? '–'}',
+                    '${session.scoreA ?? 0}',
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Padding(
@@ -411,7 +411,7 @@ class SessionsScreen extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${session.scoreB ?? '–'}',
+                    '${session.scoreB ?? 0}',
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
