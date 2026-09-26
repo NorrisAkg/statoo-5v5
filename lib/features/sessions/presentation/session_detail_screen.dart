@@ -16,7 +16,7 @@ import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 import 'add_late_players_bottom_sheet.dart';
 
-class SessionDetailScreen extends ConsumerWidget {
+class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
     required this.sessionId,
     super.key,
@@ -25,9 +25,16 @@ class SessionDetailScreen extends ConsumerWidget {
   final String sessionId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final sessionAsync = ref.watch(sessionDetailProvider(sessionId));
-    final participantsAsync = ref.watch(sessionParticipantsProvider(sessionId));
+  ConsumerState<SessionDetailScreen> createState() => _SessionDetailScreenState();
+}
+
+class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
+  Team _selectedTeamTab = Team.a;
+
+  @override
+  Widget build(BuildContext context) {
+    final sessionAsync = ref.watch(sessionDetailProvider(widget.sessionId));
+    final participantsAsync = ref.watch(sessionParticipantsProvider(widget.sessionId));
     final activeSessionId = ref.watch(activeSessionIdProvider).value;
 
     return Scaffold(
@@ -394,11 +401,126 @@ class SessionDetailScreen extends ConsumerWidget {
     bool isCurrentActive,
   ) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildTeamCard(context, ref, session, 'Équipe A', context.colors.accent500, teamAPlayers, isCurrentActive),
-        const SizedBox(height: 16),
-        _buildTeamCard(context, ref, session, 'Équipe B', context.colors.secondary500, teamBPlayers, isCurrentActive),
+        Row(
+          children: [
+            Expanded(
+              child: _buildTeamTabButton(
+                context,
+                title: 'Équipe A',
+                playerCount: teamAPlayers.length,
+                color: context.colors.accent500,
+                textColor: context.colors.accent400,
+                isSelected: _selectedTeamTab == Team.a,
+                onTap: () => setState(() => _selectedTeamTab = Team.a),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _buildTeamTabButton(
+                context,
+                title: 'Équipe B',
+                playerCount: teamBPlayers.length,
+                color: context.colors.secondary500,
+                textColor: context.colors.secondary400,
+                isSelected: _selectedTeamTab == Team.b,
+                onTap: () => setState(() => _selectedTeamTab = Team.b),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 200),
+          child: _selectedTeamTab == Team.a
+              ? _buildTeamCard(
+                  key: const ValueKey('team_a_card'),
+                  context,
+                  ref,
+                  session,
+                  'Équipe A',
+                  context.colors.accent500,
+                  teamAPlayers,
+                  isCurrentActive,
+                )
+              : _buildTeamCard(
+                  key: const ValueKey('team_b_card'),
+                  context,
+                  ref,
+                  session,
+                  'Équipe B',
+                  context.colors.secondary500,
+                  teamBPlayers,
+                  isCurrentActive,
+                ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildTeamTabButton(
+    BuildContext context, {
+    required String title,
+    required int playerCount,
+    required Color color,
+    required Color textColor,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withValues(alpha: 0.15) : context.colors.background900,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? color : context.colors.background700,
+            width: isSelected ? 1.5 : 1.0,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: isSelected ? color : color.withValues(alpha: 0.4),
+                shape: BoxShape.circle,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? context.colors.foreground50 : context.colors.foreground400,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected ? color.withValues(alpha: 0.25) : context.colors.background800,
+                borderRadius: BorderRadius.circular(9999),
+              ),
+              child: Text(
+                '$playerCount',
+                style: TextStyle(
+                  color: isSelected ? textColor : context.colors.foreground500,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -409,9 +531,11 @@ class SessionDetailScreen extends ConsumerWidget {
     String title,
     Color color,
     List<SessionParticipantDetail> players,
-    bool isCurrentActive,
-  ) {
+    bool isCurrentActive, {
+    Key? key,
+  }) {
     return AppCard(
+      key: key,
       padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -867,7 +991,7 @@ class SessionDetailScreen extends ConsumerWidget {
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
     final activeId = ref.read(activeSessionIdProvider).value;
-    if (activeId != null && activeId != sessionId) {
+    if (activeId != null && activeId != widget.sessionId) {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -890,7 +1014,7 @@ class SessionDetailScreen extends ConsumerWidget {
       if (proceed != true) return;
     }
 
-    await ref.read(sessionsControllerProvider).reopenSession(sessionId);
+    await ref.read(sessionsControllerProvider).reopenSession(widget.sessionId);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref, bool isDraft) async {
@@ -918,7 +1042,7 @@ class SessionDetailScreen extends ConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      await ref.read(sessionsControllerProvider).deleteSession(sessionId);
+      await ref.read(sessionsControllerProvider).deleteSession(widget.sessionId);
       if (context.mounted) {
         if (context.canPop()) {
           context.pop();
