@@ -3,6 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../players/application/players_provider.dart';
+import '../../ranking/application/ranking_providers.dart';
+import '../../sessions/application/sessions_provider.dart';
+import '../../settings/application/settings_provider.dart';
+import '../../settings/data/backup_service.dart';
+import '../../stats/application/stats_providers.dart';
 import '../application/team_provider.dart';
 import '../domain/team_info.dart';
 
@@ -49,6 +55,56 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
       if (mounted) {
         context.go('/ajouter-joueurs-initiaux');
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _restoreFromBackup() async {
+    try {
+      final payload = await ref.read(backupServiceProvider).pickBackupFile();
+      if (payload == null || !mounted) return;
+
+      setState(() => _isLoading = true);
+      final result = await ref.read(backupServiceProvider).restoreBackup(payload, merge: false);
+
+      await ref.read(hasTeamProvider.notifier).reloadFromDb();
+      await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
+      await ref.read(minPlayersPerSessionProvider.notifier).reloadFromPrefs();
+
+      ref
+        ..invalidate(teamInfoProvider)
+        ..invalidate(allTeamsProvider)
+        ..invalidate(playersListProvider)
+        ..invalidate(allSessionsProvider)
+        ..invalidate(sessionsListProvider)
+        ..invalidate(activeSessionIdProvider)
+        ..invalidate(activeDraftSessionProvider)
+        ..invalidate(groupTotalsProvider)
+        ..invalidate(standingsProvider)
+        ..invalidate(standingsPerMatchProvider)
+        ..invalidate(topScorersProvider)
+        ..invalidate(topAssistsProvider)
+        ..invalidate(topCardsProvider);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés.',
+            ),
+          ),
+        );
+        context.go('/');
+      }
+    } on Object catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors de la restauration : $e')),
+        );
       }
     } finally {
       if (mounted) {
@@ -298,7 +354,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                     onPressed: _isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colors.primary500,
-                      foregroundColor: context.colors.background950,
+                      foregroundColor: AppColors.onPrimaryDark,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9999),
                       ),
@@ -327,6 +383,17 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                               Icon(Remix.arrow_right_line, size: 20),
                             ],
                           ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: TextButton.icon(
+                    icon: Icon(Remix.download_cloud_2_line, size: 18, color: context.colors.foreground400),
+                    label: Text(
+                      "J'ai déjà une sauvegarde Statoo",
+                      style: TextStyle(color: context.colors.foreground300, fontSize: 13),
+                    ),
+                    onPressed: _isLoading ? null : _restoreFromBackup,
                   ),
                 ),
               ],

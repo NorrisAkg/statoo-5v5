@@ -63,14 +63,14 @@ final FutureProvider<Session?> activeDraftSessionProvider = FutureProvider<Sessi
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
-final sessionDetailProvider = FutureProvider.family<Session?, String>((ref, id) {
+final sessionDetailProvider = FutureProvider.autoDispose.family<Session?, String>((ref, id) {
   return ref.watch(sessionsRepositoryProvider).getSession(id);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final sessionParticipantsProvider =
-    FutureProvider.family<List<SessionParticipantDetail>, String>((ref, sessionId) {
+    FutureProvider.autoDispose.family<List<SessionParticipantDetail>, String>((ref, sessionId) {
   return ref.watch(sessionsRepositoryProvider).getSessionParticipants(sessionId);
 });
 

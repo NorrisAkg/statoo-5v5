@@ -123,7 +123,7 @@ final AsyncNotifierProvider<PlayersNotifier, List<Player>> playersListProvider =
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
-final playerDetailProvider = FutureProvider.family<Player?, String>((ref, playerId) async {
+final playerDetailProvider = FutureProvider.autoDispose.family<Player?, String>((ref, playerId) async {
   final playersAsync = ref.watch(playersListProvider);
   final inMemory = playersAsync.value?.where((p) => p.id == playerId).firstOrNull;
   if (inMemory != null) return inMemory;
@@ -132,20 +132,20 @@ final playerDetailProvider = FutureProvider.family<Player?, String>((ref, player
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
-final playerStatsProvider = FutureProvider.family<PlayerDetailStats, String>((ref, playerId) {
+final playerStatsProvider = FutureProvider.autoDispose.family<PlayerDetailStats, String>((ref, playerId) {
   return ref.watch(playersRepositoryProvider).getPlayerStats(playerId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final playerMatchHistoryProvider =
-    FutureProvider.family<List<PlayerMatchHistoryItem>, String>((ref, playerId) {
+    FutureProvider.autoDispose.family<List<PlayerMatchHistoryItem>, String>((ref, playerId) {
   return ref.watch(playersRepositoryProvider).getPlayerMatchHistory(playerId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
-final canDeletePlayerProvider = FutureProvider.family<bool, String>((ref, playerId) {
+final canDeletePlayerProvider = FutureProvider.autoDispose.family<bool, String>((ref, playerId) {
   return ref.watch(playersRepositoryProvider).canDeletePlayer(playerId);
 });
 

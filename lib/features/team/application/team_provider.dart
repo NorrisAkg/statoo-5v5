@@ -21,6 +21,11 @@ class HasTeamNotifier extends Notifier<bool> {
   set hasTeam(bool value) {
     state = value;
   }
+
+  Future<void> reloadFromDb() async {
+    final all = await ref.read(teamRepositoryProvider).getAllTeams();
+    state = all.isNotEmpty;
+  }
 }
 
 final hasTeamProvider = NotifierProvider<HasTeamNotifier, bool>(
@@ -37,6 +42,11 @@ class ActiveTeamIdNotifier extends Notifier<String?> {
   Future<void> selectTeam(String teamId) async {
     state = teamId;
     await ref.read(teamRepositoryProvider).setActiveTeamId(teamId);
+  }
+
+  Future<void> reloadFromDb() async {
+    final active = await ref.read(teamRepositoryProvider).getActiveTeam();
+    state = active?.id;
   }
 }
 

@@ -26,6 +26,14 @@ class MinPlayersNotifier extends Notifier<int> {
     return kDefaultMinPlayers;
   }
 
+  Future<void> reloadFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getInt(kMinPlayersKey);
+    if (saved != null) {
+      state = saved;
+    }
+  }
+
   Future<void> setMinPlayers(int count) async {
     if (count < 2) return;
     state = count;

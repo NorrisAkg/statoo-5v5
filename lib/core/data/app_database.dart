@@ -1,9 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 class AppDatabase {
   factory AppDatabase() => instance;
   AppDatabase._internal();
+
+  @visibleForTesting
+  AppDatabase.forTesting(Database db) : _database = db;
 
   static final AppDatabase instance = AppDatabase._internal();
 
@@ -13,6 +17,12 @@ class AppDatabase {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
+  }
+
+  @visibleForTesting
+  Future<void> initSchemaForTest(Database db) async {
+    await _createSchema(db);
+    await _createViews(db);
   }
 
   Future<Database> _initDatabase() async {
@@ -37,7 +47,7 @@ class AppDatabase {
             await db.execute('ALTER TABLE sessions ADD COLUMN team_id TEXT REFERENCES teams(id) ON DELETE CASCADE;');
             final teams = await db.query('teams', limit: 1);
             if (teams.isNotEmpty) {
-              final defaultTeamId = teams.first['id'] as String;
+              final defaultTeamId = teams.first['id']! as String;
               await db.rawUpdate('UPDATE sessions SET team_id = ? WHERE team_id IS NULL', [defaultTeamId]);
             }
           }
@@ -75,7 +85,8 @@ class AppDatabase {
     }
   }
 
-  Future<void> _dropAllTables(Database db) async {
+  @visibleForTesting
+  Future<void> dropAllTables(Database db) async {
     await db.execute('PRAGMA foreign_keys = OFF;');
     await _dropViews(db);
     final tables = await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
@@ -421,11 +432,12 @@ class AppDatabase {
     ''');
   }
 
-  Future<void> _seedDemoData(Database db) async {
+  @visibleForTesting
+  Future<void> seedDemoData(Database db) async {
     final batch = db.batch();
 
     // 1 Global Team
-    final teamId = 'team_1';
+    const teamId = 'team_1';
     batch.rawInsert(
       'INSERT INTO teams (id, name, format, location, created_at) VALUES (?, ?, ?, ?, ?)',
       [teamId, 'FC Urban', '5v5', 'Le Five', '2026-09-01 12:00:00'],

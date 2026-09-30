@@ -10,6 +10,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../sessions/application/sessions_provider.dart';
+import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/settings_provider.dart';
@@ -646,16 +647,21 @@ class SettingsScreen extends ConsumerWidget {
             merge: isMerge,
           );
 
+      // Rechargement des notifiers avec persistance
+      await ref.read(hasTeamProvider.notifier).reloadFromDb();
+      await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
+      await ref.read(minPlayersPerSessionProvider.notifier).reloadFromPrefs();
+
       // Invalidation de tous les providers pour synchronisation immédiate de l'UI
       ref
         ..invalidate(teamInfoProvider)
-        ..invalidate(hasTeamProvider)
+        ..invalidate(allTeamsProvider)
         ..invalidate(playersListProvider)
         ..invalidate(allSessionsProvider)
         ..invalidate(sessionsListProvider)
         ..invalidate(activeSessionIdProvider)
         ..invalidate(activeDraftSessionProvider)
-        ..invalidate(minPlayersPerSessionProvider)
+        ..invalidate(groupTotalsProvider)
         ..invalidate(standingsProvider)
         ..invalidate(standingsPerMatchProvider)
         ..invalidate(topScorersProvider)
