@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../ranking/application/ranking_providers.dart';
+import '../../ranking/domain/standing_entry.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/players_provider.dart';
@@ -12,15 +14,46 @@ import '../domain/player.dart';
 import 'edit_player_bottom_sheet.dart';
 import 'new_player_bottom_sheet.dart';
 
-class PlayersScreen extends ConsumerWidget {
+class PlayersScreen extends ConsumerStatefulWidget {
   const PlayersScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PlayersScreen> createState() => _PlayersScreenState();
+}
+
+class _PlayersScreenState extends ConsumerState<PlayersScreen> {
+  final _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      final query = _searchController.text.trim().toLowerCase();
+      if (query != _searchQuery) {
+        setState(() {
+          _searchQuery = query;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final playersAsync = ref.watch(playersListProvider);
     final deletableIdsAsync = ref.watch(deletablePlayerIdsProvider);
     final deletableIds = deletableIdsAsync.value ?? const <String>{};
     final activeTeam = ref.watch(activeTeamProvider).value;
+    final standingsAsync = ref.watch(standingsProvider);
+    final standingsMap = {
+      for (final s in standingsAsync.value ?? const <StandingEntry>[]) s.playerId: s,
+    };
 
     return Scaffold(
       appBar: AppBar(
@@ -50,31 +83,66 @@ class PlayersScreen extends ConsumerWidget {
       ),
       body: playersAsync.when(
         data: (players) {
-          final activePlayers = players.where((p) => p.isActive).toList();
-          final archivedPlayers = players.where((p) => !p.isActive).toList();
+          final query = _searchQuery;
+          bool matchesQuery(Player p) {
+            if (query.isEmpty) return true;
+            final nameMatch = p.name.toLowerCase().contains(query);
+            final nickMatch = p.nickname?.toLowerCase().contains(query) ?? false;
+            return nameMatch || nickMatch;
+          }
+
+          final activePlayers = players.where((p) => p.isActive && matchesQuery(p)).toList();
+          final archivedPlayers = players.where((p) => !p.isActive && matchesQuery(p)).toList();
+          final hasNoResults = query.isNotEmpty && activePlayers.isEmpty && archivedPlayers.isEmpty;
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
               _buildSearchBar(context),
               const SizedBox(height: 24),
-              Text(
-                'ACTIFS (${activePlayers.length})',
-                style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              if (activePlayers.isEmpty)
+              if (hasNoResults)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  padding: const EdgeInsets.symmetric(vertical: 48),
                   child: Center(
-                    child: Text('Aucun joueur actif', style: TextStyle(color: context.colors.foreground500)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Remix.user_search_line, size: 48, color: context.colors.foreground600),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Aucun joueur trouvé pour "$_searchQuery"',
+                          style: TextStyle(color: context.colors.foreground400, fontSize: 15),
+                        ),
+                      ],
+                    ),
                   ),
                 )
-              else
-                ...activePlayers.map((p) => _buildPlayerCard(context, ref, p, deletableIds.contains(p.id))),
-              const SizedBox(height: 16),
-              if (archivedPlayers.isNotEmpty)
-                _buildArchivedSection(context, ref, archivedPlayers, deletableIds),
+              else ...[
+                Text(
+                  'ACTIFS (${activePlayers.length})',
+                  style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                if (activePlayers.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Center(
+                      child: Text('Aucun joueur actif', style: TextStyle(color: context.colors.foreground500)),
+                    ),
+                  )
+                else
+                  ...activePlayers.map(
+                    (p) => _buildPlayerCard(
+                      context,
+                      p,
+                      deletableIds.contains(p.id),
+                      standing: standingsMap[p.id],
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                if (archivedPlayers.isNotEmpty)
+                  _buildArchivedSection(context, archivedPlayers, deletableIds, standingsMap),
+              ],
             ],
           );
         },
@@ -98,32 +166,52 @@ class PlayersScreen extends ConsumerWidget {
   }
 
   Widget _buildSearchBar(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: context.colors.background900,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.colors.background700),
-      ),
-      child: Row(
-        children: [
-          Icon(Remix.search_line, color: context.colors.foreground500),
-          const SizedBox(width: 12),
-          Text('Rechercher un joueur', style: TextStyle(color: context.colors.foreground500, fontSize: 16)),
-        ],
+    return TextField(
+      controller: _searchController,
+      style: TextStyle(color: context.colors.foreground50, fontSize: 15),
+      decoration: InputDecoration(
+        hintText: 'Rechercher un joueur…',
+        hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 15),
+        prefixIcon: Icon(Remix.search_line, color: context.colors.foreground500, size: 20),
+        suffixIcon: _searchQuery.isNotEmpty
+            ? IconButton(
+                icon: Icon(Remix.close_circle_fill, color: context.colors.foreground500, size: 18),
+                onPressed: _searchController.clear,
+              )
+            : null,
+        filled: true,
+        fillColor: context.colors.background900,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: context.colors.background700),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: context.colors.background700),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: context.colors.primary500),
+        ),
       ),
     );
   }
 
-  Widget _buildPlayerCard(BuildContext context, WidgetRef ref, Player player, bool canDelete) {
+  Widget _buildPlayerCard(
+    BuildContext context,
+    Player player,
+    bool canDelete, {
+    StandingEntry? standing,
+  }) {
     final initial = player.name.isNotEmpty ? player.name[0].toUpperCase() : '?';
-    final color = context.colors.primary500;
+    final color = InitialAvatar.colorForName(player.name);
 
     final cardContent = Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () => unawaited(context.push('/joueurs/${player.id}')),
-        onLongPress: () => unawaited(_showPlayerOptions(context, ref, player, canDelete)),
+        onLongPress: () => unawaited(_showPlayerOptions(context, player, canDelete)),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -150,10 +238,15 @@ class PlayersScreen extends ConsumerWidget {
                 IconButton(
                   icon: Icon(Remix.delete_bin_line, size: 20, color: context.colors.danger),
                   tooltip: 'Supprimer ce joueur',
-                  onPressed: () => unawaited(_confirmDeletePlayer(context, ref, player)),
+                  onPressed: () => unawaited(_confirmDeletePlayer(context, player)),
                 ),
               ] else ...[
-                Text('-', style: TextStyle(color: context.colors.foreground400, fontSize: 14)),
+                Text(
+                  standing != null && standing.matchesPlayed > 0
+                      ? 'J ${standing.matchesPlayed} · ${standing.points} pts'
+                      : '-',
+                  style: TextStyle(color: context.colors.foreground400, fontSize: 14),
+                ),
                 const SizedBox(width: 8),
                 Icon(Remix.arrow_right_s_line, color: context.colors.foreground500),
               ],
@@ -187,7 +280,7 @@ class PlayersScreen extends ConsumerWidget {
             ],
           ),
         ),
-        confirmDismiss: (_) => _confirmDeletePlayer(context, ref, player),
+        confirmDismiss: (_) => _confirmDeletePlayer(context, player),
         child: cardContent,
       );
     }
@@ -197,9 +290,9 @@ class PlayersScreen extends ConsumerWidget {
 
   Widget _buildArchivedSection(
     BuildContext context,
-    WidgetRef ref,
     List<Player> archivedPlayers,
     Set<String> deletableIds,
+    Map<String, StandingEntry> standingsMap,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,13 +309,18 @@ class PlayersScreen extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         ...archivedPlayers.map(
-          (p) => _buildPlayerCard(context, ref, p, deletableIds.contains(p.id)),
+          (p) => _buildPlayerCard(
+            context,
+            p,
+            deletableIds.contains(p.id),
+            standing: standingsMap[p.id],
+          ),
         ),
       ],
     );
   }
 
-  Future<bool> _confirmDeletePlayer(BuildContext context, WidgetRef ref, Player player) async {
+  Future<bool> _confirmDeletePlayer(BuildContext context, Player player) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) {
@@ -273,7 +371,6 @@ class PlayersScreen extends ConsumerWidget {
 
   Future<void> _showPlayerOptions(
     BuildContext context,
-    WidgetRef ref,
     Player player,
     bool canDelete,
   ) async {
@@ -317,7 +414,7 @@ class PlayersScreen extends ConsumerWidget {
                   ),
                   onTap: () {
                     Navigator.of(ctx).pop();
-                    unawaited(_confirmDeletePlayer(context, ref, player));
+                    unawaited(_confirmDeletePlayer(context, player));
                   },
                 )
               else

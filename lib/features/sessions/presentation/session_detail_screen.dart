@@ -121,7 +121,19 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        _buildHeader(context, ref, session, formattedDate, isCurrentActive, isWaitingDraft, scoreA, scoreB),
+        _buildHeader(
+          context,
+          ref,
+          session,
+          formattedDate,
+          isCurrentActive,
+          isWaitingDraft,
+          scoreA,
+          scoreB,
+          formatLabel: (teamAPlayers.isNotEmpty || teamBPlayers.isNotEmpty)
+              ? '${teamAPlayers.length}v${teamBPlayers.length}'
+              : '5v5',
+        ),
         if (isWaitingDraft) ...[
           const SizedBox(height: 16),
           Container(
@@ -216,8 +228,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     bool isCurrentActive,
     bool isWaitingDraft,
     int scoreA,
-    int scoreB,
-  ) {
+    int scoreB, {
+    required String formatLabel,
+  }) {
     return AppCard(
       child: Column(
         children: [
@@ -267,7 +280,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   color: context.colors.background800,
                   borderRadius: BorderRadius.circular(9999),
                 ),
-                child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                child: Text(formatLabel, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
               ),
               if (!session.isRanked) ...[
                 const SizedBox(width: 8),

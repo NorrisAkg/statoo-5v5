@@ -190,7 +190,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                 const SizedBox(height: 8),
                 Center(
                   child: Text(
-                    "Donnez un nom et une identité à votre groupe d'amis pour lancer vos séances 5v5 et suivre vos classements.",
+                    "Donnez un nom et une identité à votre groupe d'amis pour lancer vos séances et suivre vos classements.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,

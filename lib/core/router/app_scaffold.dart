@@ -47,13 +47,13 @@ class AppScaffold extends StatelessWidget {
               label: 'Séances',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Remix.user_line),
-              activeIcon: Icon(Remix.user_fill),
+              icon: Icon(Remix.user_3_line),
+              activeIcon: Icon(Remix.user_3_fill),
               label: 'Joueurs',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Remix.bar_chart_line),
-              activeIcon: Icon(Remix.bar_chart_fill),
+              icon: Icon(Remix.trophy_line),
+              activeIcon: Icon(Remix.trophy_fill),
               label: 'Classement',
             ),
             BottomNavigationBarItem(

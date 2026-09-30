@@ -423,7 +423,14 @@ class SessionsScreen extends ConsumerWidget {
                       color: context.colors.background800,
                       borderRadius: BorderRadius.circular(9999),
                     ),
-                    child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                    child: Text(
+                      item.playerCount > 0
+                          ? (item.playerCount.isEven
+                              ? '${item.playerCount ~/ 2}v${item.playerCount ~/ 2}'
+                              : '${(item.playerCount + 1) ~/ 2}v${item.playerCount ~/ 2}')
+                          : '5v5',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Text(

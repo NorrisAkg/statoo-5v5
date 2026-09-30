@@ -76,7 +76,7 @@ class TeamSwitcherBottomSheet extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Vos groupes 5v5',
+                          'Vos groupes',
                           style: TextStyle(
                             color: context.colors.foreground50,
                             fontWeight: FontWeight.bold,

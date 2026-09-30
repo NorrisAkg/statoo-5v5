@@ -360,7 +360,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                   ),
                                 ),
                                 Text(
-                                  count >= 10 ? 'Effectif complet (10+)' : 'Objectif : 10 pour 5v5',
+                                  count >= 10 ? 'Effectif complet (10+)' : 'Objectif : 10 joueurs',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,

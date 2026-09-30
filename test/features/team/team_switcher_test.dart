@@ -105,7 +105,7 @@ void main() {
       await tester.tap(find.text('Open Switcher'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Vos groupes 5v5'), findsOneWidget);
+      expect(find.text('Vos groupes'), findsOneWidget);
       expect(find.text('FC Urban'), findsOneWidget);
       expect(find.text('Les Galactiques'), findsOneWidget);
       expect(find.text('Actif'), findsOneWidget);
