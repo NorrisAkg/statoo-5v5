@@ -1156,10 +1156,14 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     List<SessionParticipantDetail> participants,
   ) async {
     final controller = ref.read(sessionsControllerProvider);
+    final goalsA = participants.where((p) => p.participation.team == Team.a).fold<int>(0, (s, p) => s + p.participation.goals);
+    final goalsB = participants.where((p) => p.participation.team == Team.b).fold<int>(0, (s, p) => s + p.participation.goals);
     final blockers = closeBlockers(
       session: session,
       teamACount: participants.where((p) => p.participation.team == Team.a).length,
       teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+      playerGoalsA: goalsA,
+      playerGoalsB: goalsB,
     );
 
     if (blockers.contains(CloseBlocker.unevenTeams)) {
@@ -1176,14 +1180,32 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       return;
     }
 
+    if (blockers.contains(CloseBlocker.goalsMismatch)) {
+      final scoreA = session.scoreA ?? 0;
+      final scoreB = session.scoreB ?? 0;
+      final totalA = goalsA + session.unassignedGoalsA;
+      final totalB = goalsB + session.unassignedGoalsB;
+      final details = <String>[];
+      if (totalA != scoreA) {
+        details.add('Équipe A : $totalA but(s) attribués vs $scoreA au score');
+      }
+      if (totalB != scoreB) {
+        details.add('Équipe B : $totalB but(s) attribués vs $scoreB au score');
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Clôture impossible : ${details.join(' · ')}. '
+            'Corrigez les buts des joueurs ou le score avant de clôturer.',
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+
     final scoreA = session.scoreA ?? 0;
     final scoreB = session.scoreB ?? 0;
-    final goalsA = participants.where((p) => p.participation.team == Team.a).fold<int>(0, (s, p) => s + p.participation.goals);
-    final goalsB = participants.where((p) => p.participation.team == Team.b).fold<int>(0, (s, p) => s + p.participation.goals);
-    final totalPlayerGoals = goalsA + goalsB;
-    final totalScoreGoals = scoreA + scoreB;
-    final isZeroZeroWithScorers = scoreA == 0 && scoreB == 0 && totalPlayerGoals > 0;
-    final hasGoalMismatch = !isZeroZeroWithScorers && (scoreA != goalsA || scoreB != goalsB);
 
     final outcome = scoreA > scoreB
         ? 'Victoire Équipe A ($scoreA – $scoreB)'
@@ -1223,51 +1245,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 ],
               ),
             ),
-            if (isZeroZeroWithScorers) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: context.colors.danger.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: context.colors.danger),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Remix.alert_fill, color: context.colors.danger, size: 20),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Attention : Le score est à 0 – 0 alors que $totalPlayerGoals but${totalPlayerGoals > 1 ? 's ont été saisis' : ' a été saisi'} pour les joueurs ! Voulez-vous vraiment clôturer à 0 – 0 ?',
-                        style: TextStyle(color: context.colors.danger, fontSize: 12, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ] else if (hasGoalMismatch) ...[
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: context.colors.warning.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: context.colors.warning),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Remix.error_warning_fill, color: context.colors.warning, size: 18),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Écart buts/score : $totalPlayerGoals buts de joueurs vs $totalScoreGoals au score général.',
-                        style: TextStyle(color: context.colors.warning, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
             const SizedBox(height: 12),
             Text(
               'Une fois clôturée, la séance mettra à jour les classements.',
@@ -1282,7 +1259,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(isZeroZeroWithScorers ? 'Clôturer à 0 – 0' : 'Clôturer'),
+            child: const Text('Clôturer'),
           ),
         ],
       ),
@@ -1306,6 +1283,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     CloseBlocker.missingScore => 'Clôture impossible : renseignez le score de la séance.',
     CloseBlocker.unevenTeams =>
       "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
+    CloseBlocker.goalsMismatch =>
+      'Clôture impossible : le total des buts attribués ne correspond pas au score. Corrigez avant de clôturer.',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {

@@ -65,15 +65,24 @@ class _FakeSessionsRepository implements SessionsRepository {
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError(invocation.memberName.toString());
 }
 
-SessionParticipantDetail _participant(String id, Team team) => SessionParticipantDetail(
-  participation: Participation(id: 'p_$id', sessionId: 's1', playerId: id, team: team),
+SessionParticipantDetail _participant(String id, Team team, {int goals = 0}) => SessionParticipantDetail(
+  participation: Participation(id: 'p_$id', sessionId: 's1', playerId: id, team: team, goals: goals),
   playerName: id,
 );
 
+/// Balanced teams with 0 goals each — for unscored or 0-0 sessions.
 final List<SessionParticipantDetail> _balancedTeams = [
   _participant('a1', Team.a),
   _participant('a2', Team.a),
   _participant('b1', Team.b),
+  _participant('b2', Team.b),
+];
+
+/// Balanced teams whose goals match scored session (scoreA=2, scoreB=1).
+final List<SessionParticipantDetail> _balancedTeamsWithGoals = [
+  _participant('a1', Team.a, goals: 1),
+  _participant('a2', Team.a, goals: 1),
+  _participant('b1', Team.b, goals: 1),
   _participant('b2', Team.b),
 ];
 
@@ -85,34 +94,60 @@ void main() {
   group('closeBlockers', () {
     test('blocks a session whose score was never entered', () {
       expect(
-        closeBlockers(session: unscored, teamACount: 5, teamBCount: 5),
+        closeBlockers(session: unscored, teamACount: 5, teamBCount: 5, playerGoalsA: 0, playerGoalsB: 0),
         [CloseBlocker.missingScore],
       );
     });
 
     test('blocks a score without result', () {
       final noResult = unscored.copyWith(scoreA: 0, scoreB: 0);
-      expect(closeBlockers(session: noResult, teamACount: 5, teamBCount: 5), [CloseBlocker.missingScore]);
+      expect(closeBlockers(session: noResult, teamACount: 5, teamBCount: 5, playerGoalsA: 0, playerGoalsB: 0), [CloseBlocker.missingScore]);
     });
 
     test('accepts a 0-0 draw once entered', () {
       final draw = unscored.copyWith(scoreA: 0, scoreB: 0, result: MatchResult.draw);
-      expect(closeBlockers(session: draw, teamACount: 5, teamBCount: 5), isEmpty);
+      expect(closeBlockers(session: draw, teamACount: 5, teamBCount: 5, playerGoalsA: 0, playerGoalsB: 0), isEmpty);
     });
 
     test('blocks a team size gap above 1 unless uneven teams are allowed', () {
-      expect(closeBlockers(session: scored, teamACount: 6, teamBCount: 4), [CloseBlocker.unevenTeams]);
-      expect(closeBlockers(session: scored, teamACount: 5, teamBCount: 4), isEmpty);
+      expect(closeBlockers(session: scored, teamACount: 6, teamBCount: 4, playerGoalsA: 2, playerGoalsB: 1), [CloseBlocker.unevenTeams]);
+      expect(closeBlockers(session: scored, teamACount: 5, teamBCount: 4, playerGoalsA: 2, playerGoalsB: 1), isEmpty);
       expect(
-        closeBlockers(session: scored.copyWith(allowUnevenTeams: true), teamACount: 6, teamBCount: 4),
+        closeBlockers(session: scored.copyWith(allowUnevenTeams: true), teamACount: 6, teamBCount: 4, playerGoalsA: 2, playerGoalsB: 1),
         isEmpty,
       );
     });
 
     test('reports every blocker at once', () {
       expect(
-        closeBlockers(session: unscored, teamACount: 7, teamBCount: 3),
+        closeBlockers(session: unscored, teamACount: 7, teamBCount: 3, playerGoalsA: 0, playerGoalsB: 0),
         [CloseBlocker.missingScore, CloseBlocker.unevenTeams],
+      );
+    });
+
+    test('blocks when player goals + unassigned do not match the score', () {
+      // scored has scoreA=2, scoreB=1, unassignedGoals default to 0
+      // playerGoalsA=1 (missing 1 from scoreA=2) → mismatch
+      expect(
+        closeBlockers(session: scored, teamACount: 5, teamBCount: 5, playerGoalsA: 1, playerGoalsB: 1),
+        [CloseBlocker.goalsMismatch],
+      );
+    });
+
+    test('accepts when player goals + unassigned exactly match the score', () {
+      final withUnassigned = scored.copyWith(unassignedGoalsA: 1);
+      // scoreA=2: playerGoalsA(1) + unassignedGoalsA(1) = 2 ✓
+      // scoreB=1: playerGoalsB(1) + unassignedGoalsB(0) = 1 ✓
+      expect(
+        closeBlockers(session: withUnassigned, teamACount: 5, teamBCount: 5, playerGoalsA: 1, playerGoalsB: 1),
+        isEmpty,
+      );
+    });
+
+    test('blocks when player goals exceed the score', () {
+      expect(
+        closeBlockers(session: scored, teamACount: 5, teamBCount: 5, playerGoalsA: 3, playerGoalsB: 1),
+        [CloseBlocker.goalsMismatch],
       );
     });
   });
@@ -139,7 +174,7 @@ void main() {
     });
 
     test('closes a scored session with balanced teams', () async {
-      final repo = _FakeSessionsRepository(scored, _balancedTeams);
+      final repo = _FakeSessionsRepository(scored, _balancedTeamsWithGoals);
       final blockers = await containerFor(repo).read(sessionsControllerProvider).closeSession('s1');
 
       expect(blockers, isEmpty);
@@ -148,7 +183,7 @@ void main() {
     });
 
     test('reports a refused write instead of claiming success', () async {
-      final repo = _FakeSessionsRepository(scored, _balancedTeams)..closeSucceeds = false;
+      final repo = _FakeSessionsRepository(scored, _balancedTeamsWithGoals)..closeSucceeds = false;
       final controller = containerFor(repo).read(sessionsControllerProvider);
 
       await expectLater(controller.closeSession('s1'), throwsA(isA<SessionCloseException>()));

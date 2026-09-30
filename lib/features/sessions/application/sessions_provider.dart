@@ -317,6 +317,12 @@ class SessionsController {
       session: session,
       teamACount: participants.where((p) => p.participation.team == Team.a).length,
       teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+      playerGoalsA: participants
+          .where((p) => p.participation.team == Team.a)
+          .fold<int>(0, (s, p) => s + p.participation.goals),
+      playerGoalsB: participants
+          .where((p) => p.participation.team == Team.b)
+          .fold<int>(0, (s, p) => s + p.participation.goals),
     );
     if (blockers.isNotEmpty) return blockers;
 
