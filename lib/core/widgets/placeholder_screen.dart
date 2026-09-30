@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PlaceholderScreen extends StatelessWidget {
-  final String title;
+  const PlaceholderScreen({
+    required this.title,
+    super.key,
+  });
 
-  const PlaceholderScreen({super.key, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +32,8 @@ class PlaceholderScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              'Cet écran arrive dans une prochaine étape du\nprototype.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+              'Cette fonctionnalité est en cours de développement.',
+              style: TextStyle(color: Color(0xFF64748B)),
             ),
           ],
         ),

@@ -17,6 +17,7 @@ class AddLatePlayersBottomSheet extends ConsumerStatefulWidget {
     required this.currentTeamACount,
     required this.currentTeamBCount,
     required this.alreadyAssignedPlayerIds,
+    this.allowUnevenTeams = false,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class AddLatePlayersBottomSheet extends ConsumerStatefulWidget {
   final int currentTeamACount;
   final int currentTeamBCount;
   final Set<String> alreadyAssignedPlayerIds;
+  final bool allowUnevenTeams;
 
   @override
   ConsumerState<AddLatePlayersBottomSheet> createState() => _AddLatePlayersBottomSheetState();
@@ -84,6 +86,22 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Tous les joueurs sélectionnés doivent être assignés à l'équipe A ou B."),
+        ),
+      );
+      return;
+    }
+
+    final assignedToA = _assignments.values.where((t) => t == Team.a).length;
+    final assignedToB = _assignments.values.where((t) => t == Team.b).length;
+    final totalA = widget.currentTeamACount + assignedToA;
+    final totalB = widget.currentTeamBCount + assignedToB;
+
+    if (!widget.allowUnevenTeams && (totalA - totalB).abs() > 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "L'écart d'effectif dépasserait 1 joueur ($totalA vs $totalB). Rééquilibrez les équipes.",
+          ),
         ),
       );
       return;
@@ -180,6 +198,7 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
               ),
               IconButton(
                 icon: const Icon(Remix.close_line),
+                tooltip: 'Fermer',
                 color: context.colors.foreground400,
                 onPressed: () => Navigator.of(context).pop(),
               ),
@@ -414,10 +433,15 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
             label: _selectedPlayerIds.isEmpty
                 ? 'Sélectionnez un joueur'
                 : unassignedCount > 0
-                    ? 'Attribuez une équipe à tous ($unassignedCount restant${unassignedCount > 1 ? 's' : ''})'
-                    : "Valider l'entrée (${_selectedPlayerIds.length} joueur${_selectedPlayerIds.length > 1 ? 's' : ''})",
+                    ? 'Attribuez une équipe ($unassignedCount restant${unassignedCount > 1 ? 's' : ''})'
+                    : (!widget.allowUnevenTeams && (totalA - totalB).abs() > 1)
+                        ? 'Écart > 1 interdit ($totalA vs $totalB)'
+                        : "Valider l'entrée (${_selectedPlayerIds.length} joueur${_selectedPlayerIds.length > 1 ? 's' : ''})",
             icon: Remix.check_line,
-            onPressed: (_selectedPlayerIds.isNotEmpty && unassignedCount == 0 && !_isSubmitting)
+            onPressed: (_selectedPlayerIds.isNotEmpty &&
+                    unassignedCount == 0 &&
+                    (widget.allowUnevenTeams || (totalA - totalB).abs() <= 1) &&
+                    !_isSubmitting)
                 ? _submit
                 : null,
           ),

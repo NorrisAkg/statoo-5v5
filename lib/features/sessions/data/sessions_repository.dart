@@ -385,8 +385,8 @@ class SqliteSessionsRepository implements SessionsRepository {
       final updated = await txn.update(
         'sessions',
         {'status': 'CLOSED'},
-        where: 'id = ? AND team_id = ? AND score_a IS NOT NULL AND score_b IS NOT NULL AND result IS NOT NULL',
-        whereArgs: [sessionId, teamId],
+        where: 'id = ? AND team_id = ? AND status = ? AND score_a IS NOT NULL AND score_b IS NOT NULL AND result IS NOT NULL',
+        whereArgs: [sessionId, teamId, 'DRAFT'],
       );
       if (updated == 0) return false;
       await txn.delete(

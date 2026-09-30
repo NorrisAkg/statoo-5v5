@@ -49,10 +49,42 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
     }
   }
 
-  void _prevStep() {
+  Future<bool> _onWillPop() async {
     if (_currentStep > 1) {
       setState(() => _currentStep--);
-    } else {
+      return false;
+    }
+    if (_selectedPlayerIds.isNotEmpty) {
+      final shouldPop = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Abandonner la création ?'),
+          content: const Text(
+            'Les joueurs sélectionnés et les équipes assignées seront perdus.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Continuer la saisie'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(ctx).colorScheme.error,
+              ),
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Abandonner'),
+            ),
+          ],
+        ),
+      );
+      return shouldPop == true;
+    }
+    return true;
+  }
+
+  Future<void> _prevStep() async {
+    final shouldPop = await _onWillPop();
+    if (shouldPop && mounted) {
       context.pop();
     }
   }
@@ -114,14 +146,15 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'Séance enregistrée en brouillon. Clôturez ou annulez la séance en cours pour débuter celle-ci.',
+                'Séance enregistrée en brouillon. Clôturez ou supprimez la séance en cours pour débuter celle-ci.',
               ),
             ),
           );
         }
-        context.go('/seances/$sessionId');
+        context.go('/seances');
+        unawaited(context.push('/seances/$sessionId'));
       }
-    } on Exception catch (e) {
+    } on Object catch (e) {
       if (mounted) {
         setState(() => _isSubmitting = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -190,14 +223,24 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Remix.arrow_left_line),
-          onPressed: _prevStep,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final shouldPop = await _onWillPop();
+        if (shouldPop && context.mounted) {
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Remix.arrow_left_line),
+            tooltip: 'Retour',
+            onPressed: () => unawaited(_prevStep()),
+          ),
+          title: const Text('Nouvelle séance'),
         ),
-        title: const Text('Nouvelle séance'),
-      ),
       body: Column(
         children: [
           const SizedBox(height: 16),
@@ -215,6 +258,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           _buildBottomBar(),
         ],
       ),
+    ),
     );
   }
 

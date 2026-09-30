@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final String label;
-  final IconData? icon;
-  final VoidCallback? onPressed;
-
   const PrimaryButton({
-    super.key,
     required this.label,
     this.icon,
     this.onPressed,
+    super.key,
   });
+
+  final String label;
+  final IconData? icon;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class PrimaryButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.primary500,
-        foregroundColor: context.colors.background950,
+        foregroundColor: AppColors.onPrimaryDark,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9999),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -36,7 +36,14 @@ class PrimaryButton extends StatelessWidget {
             Icon(icon, size: 20),
             const SizedBox(width: 8),
           ],
-          Text(label),
+          Flexible(
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );

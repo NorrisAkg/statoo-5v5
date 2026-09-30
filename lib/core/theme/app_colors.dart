@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
 
 class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
+  const AppColorsExtension({
+    required this.background950,
+    required this.background900,
+    required this.background800,
+    required this.background700,
+    required this.foreground50,
+    required this.foreground100,
+    required this.foreground200,
+    required this.foreground300,
+    required this.foreground400,
+    required this.foreground500,
+    required this.foreground600,
+    required this.primary500,
+    required this.primary400,
+    required this.primary300,
+    required this.secondary500,
+    required this.secondary400,
+    required this.accent500,
+    required this.accent400,
+    required this.accent300,
+    required this.card,
+    required this.danger,
+    required this.warning,
+  });
+
   final Color background950;
   final Color background900;
   final Color background800;
@@ -28,31 +53,6 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color card;
   final Color danger;
   final Color warning;
-
-  const AppColorsExtension({
-    required this.background950,
-    required this.background900,
-    required this.background800,
-    required this.background700,
-    required this.foreground50,
-    required this.foreground100,
-    required this.foreground200,
-    required this.foreground300,
-    required this.foreground400,
-    required this.foreground500,
-    required this.foreground600,
-    required this.primary500,
-    required this.primary400,
-    required this.primary300,
-    required this.secondary500,
-    required this.secondary400,
-    required this.accent500,
-    required this.accent400,
-    required this.accent300,
-    required this.card,
-    required this.danger,
-    required this.warning,
-  });
 
   @override
   AppColorsExtension copyWith({
@@ -142,6 +142,8 @@ extension AppColorsContext on BuildContext {
 class AppColors {
   AppColors._();
 
+  static const Color onPrimaryDark = Color(0xFF0B0F14);
+
   static const AppColorsExtension dark = AppColorsExtension(
     background950: Color(0xFF0B0F14),
     background900: Color(0xFF141A22),
@@ -152,7 +154,7 @@ class AppColors {
     foreground200: Color(0xFFE2E8F0),
     foreground300: Color(0xFFCBD5E1),
     foreground400: Color(0xFF94A3B8),
-    foreground500: Color(0xFF64748B),
+    foreground500: Color(0xFF8391A7), // Enhanced contrast (5.47:1 vs 3.68:1)
     foreground600: Color(0xFF475569),
     primary500: Color(0xFF22C55E),
     primary400: Color(0xFF4ADE80),
@@ -176,19 +178,19 @@ class AppColors {
     foreground100: Color(0xFF1E293B),
     foreground200: Color(0xFF334155),
     foreground300: Color(0xFF475569),
-    foreground400: Color(0xFF64748B),
-    foreground500: Color(0xFF94A3B8),
-    foreground600: Color(0xFFCBD5E1),
-    primary500: Color(0xFF22C55E), // keep green intact
-    primary400: Color(0xFF4ADE80),
-    primary300: Color(0xFF86EFAC),
-    secondary500: Color(0xFFF97316),
-    secondary400: Color(0xFFFB923C),
-    accent500: Color(0xFF3B82F6),
-    accent400: Color(0xFF60A5FA),
-    accent300: Color(0xFF93C5FD),
-    card: Color(0xFFFACC15),
-    danger: Color(0xFFEF4444),
-    warning: Color(0xFFF59E0B),
+    foreground400: Color(0xFF475569), // WCAG AAA compliant
+    foreground500: Color(0xFF64748B),
+    foreground600: Color(0xFF475569),
+    primary500: Color(0xFF15803D), // High-contrast green (≥ 4.9:1)
+    primary400: Color(0xFF16A34A),
+    primary300: Color(0xFF22C55E),
+    secondary500: Color(0xFFC2410C), // High-contrast orange
+    secondary400: Color(0xFFEA580C),
+    accent500: Color(0xFF1D4ED8), // High-contrast blue
+    accent400: Color(0xFF2563EB),
+    accent300: Color(0xFF3B82F6),
+    card: Color(0xFFA16207),
+    danger: Color(0xFFB91C1C),
+    warning: Color(0xFFB45309),
   );
 }

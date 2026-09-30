@@ -117,6 +117,8 @@ class SessionsController {
       playedAt: playedAt,
       isRanked: isRanked,
       allowUnevenTeams: allowUnevenTeams,
+      // TODO(cdc): Initialisation à 0-0 par défaut (choix produit ebadbc7).
+      // Un dialogue de clôture avec récapitulatif et alerte explicite protège contre les clôtures sans score.
       scoreA: 0,
       scoreB: 0,
       result: MatchResult.draw,
@@ -201,6 +203,23 @@ class SessionsController {
     if (teamId == null) throw StateError('No active team selected');
 
     if (playerTeamAssignments.isEmpty) return;
+
+    final session = await _repo.getSession(sessionId);
+    if (session == null) throw StateError('Session $sessionId not found');
+    final participants = await _repo.getSessionParticipants(sessionId);
+
+    final currentA = participants.where((p) => p.participation.team == Team.a).length;
+    final currentB = participants.where((p) => p.participation.team == Team.b).length;
+    final addingA = playerTeamAssignments.values.where((t) => t == Team.a).length;
+    final addingB = playerTeamAssignments.values.where((t) => t == Team.b).length;
+    final totalA = currentA + addingA;
+    final totalB = currentB + addingB;
+
+    if (!session.allowUnevenTeams && (totalA - totalB).abs() > 1) {
+      throw StateError(
+        "L'écart d'effectif dépasserait 1 joueur ($totalA vs $totalB) sans l'option équipes inégales.",
+      );
+    }
 
     final participations = playerTeamAssignments.entries.map((e) {
       final partId = 'p_${sessionId}_${e.key}';

@@ -134,5 +134,33 @@ void main() {
       expect(blockers, isEmpty);
       expect(repo.session.status, SessionStatus.closed);
     });
+
+    test('throws StateError when adding late players would unbalance teams by > 1 player', () async {
+      final fiveVsFive = [
+        _participant('a1', Team.a),
+        _participant('a2', Team.a),
+        _participant('a3', Team.a),
+        _participant('a4', Team.a),
+        _participant('a5', Team.a),
+        _participant('b1', Team.b),
+        _participant('b2', Team.b),
+        _participant('b3', Team.b),
+        _participant('b4', Team.b),
+        _participant('b5', Team.b),
+      ];
+      final repo = _FakeSessionsRepository(session, fiveVsFive);
+      final container = containerFor(repo);
+
+      expect(
+        () => container.read(sessionsControllerProvider).addLatePlayers(
+          sessionId: 's1',
+          playerTeamAssignments: {
+            'a6': Team.a,
+            'a7': Team.a,
+          },
+        ),
+        throwsA(isA<StateError>()),
+      );
+    });
   });
 }

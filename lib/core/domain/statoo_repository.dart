@@ -1,6 +1,6 @@
 import '../../features/players/domain/player.dart';
-import '../../features/sessions/domain/session.dart';
 import '../../features/sessions/domain/participation.dart';
+import '../../features/sessions/domain/session.dart';
 
 abstract class StatooRepository {
   Future<List<Player>> getPlayers();

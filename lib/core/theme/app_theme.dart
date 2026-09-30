@@ -16,7 +16,7 @@ class AppTheme {
         secondary: colors.secondary500,
         surface: colors.background900,
         error: colors.danger,
-        onPrimary: colors.foreground50,
+        onPrimary: AppColors.onPrimaryDark,
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(
@@ -34,8 +34,9 @@ class AppTheme {
       textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
         titleLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
         titleMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
-        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
+        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16),
+        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
+        bodySmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
         labelSmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 11),
       ),
     );
@@ -52,7 +53,7 @@ class AppTheme {
         secondary: colors.secondary500,
         surface: colors.background900,
         error: colors.danger,
-        onPrimary: colors.background950,
+        onPrimary: AppColors.onPrimaryDark,
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(
@@ -70,8 +71,9 @@ class AppTheme {
       textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
         titleLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
         titleMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
-        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
+        bodyLarge: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 16),
+        bodyMedium: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 14),
+        bodySmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 12),
         labelSmall: GoogleFonts.dmSans(color: colors.foreground50, fontSize: 11),
       ),
     );

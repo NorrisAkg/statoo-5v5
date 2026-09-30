@@ -4,9 +4,12 @@ import 'package:remixicon/remixicon.dart';
 import '../theme/app_colors.dart';
 
 class AppScaffold extends StatelessWidget {
-  final StatefulNavigationShell navigationShell;
+  const AppScaffold({
+    required this.navigationShell,
+    super.key,
+  });
 
-  const AppScaffold({super.key, required this.navigationShell});
+  final StatefulNavigationShell navigationShell;
 
   void _onTap(BuildContext context, int index) {
     navigationShell.goBranch(
@@ -28,26 +31,25 @@ class AppScaffold extends StatelessWidget {
           currentIndex: navigationShell.currentIndex,
           onTap: (index) => _onTap(context, index),
           backgroundColor: context.colors.background900,
-          type: BottomNavigationBarType.fixed,
           selectedItemColor: context.colors.primary500,
           unselectedItemColor: context.colors.foreground500,
-          selectedLabelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 12,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Remix.home_line),
-              activeIcon: Icon(Remix.home_fill),
+              icon: Icon(Remix.home_5_line),
+              activeIcon: Icon(Remix.home_5_fill),
               label: 'Accueil',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Remix.football_line),
+              activeIcon: Icon(Remix.football_fill),
+              label: 'Séances',
             ),
             BottomNavigationBarItem(
               icon: Icon(Remix.user_line),
               activeIcon: Icon(Remix.user_fill),
               label: 'Joueurs',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Remix.calendar_event_line),
-              activeIcon: Icon(Remix.calendar_event_fill),
-              label: 'Séances',
             ),
             BottomNavigationBarItem(
               icon: Icon(Remix.bar_chart_line),

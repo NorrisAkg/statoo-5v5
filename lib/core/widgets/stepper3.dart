@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class Stepper3 extends StatelessWidget {
-  final int currentStep;
+  const Stepper3({
+    required this.currentStep,
+    super.key,
+  });
 
-  const Stepper3({super.key, required this.currentStep});
+  final int currentStep;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +29,13 @@ class Stepper3 extends StatelessWidget {
       height: 24,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isActive ? context.colors.primary500 : context.colors.background800,
+        color: isActive ? context.colors.primary500 : context.colors.background700,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: isActive ? context.colors.primary500 : context.colors.foreground600,
-        ),
       ),
       child: Text(
         '$step',
         style: TextStyle(
-          color: isActive ? context.colors.background950 : context.colors.foreground600,
+          color: isActive ? AppColors.onPrimaryDark : context.colors.foreground400,
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
@@ -45,9 +45,9 @@ class Stepper3 extends StatelessWidget {
 
   Widget _buildLine(BuildContext context, bool isActive) {
     return Container(
-      width: 40,
+      width: 32,
       height: 2,
-      color: isActive ? context.colors.primary500 : context.colors.background800,
+      color: isActive ? context.colors.primary500 : context.colors.background700,
     );
   }
 }

@@ -41,6 +41,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Remix.arrow_left_line),
+          tooltip: 'Retour',
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -351,13 +352,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                visualDensity: VisualDensity.compact,
+                tooltip: 'Diminuer le score de $title',
                 icon: const Icon(Remix.subtract_line),
                 color: context.colors.foreground400,
                 onPressed: displayScore > 0 ? () => onScoreChanged(displayScore - 1) : null,
               ),
               IconButton(
-                visualDensity: VisualDensity.compact,
+                tooltip: 'Augmenter le score de $title',
                 icon: const Icon(Remix.add_line),
                 color: color,
                 onPressed: () => onScoreChanged(displayScore + 1),
@@ -817,8 +818,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           SizedBox(
             width: double.infinity,
             child: TextButton.icon(
-              icon: const Icon(Remix.close_circle_line, size: 18),
-              label: const Text('Annuler la séance'),
+              icon: const Icon(Remix.delete_bin_line, size: 18),
+              label: const Text('Supprimer ce match'),
               style: TextButton.styleFrom(
                 foregroundColor: context.colors.danger,
                 padding: const EdgeInsets.symmetric(vertical: 14),
@@ -922,25 +923,117 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       return;
     }
 
+    final scoreA = session.scoreA ?? 0;
+    final scoreB = session.scoreB ?? 0;
+    final goalsA = participants.where((p) => p.participation.team == Team.a).fold<int>(0, (s, p) => s + p.participation.goals);
+    final goalsB = participants.where((p) => p.participation.team == Team.b).fold<int>(0, (s, p) => s + p.participation.goals);
+    final totalPlayerGoals = goalsA + goalsB;
+    final totalScoreGoals = scoreA + scoreB;
+    final isZeroZeroWithScorers = scoreA == 0 && scoreB == 0 && totalPlayerGoals > 0;
+    final hasGoalMismatch = !isZeroZeroWithScorers && (scoreA != goalsA || scoreB != goalsB);
+
+    final outcome = scoreA > scoreB
+        ? 'Victoire Équipe A ($scoreA – $scoreB)'
+        : scoreB > scoreA
+            ? 'Victoire Équipe B ($scoreA – $scoreB)'
+            : 'Match nul ($scoreA – $scoreB)';
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Clôturer la séance ?'),
-        content: const Text(
-          'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
-        ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Annuler'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: context.colors.background800,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    outcome,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    session.isRanked
+                        ? 'Séance classée · Intégrée au classement général'
+                        : 'Séance amicale · Statistiques seules (hors classement)',
+                    style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                  ),
+                ],
+              ),
             ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Clôturer'),
+            if (isZeroZeroWithScorers) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: context.colors.danger.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: context.colors.danger),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Remix.alert_fill, color: context.colors.danger, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Attention : Le score est à 0 – 0 alors que $totalPlayerGoals but${totalPlayerGoals > 1 ? 's ont été saisis' : ' a été saisi'} pour les joueurs ! Voulez-vous vraiment clôturer à 0 – 0 ?',
+                        style: TextStyle(color: context.colors.danger, fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ] else if (hasGoalMismatch) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: context.colors.warning.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: context.colors.warning),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Remix.error_warning_fill, color: context.colors.warning, size: 18),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Écart buts/score : $totalPlayerGoals buts de joueurs vs $totalScoreGoals au score général.',
+                        style: TextStyle(color: context.colors.warning, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Text(
+              'Une fois clôturée, la séance mettra à jour les classements.',
+              style: TextStyle(color: context.colors.foreground300, fontSize: 13),
             ),
           ],
         ),
-      );
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(isZeroZeroWithScorers ? 'Clôturer à 0 – 0' : 'Clôturer'),
+          ),
+        ],
+      ),
+    );
 
     if (confirmed != true) return;
     String message;
@@ -949,6 +1042,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       message = remaining.isEmpty ? 'Séance clôturée avec succès !' : _closeBlockerMessage(remaining.first);
     } on SessionCloseException {
       message = "La séance n'a pas pu être clôturée. Rechargez-la et réessayez.";
+    } on Object catch (e) {
+      message = 'Erreur lors de la clôture : $e';
     }
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
@@ -992,10 +1087,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(isDraft ? 'Supprimer le brouillon ?' : 'Supprimer la séance ?'),
+        title: Text(isDraft ? 'Supprimer ce match en cours ?' : 'Supprimer la séance ?'),
         content: Text(
           isDraft
-              ? 'Ce brouillon sera définitivement supprimé.'
+              ? 'Ce match en cours sera définitivement supprimé. Les scores et statistiques saisis seront perdus.'
               : 'Cette séance et toutes ses participations seront définitivement supprimées du classement.',
         ),
         actions: [
@@ -1015,6 +1110,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     if (confirmed == true && context.mounted) {
       await ref.read(sessionsControllerProvider).deleteSession(widget.sessionId);
       if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Séance supprimée.')),
+        );
         if (context.canPop()) {
           context.pop();
         } else {
@@ -1043,6 +1141,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           currentTeamACount: teamAPlayers.length,
           currentTeamBCount: teamBPlayers.length,
           alreadyAssignedPlayerIds: alreadyAssignedIds,
+          allowUnevenTeams: session.allowUnevenTeams,
         ),
       ),
     );

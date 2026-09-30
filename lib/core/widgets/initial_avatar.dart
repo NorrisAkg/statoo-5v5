@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class InitialAvatar extends StatelessWidget {
-  final String initial;
-  final Color baseColor;
-  final double size;
-
   const InitialAvatar({
-    super.key,
     required this.initial,
     required this.baseColor,
     this.size = 32,
+    super.key,
   });
+
+  final String initial;
+  final Color baseColor;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class InitialAvatar extends StatelessWidget {
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: baseColor.withOpacity(0.15),
+        color: baseColor.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
       child: Text(

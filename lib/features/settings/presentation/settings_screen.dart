@@ -336,7 +336,7 @@ class SettingsScreen extends ConsumerWidget {
     await showDialog<void>(
       context: context,
       builder: (dialogCtx) => StatefulBuilder(
-        builder: (context, setState) {
+        builder: (_, setState) {
           return Dialog(
             backgroundColor: colors.background900,
             shape: RoundedRectangleBorder(
