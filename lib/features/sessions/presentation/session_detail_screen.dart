@@ -1158,12 +1158,16 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final controller = ref.read(sessionsControllerProvider);
     final goalsA = participants.where((p) => p.participation.team == Team.a).fold<int>(0, (s, p) => s + p.participation.goals);
     final goalsB = participants.where((p) => p.participation.team == Team.b).fold<int>(0, (s, p) => s + p.participation.goals);
+    final assistsA = participants.where((p) => p.participation.team == Team.a).fold<int>(0, (s, p) => s + p.participation.assists);
+    final assistsB = participants.where((p) => p.participation.team == Team.b).fold<int>(0, (s, p) => s + p.participation.assists);
     final blockers = closeBlockers(
       session: session,
       teamACount: participants.where((p) => p.participation.team == Team.a).length,
       teamBCount: participants.where((p) => p.participation.team == Team.b).length,
       playerGoalsA: goalsA,
       playerGoalsB: goalsB,
+      playerAssistsA: assistsA,
+      playerAssistsB: assistsB,
     );
 
     if (blockers.contains(CloseBlocker.unevenTeams)) {
@@ -1197,6 +1201,21 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           content: Text(
             'Clôture impossible : ${details.join(' · ')}. '
             'Corrigez les buts des joueurs ou le score avant de clôturer.',
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+
+    if (blockers.contains(CloseBlocker.assistsExceedGoals)) {
+      final totalAssists = assistsA + assistsB;
+      final totalPlayerGoals = goalsA + goalsB;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Clôture impossible : $totalAssists passe(s) décisive(s) pour $totalPlayerGoals but(s) marqué(s) par les joueurs. '
+            'Le nombre de passes décisives ne peut pas dépasser le nombre de buts marqués.',
           ),
           duration: const Duration(seconds: 5),
         ),
@@ -1285,6 +1304,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
     CloseBlocker.goalsMismatch =>
       'Clôture impossible : le total des buts attribués ne correspond pas au score. Corrigez avant de clôturer.',
+    CloseBlocker.assistsExceedGoals =>
+      'Clôture impossible : le nombre de passes décisives dépasse le nombre de buts marqués par les joueurs.',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {

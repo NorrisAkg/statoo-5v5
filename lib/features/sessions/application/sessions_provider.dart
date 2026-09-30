@@ -323,6 +323,12 @@ class SessionsController {
       playerGoalsB: participants
           .where((p) => p.participation.team == Team.b)
           .fold<int>(0, (s, p) => s + p.participation.goals),
+      playerAssistsA: participants
+          .where((p) => p.participation.team == Team.a)
+          .fold<int>(0, (s, p) => s + p.participation.assists),
+      playerAssistsB: participants
+          .where((p) => p.participation.team == Team.b)
+          .fold<int>(0, (s, p) => s + p.participation.assists),
     );
     if (blockers.isNotEmpty) return blockers;
 

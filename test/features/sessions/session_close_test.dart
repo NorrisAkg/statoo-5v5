@@ -65,8 +65,8 @@ class _FakeSessionsRepository implements SessionsRepository {
   dynamic noSuchMethod(Invocation invocation) => throw UnimplementedError(invocation.memberName.toString());
 }
 
-SessionParticipantDetail _participant(String id, Team team, {int goals = 0}) => SessionParticipantDetail(
-  participation: Participation(id: 'p_$id', sessionId: 's1', playerId: id, team: team, goals: goals),
+SessionParticipantDetail _participant(String id, Team team, {int goals = 0, int assists = 0}) => SessionParticipantDetail(
+  participation: Participation(id: 'p_$id', sessionId: 's1', playerId: id, team: team, goals: goals, assists: assists),
   playerName: id,
 );
 
@@ -150,6 +150,67 @@ void main() {
         [CloseBlocker.goalsMismatch],
       );
     });
+
+    test('blocks when assists exceed player goals for the session', () {
+      // playerGoals: 2 (A) + 1 (B) = 3 goals
+      // assists: 2 (A) + 2 (B) = 4 assists > 3 goals
+      expect(
+        closeBlockers(
+          session: scored,
+          teamACount: 5,
+          teamBCount: 5,
+          playerGoalsA: 2,
+          playerGoalsB: 1,
+          playerAssistsA: 2,
+          playerAssistsB: 2,
+        ),
+        [CloseBlocker.assistsExceedGoals],
+      );
+    });
+
+    test('accepts when assists are equal to or less than player goals', () {
+      // playerGoals: 2 + 1 = 3
+      // assists: 2 + 1 = 3 <= 3
+      expect(
+        closeBlockers(
+          session: scored,
+          teamACount: 5,
+          teamBCount: 5,
+          playerGoalsA: 2,
+          playerGoalsB: 1,
+          playerAssistsA: 2,
+          playerAssistsB: 1,
+        ),
+        isEmpty,
+      );
+      // assists: 1 + 0 = 1 <= 3
+      expect(
+        closeBlockers(
+          session: scored,
+          teamACount: 5,
+          teamBCount: 5,
+          playerGoalsA: 2,
+          playerGoalsB: 1,
+          playerAssistsA: 1,
+        ),
+        isEmpty,
+      );
+    });
+
+    test('blocks when assists exist on a 0-0 match without player goals', () {
+      final draw = unscored.copyWith(scoreA: 0, scoreB: 0, result: MatchResult.draw);
+      expect(
+        closeBlockers(
+          session: draw,
+          teamACount: 5,
+          teamBCount: 5,
+          playerGoalsA: 0,
+          playerGoalsB: 0,
+          playerAssistsA: 1,
+        ),
+        [CloseBlocker.assistsExceedGoals],
+      );
+    });
   });
 
   group('SessionsController.closeSession', () {
@@ -198,6 +259,21 @@ void main() {
       expect(blockers, isEmpty);
       expect(repo.closeCalls, 1);
       expect(repo.session.status, SessionStatus.closed);
+    });
+
+    test('refuses to close when assists exceed player goals', () async {
+      final teamsWithExcessAssists = [
+        _participant('a1', Team.a, goals: 1, assists: 2),
+        _participant('a2', Team.a, goals: 1, assists: 1),
+        _participant('b1', Team.b, goals: 1, assists: 1),
+        _participant('b2', Team.b),
+      ];
+      final repo = _FakeSessionsRepository(scored, teamsWithExcessAssists);
+      final blockers = await containerFor(repo).read(sessionsControllerProvider).closeSession('s1');
+
+      expect(blockers, [CloseBlocker.assistsExceedGoals]);
+      expect(repo.closeCalls, 0);
+      expect(repo.session.status, SessionStatus.draft);
     });
   });
 
