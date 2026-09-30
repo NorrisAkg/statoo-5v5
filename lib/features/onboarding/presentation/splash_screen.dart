@@ -28,7 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 900),
     );
 
     _logoFadeAnimation = CurvedAnimation(
@@ -55,7 +55,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _controller.forward();
 
-    _navTimer = Timer(const Duration(milliseconds: 2000), _navigateNext);
+    _navTimer = Timer(const Duration(milliseconds: 1100), _navigateNext);
   }
 
   void _navigateNext() {

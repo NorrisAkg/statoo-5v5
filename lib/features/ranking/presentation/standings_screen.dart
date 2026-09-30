@@ -1033,66 +1033,84 @@ Widget _buildRankBadge(BuildContext context, int rank) {
 }
 
 Widget _buildEmptyState(BuildContext context, String message) {
-  return Center(
-    child: Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
-          Icon(Remix.trophy_line, size: 56, color: context.colors.foreground500),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: context.colors.foreground400,
-              fontSize: 15,
+          Container(
+            height: constraints.maxHeight > 0 ? constraints.maxHeight : 300,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Remix.trophy_line, size: 56, color: context.colors.foreground500),
+                const SizedBox(height: 16),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: context.colors.foreground400,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ),
-    ),
+      );
+    },
   );
 }
 
 Widget _buildErrorState(BuildContext context, String error, VoidCallback onRetry) {
-  return Center(
-    child: Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
-          Icon(Remix.error_warning_line, size: 48, color: context.colors.danger),
-          const SizedBox(height: 12),
-          Text(
-            'Erreur lors du chargement',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: context.colors.foreground100,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            error,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              color: context.colors.foreground500,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton.icon(
-            onPressed: onRetry,
-            icon: const Icon(Remix.refresh_line, size: 16),
-            label: const Text('Réessayer'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.colors.primary500,
-              foregroundColor: context.colors.background950,
+          Container(
+            height: constraints.maxHeight > 0 ? constraints.maxHeight : 300,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Remix.error_warning_line, size: 48, color: context.colors.danger),
+                const SizedBox(height: 12),
+                Text(
+                  'Erreur lors du chargement',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: context.colors.foreground100,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  error,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: context.colors.foreground500,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: onRetry,
+                  icon: const Icon(Remix.refresh_line, size: 16),
+                  label: const Text('Réessayer'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.colors.primary500,
+                    foregroundColor: context.colors.background950,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ),
-    ),
+      );
+    },
   );
 }

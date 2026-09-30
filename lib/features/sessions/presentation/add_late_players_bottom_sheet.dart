@@ -44,7 +44,38 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
     super.dispose();
   }
 
-  void _drawTeams() {
+  Future<void> _drawTeams() async {
+    if (_selectedPlayerIds.isEmpty) return;
+
+    if (_assignments.isNotEmpty) {
+      final confirm = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: context.colors.background900,
+          title: const Text('Tirer au sort ?'),
+          content: Text(
+            'Le tirage au sort va remplacer la répartition actuelle de ces joueurs.',
+            style: TextStyle(color: context.colors.foreground300),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text('Annuler', style: TextStyle(color: context.colors.foreground400)),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.colors.primary500,
+                foregroundColor: context.colors.background950,
+              ),
+              child: const Text('Confirmer'),
+            ),
+          ],
+        ),
+      );
+      if (confirm != true || !mounted) return;
+    }
+
     final rng = Random();
     final selectedList = _selectedPlayerIds.toList()..shuffle(rng);
 

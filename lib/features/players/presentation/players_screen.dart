@@ -211,7 +211,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () => unawaited(context.push('/joueurs/${player.id}')),
-        onLongPress: () => unawaited(_showPlayerOptions(context, player, canDelete)),
+        onLongPress: () => unawaited(_showPlayerOptions(player, canDelete)),
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -238,7 +238,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                 IconButton(
                   icon: Icon(Remix.delete_bin_line, size: 20, color: context.colors.danger),
                   tooltip: 'Supprimer ce joueur',
-                  onPressed: () => unawaited(_confirmDeletePlayer(context, player)),
+                  onPressed: () => unawaited(_confirmDeletePlayer(player)),
                 ),
               ] else ...[
                 Text(
@@ -255,6 +255,8 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
         ),
       ),
     );
+
+    final renderedCard = player.isActive ? cardContent : Opacity(opacity: 0.65, child: cardContent);
 
     if (canDelete) {
       return Dismissible(
@@ -280,12 +282,12 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
             ],
           ),
         ),
-        confirmDismiss: (_) => _confirmDeletePlayer(context, player),
-        child: cardContent,
+        confirmDismiss: (_) => _confirmDeletePlayer(player),
+        child: renderedCard,
       );
     }
 
-    return cardContent;
+    return renderedCard;
   }
 
   Widget _buildArchivedSection(
@@ -320,7 +322,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
     );
   }
 
-  Future<bool> _confirmDeletePlayer(BuildContext context, Player player) async {
+  Future<bool> _confirmDeletePlayer(Player player) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) {
@@ -351,7 +353,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
 
     if (confirmed == true) {
       final success = await ref.read(playersListProvider.notifier).removePlayer(player.id);
-      if (context.mounted) {
+      if (mounted) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Le joueur "${player.name}" a été supprimé.')),
@@ -370,7 +372,6 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
   }
 
   Future<void> _showPlayerOptions(
-    BuildContext context,
     Player player,
     bool canDelete,
   ) async {
@@ -414,7 +415,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                   ),
                   onTap: () {
                     Navigator.of(ctx).pop();
-                    unawaited(_confirmDeletePlayer(context, player));
+                    unawaited(_confirmDeletePlayer(player));
                   },
                 )
               else
@@ -425,10 +426,47 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                   title: Text(player.isActive ? 'Archiver le joueur' : 'Activer le joueur'),
                   onTap: () async {
                     Navigator.of(ctx).pop();
+                    if (player.isActive) {
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (dCtx) => AlertDialog(
+                          backgroundColor: context.colors.background900,
+                          title: Text('Archiver ${player.name} ?'),
+                          content: Text(
+                            "Le joueur n'apparaîtra plus dans la sélection des séances. Son historique et ses statistiques restent intégralement conservés.",
+                            style: TextStyle(color: context.colors.foreground300),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(dCtx).pop(false),
+                              child: Text('Annuler', style: TextStyle(color: context.colors.foreground400)),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(dCtx).pop(true),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: context.colors.warning,
+                                foregroundColor: context.colors.background950,
+                              ),
+                              child: const Text('Archiver'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirmed != true || !mounted) return;
+                    }
                     await ref.read(playersListProvider.notifier).togglePlayerActive(
                       id: player.id,
                       isActive: !player.isActive,
                     );
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(player.isActive
+                              ? 'Le joueur "${player.name}" a été archivé.'
+                              : 'Le joueur "${player.name}" a été réactivé.'),
+                        ),
+                      );
+                    }
                   },
                 ),
             ],

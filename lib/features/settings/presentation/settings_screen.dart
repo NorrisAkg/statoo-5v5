@@ -332,7 +332,7 @@ class SettingsScreen extends ConsumerWidget {
     var isMerge = true;
 
     final teamName = payload.team?['name'] as String? ?? 'Équipe inconnue';
-    final dateFormatted = DateFormat('dd/MM/yyyy à HH:mm').format(payload.exportedAt);
+    final dateFormatted = DateFormat("dd/MM/yyyy à HH'h'mm", 'fr_FR').format(payload.exportedAt);
 
     await showDialog<void>(
       context: context,
