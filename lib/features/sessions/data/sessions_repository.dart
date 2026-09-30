@@ -24,6 +24,18 @@ abstract class SessionsRepository {
     required int scoreA,
     required int scoreB,
   });
+  Future<void> incrementScore({
+    required String sessionId,
+    required String teamId,
+    required Team team,
+    required int delta,
+  });
+  Future<void> updateUnassignedGoals({
+    required String sessionId,
+    required String teamId,
+    int? unassignedGoalsA,
+    int? unassignedGoalsB,
+  });
   Future<void> updateParticipationStats({
     required String participationId,
     required int goals,
@@ -325,6 +337,68 @@ class SqliteSessionsRepository implements SessionsRepository {
       },
       where: 'id = ?',
       whereArgs: [sessionId],
+    );
+  }
+
+  @override
+  Future<void> incrementScore({
+    required String sessionId,
+    required String teamId,
+    required Team team,
+    required int delta,
+  }) async {
+    final db = await _appDatabase.database;
+    await db.transaction((txn) async {
+      final rows = await txn.query(
+        'sessions',
+        columns: ['score_a', 'score_b'],
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+      if (rows.isEmpty) return;
+      var scoreA = (rows.first['score_a'] as int?) ?? 0;
+      var scoreB = (rows.first['score_b'] as int?) ?? 0;
+      if (team == Team.a) {
+        scoreA = (scoreA + delta).clamp(0, 999);
+      } else {
+        scoreB = (scoreB + delta).clamp(0, 999);
+      }
+      final result = scoreA > scoreB
+          ? 'A'
+          : scoreA < scoreB
+              ? 'B'
+              : 'DRAW';
+      await txn.update(
+        'sessions',
+        {
+          'score_a': scoreA,
+          'score_b': scoreB,
+          'result': result,
+        },
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+    });
+  }
+
+  @override
+  Future<void> updateUnassignedGoals({
+    required String sessionId,
+    required String teamId,
+    int? unassignedGoalsA,
+    int? unassignedGoalsB,
+  }) async {
+    final db = await _appDatabase.database;
+    final updates = <String, dynamic>{};
+    if (unassignedGoalsA != null) updates['unassigned_goals_a'] = unassignedGoalsA.clamp(0, 999);
+    if (unassignedGoalsB != null) updates['unassigned_goals_b'] = unassignedGoalsB.clamp(0, 999);
+    if (updates.isEmpty) return;
+
+    await db.update(
+      'sessions',
+      updates,
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [sessionId, teamId],
     );
   }
 

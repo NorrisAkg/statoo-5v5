@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/data/app_database.dart';
+import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
@@ -82,6 +83,7 @@ class SessionsController {
   SessionsRepository get _repo => _ref.read(sessionsRepositoryProvider);
 
   void _invalidateAll([String? sessionId]) {
+    final teamId = _ref.read(activeTeamIdProvider);
     _ref
       ..invalidate(allSessionsProvider)
       ..invalidate(sessionsListProvider)
@@ -92,7 +94,13 @@ class SessionsController {
       ..invalidate(topScorersProvider)
       ..invalidate(topAssistsProvider)
       ..invalidate(topCardsProvider)
-      ..invalidate(groupTotalsProvider);
+      ..invalidate(groupTotalsProvider)
+      ..invalidate(playersListProvider)
+      ..invalidate(deletablePlayerIdsProvider);
+
+    if (teamId != null) {
+      _ref.invalidate(teamCountsProvider(teamId));
+    }
 
     if (sessionId != null) {
       _ref
@@ -177,6 +185,49 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
+  Future<void> incrementScore({
+    required String sessionId,
+    required Team team,
+    required int delta,
+  }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+    await _repo.incrementScore(
+      sessionId: sessionId,
+      teamId: teamId,
+      team: team,
+      delta: delta,
+    );
+    _invalidateAll(sessionId);
+  }
+
+  Future<void> updateUnassignedGoals({
+    required String sessionId,
+    int? unassignedGoalsA,
+    int? unassignedGoalsB,
+    bool adjustScore = false,
+    Team? adjustedTeam,
+    int delta = 0,
+  }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+    await _repo.updateUnassignedGoals(
+      sessionId: sessionId,
+      teamId: teamId,
+      unassignedGoalsA: unassignedGoalsA,
+      unassignedGoalsB: unassignedGoalsB,
+    );
+    if (adjustScore && adjustedTeam != null && delta != 0) {
+      await _repo.incrementScore(
+        sessionId: sessionId,
+        teamId: teamId,
+        team: adjustedTeam,
+        delta: delta,
+      );
+    }
+    _invalidateAll(sessionId);
+  }
+
   Future<void> updateParticipationStats({
     required String sessionId,
     required String participationId,
@@ -184,7 +235,13 @@ class SessionsController {
     required int assists,
     required int yellowCards,
     required int redCards,
+    bool adjustScore = false,
+    Team? playerTeam,
+    int goalDelta = 0,
   }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+
     await _repo.updateParticipationStats(
       participationId: participationId,
       goals: goals,
@@ -192,6 +249,14 @@ class SessionsController {
       yellowCards: yellowCards,
       redCards: redCards,
     );
+    if (adjustScore && playerTeam != null && goalDelta != 0) {
+      await _repo.incrementScore(
+        sessionId: sessionId,
+        teamId: teamId,
+        team: playerTeam,
+        delta: goalDelta,
+      );
+    }
     _invalidateAll(sessionId);
   }
 

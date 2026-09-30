@@ -149,7 +149,15 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         ],
         if (hasDiscrepancy && !isDraft) ...[
           const SizedBox(height: 16),
-          _buildWarningBanner(context, goalsAssignedA + goalsAssignedB, scoreA + scoreB),
+          _buildWarningBanner(
+            context,
+            scoreA: scoreA,
+            scoreB: scoreB,
+            teamAGoalsTotal: goalsAssignedA + session.unassignedGoalsA,
+            teamBGoalsTotal: goalsAssignedB + session.unassignedGoalsB,
+            unassignedA: session.unassignedGoalsA,
+            unassignedB: session.unassignedGoalsB,
+          ),
         ],
         const SizedBox(height: 24),
         Row(
@@ -290,12 +298,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 score: scoreA,
                 color: context.colors.accent500,
                 isDraft: isCurrentActive,
-                onScoreChanged: (newScore) {
+                onScoreIncrement: (delta) {
                   unawaited(
-                    ref.read(sessionsControllerProvider).updateScore(
+                    ref.read(sessionsControllerProvider).incrementScore(
                       sessionId: session.id,
-                      scoreA: newScore,
-                      scoreB: scoreB,
+                      team: Team.a,
+                      delta: delta,
                     ),
                   );
                 },
@@ -314,12 +322,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 score: scoreB,
                 color: context.colors.secondary500,
                 isDraft: isCurrentActive,
-                onScoreChanged: (newScore) {
+                onScoreIncrement: (delta) {
                   unawaited(
-                    ref.read(sessionsControllerProvider).updateScore(
+                    ref.read(sessionsControllerProvider).incrementScore(
                       sessionId: session.id,
-                      scoreA: scoreA,
-                      scoreB: newScore,
+                      team: Team.b,
+                      delta: delta,
                     ),
                   );
                 },
@@ -338,7 +346,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     required int? score,
     required Color color,
     required bool isDraft,
-    required ValueChanged<int> onScoreChanged,
+    required void Function(int delta) onScoreIncrement,
   }) {
     final displayScore = score ?? 0;
     return Column(
@@ -355,13 +363,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 tooltip: 'Diminuer le score de $title',
                 icon: const Icon(Remix.subtract_line),
                 color: context.colors.foreground400,
-                onPressed: displayScore > 0 ? () => onScoreChanged(displayScore - 1) : null,
+                onPressed: displayScore > 0 ? () => onScoreIncrement(-1) : null,
               ),
               IconButton(
                 tooltip: 'Augmenter le score de $title',
                 icon: const Icon(Remix.add_line),
                 color: color,
-                onPressed: () => onScoreChanged(displayScore + 1),
+                onPressed: () => onScoreIncrement(1),
               ),
             ],
           ),
@@ -370,7 +378,27 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
   }
 
-  Widget _buildWarningBanner(BuildContext context, int totalPlayerGoals, int totalScoreGoals) {
+  Widget _buildWarningBanner(
+    BuildContext context, {
+    required int scoreA,
+    required int scoreB,
+    required int teamAGoalsTotal,
+    required int teamBGoalsTotal,
+    required int unassignedA,
+    required int unassignedB,
+  }) {
+    final diffA = teamAGoalsTotal != scoreA;
+    final diffB = teamBGoalsTotal != scoreB;
+    final details = <String>[];
+    if (diffA) {
+      final unassignedText = unassignedA > 0 ? ' (dont $unassignedA CSC/non attribué)' : '';
+      details.add('Équipe A : $teamAGoalsTotal but(s)$unassignedText pour $scoreA au score');
+    }
+    if (diffB) {
+      final unassignedText = unassignedB > 0 ? ' (dont $unassignedB CSC/non attribué)' : '';
+      details.add('Équipe B : $teamBGoalsTotal but(s)$unassignedText pour $scoreB au score');
+    }
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -379,13 +407,24 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         border: Border.all(color: context.colors.warning.withValues(alpha: 0.4)),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Remix.error_warning_line, color: context.colors.warning, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              'Avertissement : la somme des buts des joueurs ($totalPlayerGoals) ne correspond pas au score du match ($totalScoreGoals).',
-              style: TextStyle(color: context.colors.warning, fontSize: 13),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Avertissement : écart entre buts et score',
+                  style: TextStyle(color: context.colors.warning, fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  details.join(' · '),
+                  style: TextStyle(color: context.colors.warning, fontSize: 12),
+                ),
+              ],
             ),
           ),
         ],
@@ -442,6 +481,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   session,
                   'Équipe A',
                   context.colors.accent500,
+                  Team.a,
                   teamAPlayers,
                   isCurrentActive,
                 )
@@ -452,6 +492,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   session,
                   'Équipe B',
                   context.colors.secondary500,
+                  Team.b,
                   teamBPlayers,
                   isCurrentActive,
                 ),
@@ -531,10 +572,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     Session session,
     String title,
     Color color,
+    Team team,
     List<SessionParticipantDetail> players,
     bool isCurrentActive, {
     Key? key,
   }) {
+    final unassigned = team == Team.a ? session.unassignedGoalsA : session.unassignedGoalsB;
     return AppCard(
       key: key,
       padding: const EdgeInsets.all(14),
@@ -558,6 +601,94 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             )
           else
             ...players.map((p) => _buildPlayerRow(context, ref, session, p, color, isCurrentActive)),
+          if (unassigned > 0 || isCurrentActive) ...[
+            const Divider(height: 24),
+            _buildUnassignedGoalsRow(context, ref, session, team, unassigned, color, isCurrentActive),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUnassignedGoalsRow(
+    BuildContext context,
+    WidgetRef ref,
+    Session session,
+    Team team,
+    int unassigned,
+    Color teamColor,
+    bool isCurrentActive,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: teamColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Remix.football_line, size: 16, color: teamColor),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('CSC adverse / Non attribué', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                Text(
+                  'Buts pour cette équipe sans joueur assigné',
+                  style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                ),
+              ],
+            ),
+          ),
+          if (isCurrentActive) ...[
+            IconButton(
+              tooltip: 'Diminuer les buts CSC / non attribués',
+              icon: const Icon(Remix.subtract_line, size: 16),
+              color: context.colors.foreground400,
+              onPressed: unassigned > 0
+                  ? () {
+                      final newA = team == Team.a ? unassigned - 1 : null;
+                      final newB = team == Team.b ? unassigned - 1 : null;
+                      unawaited(
+                        ref.read(sessionsControllerProvider).updateUnassignedGoals(
+                          sessionId: session.id,
+                          unassignedGoalsA: newA,
+                          unassignedGoalsB: newB,
+                        ),
+                      );
+                    }
+                  : null,
+            ),
+            Text(
+              '$unassigned',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            ),
+            IconButton(
+              tooltip: 'Ajouter un but CSC / non attribué (et incrémenter le score)',
+              icon: const Icon(Remix.add_line, size: 16),
+              color: teamColor,
+              onPressed: () {
+                final newA = team == Team.a ? unassigned + 1 : null;
+                final newB = team == Team.b ? unassigned + 1 : null;
+                unawaited(
+                  ref.read(sessionsControllerProvider).updateUnassignedGoals(
+                    sessionId: session.id,
+                    unassignedGoalsA: newA,
+                    unassignedGoalsB: newB,
+                    adjustScore: true,
+                    adjustedTeam: team,
+                    delta: 1,
+                  ),
+                );
+              },
+            ),
+          ] else if (unassigned > 0) ...[
+            _buildStatPill(context, '$unassigned', Remix.football_line, context.colors.foreground200),
+          ],
         ],
       ),
     );
@@ -644,6 +775,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     int assists = item.participation.assists;
     int yellowCards = item.participation.yellowCards;
     int redCards = item.participation.redCards;
+    final initialGoals = goals;
+    bool autoAdjustScore = true;
 
     unawaited(
       showModalBottomSheet<void>(
@@ -656,6 +789,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         builder: (ctx) {
           return StatefulBuilder(
             builder: (context, setModalState) {
+              final goalDelta = goals - initialGoals;
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -670,6 +804,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         IconButton(
+                          tooltip: 'Fermer',
                           icon: const Icon(Remix.close_line),
                           onPressed: () => Navigator.pop(ctx),
                         ),
@@ -698,6 +833,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       icon: null,
                       isYellowCard: true,
                       value: yellowCards,
+                      maxValue: 2,
                       onChanged: (v) => setModalState(() => yellowCards = v),
                     ),
                     const SizedBox(height: 12),
@@ -707,8 +843,27 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       icon: null,
                       isRedCard: true,
                       value: redCards,
+                      maxValue: 1,
                       onChanged: (v) => setModalState(() => redCards = v),
                     ),
+                    if (goalDelta != 0) ...[
+                      const SizedBox(height: 12),
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        dense: true,
+                        value: autoAdjustScore,
+                        onChanged: (v) => setModalState(() => autoAdjustScore = v ?? true),
+                        title: Text(
+                          "Ajuster le score de l'équipe (${goalDelta > 0 ? '+$goalDelta' : '$goalDelta'})",
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: Text(
+                          "Met à jour automatiquement le score global de l'Équipe ${item.participation.team.name.toUpperCase()}",
+                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                        ),
+                        activeColor: context.colors.primary500,
+                      ),
+                    ],
                     const SizedBox(height: 24),
                     PrimaryButton(
                       label: 'Enregistrer les stats',
@@ -720,6 +875,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                           assists: assists,
                           yellowCards: yellowCards,
                           redCards: redCards,
+                          adjustScore: autoAdjustScore,
+                          playerTeam: item.participation.team,
+                          goalDelta: goalDelta,
                         );
                         if (context.mounted) Navigator.pop(ctx);
                       },
@@ -741,9 +899,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     required IconData? icon,
     required int value,
     required ValueChanged<int> onChanged,
+    int? maxValue,
     bool isYellowCard = false,
     bool isRedCard = false,
   }) {
+    final canIncrement = maxValue == null || value < maxValue;
     return Row(
       children: [
         if (icon != null) ...[
@@ -758,15 +918,17 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         ],
         Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w500))),
         IconButton(
+          tooltip: 'Diminuer $label',
           icon: const Icon(Remix.subtract_line),
           color: context.colors.foreground400,
           onPressed: value > 0 ? () => onChanged(value - 1) : null,
         ),
         Text('$value', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         IconButton(
+          tooltip: 'Augmenter $label',
           icon: const Icon(Remix.add_line),
           color: context.colors.primary500,
-          onPressed: () => onChanged(value + 1),
+          onPressed: canIncrement ? () => onChanged(value + 1) : null,
         ),
       ],
     );
