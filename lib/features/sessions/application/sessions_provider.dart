@@ -329,6 +329,7 @@ class SessionsController {
       playerAssistsB: participants
           .where((p) => p.participation.team == Team.b)
           .fold<int>(0, (s, p) => s + p.participation.assists),
+      participations: participants.map((p) => p.participation),
     );
     if (blockers.isNotEmpty) return blockers;
 

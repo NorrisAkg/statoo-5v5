@@ -211,6 +211,78 @@ void main() {
         [CloseBlocker.assistsExceedGoals],
       );
     });
+
+    test('blocks when unique scorer is also the unique assister (John auto-passe)', () {
+      // Team A has 1 goal scored by John, and John also has 1 assist.
+      // John cannot assist himself: goals (1) + assists (1) = 2 > teamGoals (1).
+      final oneGoalSession = unscored.copyWith(scoreA: 1, scoreB: 0, result: MatchResult.teamA);
+      final participants = [
+        _participant('john', Team.a, goals: 1, assists: 1),
+        _participant('mate_a', Team.a),
+        _participant('b1', Team.b),
+        _participant('b2', Team.b),
+      ];
+      expect(
+        closeBlockers(
+          session: oneGoalSession,
+          teamACount: 2,
+          teamBCount: 2,
+          playerGoalsA: 1,
+          playerGoalsB: 0,
+          playerAssistsA: 1,
+          participations: participants.map((p) => p.participation),
+        ),
+        [CloseBlocker.selfAssist],
+      );
+    });
+
+    test('accepts when teammate assists the unique scorer', () {
+      // Team A has 1 goal scored by John, assisted by teammate
+      final oneGoalSession = unscored.copyWith(scoreA: 1, scoreB: 0, result: MatchResult.teamA);
+      final participants = [
+        _participant('john', Team.a, goals: 1),
+        _participant('mate_a', Team.a, assists: 1),
+        _participant('b1', Team.b),
+        _participant('b2', Team.b),
+      ];
+      expect(
+        closeBlockers(
+          session: oneGoalSession,
+          teamACount: 2,
+          teamBCount: 2,
+          playerGoalsA: 1,
+          playerGoalsB: 0,
+          playerAssistsA: 1,
+          participations: participants.map((p) => p.participation),
+        ),
+        isEmpty,
+      );
+    });
+
+    test('blocks when a player assists exceed teammate goals in multi-goal match', () {
+      // Team A scores 3 goals: John scores 2 goals, Bob scores 1 goal.
+      // John has 2 assists. Teammates only scored 1 goal, so John cannot have 2 assists!
+      // John: 2 goals + 2 assists = 4 > 3 team goals.
+      final threeGoalSession = unscored.copyWith(scoreA: 3, scoreB: 0, result: MatchResult.teamA);
+      final participants = [
+        _participant('john', Team.a, goals: 2, assists: 2),
+        _participant('bob', Team.a, goals: 1),
+        _participant('b1', Team.b),
+        _participant('b2', Team.b),
+      ];
+      expect(
+        closeBlockers(
+          session: threeGoalSession,
+          teamACount: 2,
+          teamBCount: 2,
+          playerGoalsA: 3,
+          playerGoalsB: 0,
+          playerAssistsA: 2,
+          participations: participants.map((p) => p.participation),
+        ),
+        [CloseBlocker.selfAssist],
+      );
+    });
   });
 
   group('SessionsController.closeSession', () {
@@ -261,17 +333,44 @@ void main() {
       expect(repo.session.status, SessionStatus.closed);
     });
 
-    test('refuses to close when assists exceed player goals', () async {
+    test('refuses to close when team assists exceed team player goals', () async {
+      // scoreA=2, scoreB=1. Team A has 3 assists across non-scorers (no self-assist: 0+1 <= 2).
+      // playerAssistsA: 1 + 1 + 1 = 3 > playerGoalsA: 2
+      final scored5v5 = unscored.copyWith(scoreA: 2, scoreB: 1, result: MatchResult.teamA);
       final teamsWithExcessAssists = [
-        _participant('a1', Team.a, goals: 1, assists: 2),
-        _participant('a2', Team.a, goals: 1, assists: 1),
-        _participant('b1', Team.b, goals: 1, assists: 1),
+        _participant('a1', Team.a, goals: 1),
+        _participant('a2', Team.a, goals: 1),
+        _participant('a3', Team.a, assists: 1),
+        _participant('a4', Team.a, assists: 1),
+        _participant('a5', Team.a, assists: 1),
+        _participant('b1', Team.b, goals: 1),
         _participant('b2', Team.b),
+        _participant('b3', Team.b),
+        _participant('b4', Team.b),
+        _participant('b5', Team.b),
       ];
-      final repo = _FakeSessionsRepository(scored, teamsWithExcessAssists);
+      final repo = _FakeSessionsRepository(scored5v5, teamsWithExcessAssists);
       final blockers = await containerFor(repo).read(sessionsControllerProvider).closeSession('s1');
 
       expect(blockers, [CloseBlocker.assistsExceedGoals]);
+      expect(repo.closeCalls, 0);
+      expect(repo.session.status, SessionStatus.draft);
+    });
+
+    test('refuses to close when a player is credited with a self-assist (John)', () async {
+      // 1-0 match: John is unique scorer and unique assister for Team A.
+      // Team assists = 1 <= 1, but John has 1 goal + 1 assist = 2 > 1.
+      final oneZeroMatch = unscored.copyWith(scoreA: 1, scoreB: 0, result: MatchResult.teamA);
+      final teamsWithSelfAssist = [
+        _participant('john', Team.a, goals: 1, assists: 1),
+        _participant('mate_a', Team.a),
+        _participant('b1', Team.b),
+        _participant('b2', Team.b),
+      ];
+      final repo = _FakeSessionsRepository(oneZeroMatch, teamsWithSelfAssist);
+      final blockers = await containerFor(repo).read(sessionsControllerProvider).closeSession('s1');
+
+      expect(blockers, [CloseBlocker.selfAssist]);
       expect(repo.closeCalls, 0);
       expect(repo.session.status, SessionStatus.draft);
     });

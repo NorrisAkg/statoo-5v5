@@ -1,7 +1,8 @@
+import 'participation.dart';
 import 'session.dart';
 
 /// Blocking reasons for closing a session (CDC §4.2 and §5).
-enum CloseBlocker { missingScore, unevenTeams, goalsMismatch, assistsExceedGoals }
+enum CloseBlocker { missingScore, unevenTeams, goalsMismatch, assistsExceedGoals, selfAssist }
 
 /// The session vanished or changed between the check and the write.
 class SessionCloseException implements Exception {
@@ -23,7 +24,14 @@ List<CloseBlocker> closeBlockers({
   required int playerGoalsB,
   int playerAssistsA = 0,
   int playerAssistsB = 0,
+  Iterable<Participation>? participations,
 }) {
+  final hasSelfAssist = participations != null &&
+      participations.any((p) {
+        final teamGoals = p.team == Team.a ? playerGoalsA : playerGoalsB;
+        return p.goals + p.assists > teamGoals;
+      });
+
   return [
     if (!hasScore(session)) CloseBlocker.missingScore,
     if (!session.allowUnevenTeams && (teamACount - teamBCount).abs() > 1) CloseBlocker.unevenTeams,
@@ -31,7 +39,10 @@ List<CloseBlocker> closeBlockers({
         (playerGoalsA + session.unassignedGoalsA != session.scoreA! ||
          playerGoalsB + session.unassignedGoalsB != session.scoreB!))
       CloseBlocker.goalsMismatch,
-    if (playerAssistsA + playerAssistsB > playerGoalsA + playerGoalsB)
+    if (playerAssistsA > playerGoalsA ||
+        playerAssistsB > playerGoalsB ||
+        playerAssistsA + playerAssistsB > playerGoalsA + playerGoalsB)
       CloseBlocker.assistsExceedGoals,
+    if (hasSelfAssist) CloseBlocker.selfAssist,
   ];
 }

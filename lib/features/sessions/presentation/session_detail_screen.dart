@@ -1168,6 +1168,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       playerGoalsB: goalsB,
       playerAssistsA: assistsA,
       playerAssistsB: assistsB,
+      participations: participants.map((p) => p.participation),
     );
 
     if (blockers.contains(CloseBlocker.unevenTeams)) {
@@ -1209,15 +1210,40 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     }
 
     if (blockers.contains(CloseBlocker.assistsExceedGoals)) {
-      final totalAssists = assistsA + assistsB;
-      final totalPlayerGoals = goalsA + goalsB;
+      final details = <String>[];
+      if (assistsA > goalsA) {
+        details.add('Équipe A : $assistsA passe(s) pour $goalsA but(s) marqué(s)');
+      }
+      if (assistsB > goalsB) {
+        details.add('Équipe B : $assistsB passe(s) pour $goalsB but(s) marqué(s)');
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Clôture impossible : $totalAssists passe(s) décisive(s) pour $totalPlayerGoals but(s) marqué(s) par les joueurs. '
-            'Le nombre de passes décisives ne peut pas dépasser le nombre de buts marqués.',
+            'Clôture impossible : ${details.join(' · ')}. '
+            "Le nombre de passes décisives d'une équipe ne peut pas dépasser ses buts marqués.",
           ),
           duration: const Duration(seconds: 5),
+        ),
+      );
+      return;
+    }
+
+    if (blockers.contains(CloseBlocker.selfAssist)) {
+      final culprits = participants.where((p) {
+        final teamGoals = p.participation.team == Team.a ? goalsA : goalsB;
+        return p.participation.goals + p.participation.assists > teamGoals;
+      }).map((p) {
+        final teamGoals = p.participation.team == Team.a ? goalsA : goalsB;
+        return '${p.playerName} (${p.participation.goals} but(s), ${p.participation.assists} passe(s) pour $teamGoals but(s) de son équipe)';
+      }).toList();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Clôture impossible : auto-passe détectée pour ${culprits.join(', ')}. '
+            'Un joueur ne peut pas se faire une passe décisive à lui-même.',
+          ),
+          duration: const Duration(seconds: 6),
         ),
       );
       return;
@@ -1306,6 +1332,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       'Clôture impossible : le total des buts attribués ne correspond pas au score. Corrigez avant de clôturer.',
     CloseBlocker.assistsExceedGoals =>
       'Clôture impossible : le nombre de passes décisives dépasse le nombre de buts marqués par les joueurs.',
+    CloseBlocker.selfAssist =>
+      'Clôture impossible : un joueur ne peut pas se faire de passe décisive à lui-même.',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
