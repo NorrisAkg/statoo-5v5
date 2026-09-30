@@ -141,6 +141,21 @@ class _MockPlayersRepository implements PlayersRepository {
   Future<void> deletePlayer(String id) async {
     _players.removeWhere((p) => p.id == id);
   }
+
+  @override
+  Future<bool> isNameTaken({
+    required String name,
+    String? teamId,
+    String? excludePlayerId,
+  }) async {
+    final cleanName = name.trim().toLowerCase();
+    return _players.any(
+      (p) =>
+          (teamId == null || p.teamId == teamId) &&
+          (excludePlayerId == null || p.id != excludePlayerId) &&
+          p.name.trim().toLowerCase() == cleanName,
+    );
+  }
 }
 
 void main() {

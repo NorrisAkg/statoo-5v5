@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
@@ -533,7 +534,8 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         ],
         playersAsync.when(
           data: (players) {
-            final activePlayers = players.where((p) => p.isActive).toList();
+            final activePlayers = players.where((p) => p.isActive).toList()
+              ..sort(comparePlayersAlphabetically);
 
             if (activePlayers.isEmpty) {
               return AppCard(
@@ -583,6 +585,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                     final matchNickname = p.nickname?.toLowerCase().contains(query) ?? false;
                     return matchName || matchNickname;
                   }).toList();
+            sortPlayersSelectedFirst(filteredPlayers, selectedIds: _selectedPlayerIds);
 
             final allSelected = activePlayers.isNotEmpty &&
                 activePlayers.every((p) => _selectedPlayerIds.contains(p.id));

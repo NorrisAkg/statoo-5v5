@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
@@ -403,7 +404,8 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
               data: (players) {
                 final availablePlayers = players
                     .where((p) => p.isActive && !widget.alreadyAssignedPlayerIds.contains(p.id))
-                    .toList();
+                    .toList()
+                  ..sort(comparePlayersAlphabetically);
 
                 if (availablePlayers.isEmpty) {
                   return Center(
@@ -431,6 +433,7 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
                   return p.name.toLowerCase().contains(q) ||
                       (p.nickname != null && p.nickname!.toLowerCase().contains(q));
                 }).toList();
+                sortPlayersSelectedFirst(filtered, selectedIds: _selectedPlayerIds);
 
                 if (filtered.isEmpty) {
                   return Center(

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
@@ -91,8 +92,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
             return nameMatch || nickMatch;
           }
 
-          final activePlayers = players.where((p) => p.isActive && matchesQuery(p)).toList();
-          final archivedPlayers = players.where((p) => !p.isActive && matchesQuery(p)).toList();
+          final activePlayers = players.where((p) => p.isActive && matchesQuery(p)).toList()
+            ..sort(comparePlayersAlphabetically);
+          final archivedPlayers = players.where((p) => !p.isActive && matchesQuery(p)).toList()
+            ..sort(comparePlayersAlphabetically);
           final hasNoResults = query.isNotEmpty && activePlayers.isEmpty && archivedPlayers.isEmpty;
 
           return ListView(

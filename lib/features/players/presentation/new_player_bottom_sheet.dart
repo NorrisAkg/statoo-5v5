@@ -21,6 +21,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameFocusNode = FocusNode();
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
+  String? _nameError;
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -36,6 +37,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
     _nicknameController.clear();
     setState(() {
       _imageFile = null;
+      _nameError = null;
     });
     _nameFocusNode.requestFocus();
   }
@@ -43,6 +45,12 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   Future<void> _submit({required bool createAnother}) async {
     final name = _nameController.text.trim();
     if (name.isEmpty) return;
+
+    final taken = await ref.read(playersListProvider.notifier).isNameTaken(name);
+    if (taken) {
+      setState(() => _nameError = 'Un joueur nommé « $name » existe déjà. Modifiez légèrement le nom.');
+      return;
+    }
 
     await ref.read(playersListProvider.notifier).addPlayer(
       name: name,
@@ -74,7 +82,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isFormValid = _nameController.text.trim().isNotEmpty;
+    final isFormValid = _nameController.text.trim().isNotEmpty && _nameError == null;
 
     return Container(
       decoration: BoxDecoration(
@@ -155,8 +163,23 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                   borderSide: BorderSide(color: context.colors.primary500),
                 ),
               ),
-              onChanged: (_) => setState(() {}),
+              onChanged: (_) => setState(() => _nameError = null),
             ),
+            if (_nameError != null) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(Remix.error_warning_line, size: 14, color: Theme.of(context).colorScheme.error),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      _nameError!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 16),
             Text('Surnom', style: TextStyle(color: context.colors.foreground300, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),

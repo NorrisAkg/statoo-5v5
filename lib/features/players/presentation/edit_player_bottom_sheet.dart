@@ -20,6 +20,7 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
   late final TextEditingController _nicknameController;
   final _formKey = GlobalKey<FormState>();
   bool _isSaving = false;
+  String? _nameError;
 
   @override
   void initState() {
@@ -37,12 +38,24 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
+
+    final name = _nameController.text.trim();
+    final taken = await ref
+        .read(playersListProvider.notifier)
+        .isNameTaken(name, excludePlayerId: widget.player.id);
+    if (taken) {
+      setState(() {
+        _nameError = 'Un joueur nommé « $name » existe déjà. Modifiez légèrement le nom.';
+      });
+      return;
+    }
+
     setState(() => _isSaving = true);
 
     try {
       await ref.read(playersListProvider.notifier).updatePlayer(
         id: widget.player.id,
-        name: _nameController.text.trim(),
+        name: name,
         nickname: _nicknameController.text.trim().isNotEmpty
             ? _nicknameController.text.trim()
             : null,
@@ -51,7 +64,7 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
       if (mounted) {
         Navigator.of(context).pop(true);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Joueur "${_nameController.text.trim()}" mis à jour.')),
+          SnackBar(content: Text('Joueur "$name" mis à jour.')),
         );
       }
     } finally {
@@ -114,6 +127,11 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   autofocus: true,
+                  onChanged: (_) {
+                    if (_nameError != null) {
+                      setState(() => _nameError = null);
+                    }
+                  },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return 'Le nom est obligatoire';
@@ -121,6 +139,21 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
                     return null;
                   },
                 ),
+                if (_nameError != null) ...[
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Icon(Remix.error_warning_line, size: 14, color: Theme.of(context).colorScheme.error),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          _nameError!,
+                          style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _nicknameController,

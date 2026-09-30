@@ -75,6 +75,21 @@ class _MockPlayersRepository implements PlayersRepository {
   Future<void> deletePlayer(String id) async {
     _players.removeWhere((p) => p.id == id);
   }
+
+  @override
+  Future<bool> isNameTaken({
+    required String name,
+    String? teamId,
+    String? excludePlayerId,
+  }) async {
+    final cleanName = name.trim().toLowerCase();
+    return _players.any(
+      (p) =>
+          (teamId == null || p.teamId == teamId) &&
+          (excludePlayerId == null || p.id != excludePlayerId) &&
+          p.name.trim().toLowerCase() == cleanName,
+    );
+  }
 }
 
 void main() {
@@ -127,6 +142,35 @@ void main() {
 
       // Verify name field is cleared and focus is returned
       expect(nameEditable.focusNode.hasFocus, isTrue);
+    });
+
+    testWidgets('shows inline error message when attempting to add duplicate player name', (tester) async {
+      final repo = _MockPlayersRepository();
+      await repo.createPlayer(name: 'Lucas', teamId: 'team_1');
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            playersRepositoryProvider.overrideWithValue(repo),
+            activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            home: const Scaffold(
+              body: NewPlayerBottomSheet(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField).first, 'lucas');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Créer'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('existe déjà'), findsOneWidget);
     });
   });
 }

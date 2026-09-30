@@ -57,6 +57,21 @@ class _FakePlayersRepository implements PlayersRepository {
 
   @override
   Future<Set<String>> getDeletablePlayerIds() async => {'p_3'};
+
+  @override
+  Future<bool> isNameTaken({
+    required String name,
+    String? teamId,
+    String? excludePlayerId,
+  }) async {
+    final cleanName = name.trim().toLowerCase();
+    return _players.any(
+      (p) =>
+          (teamId == null || p.teamId == teamId) &&
+          (excludePlayerId == null || p.id != excludePlayerId) &&
+          p.name.trim().toLowerCase() == cleanName,
+    );
+  }
 }
 
 void main() {

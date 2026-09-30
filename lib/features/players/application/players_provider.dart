@@ -116,6 +116,18 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
       ..invalidate(topCardsProvider)
       ..invalidate(groupTotalsProvider);
   }
+
+  /// Checks whether a player with the given [name] already exists in the
+  /// active team. Pass [excludePlayerId] to ignore a specific player (for edits).
+  Future<bool> isNameTaken(String name, {String? excludePlayerId}) async {
+    final activeTeamId = ref.read(activeTeamIdProvider);
+    if (activeTeamId == null) return false;
+    return await ref.read(playersRepositoryProvider).isNameTaken(
+      name: name,
+      teamId: activeTeamId,
+      excludePlayerId: excludePlayerId,
+    );
+  }
 }
 
 final AsyncNotifierProvider<PlayersNotifier, List<Player>> playersListProvider =

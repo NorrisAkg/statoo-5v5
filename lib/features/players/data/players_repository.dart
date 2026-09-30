@@ -23,6 +23,15 @@ abstract class PlayersRepository {
   Future<bool> canDeletePlayer(String id);
   Future<Set<String>> getDeletablePlayerIds();
   Future<void> deletePlayer(String id);
+
+  /// Returns true if a player with the same [name] (case-insensitive) already
+  /// exists in the given [teamId]. If [excludePlayerId] is provided, that
+  /// player is excluded from the check (useful for edits).
+  Future<bool> isNameTaken({
+    required String name,
+    required String teamId,
+    String? excludePlayerId,
+  });
 }
 
 class SqlitePlayersRepository implements PlayersRepository {
@@ -222,5 +231,32 @@ class SqlitePlayersRepository implements PlayersRepository {
   Future<void> deletePlayer(String id) async {
     final db = await _appDatabase.database;
     await db.delete('players', where: 'id = ?', whereArgs: [id]);
+  }
+
+  @override
+  Future<bool> isNameTaken({
+    required String name,
+    required String teamId,
+    String? excludePlayerId,
+  }) async {
+    final db = await _appDatabase.database;
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return false;
+
+    final where = StringBuffer('team_id = ? AND name = ? COLLATE NOCASE');
+    final args = <Object>[teamId, trimmed];
+
+    if (excludePlayerId != null) {
+      where.write(' AND id != ?');
+      args.add(excludePlayerId);
+    }
+
+    final count = Sqflite.firstIntValue(
+      await db.rawQuery(
+        'SELECT COUNT(*) FROM players WHERE $where',
+        args,
+      ),
+    ) ?? 0;
+    return count > 0;
   }
 }
