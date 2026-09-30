@@ -31,7 +31,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 6,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -59,6 +59,48 @@ class AppDatabase {
             "UPDATE sessions SET status = 'DRAFT' "
             "WHERE status = 'CLOSED' AND (score_a IS NULL OR score_b IS NULL OR result IS NULL)",
           );
+        }
+        if (oldVersion < 6) {
+          final sessionCols = await db.rawQuery('PRAGMA table_info(sessions)');
+          final colNames = sessionCols.map((c) => c['name']?.toString()).toSet();
+          if (!colNames.contains('session_type')) {
+            await db.execute("ALTER TABLE sessions ADD COLUMN session_type TEXT NOT NULL DEFAULT 'CLASSIC_2';");
+          }
+          if (!colNames.contains('score_c')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN score_c INTEGER;');
+          }
+          if (!colNames.contains('wins_a')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN wins_a INTEGER DEFAULT 0;');
+          }
+          if (!colNames.contains('wins_b')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN wins_b INTEGER DEFAULT 0;');
+          }
+          if (!colNames.contains('wins_c')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN wins_c INTEGER DEFAULT 0;');
+          }
+          if (!colNames.contains('draw_points')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN draw_points INTEGER DEFAULT 1;');
+          }
+          if (!colNames.contains('unassigned_goals_c')) {
+            await db.execute('ALTER TABLE sessions ADD COLUMN unassigned_goals_c INTEGER DEFAULT 0;');
+          }
+          // Relax participations team CHECK constraint to allow 'C'
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS participations_new (
+              id TEXT PRIMARY KEY,
+              session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+              player_id TEXT NOT NULL REFERENCES players(id) ON DELETE RESTRICT,
+              team TEXT NOT NULL CHECK(team IN ('A', 'B', 'C')),
+              goals INTEGER NOT NULL DEFAULT 0,
+              assists INTEGER NOT NULL DEFAULT 0,
+              yellow_cards INTEGER NOT NULL DEFAULT 0,
+              red_cards INTEGER NOT NULL DEFAULT 0,
+              UNIQUE (session_id, player_id)
+            );
+          ''');
+          await db.execute('INSERT OR IGNORE INTO participations_new SELECT id, session_id, player_id, team, goals, assists, yellow_cards, red_cards FROM participations;');
+          await db.execute('DROP TABLE participations;');
+          await db.execute('ALTER TABLE participations_new RENAME TO participations;');
         }
         await _dropViews(db);
         await _createViews(db);
@@ -127,13 +169,20 @@ class AppDatabase {
         played_at TEXT NOT NULL,
         status TEXT NOT NULL CHECK(status IN ('DRAFT', 'CLOSED')),
         split_mode TEXT CHECK(split_mode IN ('RANDOM', 'RANDOM_ADJUSTED', 'MANUAL')),
+        session_type TEXT NOT NULL DEFAULT 'CLASSIC_2' CHECK(session_type IN ('CLASSIC_2', 'TOURNAMENT_3')),
         allow_uneven_teams INTEGER NOT NULL DEFAULT 0,
         is_ranked INTEGER NOT NULL DEFAULT 1,
         score_a INTEGER,
         score_b INTEGER,
-        result TEXT CHECK(result IN ('A', 'B', 'DRAW')),
+        score_c INTEGER,
+        wins_a INTEGER DEFAULT 0,
+        wins_b INTEGER DEFAULT 0,
+        wins_c INTEGER DEFAULT 0,
+        draw_points INTEGER DEFAULT 1,
+        result TEXT CHECK(result IN ('A', 'B', 'C', 'DRAW', 'DRAW_AB', 'DRAW_BC', 'DRAW_AC', 'DRAW_ALL')),
         unassigned_goals_a INTEGER DEFAULT 0,
         unassigned_goals_b INTEGER DEFAULT 0,
+        unassigned_goals_c INTEGER DEFAULT 0,
         notes TEXT
       );
     ''');
@@ -143,7 +192,7 @@ class AppDatabase {
         id TEXT PRIMARY KEY,
         session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
         player_id TEXT NOT NULL REFERENCES players(id) ON DELETE RESTRICT,
-        team TEXT NOT NULL CHECK(team IN ('A', 'B')),
+        team TEXT NOT NULL CHECK(team IN ('A', 'B', 'C')),
         goals INTEGER NOT NULL DEFAULT 0,
         assists INTEGER NOT NULL DEFAULT 0,
         yellow_cards INTEGER NOT NULL DEFAULT 0,
@@ -183,21 +232,38 @@ class AppDatabase {
           WHEN s.status = 'CLOSED' AND s.is_ranked = 1 THEN
             CASE 
               WHEN s.result = 'DRAW' THEN 1
-              WHEN (s.result = 'A' AND pt.team = 'A') OR (s.result = 'B' AND pt.team = 'B') THEN 3
+              WHEN (s.result = 'A' AND pt.team = 'A') OR (s.result = 'B' AND pt.team = 'B') OR (s.result = 'C' AND pt.team = 'C') THEN 3
+              WHEN s.result = 'DRAW_AB' AND (pt.team = 'A' OR pt.team = 'B') THEN COALESCE(s.draw_points, 1)
+              WHEN s.result = 'DRAW_BC' AND (pt.team = 'B' OR pt.team = 'C') THEN COALESCE(s.draw_points, 1)
+              WHEN s.result = 'DRAW_AC' AND (pt.team = 'A' OR pt.team = 'C') THEN COALESCE(s.draw_points, 1)
+              WHEN s.result = 'DRAW_ALL' THEN COALESCE(s.draw_points, 1)
               ELSE 0
             END
           ELSE 0
         END AS points,
         CASE 
-          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND ((s.result = 'A' AND pt.team = 'A') OR (s.result = 'B' AND pt.team = 'B')) THEN 1
+          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND ((s.result = 'A' AND pt.team = 'A') OR (s.result = 'B' AND pt.team = 'B') OR (s.result = 'C' AND pt.team = 'C')) THEN 1
           ELSE 0
         END AS is_win,
         CASE 
-          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND s.result = 'DRAW' THEN 1
+          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND (
+            s.result = 'DRAW' OR 
+            (s.result = 'DRAW_AB' AND (pt.team = 'A' OR pt.team = 'B')) OR
+            (s.result = 'DRAW_BC' AND (pt.team = 'B' OR pt.team = 'C')) OR
+            (s.result = 'DRAW_AC' AND (pt.team = 'A' OR pt.team = 'C')) OR
+            s.result = 'DRAW_ALL'
+          ) THEN 1
           ELSE 0
         END AS is_draw,
         CASE 
-          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND ((s.result = 'A' AND pt.team = 'B') OR (s.result = 'B' AND pt.team = 'A')) THEN 1
+          WHEN s.status = 'CLOSED' AND s.is_ranked = 1 AND (
+            (s.result = 'A' AND pt.team != 'A') OR 
+            (s.result = 'B' AND pt.team != 'B') OR 
+            (s.result = 'C' AND pt.team != 'C') OR
+            (s.result = 'DRAW_AB' AND pt.team = 'C') OR
+            (s.result = 'DRAW_BC' AND pt.team = 'A') OR
+            (s.result = 'DRAW_AC' AND pt.team = 'B')
+          ) THEN 1
           ELSE 0
         END AS is_loss
       FROM participations pt
@@ -382,8 +448,8 @@ class AppDatabase {
           COUNT(CASE WHEN status = 'CLOSED' THEN 1 END) AS total_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 1 THEN 1 END) AS ranked_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 0 THEN 1 END) AS friendly_sessions,
-          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN score_a + score_b ELSE 0 END), 0) AS total_score_goals,
-          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN unassigned_goals_a + unassigned_goals_b ELSE 0 END), 0) AS explicit_unassigned_goals
+          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN score_a + score_b + COALESCE(score_c, 0) ELSE 0 END), 0) AS total_score_goals,
+          COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN unassigned_goals_a + unassigned_goals_b + COALESCE(unassigned_goals_c, 0) ELSE 0 END), 0) AS explicit_unassigned_goals
         FROM sessions
         GROUP BY team_id
       ),

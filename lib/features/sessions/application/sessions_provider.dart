@@ -114,31 +114,44 @@ class SessionsController {
     required bool isRanked,
     required bool allowUnevenTeams,
     required Map<String, String> playerTeamAssignments,
+    SessionType sessionType = SessionType.classic2,
+    int drawPoints = 1,
     bool startImmediately = true,
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
+    final isTournament = sessionType == SessionType.tournament3;
     final sessionId = 's_${DateTime.now().millisecondsSinceEpoch}';
     final session = Session(
       id: sessionId,
       playedAt: playedAt,
       isRanked: isRanked,
+      sessionType: sessionType,
       allowUnevenTeams: allowUnevenTeams,
-      // TODO(cdc): Initialisation à 0-0 par défaut (choix produit ebadbc7).
-      // Un dialogue de clôture avec récapitulatif et alerte explicite protège contre les clôtures sans score.
-      scoreA: 0,
-      scoreB: 0,
-      result: MatchResult.draw,
+      // TODO(cdc): Pour le mode classique 2 équipes, initialisation à 0-0 par défaut (choix produit ebadbc7).
+      // Pour le tournoi 3 équipes, les scores de match ne sont pas initialisés et les victoires font foi.
+      scoreA: isTournament ? null : 0,
+      scoreB: isTournament ? null : 0,
+      drawPoints: drawPoints,
+      result: isTournament ? null : MatchResult.draw,
     );
 
     final participations = playerTeamAssignments.entries.map((e) {
       final partId = 'p_${sessionId}_${e.key}';
+      final Team team;
+      if (e.value == 'C') {
+        team = Team.c;
+      } else if (e.value == 'B') {
+        team = Team.b;
+      } else {
+        team = Team.a;
+      }
       return Participation(
         id: partId,
         sessionId: sessionId,
         playerId: e.key,
-        team: e.value == 'B' ? Team.b : Team.a,
+        team: team,
       );
     }).toList();
 
@@ -164,6 +177,7 @@ class SessionsController {
     }
     final session = await _repo.getSession(sessionId);
     if (session != null &&
+        session.sessionType == SessionType.classic2 &&
         (session.scoreA == null || session.scoreB == null || session.result == null)) {
       await _repo.updateSessionScore(sessionId: sessionId, scoreA: 0, scoreB: 0);
     }
@@ -201,10 +215,28 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
+  Future<void> updateTournamentWins({
+    required String sessionId,
+    required int winsA,
+    required int winsB,
+    required int winsC,
+    MatchResult? result,
+  }) async {
+    await _repo.updateTournamentWins(
+      sessionId: sessionId,
+      winsA: winsA,
+      winsB: winsB,
+      winsC: winsC,
+      result: result,
+    );
+    _invalidateAll(sessionId);
+  }
+
   Future<void> updateUnassignedGoals({
     required String sessionId,
     int? unassignedGoalsA,
     int? unassignedGoalsB,
+    int? unassignedGoalsC,
     bool adjustScore = false,
     Team? adjustedTeam,
     int delta = 0,
@@ -216,6 +248,7 @@ class SessionsController {
       teamId: teamId,
       unassignedGoalsA: unassignedGoalsA,
       unassignedGoalsB: unassignedGoalsB,
+      unassignedGoalsC: unassignedGoalsC,
     );
     if (adjustScore && adjustedTeam != null && delta != 0) {
       await _repo.incrementScore(
@@ -227,7 +260,6 @@ class SessionsController {
     }
     _invalidateAll(sessionId);
   }
-
   Future<void> updateParticipationStats({
     required String sessionId,
     required String participationId,
@@ -275,15 +307,31 @@ class SessionsController {
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;
+    final currentC = participants.where((p) => p.participation.team == Team.c).length;
     final addingA = playerTeamAssignments.values.where((t) => t == Team.a).length;
     final addingB = playerTeamAssignments.values.where((t) => t == Team.b).length;
+    final addingC = playerTeamAssignments.values.where((t) => t == Team.c).length;
     final totalA = currentA + addingA;
     final totalB = currentB + addingB;
+    final totalC = currentC + addingC;
 
-    if (!session.allowUnevenTeams && (totalA - totalB).abs() > 1) {
-      throw StateError(
-        "L'écart d'effectif dépasserait 1 joueur ($totalA vs $totalB) sans l'option équipes inégales.",
-      );
+    if (!session.allowUnevenTeams) {
+      if (session.sessionType == SessionType.tournament3) {
+        final counts = [totalA, totalB, totalC];
+        final maxCount = counts.reduce((a, b) => a > b ? a : b);
+        final minCount = counts.reduce((a, b) => a < b ? a : b);
+        if (maxCount - minCount > 1) {
+          throw StateError(
+            "L'écart d'effectif dépasserait 1 joueur ($totalA vs $totalB vs $totalC) sans l'option équipes inégales.",
+          );
+        }
+      } else {
+        if ((totalA - totalB).abs() > 1) {
+          throw StateError(
+            "L'écart d'effectif dépasserait 1 joueur ($totalA vs $totalB) sans l'option équipes inégales.",
+          );
+        }
+      }
     }
 
     final participations = playerTeamAssignments.entries.map((e) {
@@ -313,22 +361,22 @@ class SessionsController {
     if (session == null) throw SessionCloseException('Session $sessionId not found');
     final participants = await _repo.getSessionParticipants(sessionId);
 
+    final isTournament = session.sessionType == SessionType.tournament3;
+    final teamAParts = participants.where((p) => p.participation.team == Team.a);
+    final teamBParts = participants.where((p) => p.participation.team == Team.b);
+    final teamCParts = participants.where((p) => p.participation.team == Team.c);
+
     final blockers = closeBlockers(
       session: session,
-      teamACount: participants.where((p) => p.participation.team == Team.a).length,
-      teamBCount: participants.where((p) => p.participation.team == Team.b).length,
-      playerGoalsA: participants
-          .where((p) => p.participation.team == Team.a)
-          .fold<int>(0, (s, p) => s + p.participation.goals),
-      playerGoalsB: participants
-          .where((p) => p.participation.team == Team.b)
-          .fold<int>(0, (s, p) => s + p.participation.goals),
-      playerAssistsA: participants
-          .where((p) => p.participation.team == Team.a)
-          .fold<int>(0, (s, p) => s + p.participation.assists),
-      playerAssistsB: participants
-          .where((p) => p.participation.team == Team.b)
-          .fold<int>(0, (s, p) => s + p.participation.assists),
+      teamACount: teamAParts.length,
+      teamBCount: teamBParts.length,
+      teamCCount: isTournament ? teamCParts.length : null,
+      playerGoalsA: teamAParts.fold<int>(0, (s, p) => s + p.participation.goals),
+      playerGoalsB: teamBParts.fold<int>(0, (s, p) => s + p.participation.goals),
+      playerGoalsC: teamCParts.fold<int>(0, (s, p) => s + p.participation.goals),
+      playerAssistsA: teamAParts.fold<int>(0, (s, p) => s + p.participation.assists),
+      playerAssistsB: teamBParts.fold<int>(0, (s, p) => s + p.participation.assists),
+      playerAssistsC: teamCParts.fold<int>(0, (s, p) => s + p.participation.assists),
       participations: participants.map((p) => p.participation),
     );
     if (blockers.isNotEmpty) return blockers;
@@ -343,6 +391,7 @@ class SessionsController {
     required String sessionId,
     required String participationId,
     required Team currentTeam,
+    Team? targetTeam,
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
@@ -353,14 +402,41 @@ class SessionsController {
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;
-    final newTeam = currentTeam == Team.a ? Team.b : Team.a;
-    final nextA = newTeam == Team.a ? currentA + 1 : currentA - 1;
-    final nextB = newTeam == Team.b ? currentB + 1 : currentB - 1;
+    final currentC = participants.where((p) => p.participation.team == Team.c).length;
+    final isTournament = session.sessionType == SessionType.tournament3;
 
-    if (!session.allowUnevenTeams && (nextA - nextB).abs() > 1) {
-      throw StateError(
-        "Ce changement créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
-      );
+    final newTeam = targetTeam ??
+        (isTournament
+            ? (currentTeam == Team.a ? Team.b : (currentTeam == Team.b ? Team.c : Team.a))
+            : (currentTeam == Team.a ? Team.b : Team.a));
+
+    final nextA = newTeam == Team.a
+        ? (currentTeam == Team.a ? currentA : currentA + 1)
+        : (currentTeam == Team.a ? currentA - 1 : currentA);
+    final nextB = newTeam == Team.b
+        ? (currentTeam == Team.b ? currentB : currentB + 1)
+        : (currentTeam == Team.b ? currentB - 1 : currentB);
+    final nextC = newTeam == Team.c
+        ? (currentTeam == Team.c ? currentC : currentC + 1)
+        : (currentTeam == Team.c ? currentC - 1 : currentC);
+
+    if (!session.allowUnevenTeams) {
+      if (isTournament) {
+        final counts = [nextA, nextB, nextC];
+        final maxCount = counts.reduce((a, b) => a > b ? a : b);
+        final minCount = counts.reduce((a, b) => a < b ? a : b);
+        if (maxCount - minCount > 1) {
+          throw StateError(
+            "Ce changement créerait un écart d'effectif de ${maxCount - minCount} joueurs sans l'option équipes inégales.",
+          );
+        }
+      } else {
+        if ((nextA - nextB).abs() > 1) {
+          throw StateError(
+            "Ce changement créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
+          );
+        }
+      }
     }
 
     await _repo.switchPlayerTeam(
@@ -386,13 +462,30 @@ class SessionsController {
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;
+    final currentC = participants.where((p) => p.participation.team == Team.c).length;
+    final isTournament = session.sessionType == SessionType.tournament3;
+
     final nextA = playerTeam == Team.a ? currentA - 1 : currentA;
     final nextB = playerTeam == Team.b ? currentB - 1 : currentB;
+    final nextC = playerTeam == Team.c ? currentC - 1 : currentC;
 
-    if (!session.allowUnevenTeams && (nextA - nextB).abs() > 1) {
-      throw StateError(
-        "Ce retrait créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
-      );
+    if (!session.allowUnevenTeams) {
+      if (isTournament) {
+        final counts = [nextA, nextB, nextC];
+        final maxCount = counts.reduce((a, b) => a > b ? a : b);
+        final minCount = counts.reduce((a, b) => a < b ? a : b);
+        if (maxCount - minCount > 1) {
+          throw StateError(
+            "Ce retrait créerait un écart d'effectif de ${maxCount - minCount} joueurs sans l'option équipes inégales.",
+          );
+        }
+      } else {
+        if ((nextA - nextB).abs() > 1) {
+          throw StateError(
+            "Ce retrait créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
+          );
+        }
+      }
     }
 
     await _repo.removeParticipation(

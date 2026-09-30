@@ -41,7 +41,7 @@ final class ThemeModeNotifierProvider
   }
 }
 
-String _$themeModeNotifierHash() => r'75705bd7232af7c18f5636af6da5c1b2bf32bdb3';
+String _$themeModeNotifierHash() => r'ccdba5b8776c057102fb7dfd0bb61fa0feb675bc';
 
 abstract class _$ThemeModeNotifier extends $Notifier<ThemeMode> {
   ThemeMode build();

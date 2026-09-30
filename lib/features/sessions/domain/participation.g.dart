@@ -30,4 +30,4 @@ Map<String, dynamic> _$ParticipationToJson(_Participation instance) =>
       'redCards': instance.redCards,
     };
 
-const _$TeamEnumMap = {Team.a: 'a', Team.b: 'b'};
+const _$TeamEnumMap = {Team.a: 'a', Team.b: 'b', Team.c: 'c'};

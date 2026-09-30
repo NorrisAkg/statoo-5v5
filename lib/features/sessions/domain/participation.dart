@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'participation.freezed.dart';
 part 'participation.g.dart';
 
-enum Team { a, b }
+enum Team { a, b, c }
 
 @freezed
 sealed class Participation with _$Participation {

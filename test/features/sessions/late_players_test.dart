@@ -53,7 +53,16 @@ SessionParticipantDetail _participant(String id, Team team) => SessionParticipan
 
 void main() {
   final playedAt = DateTime(2026, 9, 25, 20, 30);
-  final session = Session(id: 's1', playedAt: playedAt, isRanked: true, scoreA: 5, scoreB: 4, result: MatchResult.teamA);
+  final session = Session(
+    id: 's1',
+    playedAt: playedAt,
+    isRanked: true,
+    scoreA: 5,
+    scoreB: 4,
+    unassignedGoalsA: 5,
+    unassignedGoalsB: 4,
+    result: MatchResult.teamA,
+  );
 
   group('SessionsController.addLatePlayers', () {
     ProviderContainer containerFor(SessionsRepository repo, {String? teamId = 't1'}) {

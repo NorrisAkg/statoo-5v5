@@ -35,6 +35,14 @@ abstract class SessionsRepository {
     required String teamId,
     int? unassignedGoalsA,
     int? unassignedGoalsB,
+    int? unassignedGoalsC,
+  });
+  Future<void> updateTournamentWins({
+    required String sessionId,
+    required int winsA,
+    required int winsB,
+    required int winsC,
+    MatchResult? result,
   });
   Future<void> updateParticipationStats({
     required String participationId,
@@ -91,11 +99,22 @@ class SqliteSessionsRepository implements SessionsRepository {
     };
   }
 
+  SessionType _parseSessionType(String? val) =>
+      val == 'TOURNAMENT_3' ? SessionType.tournament3 : SessionType.classic2;
+
+  String _sessionTypeToString(SessionType t) =>
+      t == SessionType.tournament3 ? 'TOURNAMENT_3' : 'CLASSIC_2';
+
   MatchResult? _parseResult(String? val) {
     return switch (val) {
       'A' => MatchResult.teamA,
       'B' => MatchResult.teamB,
+      'C' => MatchResult.teamC,
       'DRAW' => MatchResult.draw,
+      'DRAW_AB' => MatchResult.drawAB,
+      'DRAW_BC' => MatchResult.drawBC,
+      'DRAW_AC' => MatchResult.drawAC,
+      'DRAW_ALL' => MatchResult.drawAll,
       _ => null,
     };
   }
@@ -104,13 +123,31 @@ class SqliteSessionsRepository implements SessionsRepository {
     return switch (r) {
       MatchResult.teamA => 'A',
       MatchResult.teamB => 'B',
+      MatchResult.teamC => 'C',
       MatchResult.draw => 'DRAW',
+      MatchResult.drawAB => 'DRAW_AB',
+      MatchResult.drawBC => 'DRAW_BC',
+      MatchResult.drawAC => 'DRAW_AC',
+      MatchResult.drawAll => 'DRAW_ALL',
       null => null,
     };
   }
 
-  Team _parseTeam(String val) => val == 'B' ? Team.b : Team.a;
-  String _teamToString(Team t) => t == Team.b ? 'B' : 'A';
+  Team _parseTeam(String val) {
+    return switch (val) {
+      'C' => Team.c,
+      'B' => Team.b,
+      _ => Team.a,
+    };
+  }
+
+  String _teamToString(Team t) {
+    return switch (t) {
+      Team.c => 'C',
+      Team.b => 'B',
+      Team.a => 'A',
+    };
+  }
 
   Session _mapSessionRow(Map<String, dynamic> row) {
     return Session(
@@ -118,13 +155,20 @@ class SqliteSessionsRepository implements SessionsRepository {
       playedAt: DateTime.parse(row['played_at']! as String),
       status: _parseStatus(row['status']! as String),
       splitMode: _parseSplitMode(row['split_mode'] as String?),
+      sessionType: _parseSessionType(row['session_type'] as String?),
       allowUnevenTeams: (row['allow_uneven_teams'] as int?) == 1,
       isRanked: (row['is_ranked'] as int?) == 1,
       scoreA: row['score_a'] as int?,
       scoreB: row['score_b'] as int?,
+      scoreC: row['score_c'] as int?,
+      winsA: (row['wins_a'] as int?) ?? 0,
+      winsB: (row['wins_b'] as int?) ?? 0,
+      winsC: (row['wins_c'] as int?) ?? 0,
+      drawPoints: (row['draw_points'] as int?) ?? 1,
       result: _parseResult(row['result'] as String?),
       unassignedGoalsA: (row['unassigned_goals_a'] as int?) ?? 0,
       unassignedGoalsB: (row['unassigned_goals_b'] as int?) ?? 0,
+      unassignedGoalsC: (row['unassigned_goals_c'] as int?) ?? 0,
       notes: row['notes'] as String?,
     );
   }
@@ -203,7 +247,8 @@ class SqliteSessionsRepository implements SessionsRepository {
         s.*,
         COUNT(pt.id) as player_count,
         COALESCE(SUM(CASE WHEN pt.team = 'A' THEN pt.goals ELSE 0 END), 0) as goals_a,
-        COALESCE(SUM(CASE WHEN pt.team = 'B' THEN pt.goals ELSE 0 END), 0) as goals_b
+        COALESCE(SUM(CASE WHEN pt.team = 'B' THEN pt.goals ELSE 0 END), 0) as goals_b,
+        COALESCE(SUM(CASE WHEN pt.team = 'C' THEN pt.goals ELSE 0 END), 0) as goals_c
       FROM sessions s
       LEFT JOIN participations pt ON pt.session_id = s.id
       $whereClause
@@ -218,6 +263,7 @@ class SqliteSessionsRepository implements SessionsRepository {
         playerCount: (r['player_count'] as num?)?.toInt() ?? 0,
         totalGoalsAssignedA: (r['goals_a'] as num?)?.toInt() ?? 0,
         totalGoalsAssignedB: (r['goals_b'] as num?)?.toInt() ?? 0,
+        totalGoalsAssignedC: (r['goals_c'] as num?)?.toInt() ?? 0,
         isActiveSession: session.id == activeId,
       );
     }).toList();
@@ -296,13 +342,20 @@ class SqliteSessionsRepository implements SessionsRepository {
           'played_at': session.playedAt.toIso8601String(),
           'status': _statusToString(session.status),
           'split_mode': _splitModeToString(session.splitMode),
+          'session_type': _sessionTypeToString(session.sessionType),
           'allow_uneven_teams': session.allowUnevenTeams ? 1 : 0,
           'is_ranked': session.isRanked ? 1 : 0,
           'score_a': session.scoreA,
           'score_b': session.scoreB,
+          'score_c': session.scoreC,
+          'wins_a': session.winsA,
+          'wins_b': session.winsB,
+          'wins_c': session.winsC,
+          'draw_points': session.drawPoints,
           'result': _resultToString(session.result),
           'unassigned_goals_a': session.unassignedGoalsA,
           'unassigned_goals_b': session.unassignedGoalsB,
+          'unassigned_goals_c': session.unassignedGoalsC,
           'notes': session.notes,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -398,11 +451,13 @@ class SqliteSessionsRepository implements SessionsRepository {
     required String teamId,
     int? unassignedGoalsA,
     int? unassignedGoalsB,
+    int? unassignedGoalsC,
   }) async {
     final db = await _appDatabase.database;
     final updates = <String, dynamic>{};
     if (unassignedGoalsA != null) updates['unassigned_goals_a'] = unassignedGoalsA.clamp(0, 999);
     if (unassignedGoalsB != null) updates['unassigned_goals_b'] = unassignedGoalsB.clamp(0, 999);
+    if (unassignedGoalsC != null) updates['unassigned_goals_c'] = unassignedGoalsC.clamp(0, 999);
     if (updates.isEmpty) return;
 
     await db.update(
@@ -462,15 +517,39 @@ class SqliteSessionsRepository implements SessionsRepository {
   }
 
   @override
+  Future<void> updateTournamentWins({
+    required String sessionId,
+    required int winsA,
+    required int winsB,
+    required int winsC,
+    MatchResult? result,
+  }) async {
+    final db = await _appDatabase.database;
+    final resStr = _resultToString(result);
+    await db.update(
+      'sessions',
+      {
+        'wins_a': winsA,
+        'wins_b': winsB,
+        'wins_c': winsC,
+        if (resStr != null) ...{'result': resStr},
+      },
+      where: 'id = ?',
+      whereArgs: [sessionId],
+    );
+  }
+
+  @override
   Future<bool> closeSession(String sessionId, {required String teamId}) async {
     final db = await _appDatabase.database;
     final key = _activeSessionKey(teamId);
     return await db.transaction((txn) async {
-      // A CLOSED session must carry a score and a result (CDC §4.2), whatever the caller checked.
+      // A CLOSED session must carry a result, and scores (for classic) or result (for tournament).
       final updated = await txn.update(
         'sessions',
         {'status': 'CLOSED'},
-        where: 'id = ? AND team_id = ? AND status = ? AND score_a IS NOT NULL AND score_b IS NOT NULL AND result IS NOT NULL',
+        where:
+            "id = ? AND team_id = ? AND status = ? AND result IS NOT NULL AND ((session_type = 'TOURNAMENT_3') OR (score_a IS NOT NULL AND score_b IS NOT NULL))",
         whereArgs: [sessionId, teamId, 'DRAFT'],
       );
       if (updated == 0) return false;
