@@ -47,9 +47,20 @@ abstract class SessionsRepository {
     required String sessionId,
     required List<Participation> participations,
   });
+  Future<void> switchPlayerTeam({
+    required String sessionId,
+    required String participationId,
+    required Team newTeam,
+    required String teamId,
+  });
+  Future<void> removeParticipation({
+    required String sessionId,
+    required String participationId,
+    required String teamId,
+  });
   /// Returns false when nothing was closed (unknown session, other team, or no score).
   Future<bool> closeSession(String sessionId, {required String teamId});
-  Future<void> reopenSession(String sessionId);
+  Future<void> reopenSession(String sessionId, {required String teamId});
   Future<void> deleteSession(String sessionId, {required String teamId});
 }
 
@@ -473,14 +484,64 @@ class SqliteSessionsRepository implements SessionsRepository {
   }
 
   @override
-  Future<void> reopenSession(String sessionId) async {
+  Future<void> switchPlayerTeam({
+    required String sessionId,
+    required String participationId,
+    required Team newTeam,
+    required String teamId,
+  }) async {
+    final db = await _appDatabase.database;
+    await db.transaction((txn) async {
+      final sess = await txn.query(
+        'sessions',
+        columns: ['id'],
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+      if (sess.isEmpty) return;
+
+      await txn.update(
+        'participations',
+        {'team': _teamToString(newTeam)},
+        where: 'id = ? AND session_id = ?',
+        whereArgs: [participationId, sessionId],
+      );
+    });
+  }
+
+  @override
+  Future<void> removeParticipation({
+    required String sessionId,
+    required String participationId,
+    required String teamId,
+  }) async {
+    final db = await _appDatabase.database;
+    await db.transaction((txn) async {
+      final sess = await txn.query(
+        'sessions',
+        columns: ['id'],
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+      if (sess.isEmpty) return;
+
+      await txn.delete(
+        'participations',
+        where: 'id = ? AND session_id = ?',
+        whereArgs: [participationId, sessionId],
+      );
+    });
+  }
+
+  @override
+  Future<void> reopenSession(String sessionId, {required String teamId}) async {
     final db = await _appDatabase.database;
     await db.transaction((txn) async {
       await txn.update(
         'sessions',
         {'status': 'DRAFT'},
-        where: 'id = ?',
-        whereArgs: [sessionId],
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
       );
     });
   }

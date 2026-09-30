@@ -882,6 +882,84 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                         if (context.mounted) Navigator.pop(ctx);
                       },
                     ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      icon: const Icon(Remix.arrow_left_right_line, size: 16),
+                      label: Text('Basculer vers Équipe ${item.participation.team == Team.a ? 'B' : 'A'}'),
+                      style: OutlinedButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(ctx);
+                        try {
+                          await ref.read(sessionsControllerProvider).switchPlayerTeam(
+                            sessionId: sessionId,
+                            participationId: item.participation.id,
+                            currentTeam: item.participation.team,
+                          );
+                        } on Object catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e is StateError ? e.message : 'Erreur: $e'),
+                                backgroundColor: context.colors.danger,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton.icon(
+                      icon: Icon(Remix.user_unfollow_line, size: 16, color: context.colors.danger),
+                      label: Text(
+                        'Retirer de la feuille de match',
+                        style: TextStyle(color: context.colors.danger, fontSize: 13),
+                      ),
+                      onPressed: () async {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (dialogCtx) => AlertDialog(
+                            title: Text('Retirer ${item.playerName} ?'),
+                            content: Text(
+                              (item.participation.goals > 0 || item.participation.assists > 0)
+                                  ? 'Ce joueur a des statistiques enregistrées (${item.participation.goals} but(s), ${item.participation.assists} passe(s)). Elles seront supprimées.'
+                                  : 'Ce joueur sera retiré de la feuille de match de cette séance.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(dialogCtx, false),
+                                child: const Text('Annuler'),
+                              ),
+                              FilledButton(
+                                style: FilledButton.styleFrom(backgroundColor: context.colors.danger),
+                                onPressed: () => Navigator.pop(dialogCtx, true),
+                                child: const Text('Retirer'),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirm != true) return;
+                        if (ctx.mounted) Navigator.pop(ctx);
+                        try {
+                          await ref.read(sessionsControllerProvider).removeParticipation(
+                            sessionId: sessionId,
+                            participationId: item.participation.id,
+                            playerTeam: item.participation.team,
+                          );
+                        } on Object catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e is StateError ? e.message : 'Erreur: $e'),
+                                backgroundColor: context.colors.danger,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    ),
                     const SizedBox(height: 8),
                   ],
                 ),
@@ -1219,30 +1297,40 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
     final activeId = ref.read(activeSessionIdProvider).value;
-    if (activeId != null && activeId != widget.sessionId) {
-      final proceed = await showDialog<bool>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Une séance est déjà en cours'),
-          content: const Text(
-            'Une autre séance est actuellement en cours. Cette séance sera rouverte en tant que brouillon en attente.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Rouvrir en brouillon'),
-            ),
-          ],
+    final isAnotherActive = activeId != null && activeId != widget.sessionId;
+
+    final proceed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isAnotherActive ? 'Une séance est déjà en cours' : 'Modifier cette séance ?'),
+        content: Text(
+          isAnotherActive
+              ? 'Une autre séance est actuellement en cours. Cette séance sera rouverte en tant que brouillon en attente et sortira temporairement du classement.'
+              : "Cette séance repassera en mode brouillon pour vous permettre d'ajuster le score, les effectifs ou les statistiques. Elle sortira temporairement du classement jusqu'à sa reclôture.",
         ),
-      );
-      if (proceed != true) return;
-    }
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Rouvrir pour modifier'),
+          ),
+        ],
+      ),
+    );
+    if (proceed != true) return;
 
     await ref.read(sessionsControllerProvider).reopenSession(widget.sessionId);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Séance rouverte en brouillon pour modification.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref, bool isDraft) async {

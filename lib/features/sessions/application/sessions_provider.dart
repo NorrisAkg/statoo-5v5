@@ -326,8 +326,74 @@ class SessionsController {
     return const [];
   }
 
+  Future<void> switchPlayerTeam({
+    required String sessionId,
+    required String participationId,
+    required Team currentTeam,
+  }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+
+    final session = await _repo.getSession(sessionId);
+    if (session == null) throw StateError('Session $sessionId not found');
+    final participants = await _repo.getSessionParticipants(sessionId);
+
+    final currentA = participants.where((p) => p.participation.team == Team.a).length;
+    final currentB = participants.where((p) => p.participation.team == Team.b).length;
+    final newTeam = currentTeam == Team.a ? Team.b : Team.a;
+    final nextA = newTeam == Team.a ? currentA + 1 : currentA - 1;
+    final nextB = newTeam == Team.b ? currentB + 1 : currentB - 1;
+
+    if (!session.allowUnevenTeams && (nextA - nextB).abs() > 1) {
+      throw StateError(
+        "Ce changement créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
+      );
+    }
+
+    await _repo.switchPlayerTeam(
+      sessionId: sessionId,
+      participationId: participationId,
+      newTeam: newTeam,
+      teamId: teamId,
+    );
+    _invalidateAll(sessionId);
+  }
+
+  Future<void> removeParticipation({
+    required String sessionId,
+    required String participationId,
+    required Team playerTeam,
+  }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+
+    final session = await _repo.getSession(sessionId);
+    if (session == null) throw StateError('Session $sessionId not found');
+    final participants = await _repo.getSessionParticipants(sessionId);
+
+    final currentA = participants.where((p) => p.participation.team == Team.a).length;
+    final currentB = participants.where((p) => p.participation.team == Team.b).length;
+    final nextA = playerTeam == Team.a ? currentA - 1 : currentA;
+    final nextB = playerTeam == Team.b ? currentB - 1 : currentB;
+
+    if (!session.allowUnevenTeams && (nextA - nextB).abs() > 1) {
+      throw StateError(
+        "Ce retrait créerait un écart d'effectif de ${(nextA - nextB).abs()} joueurs ($nextA vs $nextB) sans l'option équipes inégales.",
+      );
+    }
+
+    await _repo.removeParticipation(
+      sessionId: sessionId,
+      participationId: participationId,
+      teamId: teamId,
+    );
+    _invalidateAll(sessionId);
+  }
+
   Future<void> reopenSession(String sessionId) async {
-    await _repo.reopenSession(sessionId);
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+    await _repo.reopenSession(sessionId, teamId: teamId);
     _invalidateAll(sessionId);
   }
 
