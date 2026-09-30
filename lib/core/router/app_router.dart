@@ -89,16 +89,16 @@ GoRouter appRouter(Ref ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/joueurs',
-                builder: (context, state) => const PlayersScreen(),
+                path: '/seances',
+                builder: (context, state) => const SessionsScreen(),
               ),
             ],
           ),
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/seances',
-                builder: (context, state) => const SessionsScreen(),
+                path: '/joueurs',
+                builder: (context, state) => const PlayersScreen(),
               ),
             ],
           ),
