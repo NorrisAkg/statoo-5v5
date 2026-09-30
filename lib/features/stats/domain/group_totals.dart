@@ -14,6 +14,20 @@ class GroupTotals {
     required this.unassignedGoalsDifference,
   });
 
+  const GroupTotals.empty()
+      : totalSessions = 0,
+        rankedSessions = 0,
+        friendlySessions = 0,
+        totalPlayers = 0,
+        activePlayers = 0,
+        totalGoals = 0,
+        avgGoalsPerSession = 0.0,
+        totalAssists = 0,
+        totalYellowCards = 0,
+        totalRedCards = 0,
+        totalPlayerGoals = 0,
+        unassignedGoalsDifference = 0;
+
   factory GroupTotals.fromMap(Map<String, dynamic> map) {
     return GroupTotals(
       totalSessions: (map['total_sessions'] as num?)?.toInt() ?? 0,

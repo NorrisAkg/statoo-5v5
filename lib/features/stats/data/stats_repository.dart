@@ -12,26 +12,14 @@ class SqliteStatsRepository implements StatsRepository {
 
   @override
   Future<GroupTotals> getGroupTotals({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const GroupTotals.empty();
     final db = await _appDatabase.database;
-    final sql = teamId != null
-        ? 'SELECT * FROM v_group_totals WHERE team_id = ? LIMIT 1'
-        : 'SELECT * FROM v_group_totals LIMIT 1';
-    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
+    final results = await db.rawQuery(
+      'SELECT * FROM v_group_totals WHERE team_id = ? LIMIT 1',
+      [teamId],
+    );
     if (results.isEmpty) {
-      return const GroupTotals(
-        totalSessions: 0,
-        rankedSessions: 0,
-        friendlySessions: 0,
-        totalPlayers: 0,
-        activePlayers: 0,
-        totalGoals: 0,
-        avgGoalsPerSession: 0,
-        totalAssists: 0,
-        totalYellowCards: 0,
-        totalRedCards: 0,
-        totalPlayerGoals: 0,
-        unassignedGoalsDifference: 0,
-      );
+      return const GroupTotals.empty();
     }
     return GroupTotals.fromMap(results.first);
   }

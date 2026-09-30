@@ -223,7 +223,6 @@ class AppDatabase {
           COALESCE(SUM(CASE WHEN pm.status = 'CLOSED' THEN pm.assists ELSE 0 END), 0) AS assists
         FROM players pl
         LEFT JOIN v_player_match_results pm ON pm.player_id = pl.id
-        WHERE pl.is_active = 1
         GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url, pl.is_active
       )
       SELECT 
@@ -295,7 +294,6 @@ class AppDatabase {
         FROM players pl
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
-        WHERE pl.is_active = 1
         GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
@@ -326,7 +324,6 @@ class AppDatabase {
         FROM players pl
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
-        WHERE pl.is_active = 1
         GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
@@ -359,7 +356,6 @@ class AppDatabase {
         FROM players pl
         LEFT JOIN participations pt ON pt.player_id = pl.id
         LEFT JOIN sessions s ON s.id = pt.session_id
-        WHERE pl.is_active = 1
         GROUP BY pl.id, pl.team_id, pl.name, pl.nickname, pl.avatar_url
       )
       SELECT 
@@ -383,7 +379,7 @@ class AppDatabase {
       WITH session_counts AS (
         SELECT 
           team_id,
-          COUNT(*) AS total_sessions,
+          COUNT(CASE WHEN status = 'CLOSED' THEN 1 END) AS total_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 1 THEN 1 END) AS ranked_sessions,
           COUNT(CASE WHEN status = 'CLOSED' AND is_ranked = 0 THEN 1 END) AS friendly_sessions,
           COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN score_a + score_b ELSE 0 END), 0) AS total_score_goals,

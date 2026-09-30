@@ -20,53 +20,57 @@ class SqliteRankingRepository implements RankingRepository {
 
   @override
   Future<List<StandingEntry>> getStandings({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
-    final sql = teamId != null
-        ? 'SELECT * FROM v_standings WHERE team_id = ?'
-        : 'SELECT * FROM v_standings';
-    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
+    final results = await db.rawQuery(
+      'SELECT * FROM v_standings WHERE team_id = ?',
+      [teamId],
+    );
     return results.map(StandingEntry.fromMap).toList();
   }
 
   @override
   Future<List<StandingPerMatchEntry>> getStandingsPerMatch({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
-    final sql = teamId != null
-        ? 'SELECT * FROM v_standings_per_match WHERE team_id = ?'
-        : 'SELECT * FROM v_standings_per_match';
-    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
+    final results = await db.rawQuery(
+      'SELECT * FROM v_standings_per_match WHERE team_id = ?',
+      [teamId],
+    );
     return results.map(StandingPerMatchEntry.fromMap).toList();
   }
 
   @override
   Future<List<ScorerEntry>> getTopScorers({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
-    final sql = teamId != null
-        ? 'SELECT * FROM v_top_scorers WHERE team_id = ?'
-        : 'SELECT * FROM v_top_scorers';
-    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
+    final results = await db.rawQuery(
+      'SELECT * FROM v_top_scorers WHERE team_id = ?',
+      [teamId],
+    );
     return results.map(ScorerEntry.fromMap).toList();
   }
 
   @override
   Future<List<AssistEntry>> getTopAssists({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
-    final sql = teamId != null
-        ? 'SELECT * FROM v_top_assists WHERE team_id = ?'
-        : 'SELECT * FROM v_top_assists';
-    final results = await db.rawQuery(sql, teamId != null ? [teamId] : null);
+    final results = await db.rawQuery(
+      'SELECT * FROM v_top_assists WHERE team_id = ?',
+      [teamId],
+    );
     return results.map(AssistEntry.fromMap).toList();
   }
 
   @override
   Future<List<CardEntry>> getTopCards({String? teamId, String sortBy = 'all'}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
     final orderBy = switch (sortBy) {
       'yellow' => 'yellow_cards DESC, red_cards DESC, matches_played ASC, name ASC',
       'red' => 'red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC',
       _ => '(red_cards * 3 + yellow_cards) DESC, red_cards DESC, yellow_cards DESC, matches_played ASC, name ASC',
     };
-    final whereClause = teamId != null ? 'WHERE team_id = ?' : '';
     final results = await db.rawQuery('''
       SELECT 
         ROW_NUMBER() OVER (ORDER BY $orderBy) AS rank,
@@ -79,9 +83,9 @@ class SqliteRankingRepository implements RankingRepository {
         red_cards,
         total_cards
       FROM v_top_cards
-      $whereClause
+      WHERE team_id = ?
       ORDER BY rank
-    ''', teamId != null ? [teamId] : null);
+    ''', [teamId]);
     return results.map(CardEntry.fromMap).toList();
   }
 }

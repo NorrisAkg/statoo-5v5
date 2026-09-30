@@ -14,8 +14,9 @@ final Provider<PlayersRepository> playersRepositoryProvider = Provider<PlayersRe
 class PlayersNotifier extends AsyncNotifier<List<Player>> {
   @override
   Future<List<Player>> build() {
-    final activeTeam = ref.watch(activeTeamProvider).value;
-    return ref.watch(playersRepositoryProvider).getPlayers(teamId: activeTeam?.id);
+    final activeTeamId = ref.watch(activeTeamIdProvider);
+    if (activeTeamId == null) return Future.value(const []);
+    return ref.watch(playersRepositoryProvider).getPlayers(teamId: activeTeamId);
   }
 
   Future<Player> addPlayer({
@@ -23,12 +24,13 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
     String? nickname,
     String? avatarUrl,
   }) async {
-    final activeTeam = ref.read(activeTeamProvider).value;
+    final activeTeamId = ref.read(activeTeamIdProvider);
+    if (activeTeamId == null) throw StateError('No active team selected');
     final player = await ref.read(playersRepositoryProvider).createPlayer(
       name: name,
       nickname: nickname,
       avatarUrl: avatarUrl,
-      teamId: activeTeam?.id,
+      teamId: activeTeamId,
     );
     final currentList = state.value;
     if (currentList != null) {

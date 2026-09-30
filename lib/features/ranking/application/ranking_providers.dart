@@ -14,26 +14,30 @@ final rankingRepositoryProvider = Provider<RankingRepository>((ref) {
 
 final standingsProvider = FutureProvider<List<StandingEntry>>((ref) {
   final repo = ref.watch(rankingRepositoryProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getStandings(teamId: activeTeam?.id);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const []);
+  return repo.getStandings(teamId: activeTeamId);
 });
 
 final standingsPerMatchProvider = FutureProvider<List<StandingPerMatchEntry>>((ref) {
   final repo = ref.watch(rankingRepositoryProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getStandingsPerMatch(teamId: activeTeam?.id);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const []);
+  return repo.getStandingsPerMatch(teamId: activeTeamId);
 });
 
 final topScorersProvider = FutureProvider<List<ScorerEntry>>((ref) {
   final repo = ref.watch(rankingRepositoryProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getTopScorers(teamId: activeTeam?.id);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const []);
+  return repo.getTopScorers(teamId: activeTeamId);
 });
 
 final topAssistsProvider = FutureProvider<List<AssistEntry>>((ref) {
   final repo = ref.watch(rankingRepositoryProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getTopAssists(teamId: activeTeam?.id);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const []);
+  return repo.getTopAssists(teamId: activeTeamId);
 });
 
 class CardsFilterNotifier extends Notifier<String> {
@@ -51,6 +55,7 @@ final cardsFilterProvider = NotifierProvider<CardsFilterNotifier, String>(
 final topCardsProvider = FutureProvider<List<CardEntry>>((ref) {
   final repo = ref.watch(rankingRepositoryProvider);
   final filter = ref.watch(cardsFilterProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getTopCards(teamId: activeTeam?.id, sortBy: filter);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const []);
+  return repo.getTopCards(teamId: activeTeamId, sortBy: filter);
 });

@@ -9,6 +9,7 @@ import 'package:statoo/features/players/data/players_repository.dart';
 import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/players/domain/player_detail_data.dart';
 import 'package:statoo/features/players/presentation/new_player_bottom_sheet.dart';
+import 'package:statoo/features/team/application/team_provider.dart';
 
 class _MockPlayersRepository implements PlayersRepository {
   final List<Player> _players = [];
@@ -89,6 +90,7 @@ void main() {
         ProviderScope(
           overrides: [
             playersRepositoryProvider.overrideWithValue(repo),
+            activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
           ],
           child: MaterialApp(
             theme: AppTheme.darkTheme,

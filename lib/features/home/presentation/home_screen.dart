@@ -5,8 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
+import '../../ranking/application/ranking_providers.dart';
+import '../../ranking/domain/standing_entry.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
@@ -76,7 +79,7 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 32),
           _buildSectionHeader(context, 'Classement', '/classement'),
           const SizedBox(height: 16),
-          _buildRanking(context),
+          _buildRanking(context, ref),
           const SizedBox(height: 32),
           _buildTiles(context, ref),
           const SizedBox(height: 32),
@@ -235,7 +238,131 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRanking(BuildContext context) {
+  Widget _buildRanking(BuildContext context, WidgetRef ref) {
+    final standingsAsync = ref.watch(standingsProvider);
+
+    return standingsAsync.when(
+      loading: () => const AppCard(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+      error: (_, _) => _buildEmptyRanking(context),
+      data: (standings) {
+        final playedStandings = standings.where((s) => s.matchesPlayed > 0).take(3).toList();
+        if (playedStandings.isEmpty) {
+          return _buildEmptyRanking(context);
+        }
+
+        return AppCard(
+          child: Column(
+            children: [
+              for (var i = 0; i < playedStandings.length; i++) ...[
+                if (i > 0) const Divider(height: 16),
+                _buildHomeStandingRow(context, playedStandings[i], i + 1),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHomeStandingRow(BuildContext context, StandingEntry entry, int rank) {
+    final rankColor = rank == 1
+        ? const Color(0xFFFFD700)
+        : rank == 2
+            ? const Color(0xFFC0C0C0)
+            : const Color(0xFFCD7F32);
+
+    return InkWell(
+      onTap: () => context.go('/classement'),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: rankColor.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+                border: Border.all(color: rankColor.withValues(alpha: 0.6)),
+              ),
+              child: Text(
+                '$rank',
+                style: TextStyle(
+                  color: rankColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            InitialAvatar(
+              initial: entry.name.isNotEmpty ? entry.name[0].toUpperCase() : '?',
+              baseColor: context.colors.foreground300,
+              size: 28,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          entry.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                        const SizedBox(width: 4),
+                        Text(
+                          '« ${entry.nickname} »',
+                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                        ),
+                      ],
+                    ],
+                  ),
+                  Text(
+                    '${entry.matchesPlayed} MJ · ${entry.wins}V ${entry.draws}N ${entry.losses}D',
+                    style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${entry.points} pts',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 15,
+                    color: context.colors.foreground50,
+                  ),
+                ),
+                Text(
+                  '${entry.goals} buts',
+                  style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyRanking(BuildContext context) {
     return AppCard(
       child: Center(
         child: Padding(

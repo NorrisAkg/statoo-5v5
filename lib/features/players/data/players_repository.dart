@@ -32,11 +32,12 @@ class SqlitePlayersRepository implements PlayersRepository {
 
   @override
   Future<List<Player>> getPlayers({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return const [];
     final db = await _appDatabase.database;
     final rows = await db.query(
       'players',
-      where: teamId != null ? 'team_id = ?' : null,
-      whereArgs: teamId != null ? [teamId] : null,
+      where: 'team_id = ?',
+      whereArgs: [teamId],
       orderBy: 'is_active DESC, name ASC',
     );
 
@@ -135,11 +136,10 @@ class SqlitePlayersRepository implements PlayersRepository {
     final db = await _appDatabase.database;
     final now = DateTime.now();
 
-    var resolvedTeamId = teamId ?? '';
-    if (resolvedTeamId.isEmpty) {
-      final teams = await db.query('teams', limit: 1);
-      resolvedTeamId = teams.isNotEmpty ? teams.first['id']! as String : 'team_1';
+    if (teamId == null || teamId.trim().isEmpty) {
+      throw ArgumentError('teamId is required to create a player');
     }
+    final resolvedTeamId = teamId.trim();
 
     final player = Player(
       id: 'p_${now.millisecondsSinceEpoch}',

@@ -10,6 +10,7 @@ final statsRepositoryProvider = Provider<StatsRepository>((ref) {
 
 final groupTotalsProvider = FutureProvider<GroupTotals>((ref) {
   final repo = ref.watch(statsRepositoryProvider);
-  final activeTeam = ref.watch(activeTeamProvider).value;
-  return repo.getGroupTotals(teamId: activeTeam?.id);
+  final activeTeamId = ref.watch(activeTeamIdProvider);
+  if (activeTeamId == null) return Future.value(const GroupTotals.empty());
+  return repo.getGroupTotals(teamId: activeTeamId);
 });
