@@ -8,6 +8,7 @@ class SessionSummaryItem {
     required this.playerCount,
     this.totalGoalsAssignedA = 0,
     this.totalGoalsAssignedB = 0,
+    this.totalGoalsAssignedC = 0,
     this.isActiveSession = false,
   });
 
@@ -15,6 +16,7 @@ class SessionSummaryItem {
   final int playerCount;
   final int totalGoalsAssignedA;
   final int totalGoalsAssignedB;
+  final int totalGoalsAssignedC;
   final bool isActiveSession;
 
   bool get isDraft => session.status == SessionStatus.draft;
@@ -25,6 +27,9 @@ class SessionSummaryItem {
 
   bool get hasGoalWarning {
     if (!isClosed) return false;
+    if (session.sessionType == SessionType.tournament3) {
+      return false;
+    }
     final totalA = session.scoreA ?? 0;
     final totalB = session.scoreB ?? 0;
     final sumA = totalGoalsAssignedA + session.unassignedGoalsA;

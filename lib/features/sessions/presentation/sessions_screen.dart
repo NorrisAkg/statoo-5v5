@@ -9,6 +9,7 @@ import '../../../core/widgets/status_badge.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/sessions_provider.dart';
+import '../domain/session.dart';
 import '../domain/session_summary.dart';
 
 class SessionsScreen extends ConsumerWidget {
@@ -391,47 +392,72 @@ class SessionsScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  _buildTeamDot(context, context.colors.accent500, 'A'),
-                  const SizedBox(width: 12),
-                  Text(
-                    '${session.scoreA ?? 0}',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      '-',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: context.colors.foreground600,
+              if (session.sessionType == SessionType.tournament3)
+                Row(
+                  children: [
+                    _buildTournamentPill(context, 'A', session.winsA, context.colors.accent500),
+                    const SizedBox(width: 8),
+                    _buildTournamentPill(context, 'B', session.winsB, context.colors.secondary500),
+                    const SizedBox(width: 8),
+                    _buildTournamentPill(context, 'C', session.winsC, context.colors.primary500),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: context.colors.background800,
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
+                      child: const Text('Tournoi', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${item.playerCount} joueur${item.playerCount > 1 ? 's' : ''}',
+                      style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                    ),
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    _buildTeamDot(context, context.colors.accent500, 'A'),
+                    const SizedBox(width: 12),
+                    Text(
+                      '${session.scoreA ?? 0}',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        '-',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: context.colors.foreground600,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '${session.scoreB ?? 0}',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 12),
-                  _buildTeamDot(context, context.colors.secondary500, 'B'),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: context.colors.background800,
-                      borderRadius: BorderRadius.circular(9999),
+                    Text(
+                      '${session.scoreB ?? 0}',
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${item.playerCount} joueur${item.playerCount > 1 ? 's' : ''}',
-                    style: TextStyle(color: context.colors.foreground400, fontSize: 12),
-                  ),
-                ],
-              ),
+                    const SizedBox(width: 12),
+                    _buildTeamDot(context, context.colors.secondary500, 'B'),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: context.colors.background800,
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
+                      child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${item.playerCount} joueur${item.playerCount > 1 ? 's' : ''}',
+                      style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),
@@ -452,6 +478,37 @@ class SessionsScreen extends ConsumerWidget {
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
+      ),
+    );
+  }
+
+  Widget _buildTournamentPill(BuildContext context, String team, int wins, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 16,
+            height: 16,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            child: Text(
+              team,
+              style: TextStyle(color: context.colors.foreground50, fontSize: 10, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '$wins V',
+            style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }

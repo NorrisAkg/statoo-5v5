@@ -11,6 +11,7 @@ import '../../players/application/players_provider.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
 import '../../settings/application/settings_provider.dart';
 import '../application/sessions_provider.dart';
+import '../domain/session.dart';
 
 class NewSessionScreen extends ConsumerStatefulWidget {
   const NewSessionScreen({super.key});
@@ -25,6 +26,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   // Step 1 State: Date, Time & Options
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
+  SessionType _sessionType = SessionType.classic2;
   bool _isRanked = true;
   bool _allowUnevenTeams = false;
 
@@ -72,19 +74,52 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
     final countA = _playerTeamAssignments.values.where((v) => v == 'A').length;
     final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
+    final countC = _playerTeamAssignments.values.where((v) => v == 'C').length;
 
-    if (countA + countB != _selectedPlayerIds.length) {
+    final totalAssigned = _sessionType == SessionType.tournament3
+        ? countA + countB + countC
+        : countA + countB;
+
+    if (totalAssigned != _selectedPlayerIds.length) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Tous les joueurs présents doivent être assignés à l'équipe A ou B.")),
+        SnackBar(
+          content: Text(
+            _sessionType == SessionType.tournament3
+                ? "Tous les joueurs présents doivent être assignés à l'équipe A, B ou C."
+                : "Tous les joueurs présents doivent être assignés à l'équipe A ou B.",
+          ),
+        ),
       );
       return;
     }
 
-    if (!_allowUnevenTeams && (countA - countB).abs() > 1) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("L'écart d'effectif entre les équipes ne peut dépasser 1 (activez l'option sinon).")),
-      );
-      return;
+    if (!_allowUnevenTeams) {
+      if (_sessionType == SessionType.tournament3) {
+        final counts = [countA, countB, countC];
+        final maxCount = counts.reduce((a, b) => a > b ? a : b);
+        final minCount = counts.reduce((a, b) => a < b ? a : b);
+        if (maxCount - minCount > 1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "L'écart d'effectif entre les 3 équipes ne peut dépasser 1 (activez l'option sinon).",
+              ),
+            ),
+          );
+          return;
+        }
+      } else {
+        if ((countA - countB).abs() > 1) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "L'écart d'effectif entre les équipes ne peut dépasser 1 (activez l'option sinon).",
+              ),
+            ),
+          );
+          return;
+        }
+      }
     }
 
     setState(() => _isSubmitting = true);
@@ -100,10 +135,13 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
       final activeDraft = ref.read(activeDraftSessionProvider).value;
       final startImmediately = activeDraft == null;
+      final drawPoints = ref.read(tournamentDrawPointsProvider);
 
       final sessionId = await ref.read(sessionsControllerProvider).createDraftSession(
         playedAt: playedAt,
         isRanked: _isRanked,
+        sessionType: _sessionType,
+        drawPoints: drawPoints,
         allowUnevenTeams: _allowUnevenTeams,
         playerTeamAssignments: _playerTeamAssignments,
         startImmediately: startImmediately,
@@ -388,13 +426,47 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         ),
         const SizedBox(height: 24),
         const Text(
-          'Options du match',
+          'Format & Options de la séance',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
         AppCard(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Icon(Remix.layout_masonry_line, color: context.colors.primary500, size: 20),
+                  const SizedBox(width: 8),
+                  const Text('Format de jeu', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              SegmentedButton<SessionType>(
+                segments: const [
+                  ButtonSegment(
+                    value: SessionType.classic2,
+                    label: Text('Match (2 équipes)'),
+                    icon: Icon(Remix.team_line, size: 16),
+                  ),
+                  ButtonSegment(
+                    value: SessionType.tournament3,
+                    label: Text('Tournoi (3 équipes)'),
+                    icon: Icon(Remix.trophy_line, size: 16),
+                  ),
+                ],
+                selected: {_sessionType},
+                onSelectionChanged: (newSelection) {
+                  setState(() {
+                    _sessionType = newSelection.first;
+                    _playerTeamAssignments.clear();
+                  });
+                },
+                style: const ButtonStyle(
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
+              Divider(color: context.colors.background700, height: 24),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 activeThumbColor: context.colors.primary500,
@@ -460,10 +532,54 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         const Text('Composition des équipes', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(height: 6),
         Text(
-          "Sélectionnez les joueurs présents (minimum $minPlayers) et assignez-les à l'équipe A ou B.",
+          _sessionType == SessionType.tournament3
+              ? "Sélectionnez les joueurs présents et assignez-les à l'équipe A, B ou C."
+              : "Sélectionnez les joueurs présents (minimum $minPlayers) et assignez-les à l'équipe A ou B.",
           style: TextStyle(color: context.colors.foreground400),
         ),
         const SizedBox(height: 16),
+        if (_sessionType == SessionType.classic2 && _selectedPlayerIds.length >= 15) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: context.colors.primary500.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: context.colors.primary500.withValues(alpha: 0.4)),
+            ),
+            child: Row(
+              children: [
+                Icon(Remix.trophy_line, color: context.colors.primary500, size: 22),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${_selectedPlayerIds.length} joueurs présents',
+                        style: TextStyle(color: context.colors.foreground50, fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Format tournoi à 3 équipes recommandé !',
+                        style: TextStyle(color: context.colors.foreground300, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                FilledButton.tonal(
+                  onPressed: () {
+                    setState(() {
+                      _sessionType = SessionType.tournament3;
+                      _playerTeamAssignments.clear();
+                    });
+                  },
+                  child: const Text('Passer en 3 équipes'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
         if (activeDraft != null) ...[
           Container(
             padding: const EdgeInsets.all(12),
@@ -528,7 +644,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
             final countA = _playerTeamAssignments.values.where((v) => v == 'A').length;
             final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
-            final unassignedCount = _selectedPlayerIds.length - (countA + countB);
+            final countC = _playerTeamAssignments.values.where((v) => v == 'C').length;
+            final totalAssignedCount = _sessionType == SessionType.tournament3
+                ? (countA + countB + countC)
+                : (countA + countB);
+            final unassignedCount = _selectedPlayerIds.length - totalAssignedCount;
 
             final isSearching = _searchQuery.trim().isNotEmpty;
             final filteredPlayers = !isSearching
@@ -552,7 +672,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                   children: [
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                         decoration: BoxDecoration(
                           color: context.colors.accent500.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
@@ -562,16 +682,16 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.accent500, shape: BoxShape.circle)),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             Text('Équipe A: $countA', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.bold, fontSize: 13)),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                         decoration: BoxDecoration(
                           color: context.colors.secondary500.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
@@ -581,17 +701,38 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.secondary500, shape: BoxShape.circle)),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             Text('Équipe B: $countB', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.bold, fontSize: 13)),
                           ],
                         ),
                       ),
                     ),
-                    if (unassignedCount > 0) ...[
-                      const SizedBox(width: 8),
+                    if (_sessionType == SessionType.tournament3) ...[
+                      const SizedBox(width: 6),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: context.colors.primary500.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: context.colors.primary500.withValues(alpha: 0.4)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.primary500, shape: BoxShape.circle)),
+                              const SizedBox(width: 6),
+                              Text('Équipe C: $countC', style: TextStyle(color: context.colors.primary400, fontWeight: FontWeight.bold, fontSize: 13)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (unassignedCount > 0) ...[
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
                           decoration: BoxDecoration(
                             color: context.colors.warning.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
@@ -601,11 +742,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.warning, shape: BoxShape.circle)),
-                              const SizedBox(width: 6),
+                              const SizedBox(width: 4),
                               Flexible(
                                 child: Text(
                                   'À placer: $unassignedCount',
-                                  style: TextStyle(color: context.colors.warning, fontWeight: FontWeight.bold, fontSize: 13),
+                                  style: TextStyle(color: context.colors.warning, fontWeight: FontWeight.bold, fontSize: 12),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -635,7 +776,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                               final selected = _selectedPlayerIds.toList()..shuffle();
                               _playerTeamAssignments.clear();
                               for (int i = 0; i < selected.length; i++) {
-                                _playerTeamAssignments[selected[i]] = i.isEven ? 'A' : 'B';
+                                if (_sessionType == SessionType.tournament3) {
+                                  _playerTeamAssignments[selected[i]] = const ['A', 'B', 'C'][i % 3];
+                                } else {
+                                  _playerTeamAssignments[selected[i]] = i.isEven ? 'A' : 'B';
+                                }
                               }
                             });
                           },
@@ -831,6 +976,9 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                   } else if (team == 'B') {
                     avatarBg = context.colors.secondary500.withValues(alpha: 0.2);
                     avatarFg = context.colors.secondary400;
+                  } else if (team == 'C') {
+                    avatarBg = context.colors.primary500.withValues(alpha: 0.2);
+                    avatarFg = context.colors.primary400;
                   } else if (isSelected) {
                     avatarBg = context.colors.warning.withValues(alpha: 0.2);
                     avatarFg = context.colors.warning;
@@ -848,18 +996,22 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                             ? context.colors.accent500.withValues(alpha: 0.05)
                             : team == 'B'
                                 ? context.colors.secondary500.withValues(alpha: 0.05)
-                                : isSelected
-                                    ? context.colors.warning.withValues(alpha: 0.05)
-                                    : context.colors.background900,
+                                : team == 'C'
+                                    ? context.colors.primary500.withValues(alpha: 0.05)
+                                    : isSelected
+                                        ? context.colors.warning.withValues(alpha: 0.05)
+                                        : context.colors.background900,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: team == 'A'
                               ? context.colors.accent500.withValues(alpha: 0.35)
                               : team == 'B'
                                   ? context.colors.secondary500.withValues(alpha: 0.35)
-                                  : isSelected
-                                      ? context.colors.warning.withValues(alpha: 0.35)
-                                      : context.colors.background700,
+                                  : team == 'C'
+                                      ? context.colors.primary500.withValues(alpha: 0.35)
+                                      : isSelected
+                                          ? context.colors.warning.withValues(alpha: 0.35)
+                                          : context.colors.background700,
                         ),
                       ),
                       child: Row(
@@ -881,7 +1033,10 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                                 if (player.nickname != null)
                                   Text('« ${player.nickname} »', style: TextStyle(color: context.colors.foreground500, fontSize: 12))
                                 else if (isSelected && team == null)
-                                  Text('Choisir A ou B', style: TextStyle(color: context.colors.warning, fontSize: 11, fontWeight: FontWeight.w500)),
+                                  Text(
+                                    _sessionType == SessionType.tournament3 ? 'Choisir A, B ou C' : 'Choisir A ou B',
+                                    style: TextStyle(color: context.colors.warning, fontSize: 11, fontWeight: FontWeight.w500),
+                                  ),
                               ],
                             ),
                           ),
@@ -905,9 +1060,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SegmentedButton<String>(
-                                  segments: const [
-                                    ButtonSegment(value: 'A', label: Text('A', style: TextStyle(fontWeight: FontWeight.bold))),
-                                    ButtonSegment(value: 'B', label: Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
+                                  segments: [
+                                    const ButtonSegment(value: 'A', label: Text('A', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    const ButtonSegment(value: 'B', label: Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
+                                    if (_sessionType == SessionType.tournament3)
+                                      const ButtonSegment(value: 'C', label: Text('C', style: TextStyle(fontWeight: FontWeight.bold))),
                                   ],
                                   selected: team != null ? {team} : <String>{},
                                   emptySelectionAllowed: true,
@@ -915,10 +1072,14 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                                     backgroundColor: context.colors.background800,
                                     selectedBackgroundColor: team == 'A'
                                         ? context.colors.accent500.withValues(alpha: 0.3)
-                                        : context.colors.secondary500.withValues(alpha: 0.3),
+                                        : team == 'B'
+                                            ? context.colors.secondary500.withValues(alpha: 0.3)
+                                            : context.colors.primary500.withValues(alpha: 0.3),
                                     selectedForegroundColor: team == 'A'
                                         ? context.colors.accent400
-                                        : context.colors.secondary400,
+                                        : team == 'B'
+                                            ? context.colors.secondary400
+                                            : context.colors.primary400,
                                     visualDensity: VisualDensity.compact,
                                   ),
                                   onSelectionChanged: (newSelection) {

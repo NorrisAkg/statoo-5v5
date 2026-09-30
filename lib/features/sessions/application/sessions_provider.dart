@@ -106,29 +106,42 @@ class SessionsController {
     required bool isRanked,
     required bool allowUnevenTeams,
     required Map<String, String> playerTeamAssignments,
+    SessionType sessionType = SessionType.classic2,
+    int drawPoints = 1,
     bool startImmediately = true,
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
+    final isTournament = sessionType == SessionType.tournament3;
     final sessionId = 's_${DateTime.now().millisecondsSinceEpoch}';
     final session = Session(
       id: sessionId,
       playedAt: playedAt,
       isRanked: isRanked,
+      sessionType: sessionType,
       allowUnevenTeams: allowUnevenTeams,
-      scoreA: 0,
-      scoreB: 0,
-      result: MatchResult.draw,
+      scoreA: isTournament ? null : 0,
+      scoreB: isTournament ? null : 0,
+      drawPoints: drawPoints,
+      result: isTournament ? null : MatchResult.draw,
     );
 
     final participations = playerTeamAssignments.entries.map((e) {
       final partId = 'p_${sessionId}_${e.key}';
+      final Team team;
+      if (e.value == 'C') {
+        team = Team.c;
+      } else if (e.value == 'B') {
+        team = Team.b;
+      } else {
+        team = Team.a;
+      }
       return Participation(
         id: partId,
         sessionId: sessionId,
         playerId: e.key,
-        team: e.value == 'B' ? Team.b : Team.a,
+        team: team,
       );
     }).toList();
 
@@ -154,6 +167,7 @@ class SessionsController {
     }
     final session = await _repo.getSession(sessionId);
     if (session != null &&
+        session.sessionType == SessionType.classic2 &&
         (session.scoreA == null || session.scoreB == null || session.result == null)) {
       await _repo.updateSessionScore(sessionId: sessionId, scoreA: 0, scoreB: 0);
     }
@@ -171,6 +185,23 @@ class SessionsController {
       sessionId: sessionId,
       scoreA: scoreA,
       scoreB: scoreB,
+    );
+    _invalidateAll(sessionId);
+  }
+
+  Future<void> updateTournamentWins({
+    required String sessionId,
+    required int winsA,
+    required int winsB,
+    required int winsC,
+    MatchResult? result,
+  }) async {
+    await _repo.updateTournamentWins(
+      sessionId: sessionId,
+      winsA: winsA,
+      winsB: winsB,
+      winsC: winsC,
+      result: result,
     );
     _invalidateAll(sessionId);
   }
@@ -233,6 +264,7 @@ class SessionsController {
       session: session,
       teamACount: participants.where((p) => p.participation.team == Team.a).length,
       teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+      teamCCount: participants.where((p) => p.participation.team == Team.c).length,
     );
     if (blockers.isNotEmpty) return blockers;
 

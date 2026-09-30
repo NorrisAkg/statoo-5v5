@@ -23,6 +23,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final minPlayers = ref.watch(minPlayersPerSessionProvider);
+    final tournamentDrawPoints = ref.watch(tournamentDrawPointsProvider);
 
     final formatEstimate = minPlayers.isEven
         ? '${minPlayers ~/ 2}v${minPlayers ~/ 2}'
@@ -113,6 +114,50 @@ class SettingsScreen extends ConsumerWidget {
                               : null,
                         ),
                       ],
+                    ),
+                  ],
+                ),
+                const Divider(height: 24),
+                Row(
+                  children: [
+                    Icon(Remix.trophy_line, color: context.colors.primary500, size: 22),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nul en tournoi (3 équipes)',
+                            style: TextStyle(
+                              color: context.colors.foreground50,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Points attribués aux 2 équipes en tête si égalité',
+                            style: TextStyle(
+                              color: context.colors.foreground400,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SegmentedButton<int>(
+                      segments: const [
+                        ButtonSegment(value: 1, label: Text('1 pt')),
+                        ButtonSegment(value: 2, label: Text('2 pts')),
+                      ],
+                      selected: {tournamentDrawPoints},
+                      onSelectionChanged: (newSelection) {
+                        unawaited(ref.read(tournamentDrawPointsProvider.notifier).setDrawPoints(newSelection.first));
+                      },
+                      style: const ButtonStyle(
+                        visualDensity: VisualDensity.compact,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                     ),
                   ],
                 ),
@@ -656,6 +701,7 @@ class SettingsScreen extends ConsumerWidget {
         ..invalidate(activeSessionIdProvider)
         ..invalidate(activeDraftSessionProvider)
         ..invalidate(minPlayersPerSessionProvider)
+        ..invalidate(tournamentDrawPointsProvider)
         ..invalidate(standingsProvider)
         ..invalidate(standingsPerMatchProvider)
         ..invalidate(topScorersProvider)

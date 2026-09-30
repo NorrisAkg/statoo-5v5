@@ -17,13 +17,17 @@ class AddLatePlayersBottomSheet extends ConsumerStatefulWidget {
     required this.currentTeamACount,
     required this.currentTeamBCount,
     required this.alreadyAssignedPlayerIds,
+    this.currentTeamCCount,
     super.key,
   });
 
   final String sessionId;
   final int currentTeamACount;
   final int currentTeamBCount;
+  final int? currentTeamCCount;
   final Set<String> alreadyAssignedPlayerIds;
+
+  bool get isTournament => currentTeamCCount != null;
 
   @override
   ConsumerState<AddLatePlayersBottomSheet> createState() => _AddLatePlayersBottomSheetState();
@@ -46,26 +50,46 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
     final rng = Random();
     final selectedList = _selectedPlayerIds.toList()..shuffle(rng);
 
-    int countA = widget.currentTeamACount;
-    int countB = widget.currentTeamBCount;
-
     final newAssignments = <String, Team>{};
-    for (final pid in selectedList) {
-      if (countA < countB) {
-        newAssignments[pid] = Team.a;
-        countA++;
-      } else if (countB < countA) {
-        newAssignments[pid] = Team.b;
-        countB++;
-      } else {
-        // En cas d'égalité (ex. 5v5, 6v6), tirage au sort 50/50 à pile ou face
-        final chooseA = rng.nextBool();
-        if (chooseA) {
+
+    if (widget.isTournament) {
+      int countA = widget.currentTeamACount;
+      int countB = widget.currentTeamBCount;
+      int countC = widget.currentTeamCCount!;
+
+      for (final pid in selectedList) {
+        final minCount = [countA, countB, countC].reduce((a, b) => a < b ? a : b);
+        final eligible = <Team>[
+          if (countA == minCount) Team.a,
+          if (countB == minCount) Team.b,
+          if (countC == minCount) Team.c,
+        ];
+        final chosen = eligible[rng.nextInt(eligible.length)];
+        newAssignments[pid] = chosen;
+        if (chosen == Team.a) countA++;
+        if (chosen == Team.b) countB++;
+        if (chosen == Team.c) countC++;
+      }
+    } else {
+      int countA = widget.currentTeamACount;
+      int countB = widget.currentTeamBCount;
+
+      for (final pid in selectedList) {
+        if (countA < countB) {
           newAssignments[pid] = Team.a;
           countA++;
-        } else {
+        } else if (countB < countA) {
           newAssignments[pid] = Team.b;
           countB++;
+        } else {
+          final chooseA = rng.nextBool();
+          if (chooseA) {
+            newAssignments[pid] = Team.a;
+            countA++;
+          } else {
+            newAssignments[pid] = Team.b;
+            countB++;
+          }
         }
       }
     }
@@ -123,8 +147,10 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
 
     final assignedToA = _assignments.values.where((t) => t == Team.a).length;
     final assignedToB = _assignments.values.where((t) => t == Team.b).length;
+    final assignedToC = _assignments.values.where((t) => t == Team.c).length;
     final totalA = widget.currentTeamACount + assignedToA;
     final totalB = widget.currentTeamBCount + assignedToB;
+    final totalC = (widget.currentTeamCCount ?? 0) + assignedToC;
     final unassignedCount = _selectedPlayerIds.length - _assignments.length;
 
     return Container(
@@ -249,6 +275,35 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
                     ],
                   ),
                 ),
+                if (widget.isTournament) ...[
+                  Container(width: 1, height: 20, color: context.colors.background700),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(color: context.colors.primary500, shape: BoxShape.circle),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Équipe C : ',
+                          style: TextStyle(color: context.colors.foreground300, fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          '$totalC j.',
+                          style: TextStyle(color: context.colors.primary400, fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                        if (assignedToC > 0)
+                          Text(
+                            ' (+$assignedToC)',
+                            style: TextStyle(color: context.colors.primary300, fontSize: 11),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -440,6 +495,9 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
     } else if (team == Team.b) {
       avatarBg = context.colors.secondary500.withValues(alpha: 0.2);
       avatarFg = context.colors.secondary400;
+    } else if (team == Team.c) {
+      avatarBg = context.colors.primary500.withValues(alpha: 0.2);
+      avatarFg = context.colors.primary400;
     } else if (isSelected) {
       avatarBg = context.colors.warning.withValues(alpha: 0.2);
       avatarFg = context.colors.warning;
@@ -457,18 +515,22 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
               ? context.colors.accent500.withValues(alpha: 0.05)
               : team == Team.b
                   ? context.colors.secondary500.withValues(alpha: 0.05)
-                  : isSelected
-                      ? context.colors.warning.withValues(alpha: 0.05)
-                      : context.colors.background900,
+                  : team == Team.c
+                      ? context.colors.primary500.withValues(alpha: 0.05)
+                      : isSelected
+                          ? context.colors.warning.withValues(alpha: 0.05)
+                          : context.colors.background900,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: team == Team.a
                 ? context.colors.accent500.withValues(alpha: 0.35)
                 : team == Team.b
                     ? context.colors.secondary500.withValues(alpha: 0.35)
-                    : isSelected
-                        ? context.colors.warning.withValues(alpha: 0.35)
-                        : context.colors.background700,
+                    : team == Team.c
+                        ? context.colors.primary500.withValues(alpha: 0.35)
+                        : isSelected
+                            ? context.colors.warning.withValues(alpha: 0.35)
+                            : context.colors.background700,
           ),
         ),
         child: Row(
@@ -521,9 +583,11 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SegmentedButton<Team>(
-                    segments: const [
-                      ButtonSegment(value: Team.a, label: Text('A', style: TextStyle(fontWeight: FontWeight.bold))),
-                      ButtonSegment(value: Team.b, label: Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
+                    segments: [
+                      const ButtonSegment(value: Team.a, label: Text('A', style: TextStyle(fontWeight: FontWeight.bold))),
+                      const ButtonSegment(value: Team.b, label: Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
+                      if (widget.isTournament)
+                        const ButtonSegment(value: Team.c, label: Text('C', style: TextStyle(fontWeight: FontWeight.bold))),
                     ],
                     selected: team != null ? {team} : <Team>{},
                     emptySelectionAllowed: true,
@@ -531,10 +595,14 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
                       backgroundColor: context.colors.background800,
                       selectedBackgroundColor: team == Team.a
                           ? context.colors.accent500.withValues(alpha: 0.3)
-                          : context.colors.secondary500.withValues(alpha: 0.3),
+                          : team == Team.b
+                              ? context.colors.secondary500.withValues(alpha: 0.3)
+                              : context.colors.primary500.withValues(alpha: 0.3),
                       selectedForegroundColor: team == Team.a
                           ? context.colors.accent400
-                          : context.colors.secondary400,
+                          : team == Team.b
+                              ? context.colors.secondary400
+                              : context.colors.primary400,
                       visualDensity: VisualDensity.compact,
                     ),
                     onSelectionChanged: (newSelection) {

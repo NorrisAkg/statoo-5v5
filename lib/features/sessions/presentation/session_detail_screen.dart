@@ -107,13 +107,16 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final isDraft = session.status == SessionStatus.draft;
     final teamAPlayers = participants.where((p) => p.participation.team == Team.a).toList();
     final teamBPlayers = participants.where((p) => p.participation.team == Team.b).toList();
+    final teamCPlayers = participants.where((p) => p.participation.team == Team.c).toList();
 
     final goalsAssignedA = teamAPlayers.fold<int>(0, (sum, p) => sum + p.participation.goals);
     final goalsAssignedB = teamBPlayers.fold<int>(0, (sum, p) => sum + p.participation.goals);
     final scoreA = session.scoreA ?? 0;
     final scoreB = session.scoreB ?? 0;
-    final hasDiscrepancy = (goalsAssignedA + session.unassignedGoalsA != scoreA) ||
-        (goalsAssignedB + session.unassignedGoalsB != scoreB);
+    final isTournament = session.sessionType == SessionType.tournament3;
+    final hasDiscrepancy = !isTournament &&
+        ((goalsAssignedA + session.unassignedGoalsA != scoreA) ||
+            (goalsAssignedB + session.unassignedGoalsB != scoreB));
 
     final formattedDate = DateFormat("EEE d MMM yyyy · HH'h'mm", 'fr_FR').format(session.playedAt);
 
@@ -169,7 +172,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildTeamsSection(context, ref, session, teamAPlayers, teamBPlayers, isCurrentActive),
+        _buildTeamsSection(context, ref, session, teamAPlayers, teamBPlayers, teamCPlayers, isCurrentActive),
         if (isDraft) ...[
           const SizedBox(height: 12),
           OutlinedButton.icon(
@@ -258,7 +261,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   color: context.colors.background800,
                   borderRadius: BorderRadius.circular(9999),
                 ),
-                child: const Text('5v5', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                child: Text(
+                  session.sessionType == SessionType.tournament3 ? 'TOURNOI 3 ÉQUIPES' : '5v5',
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                ),
               ),
               if (!session.isRanked) ...[
                 const SizedBox(width: 8),
@@ -279,52 +285,231 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             style: TextStyle(color: context.colors.foreground400, fontSize: 14),
           ),
           const SizedBox(height: 20),
+          if (session.sessionType == SessionType.tournament3)
+            _buildTournamentWinsBoard(context, ref, session, isCurrentActive)
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildTeamScore(
+                  context,
+                  ref,
+                  title: 'Équipe A',
+                  score: scoreA,
+                  color: context.colors.accent500,
+                  isDraft: isCurrentActive,
+                  onScoreChanged: (newScore) {
+                    unawaited(
+                      ref.read(sessionsControllerProvider).updateScore(
+                        sessionId: session.id,
+                        scoreA: newScore,
+                        scoreB: scoreB,
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    '-',
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: context.colors.foreground600),
+                  ),
+                ),
+                _buildTeamScore(
+                  context,
+                  ref,
+                  title: 'Équipe B',
+                  score: scoreB,
+                  color: context.colors.secondary500,
+                  isDraft: isCurrentActive,
+                  onScoreChanged: (newScore) {
+                    unawaited(
+                      ref.read(sessionsControllerProvider).updateScore(
+                        sessionId: session.id,
+                        scoreA: scoreA,
+                        scoreB: newScore,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  MatchResult _computeTournamentResult(int a, int b, int c) {
+    if (a > b && a > c) return MatchResult.teamA;
+    if (b > a && b > c) return MatchResult.teamB;
+    if (c > a && c > b) return MatchResult.teamC;
+    if (a == b && a > c) return MatchResult.drawAB;
+    if (b == c && b > a) return MatchResult.drawBC;
+    if (a == c && a > b) return MatchResult.drawAC;
+    return MatchResult.drawAll;
+  }
+
+  Widget _buildTournamentWinsBoard(
+    BuildContext context,
+    WidgetRef ref,
+    Session session,
+    bool isCurrentActive,
+  ) {
+    void changeWins({int? a, int? b, int? c}) {
+      final newA = a ?? session.winsA;
+      final newB = b ?? session.winsB;
+      final newC = c ?? session.winsC;
+      final result = _computeTournamentResult(newA, newB, newC);
+      unawaited(
+        ref.read(sessionsControllerProvider).updateTournamentWins(
+          sessionId: session.id,
+          winsA: newA,
+          winsB: newB,
+          winsC: newC,
+          result: result,
+        ),
+      );
+    }
+
+    final maxWins = [session.winsA, session.winsB, session.winsC].reduce((x, y) => x > y ? x : y);
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Remix.trophy_line, size: 16, color: context.colors.primary400),
+            const SizedBox(width: 6),
+            Text(
+              'Compteur de victoires',
+              style: TextStyle(
+                color: context.colors.foreground300,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildTournamentTeamWinCard(
+                context,
+                title: 'Équipe A',
+                wins: session.winsA,
+                color: context.colors.accent500,
+                textColor: context.colors.accent400,
+                isLeader: session.winsA > 0 && session.winsA == maxWins,
+                isEditable: isCurrentActive,
+                onDecrement: session.winsA > 0 ? () => changeWins(a: session.winsA - 1) : null,
+                onIncrement: () => changeWins(a: session.winsA + 1),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildTournamentTeamWinCard(
+                context,
+                title: 'Équipe B',
+                wins: session.winsB,
+                color: context.colors.secondary500,
+                textColor: context.colors.secondary400,
+                isLeader: session.winsB > 0 && session.winsB == maxWins,
+                isEditable: isCurrentActive,
+                onDecrement: session.winsB > 0 ? () => changeWins(b: session.winsB - 1) : null,
+                onIncrement: () => changeWins(b: session.winsB + 1),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildTournamentTeamWinCard(
+                context,
+                title: 'Équipe C',
+                wins: session.winsC,
+                color: context.colors.primary500,
+                textColor: context.colors.primary400,
+                isLeader: session.winsC > 0 && session.winsC == maxWins,
+                isEditable: isCurrentActive,
+                onDecrement: session.winsC > 0 ? () => changeWins(c: session.winsC - 1) : null,
+                onIncrement: () => changeWins(c: session.winsC + 1),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTournamentTeamWinCard(
+    BuildContext context, {
+    required String title,
+    required int wins,
+    required Color color,
+    required Color textColor,
+    required bool isLeader,
+    required bool isEditable,
+    required VoidCallback? onDecrement,
+    required VoidCallback onIncrement,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isLeader ? color : color.withValues(alpha: 0.25),
+          width: isLeader ? 1.5 : 1.0,
+        ),
+      ),
+      child: Column(
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildTeamScore(
-                context,
-                ref,
-                title: 'Équipe A',
-                score: scoreA,
-                color: context.colors.accent500,
-                isDraft: isCurrentActive,
-                onScoreChanged: (newScore) {
-                  unawaited(
-                    ref.read(sessionsControllerProvider).updateScore(
-                      sessionId: session.id,
-                      scoreA: newScore,
-                      scoreB: scoreB,
-                    ),
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+              const SizedBox(width: 6),
+              Flexible(
                 child: Text(
-                  '-',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: context.colors.foreground600),
+                  title,
+                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 13),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              _buildTeamScore(
-                context,
-                ref,
-                title: 'Équipe B',
-                score: scoreB,
-                color: context.colors.secondary500,
-                isDraft: isCurrentActive,
-                onScoreChanged: (newScore) {
-                  unawaited(
-                    ref.read(sessionsControllerProvider).updateScore(
-                      sessionId: session.id,
-                      scoreA: scoreA,
-                      scoreB: newScore,
-                    ),
-                  );
-                },
-              ),
+              if (isLeader) ...[
+                const SizedBox(width: 4),
+                const Icon(Remix.trophy_fill, size: 13, color: Color(0xFFFACC15)),
+              ],
             ],
           ),
+          const SizedBox(height: 6),
+          Text(
+            '$wins',
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
+          ),
+          Text(
+            'victoire${wins > 1 ? 's' : ''}',
+            style: TextStyle(color: context.colors.foreground400, fontSize: 11),
+          ),
+          if (isEditable) ...[
+            const SizedBox(height: 6),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Remix.subtract_line, size: 16),
+                  color: context.colors.foreground400,
+                  onPressed: onDecrement,
+                ),
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Remix.add_line, size: 16),
+                  color: textColor,
+                  onPressed: onIncrement,
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );
@@ -398,8 +583,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     Session session,
     List<SessionParticipantDetail> teamAPlayers,
     List<SessionParticipantDetail> teamBPlayers,
+    List<SessionParticipantDetail> teamCPlayers,
     bool isCurrentActive,
   ) {
+    final isTournament = session.sessionType == SessionType.tournament3;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -416,7 +604,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 onTap: () => setState(() => _selectedTeamTab = Team.a),
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 8),
             Expanded(
               child: _buildTeamTabButton(
                 context,
@@ -428,6 +616,20 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 onTap: () => setState(() => _selectedTeamTab = Team.b),
               ),
             ),
+            if (isTournament) ...[
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildTeamTabButton(
+                  context,
+                  title: 'Équipe C',
+                  playerCount: teamCPlayers.length,
+                  color: context.colors.primary500,
+                  textColor: context.colors.primary400,
+                  isSelected: _selectedTeamTab == Team.c,
+                  onTap: () => setState(() => _selectedTeamTab = Team.c),
+                ),
+              ),
+            ],
           ],
         ),
         const SizedBox(height: 14),
@@ -444,16 +646,27 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   teamAPlayers,
                   isCurrentActive,
                 )
-              : _buildTeamCard(
-                  key: const ValueKey('team_b_card'),
-                  context,
-                  ref,
-                  session,
-                  'Équipe B',
-                  context.colors.secondary500,
-                  teamBPlayers,
-                  isCurrentActive,
-                ),
+              : _selectedTeamTab == Team.b
+                  ? _buildTeamCard(
+                      key: const ValueKey('team_b_card'),
+                      context,
+                      ref,
+                      session,
+                      'Équipe B',
+                      context.colors.secondary500,
+                      teamBPlayers,
+                      isCurrentActive,
+                    )
+                  : _buildTeamCard(
+                      key: const ValueKey('team_c_card'),
+                      context,
+                      ref,
+                      session,
+                      'Équipe C',
+                      context.colors.primary500,
+                      teamCPlayers,
+                      isCurrentActive,
+                    ),
         ),
       ],
     );
@@ -902,51 +1115,79 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     List<SessionParticipantDetail> participants,
   ) async {
     final controller = ref.read(sessionsControllerProvider);
+    final teamAPlayers = participants.where((p) => p.participation.team == Team.a).toList();
+    final teamBPlayers = participants.where((p) => p.participation.team == Team.b).toList();
+    final teamCPlayers = participants.where((p) => p.participation.team == Team.c).toList();
+    final isTournament = session.sessionType == SessionType.tournament3;
+
     final blockers = closeBlockers(
       session: session,
-      teamACount: participants.where((p) => p.participation.team == Team.a).length,
-      teamBCount: participants.where((p) => p.participation.team == Team.b).length,
+      teamACount: teamAPlayers.length,
+      teamBCount: teamBPlayers.length,
+      teamCCount: isTournament ? teamCPlayers.length : null,
     );
 
     if (blockers.contains(CloseBlocker.unevenTeams)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.unevenTeams))),
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.unevenTeams, session))),
       );
       return;
     }
 
     if (blockers.contains(CloseBlocker.missingScore)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore))),
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore, session))),
       );
       return;
+    }
+
+    String confirmMessage =
+        'Les points du match seront calculés et intégrés au classement général et aux statistiques.';
+    if (isTournament) {
+      final res = session.result ??
+          _computeTournamentResult(session.winsA, session.winsB, session.winsC);
+      final outcome = switch (res) {
+        MatchResult.teamA => 'Vainqueur : Équipe A (${session.winsA} victoires) — 3 pts.',
+        MatchResult.teamB => 'Vainqueur : Équipe B (${session.winsB} victoires) — 3 pts.',
+        MatchResult.teamC => 'Vainqueur : Équipe C (${session.winsC} victoires) — 3 pts.',
+        MatchResult.drawAB =>
+          'Égalité : Équipes A et B (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune.',
+        MatchResult.drawBC =>
+          'Égalité : Équipes B et C (${session.winsB} victoires) — ${session.drawPoints} pt(s) chacune.',
+        MatchResult.drawAC =>
+          'Égalité : Équipes A et C (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune.',
+        MatchResult.drawAll =>
+          'Égalité à trois (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune.',
+        _ => 'Points calculés pour le classement général.',
+      };
+      confirmMessage = '$outcome\n\nSouhaitez-vous clôturer cette séance ?';
     }
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Clôturer la séance ?'),
-        content: const Text(
-          'Les points du match seront calculés et intégrés au classement général et aux statistiques.',
-        ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Clôturer'),
-            ),
-          ],
-        ),
-      );
+        content: Text(confirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Clôturer'),
+          ),
+        ],
+      ),
+    );
 
     if (confirmed != true) return;
     String message;
     try {
       final remaining = await controller.closeSession(session.id);
-      message = remaining.isEmpty ? 'Séance clôturée avec succès !' : _closeBlockerMessage(remaining.first);
+      message = remaining.isEmpty
+          ? 'Séance clôturée avec succès !'
+          : _closeBlockerMessage(remaining.first, session);
     } on SessionCloseException {
       message = "La séance n'a pas pu être clôturée. Rechargez-la et réessayez.";
     }
@@ -954,11 +1195,14 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  String _closeBlockerMessage(CloseBlocker blocker) => switch (blocker) {
-    CloseBlocker.missingScore => 'Clôture impossible : renseignez le score de la séance.',
-    CloseBlocker.unevenTeams =>
-      "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
-  };
+  String _closeBlockerMessage(CloseBlocker blocker, Session session) => switch (blocker) {
+        CloseBlocker.missingScore => session.sessionType == SessionType.tournament3
+            ? 'Clôture impossible : au moins une victoire doit être enregistrée.'
+            : 'Clôture impossible : renseignez le score de la séance.',
+        CloseBlocker.unevenTeams => session.sessionType == SessionType.tournament3
+            ? "Clôture impossible : l'écart d'effectif entre les 3 équipes dépasse 1 et l'option équipes inégales n'est pas activée."
+            : "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
+      };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
     final activeId = ref.read(activeSessionIdProvider).value;
@@ -1031,6 +1275,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
   ) {
     final teamAPlayers = participants.where((p) => p.participation.team == Team.a).toList();
     final teamBPlayers = participants.where((p) => p.participation.team == Team.b).toList();
+    final teamCPlayers = participants.where((p) => p.participation.team == Team.c).toList();
     final alreadyAssignedIds = participants.map((p) => p.participation.playerId).toSet();
 
     unawaited(
@@ -1042,6 +1287,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           sessionId: session.id,
           currentTeamACount: teamAPlayers.length,
           currentTeamBCount: teamBPlayers.length,
+          currentTeamCCount: session.sessionType == SessionType.tournament3 ? teamCPlayers.length : null,
           alreadyAssignedPlayerIds: alreadyAssignedIds,
         ),
       ),

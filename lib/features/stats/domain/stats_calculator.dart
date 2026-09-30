@@ -21,9 +21,22 @@ class StatsCalculator {
           pts = 1;
           draw = 1;
         } else if ((session.result == MatchResult.teamA && part.team == Team.a) ||
-                   (session.result == MatchResult.teamB && part.team == Team.b)) {
+                   (session.result == MatchResult.teamB && part.team == Team.b) ||
+                   (session.result == MatchResult.teamC && part.team == Team.c)) {
           pts = 3;
           win = 1;
+        } else if (session.result == MatchResult.drawAB && (part.team == Team.a || part.team == Team.b)) {
+          pts = session.drawPoints;
+          draw = 1;
+        } else if (session.result == MatchResult.drawBC && (part.team == Team.b || part.team == Team.c)) {
+          pts = session.drawPoints;
+          draw = 1;
+        } else if (session.result == MatchResult.drawAC && (part.team == Team.a || part.team == Team.c)) {
+          pts = session.drawPoints;
+          draw = 1;
+        } else if (session.result == MatchResult.drawAll) {
+          pts = session.drawPoints;
+          draw = 1;
         } else {
           pts = 0;
           loss = 1;

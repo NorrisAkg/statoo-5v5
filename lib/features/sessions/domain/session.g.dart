@@ -15,13 +15,22 @@ _Session _$SessionFromJson(Map<String, dynamic> json) => _Session(
   splitMode:
       $enumDecodeNullable(_$SplitModeEnumMap, json['splitMode']) ??
       SplitMode.random,
+  sessionType:
+      $enumDecodeNullable(_$SessionTypeEnumMap, json['sessionType']) ??
+      SessionType.classic2,
   allowUnevenTeams: json['allowUnevenTeams'] as bool? ?? false,
   isRanked: json['isRanked'] as bool? ?? false,
   scoreA: (json['scoreA'] as num?)?.toInt(),
   scoreB: (json['scoreB'] as num?)?.toInt(),
+  scoreC: (json['scoreC'] as num?)?.toInt(),
+  winsA: (json['winsA'] as num?)?.toInt() ?? 0,
+  winsB: (json['winsB'] as num?)?.toInt() ?? 0,
+  winsC: (json['winsC'] as num?)?.toInt() ?? 0,
+  drawPoints: (json['drawPoints'] as num?)?.toInt() ?? 1,
   result: $enumDecodeNullable(_$MatchResultEnumMap, json['result']),
   unassignedGoalsA: (json['unassignedGoalsA'] as num?)?.toInt() ?? 0,
   unassignedGoalsB: (json['unassignedGoalsB'] as num?)?.toInt() ?? 0,
+  unassignedGoalsC: (json['unassignedGoalsC'] as num?)?.toInt() ?? 0,
   notes: json['notes'] as String?,
 );
 
@@ -30,13 +39,20 @@ Map<String, dynamic> _$SessionToJson(_Session instance) => <String, dynamic>{
   'playedAt': instance.playedAt.toIso8601String(),
   'status': _$SessionStatusEnumMap[instance.status]!,
   'splitMode': _$SplitModeEnumMap[instance.splitMode]!,
+  'sessionType': _$SessionTypeEnumMap[instance.sessionType]!,
   'allowUnevenTeams': instance.allowUnevenTeams,
   'isRanked': instance.isRanked,
   'scoreA': instance.scoreA,
   'scoreB': instance.scoreB,
+  'scoreC': instance.scoreC,
+  'winsA': instance.winsA,
+  'winsB': instance.winsB,
+  'winsC': instance.winsC,
+  'drawPoints': instance.drawPoints,
   'result': _$MatchResultEnumMap[instance.result],
   'unassignedGoalsA': instance.unassignedGoalsA,
   'unassignedGoalsB': instance.unassignedGoalsB,
+  'unassignedGoalsC': instance.unassignedGoalsC,
   'notes': instance.notes,
 };
 
@@ -51,8 +67,18 @@ const _$SplitModeEnumMap = {
   SplitMode.manual: 'manual',
 };
 
+const _$SessionTypeEnumMap = {
+  SessionType.classic2: 'classic2',
+  SessionType.tournament3: 'tournament3',
+};
+
 const _$MatchResultEnumMap = {
   MatchResult.teamA: 'teamA',
   MatchResult.teamB: 'teamB',
+  MatchResult.teamC: 'teamC',
   MatchResult.draw: 'draw',
+  MatchResult.drawAB: 'drawAB',
+  MatchResult.drawBC: 'drawBC',
+  MatchResult.drawAC: 'drawAC',
+  MatchResult.drawAll: 'drawAll',
 };
