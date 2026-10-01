@@ -712,98 +712,54 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
             final allFilteredSelected = filteredPlayers.isNotEmpty &&
                 filteredPlayers.every((p) => _selectedPlayerIds.contains(p.id));
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
+                final isTournament = _sessionType == SessionType.tournament3;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: context.colors.accent500.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: context.colors.accent500.withValues(alpha: 0.4)),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTeamCounterBadge(
+                            context: context,
+                            label: isTournament ? 'Éq. A: $countA' : 'Équipe A: $countA',
+                            color: context.colors.accent500,
+                            textColor: context.colors.accent400,
+                          ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.accent500, shape: BoxShape.circle)),
-                            const SizedBox(width: 6),
-                            Text('Équipe A: $countA', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.bold, fontSize: 13)),
-                          ],
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: _buildTeamCounterBadge(
+                            context: context,
+                            label: isTournament ? 'Éq. B: $countB' : 'Équipe B: $countB',
+                            color: context.colors.secondary500,
+                            textColor: context.colors.secondary400,
+                          ),
                         ),
-                      ),
+                        if (isTournament) ...[
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: _buildTeamCounterBadge(
+                              context: context,
+                              label: 'Éq. C: $countC',
+                              color: context.colors.primary500,
+                              textColor: context.colors.primary400,
+                            ),
+                          ),
+                        ],
+                        if (unassignedCount > 0) ...[
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: _buildTeamCounterBadge(
+                              context: context,
+                              label: isTournament ? 'Reste: $unassignedCount' : 'À placer: $unassignedCount',
+                              color: context.colors.warning,
+                              textColor: context.colors.warning,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: context.colors.secondary500.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: context.colors.secondary500.withValues(alpha: 0.4)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.secondary500, shape: BoxShape.circle)),
-                            const SizedBox(width: 6),
-                            Text('Équipe B: $countB', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.bold, fontSize: 13)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (_sessionType == SessionType.tournament3) ...[
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: context.colors.primary500.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: context.colors.primary500.withValues(alpha: 0.4)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.primary500, shape: BoxShape.circle)),
-                              const SizedBox(width: 6),
-                              Text('Équipe C: $countC', style: TextStyle(color: context.colors.primary400, fontWeight: FontWeight.bold, fontSize: 13)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                    if (unassignedCount > 0) ...[
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                          decoration: BoxDecoration(
-                            color: context.colors.warning.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: context.colors.warning.withValues(alpha: 0.4)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(width: 8, height: 8, decoration: BoxDecoration(color: context.colors.warning, shape: BoxShape.circle)),
-                              const SizedBox(width: 4),
-                              Flexible(
-                                child: Text(
-                                  'À placer: $unassignedCount',
-                                  style: TextStyle(color: context.colors.warning, fontWeight: FontWeight.bold, fontSize: 12),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -1166,6 +1122,46 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           error: (err, _) => Center(child: Text('Erreur: $err')),
         ),
       ],
+    );
+  }
+
+  Widget _buildTeamCounterBadge({
+    required BuildContext context,
+    required String label,
+    required Color color,
+    required Color textColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 7,
+            height: 7,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 4),
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
