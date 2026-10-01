@@ -532,7 +532,7 @@ class SqliteSessionsRepository implements SessionsRepository {
         'wins_a': winsA,
         'wins_b': winsB,
         'wins_c': winsC,
-        if (resStr != null) ...{'result': resStr},
+        'result': resStr,
       },
       where: 'id = ?',
       whereArgs: [sessionId],

@@ -31,7 +31,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 6,
+      version: 7,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -101,6 +101,51 @@ class AppDatabase {
           await db.execute('INSERT OR IGNORE INTO participations_new SELECT id, session_id, player_id, team, goals, assists, yellow_cards, red_cards FROM participations;');
           await db.execute('DROP TABLE participations;');
           await db.execute('ALTER TABLE participations_new RENAME TO participations;');
+        }
+        if (oldVersion < 7) {
+          await db.execute('PRAGMA foreign_keys = OFF;');
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS sessions_new (
+              id TEXT PRIMARY KEY,
+              team_id TEXT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+              played_at TEXT NOT NULL,
+              status TEXT NOT NULL CHECK(status IN ('DRAFT', 'CLOSED')),
+              split_mode TEXT CHECK(split_mode IN ('RANDOM', 'RANDOM_ADJUSTED', 'MANUAL')),
+              session_type TEXT NOT NULL DEFAULT 'CLASSIC_2' CHECK(session_type IN ('CLASSIC_2', 'TOURNAMENT_3')),
+              allow_uneven_teams INTEGER NOT NULL DEFAULT 0,
+              is_ranked INTEGER NOT NULL DEFAULT 1,
+              score_a INTEGER,
+              score_b INTEGER,
+              score_c INTEGER,
+              wins_a INTEGER DEFAULT 0,
+              wins_b INTEGER DEFAULT 0,
+              wins_c INTEGER DEFAULT 0,
+              draw_points INTEGER DEFAULT 1,
+              result TEXT CHECK(result IN ('A', 'B', 'C', 'DRAW', 'DRAW_AB', 'DRAW_BC', 'DRAW_AC', 'DRAW_ALL')),
+              unassigned_goals_a INTEGER DEFAULT 0,
+              unassigned_goals_b INTEGER DEFAULT 0,
+              unassigned_goals_c INTEGER DEFAULT 0,
+              notes TEXT
+            );
+          ''');
+          await db.execute('''
+            INSERT OR IGNORE INTO sessions_new (
+              id, team_id, played_at, status, split_mode, session_type,
+              allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+              wins_a, wins_b, wins_c, draw_points, result,
+              unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+            )
+            SELECT 
+              id, team_id, played_at, status, split_mode,
+              session_type, allow_uneven_teams, is_ranked,
+              score_a, score_b, score_c,
+              wins_a, wins_b, wins_c, draw_points, result,
+              unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+            FROM sessions;
+          ''');
+          await db.execute('DROP TABLE sessions;');
+          await db.execute('ALTER TABLE sessions_new RENAME TO sessions;');
+          await db.execute('PRAGMA foreign_keys = ON;');
         }
         await _dropViews(db);
         await _createViews(db);

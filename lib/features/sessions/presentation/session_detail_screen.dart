@@ -361,36 +361,32 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
   }
 
-  MatchResult _computeTournamentResult(int a, int b, int c) {
-    if (a > b && a > c) return MatchResult.teamA;
-    if (b > a && b > c) return MatchResult.teamB;
-    if (c > a && c > b) return MatchResult.teamC;
-    if (a == b && a > c) return MatchResult.drawAB;
-    if (b == c && b > a) return MatchResult.drawBC;
-    if (a == c && a > b) return MatchResult.drawAC;
-    return MatchResult.drawAll;
-  }
-
   Widget _buildTournamentWinsBoard(
     BuildContext context,
     WidgetRef ref,
     Session session,
     bool isCurrentActive,
   ) {
-    void changeWins({int? a, int? b, int? c}) {
+    Future<void> changeWins({int? a, int? b, int? c}) async {
       final newA = a ?? session.winsA;
       final newB = b ?? session.winsB;
       final newC = c ?? session.winsC;
-      final result = _computeTournamentResult(newA, newB, newC);
-      unawaited(
-        ref.read(sessionsControllerProvider).updateTournamentWins(
+      final result = computeTournamentResult(newA, newB, newC);
+      try {
+        await ref.read(sessionsControllerProvider).updateTournamentWins(
           sessionId: session.id,
           winsA: newA,
           winsB: newB,
           winsC: newC,
           result: result,
-        ),
-      );
+        );
+      } on Object catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erreur lors de la mise à jour des victoires : $e')),
+          );
+        }
+      }
     }
 
     final maxWins = [session.winsA, session.winsB, session.winsC].reduce((x, y) => x > y ? x : y);
@@ -1503,8 +1499,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
     final String outcome;
     if (isTournament) {
-      final res = session.result ??
-          _computeTournamentResult(session.winsA, session.winsB, session.winsC);
+      final res = computeTournamentResult(session.winsA, session.winsB, session.winsC);
       outcome = switch (res) {
         MatchResult.teamA => 'Vainqueur : Équipe A (${session.winsA} victoires) — 3 pts',
         MatchResult.teamB => 'Vainqueur : Équipe B (${session.winsB} victoires) — 3 pts',

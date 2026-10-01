@@ -13,6 +13,17 @@ class SessionCloseException implements Exception {
   String toString() => 'SessionCloseException: $message';
 }
 
+MatchResult? computeTournamentResult(int winsA, int winsB, int winsC) {
+  if (winsA == 0 && winsB == 0 && winsC == 0) return null;
+  if (winsA > winsB && winsA > winsC) return MatchResult.teamA;
+  if (winsB > winsA && winsB > winsC) return MatchResult.teamB;
+  if (winsC > winsA && winsC > winsB) return MatchResult.teamC;
+  if (winsA == winsB && winsA > winsC) return MatchResult.drawAB;
+  if (winsB == winsC && winsB > winsA) return MatchResult.drawBC;
+  if (winsA == winsC && winsA > winsB) return MatchResult.drawAC;
+  return MatchResult.drawAll;
+}
+
 bool hasScore(Session session) {
   if (session.sessionType == SessionType.tournament3) {
     return session.result != null;

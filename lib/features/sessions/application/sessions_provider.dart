@@ -381,6 +381,19 @@ class SessionsController {
     );
     if (blockers.isNotEmpty) return blockers;
 
+    if (isTournament) {
+      final tournamentResult = computeTournamentResult(session.winsA, session.winsB, session.winsC);
+      if (tournamentResult != null && tournamentResult != session.result) {
+        await _repo.updateTournamentWins(
+          sessionId: sessionId,
+          winsA: session.winsA,
+          winsB: session.winsB,
+          winsC: session.winsC,
+          result: tournamentResult,
+        );
+      }
+    }
+
     final closed = await _repo.closeSession(sessionId, teamId: teamId);
     if (!closed) throw SessionCloseException('Session $sessionId could not be closed');
     _invalidateAll(sessionId);

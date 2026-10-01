@@ -352,5 +352,72 @@ void main() {
       expect(repo.closeCalls, 1);
       expect(repo.session.status, SessionStatus.closed);
     });
+
+    test('closeSession recomputes and synchronizes result when wins changed', () async {
+      final participants = [
+        _part('p1', Team.a),
+        _part('p2', Team.b),
+        _part('p3', Team.c),
+      ];
+      // Session has initial result teamA but wins were updated to Team B having more wins
+      final tourn = Session(
+        id: 's_tourn',
+        playedAt: playedAt,
+        sessionType: SessionType.tournament3,
+        winsA: 1,
+        winsB: 3,
+        result: MatchResult.teamA, // Out of sync initially
+      );
+      final repo = _FakeTournamentRepository(tourn, participants);
+      final container = containerFor(repo);
+
+      final blockers = await container.read(sessionsControllerProvider).closeSession('s_tourn');
+
+      expect(blockers, isEmpty);
+      expect(repo.closeCalls, 1);
+      expect(repo.session.result, MatchResult.teamB); // Recomputed to Team B!
+      expect(repo.session.status, SessionStatus.closed);
+    });
+  });
+
+  group('Tournament 3 Teams - computeTournamentResult', () {
+    test('returns null when 0 wins are recorded for all 3 teams', () {
+      expect(computeTournamentResult(0, 0, 0), isNull);
+    });
+
+    test('returns teamA when A has strictly more wins', () {
+      expect(computeTournamentResult(3, 1, 1), MatchResult.teamA);
+      expect(computeTournamentResult(1, 0, 0), MatchResult.teamA);
+    });
+
+    test('returns teamB when B has strictly more wins', () {
+      expect(computeTournamentResult(1, 4, 2), MatchResult.teamB);
+      expect(computeTournamentResult(0, 1, 0), MatchResult.teamB);
+    });
+
+    test('returns teamC when C has strictly more wins', () {
+      expect(computeTournamentResult(2, 1, 5), MatchResult.teamC);
+      expect(computeTournamentResult(0, 0, 1), MatchResult.teamC);
+    });
+
+    test('returns drawAB when A and B tie for the lead', () {
+      expect(computeTournamentResult(3, 3, 1), MatchResult.drawAB);
+      expect(computeTournamentResult(1, 1, 0), MatchResult.drawAB);
+    });
+
+    test('returns drawBC when B and C tie for the lead', () {
+      expect(computeTournamentResult(0, 2, 2), MatchResult.drawBC);
+      expect(computeTournamentResult(1, 3, 3), MatchResult.drawBC);
+    });
+
+    test('returns drawAC when A and C tie for the lead', () {
+      expect(computeTournamentResult(2, 0, 2), MatchResult.drawAC);
+      expect(computeTournamentResult(3, 1, 3), MatchResult.drawAC);
+    });
+
+    test('returns drawAll when all 3 teams tie with at least 1 win', () {
+      expect(computeTournamentResult(1, 1, 1), MatchResult.drawAll);
+      expect(computeTournamentResult(4, 4, 4), MatchResult.drawAll);
+    });
   });
 }
