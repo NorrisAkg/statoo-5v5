@@ -649,7 +649,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTeamTabButton(
                 context,
-                title: 'Équipe A',
+                title: isTournament ? 'Éq. A' : 'Équipe A',
                 playerCount: teamAPlayers.length,
                 color: context.colors.accent500,
                 textColor: context.colors.accent400,
@@ -661,7 +661,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTeamTabButton(
                 context,
-                title: 'Équipe B',
+                title: isTournament ? 'Éq. B' : 'Équipe B',
                 playerCount: teamBPlayers.length,
                 color: context.colors.secondary500,
                 textColor: context.colors.secondary400,
@@ -674,7 +674,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               Expanded(
                 child: _buildTeamTabButton(
                   context,
-                  title: 'Équipe C',
+                  title: 'Éq. C',
                   playerCount: teamCPlayers.length,
                   color: context.colors.primary500,
                   textColor: context.colors.primary400,
@@ -742,7 +742,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected ? color.withValues(alpha: 0.15) : context.colors.background900,
           borderRadius: BorderRadius.circular(14),
@@ -755,25 +755,30 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 8,
-              height: 8,
+              width: 7,
+              height: 7,
               decoration: BoxDecoration(
                 color: isSelected ? color : color.withValues(alpha: 0.4),
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? context.colors.foreground50 : context.colors.foreground400,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                fontSize: 14,
+            const SizedBox(width: 5),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: isSelected ? context.colors.foreground50 : context.colors.foreground400,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                    fontSize: 13.5,
+                  ),
+                ),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 5),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
               decoration: BoxDecoration(
                 color: isSelected ? color.withValues(alpha: 0.25) : context.colors.background800,
                 borderRadius: BorderRadius.circular(9999),
