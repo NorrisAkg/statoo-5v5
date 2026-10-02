@@ -402,6 +402,7 @@ class AppDatabase {
           MAX(0, CAST((COALESCE(tr.total_sessions, 0) + 1) / 2 AS INTEGER) - s.matches_played) AS missing_matches
         FROM v_standings s
         LEFT JOIN total_ranked tr ON tr.team_id = s.team_id
+        WHERE s.is_active = 1
       )
       SELECT 
         ROW_NUMBER() OVER (PARTITION BY team_id ORDER BY is_eligible DESC, points_per_match DESC, points DESC, matches_played DESC, name ASC) AS rank,
