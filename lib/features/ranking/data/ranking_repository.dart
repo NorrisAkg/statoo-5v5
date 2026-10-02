@@ -1,8 +1,10 @@
+import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
 import '../domain/assist_entry.dart';
 import '../domain/card_entry.dart';
 import '../domain/mvp_calculator.dart';
 import '../domain/mvp_entry.dart';
+import '../domain/mvp_weights.dart';
 import '../domain/scorer_entry.dart';
 import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
@@ -16,7 +18,11 @@ abstract class RankingRepository {
   Future<List<CardEntry>> getTopCards({String? teamId, String sortBy = 'all', String? month});
   Future<List<MvpEntry>> getMvpRanking({required String month, String? teamId});
   Future<MvpEntry?> getPlayerOfTheMonth({String? teamId, String? month});
+  Future<MvpWeights> getMvpWeights({String? teamId});
+  Future<void> saveMvpWeights({required String teamId, required MvpWeights weights});
 }
+
+String mvpWeightsMetaKey(String teamId) => 'mvp_weights_$teamId';
 
 class SqliteRankingRepository implements RankingRepository {
   SqliteRankingRepository(this._appDatabase);
@@ -282,6 +288,8 @@ class SqliteRankingRepository implements RankingRepository {
     final totalSessions = (sessionCountResults.first['total'] as num?)?.toInt() ?? 0;
     if (totalSessions == 0) return const [];
 
+    final w = await getMvpWeights(teamId: teamId);
+
     // 2. Fetch raw aggregate stats per player in that month
     final rows = await db.rawQuery('''
       SELECT 
@@ -299,19 +307,20 @@ class SqliteRankingRepository implements RankingRepository {
         COALESCE(SUM(pm.yellow_cards), 0) AS yellow_cards,
         COALESCE(SUM(pm.red_cards), 0) AS red_cards,
         COALESCE(SUM(
-          (pm.is_win * 10.0) +
-          (pm.is_draw * 3.0) +
-          (pm.goals * 2.0) +
-          (pm.assists * 1.0) -
-          (pm.yellow_cards * 0.5) -
-          (pm.red_cards * 1.0)
+          (pm.is_win * ?) +
+          (pm.is_draw * ?) +
+          (pm.is_loss * ?) +
+          (pm.goals * ?) +
+          (pm.assists * ?) -
+          (pm.yellow_cards * ?) -
+          (pm.red_cards * ?)
         ), 0.0) AS total_score
       FROM players pl
       JOIN v_player_match_results pm ON pm.player_id = pl.id
       JOIN sessions s ON s.id = pm.session_id
       WHERE pl.team_id = ? AND s.status = 'CLOSED' AND s.is_ranked = 1 AND substr(s.played_at, 1, 7) = ?
       GROUP BY pl.id, pl.name, pl.nickname, pl.avatar_url, pl.is_active
-    ''', [teamId, month]);
+    ''', [w.win, w.draw, w.loss, w.goal, w.assist, w.yellowCard, w.redCard, teamId, month]);
 
     final entries = <MvpEntry>[];
 
@@ -406,6 +415,36 @@ class SqliteRankingRepository implements RankingRepository {
           month: month,
         ),
     ];
+  }
+
+  @override
+  Future<MvpWeights> getMvpWeights({String? teamId}) async {
+    if (teamId == null || teamId.isEmpty) return MvpWeights.defaults;
+    final db = await _appDatabase.database;
+    final rows = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: [mvpWeightsMetaKey(teamId)],
+      limit: 1,
+    );
+    if (rows.isEmpty) return MvpWeights.defaults;
+    return MvpWeights.decode(rows.first['value'] as String?);
+  }
+
+  @override
+  Future<void> saveMvpWeights({required String teamId, required MvpWeights weights}) async {
+    if (teamId.isEmpty) throw StateError('No active team selected');
+    final db = await _appDatabase.database;
+    final key = mvpWeightsMetaKey(teamId);
+    if (weights.isDefault) {
+      await db.delete('meta', where: 'key = ?', whereArgs: [key]);
+      return;
+    }
+    await db.insert(
+      'meta',
+      {'key': key, 'value': weights.encode()},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   @override

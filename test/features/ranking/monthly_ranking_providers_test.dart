@@ -5,6 +5,7 @@ import 'package:statoo/features/ranking/data/ranking_repository.dart';
 import 'package:statoo/features/ranking/domain/assist_entry.dart';
 import 'package:statoo/features/ranking/domain/card_entry.dart';
 import 'package:statoo/features/ranking/domain/mvp_entry.dart';
+import 'package:statoo/features/ranking/domain/mvp_weights.dart';
 import 'package:statoo/features/ranking/domain/scorer_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_per_match_entry.dart';
@@ -58,6 +59,12 @@ class FakeRankingRepository implements RankingRepository {
       ),
     ];
   }
+
+  @override
+  Future<MvpWeights> getMvpWeights({String? teamId}) async => MvpWeights.defaults;
+
+  @override
+  Future<void> saveMvpWeights({required String teamId, required MvpWeights weights}) async {}
 
   @override
   Future<List<MvpEntry>> getMvpRanking({required String month, String? teamId}) async {

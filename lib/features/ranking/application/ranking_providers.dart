@@ -5,6 +5,7 @@ import '../data/ranking_repository.dart';
 import '../domain/assist_entry.dart';
 import '../domain/card_entry.dart';
 import '../domain/mvp_entry.dart';
+import '../domain/mvp_weights.dart';
 import '../domain/scorer_entry.dart';
 import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
@@ -88,6 +89,30 @@ final topCardsProvider = FutureProvider<List<CardEntry>>((ref) {
 final selectedMvpMonthProvider = NotifierProvider<RankingMonthNotifier, String?>(
   RankingMonthNotifier.new,
 );
+
+class MvpWeightsController extends AsyncNotifier<MvpWeights> {
+  @override
+  Future<MvpWeights> build() {
+    final activeTeamId = ref.watch(activeTeamIdProvider);
+    if (activeTeamId == null) return Future.value(MvpWeights.defaults);
+    return ref.watch(rankingRepositoryProvider).getMvpWeights(teamId: activeTeamId);
+  }
+
+  Future<void> save(MvpWeights weights) async {
+    final activeTeamId = ref.read(activeTeamIdProvider);
+    if (activeTeamId == null) throw StateError('No active team selected');
+    await ref.read(rankingRepositoryProvider).saveMvpWeights(teamId: activeTeamId, weights: weights);
+    state = AsyncData(weights);
+    ref
+      ..invalidate(monthlyMvpRankingProvider)
+      ..invalidate(playerOfTheMonthProvider);
+  }
+
+  Future<void> reset() => save(MvpWeights.defaults);
+}
+
+final AsyncNotifierProvider<MvpWeightsController, MvpWeights> mvpWeightsProvider =
+    AsyncNotifierProvider<MvpWeightsController, MvpWeights>(MvpWeightsController.new);
 
 final monthlyMvpRankingProvider = FutureProvider<List<MvpEntry>>((ref) async {
   final repo = ref.watch(rankingRepositoryProvider);

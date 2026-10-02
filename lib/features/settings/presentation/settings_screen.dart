@@ -16,6 +16,7 @@ import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/settings_provider.dart';
 import '../data/backup_service.dart';
 import '../domain/backup_payload.dart';
+import 'mvp_weights_section.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -165,6 +166,9 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 32),
+          _buildSectionTitle(context, 'Joueur du mois'),
+          const MvpWeightsSection(),
           const SizedBox(height: 32),
           _buildSectionTitle(context, 'Apparence'),
           AppCard(
@@ -712,7 +716,10 @@ class SettingsScreen extends ConsumerWidget {
         ..invalidate(standingsPerMatchProvider)
         ..invalidate(topScorersProvider)
         ..invalidate(topAssistsProvider)
-        ..invalidate(topCardsProvider);
+        ..invalidate(topCardsProvider)
+        ..invalidate(mvpWeightsProvider)
+        ..invalidate(monthlyMvpRankingProvider)
+        ..invalidate(playerOfTheMonthProvider);
 
       if (!context.mounted) return;
       Navigator.of(context, rootNavigator: true).pop(); // dismiss loading

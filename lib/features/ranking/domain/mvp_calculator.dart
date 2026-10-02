@@ -1,16 +1,13 @@
 import 'dart:math' as math;
 
+import 'mvp_weights.dart';
+
 class MvpCalculator {
   const MvpCalculator._();
 
-  /// Calculates the performance score for a single match:
-  /// - Win: 10 pts
-  /// - Draw: 3 pts (or specified [drawPoints])
-  /// - Loss: 0 pt
-  /// - Goals: +2 pts each
-  /// - Assists: +1 pt each
-  /// - Yellow card: -0.5 pt each
-  /// - Red card: -1.0 pt each
+  /// Calculates the performance score for a single match. With the default
+  /// [MvpWeights]: win 10, draw 3 (or [drawPoints]), loss 0, goal +2,
+  /// assist +1, yellow -0.5, red -1.
   static double calculateMatchScore({
     required bool isWin,
     required bool isDraw,
@@ -18,17 +15,20 @@ class MvpCalculator {
     required int assists,
     required int yellowCards,
     required int redCards,
-    int drawPoints = 3,
+    MvpWeights weights = MvpWeights.defaults,
+    int? drawPoints,
   }) {
-    double resultPoints = 0;
+    final double resultPoints;
     if (isWin) {
-      resultPoints = 10;
+      resultPoints = weights.win;
     } else if (isDraw) {
-      resultPoints = drawPoints.toDouble();
+      resultPoints = drawPoints?.toDouble() ?? weights.draw;
+    } else {
+      resultPoints = weights.loss;
     }
 
-    final offensivePoints = (goals * 2) + assists;
-    final fairPlayMalus = (yellowCards * 0.5) + redCards;
+    final offensivePoints = (goals * weights.goal) + (assists * weights.assist);
+    final fairPlayMalus = (yellowCards * weights.yellowCard) + (redCards * weights.redCard);
 
     return resultPoints + offensivePoints - fairPlayMalus;
   }
