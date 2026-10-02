@@ -13,6 +13,7 @@ import '../../ranking/domain/standing_entry.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
+import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 
@@ -648,28 +649,81 @@ class HomeScreen extends ConsumerWidget {
       orElse: () => '0',
     );
 
+    final groupTotalsAsync = ref.watch(groupTotalsProvider);
+    final statsCount = groupTotalsAsync.maybeWhen(
+      data: (totals) => '${totals.totalGoals} B · ${totals.totalAssists} P',
+      orElse: () => '-',
+    );
+
     return Row(
       children: [
-        Expanded(child: _buildTile(context, Remix.user_line, 'Joueurs', playersCount)),
+        Expanded(
+          child: _buildTile(
+            context,
+            Remix.user_line,
+            'Joueurs',
+            playersCount,
+            onTap: () => context.go('/joueurs'),
+          ),
+        ),
         const SizedBox(width: 12),
-        Expanded(child: _buildTile(context, Remix.calendar_event_line, 'Séances', sessionsCount)),
+        Expanded(
+          child: _buildTile(
+            context,
+            Remix.calendar_event_line,
+            'Séances',
+            sessionsCount,
+            onTap: () => context.go('/seances'),
+          ),
+        ),
         const SizedBox(width: 12),
-        Expanded(child: _buildTile(context, Remix.pie_chart_line, 'Stats', '-')),
+        Expanded(
+          child: _buildTile(
+            context,
+            Remix.pie_chart_line,
+            'Stats',
+            statsCount,
+            onTap: () => context.go('/stats'),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildTile(BuildContext context, IconData icon, String title, String value) {
+  Widget _buildTile(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String value, {
+    VoidCallback? onTap,
+  }) {
     return AppCard(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: context.colors.primary500, size: 24),
-          const SizedBox(height: 12),
-          Text(title, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
-          if (value.isNotEmpty) Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-        ],
+      padding: EdgeInsets.zero,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: context.colors.primary500, size: 24),
+              const SizedBox(height: 12),
+              Text(title, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
+              if (value.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    value,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
