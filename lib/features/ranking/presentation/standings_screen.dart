@@ -12,6 +12,7 @@ import '../domain/mvp_entry.dart';
 import '../domain/scorer_entry.dart';
 import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
+import 'mvp_rules_bottom_sheet.dart';
 
 class StandingsScreen extends ConsumerWidget {
   const StandingsScreen({super.key});
@@ -1323,18 +1324,20 @@ class _MvpView extends ConsumerWidget {
                 color: context.colors.primary400,
               ),
               const SizedBox(width: 6),
-              const Text(
-                'Règles MVP & Éligibilité',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              const Expanded(
+                child: Text(
+                  'Règles MVP & Éligibilité',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
               ),
+              const MvpHelpButton(size: 18),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           Text(
-            '• Éligibilité : au moins N-1 séances jouées dans le mois (max 1 séance manquée).\n'
-            '• Match : Victoire (+10 pts), Nul (+3 pts), Défaite (0 pt).\n'
-            '• Actions : But (+2 pts), Passe décisive (+1 pt).\n'
-            '• Fair-play : Carton jaune (-0.5 pt), Carton rouge (-1 pt).',
+            'Éligibilité : au moins N-1 séances jouées dans le mois. '
+            'Le barème (victoire, nul, buts, passes, cartons) est réglable dans '
+            "Réglages ; touchez l'icône d'aide pour le détail.",
             style: TextStyle(
               color: context.colors.foreground400,
               fontSize: 12,
@@ -1350,7 +1353,7 @@ class _MvpView extends ConsumerWidget {
     final avatarColor = _getPlayerColor(context, entry.playerId);
     final isTopEligible = entry.rank == 1 && entry.isEligible;
     final cardBorderColor = isTopEligible
-        ? const Color(0xFFFFD700)
+        ? context.colors.gold
         : entry.isEligible
         ? context.colors.background700
         : context.colors.background800;
@@ -1363,7 +1366,7 @@ class _MvpView extends ConsumerWidget {
         child: Container(
           decoration: BoxDecoration(
             color: isTopEligible
-                ? const Color(0xFFFFD700).withValues(alpha: 0.08)
+                ? context.colors.gold.withValues(alpha: 0.08)
                 : context.colors.background900,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
@@ -1376,18 +1379,18 @@ class _MvpView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isTopEligible) ...[
-                const Row(
+                Row(
                   children: [
                     Icon(
                       Remix.trophy_fill,
-                      color: Color(0xFFFFD700),
+                      color: context.colors.gold,
                       size: 16,
                     ),
-                    SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     Text(
                       'Joueur du mois',
                       style: TextStyle(
-                        color: Color(0xFFFFD700),
+                        color: context.colors.gold,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -1424,7 +1427,7 @@ class _MvpView extends ConsumerWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isTopEligible
-                          ? const Color(0xFFFFD700).withValues(alpha: 0.2)
+                          ? context.colors.gold.withValues(alpha: 0.2)
                           : context.colors.background800,
                       shape: BoxShape.circle,
                     ),
@@ -1432,7 +1435,7 @@ class _MvpView extends ConsumerWidget {
                       '${entry.rank}',
                       style: TextStyle(
                         color: isTopEligible
-                            ? const Color(0xFFFFD700)
+                            ? context.colors.gold
                             : context.colors.foreground400,
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
@@ -1496,7 +1499,7 @@ class _MvpView extends ConsumerWidget {
                           fontWeight: FontWeight.w900,
                           fontSize: 16,
                           color: isTopEligible
-                              ? const Color(0xFFFFD700)
+                              ? context.colors.gold
                               : context.colors.primary400,
                         ),
                       ),

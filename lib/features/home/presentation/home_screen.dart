@@ -387,12 +387,12 @@ class HomeScreen extends ConsumerWidget {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                        color: context.colors.gold.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Remix.trophy_line,
-                        color: Color(0xFFFFD700),
+                        color: context.colors.gold,
                         size: 22,
                       ),
                     ),
@@ -401,10 +401,10 @@ class HomeScreen extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Joueur du mois',
                             style: TextStyle(
-                              color: Color(0xFFFFD700),
+                              color: context.colors.gold,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
@@ -447,9 +447,9 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Remix.trophy_fill,
-                        color: Color(0xFFFFD700),
+                        color: context.colors.gold,
                         size: 18,
                       ),
                       const SizedBox(width: 8),
@@ -457,8 +457,8 @@ class HomeScreen extends ConsumerWidget {
                         monthLabel.isNotEmpty
                             ? 'Joueur du mois · $monthLabel'
                             : 'Joueur du mois',
-                        style: const TextStyle(
-                          color: Color(0xFFFFD700),
+                        style: TextStyle(
+                          color: context.colors.gold,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -470,18 +470,18 @@ class HomeScreen extends ConsumerWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFD700)
+                          color: context.colors.gold
                               .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: const Color(0xFFFFD700)
+                            color: context.colors.gold
                                 .withValues(alpha: 0.4),
                           ),
                         ),
                         child: Text(
                           '${mvp.score.toStringAsFixed(2)} pts',
-                          style: const TextStyle(
-                            color: Color(0xFFFFD700),
+                          style: TextStyle(
+                            color: context.colors.gold,
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -496,7 +496,7 @@ class HomeScreen extends ConsumerWidget {
                         initial: mvp.name.isNotEmpty
                             ? mvp.name[0].toUpperCase()
                             : '?',
-                        baseColor: const Color(0xFFFFD700),
+                        baseColor: context.colors.gold,
                         size: 40,
                       ),
                       const SizedBox(width: 12),
@@ -696,7 +696,7 @@ class HomeScreen extends ConsumerWidget {
     int rank,
   ) {
     final rankColor = rank == 1
-        ? const Color(0xFFFFD700)
+        ? context.colors.gold
         : rank == 2
         ? const Color(0xFFC0C0C0)
         : const Color(0xFFCD7F32);

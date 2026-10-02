@@ -24,6 +24,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.card,
     required this.danger,
     required this.warning,
+    required this.gold,
   });
 
   final Color background950;
@@ -53,6 +54,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color card;
   final Color danger;
   final Color warning;
+  final Color gold;
 
   @override
   AppColorsExtension copyWith({
@@ -78,6 +80,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? card,
     Color? danger,
     Color? warning,
+    Color? gold,
   }) {
     return AppColorsExtension(
       background950: background950 ?? this.background950,
@@ -102,6 +105,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       card: card ?? this.card,
       danger: danger ?? this.danger,
       warning: warning ?? this.warning,
+      gold: gold ?? this.gold,
     );
   }
 
@@ -131,6 +135,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       card: Color.lerp(card, other.card, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
+      gold: Color.lerp(gold, other.gold, t)!,
     );
   }
 }
@@ -167,6 +172,7 @@ class AppColors {
     card: Color(0xFFFACC15),
     danger: Color(0xFFEF4444),
     warning: Color(0xFFF59E0B),
+    gold: Color(0xFFFFD700),
   );
 
   static const AppColorsExtension light = AppColorsExtension(
@@ -192,5 +198,6 @@ class AppColors {
     card: Color(0xFFA16207),
     danger: Color(0xFFB91C1C),
     warning: Color(0xFFB45309),
+    gold: Color(0xFFD97706), // Warm darker golden orange for white background
   );
 }
