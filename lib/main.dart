@@ -8,7 +8,6 @@ import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'features/onboarding/application/onboarding_provider.dart';
-import 'features/settings/application/settings_provider.dart';
 import 'features/team/application/team_provider.dart';
 import 'features/team/data/team_repository.dart';
 
@@ -21,8 +20,6 @@ Future<void> main() async {
   final team = await teamRepository.getTeamInfo();
   final hasTeam = team != null;
 
-  final minPlayers = prefs.getInt('min_players_per_session') ?? 6;
-
   runApp(
     ProviderScope(
       overrides: [
@@ -31,9 +28,6 @@ Future<void> main() async {
         ),
         hasTeamProvider.overrideWith(
           () => HasTeamNotifier(initialValue: hasTeam),
-        ),
-        minPlayersPerSessionProvider.overrideWith(
-          () => MinPlayersNotifier(initialValue: minPlayers),
         ),
       ],
       child: const MyApp(),

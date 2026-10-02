@@ -123,6 +123,17 @@ class SqliteTeamRepository implements TeamRepository {
   Future<void> deleteTeam(String id) async {
     final db = await _appDatabase.database;
     await db.delete('teams', where: 'id = ?', whereArgs: [id]);
+    // Per-group settings live in `meta` and are not covered by the FK cascade.
+    await db.delete(
+      'meta',
+      where: 'key IN (?, ?, ?, ?)',
+      whereArgs: [
+        'active_session_id_$id',
+        'mvp_weights_$id',
+        'min_players_per_session_$id',
+        'tournament_draw_points_$id',
+      ],
+    );
 
     final currentActiveId = await getActiveTeamId();
     if (currentActiveId == id) {

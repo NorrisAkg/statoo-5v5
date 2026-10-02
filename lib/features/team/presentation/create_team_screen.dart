@@ -73,7 +73,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
       await ref.read(hasTeamProvider.notifier).reloadFromDb();
       await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
-      await ref.read(minPlayersPerSessionProvider.notifier).reloadFromPrefs();
+      await ref.read(minPlayersPerSessionProvider.notifier).reload();
 
       ref
         ..invalidate(teamInfoProvider)

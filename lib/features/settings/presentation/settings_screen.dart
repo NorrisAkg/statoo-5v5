@@ -699,7 +699,7 @@ class SettingsScreen extends ConsumerWidget {
       // Rechargement des notifiers avec persistance
       await ref.read(hasTeamProvider.notifier).reloadFromDb();
       await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
-      await ref.read(minPlayersPerSessionProvider.notifier).reloadFromPrefs();
+      await ref.read(minPlayersPerSessionProvider.notifier).reload();
 
       // Invalidation de tous les providers pour synchronisation immédiate de l'UI
       ref

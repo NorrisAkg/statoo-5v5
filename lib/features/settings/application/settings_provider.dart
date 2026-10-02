@@ -2,43 +2,85 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/data/app_database.dart';
+import '../../team/application/team_provider.dart';
+import '../data/group_settings_repository.dart';
+
+final Provider<GroupSettingsRepository> groupSettingsRepositoryProvider =
+    Provider<GroupSettingsRepository>((ref) {
+  return SqliteGroupSettingsRepository(AppDatabase.instance);
+});
+
 const String kMinPlayersKey = 'min_players_per_session';
 const int kDefaultMinPlayers = 6;
 
-class MinPlayersNotifier extends Notifier<int> {
-  MinPlayersNotifier({this.initialValue});
+const String kTournamentDrawPointsKey = 'tournament_draw_points';
+const int kDefaultTournamentDrawPoints = 1;
 
+/// Réglage entier propre au groupe actif. Une valeur absente retombe sur
+/// l'ancien réglage global (SharedPreferences), puis sur le défaut.
+abstract class GroupIntSettingNotifier extends Notifier<int> {
+  GroupIntSettingNotifier({this.initialValue});
+
+  /// Valeur imposée (tests) : neutralise le chargement depuis la base.
   final int? initialValue;
+
+  String get key;
+  int get defaultValue;
 
   @override
   int build() {
+    final teamId = ref.watch(activeTeamIdProvider);
     if (initialValue != null) return initialValue!;
-
-    unawaited(
-      SharedPreferences.getInstance().then((prefs) {
-        final saved = prefs.getInt(kMinPlayersKey);
-        if (saved != null && saved != state) {
-          state = saved;
-        }
-      }),
-    );
-
-    return kDefaultMinPlayers;
+    if (teamId != null) unawaited(_load(teamId));
+    return defaultValue;
   }
 
-  Future<void> reloadFromPrefs() async {
+  Future<int> _read(String teamId) async {
+    final stored = await ref.read(groupSettingsRepositoryProvider).getInt(teamId, key);
+    if (stored != null) return stored;
     final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getInt(kMinPlayersKey);
-    if (saved != null) {
-      state = saved;
+    return prefs.getInt(key) ?? defaultValue;
+  }
+
+  Future<void> _load(String teamId) async {
+    final value = await _read(teamId);
+    // The group may have changed while reading: never apply another group's value.
+    if (!ref.mounted) return;
+    if (ref.read(activeTeamIdProvider) == teamId && value != state) {
+      state = value;
     }
   }
 
+  Future<void> reload() async {
+    final teamId = ref.read(activeTeamIdProvider);
+    if (teamId == null) {
+      state = defaultValue;
+      return;
+    }
+    await _load(teamId);
+  }
+
+  Future<void> _save(int value) async {
+    final teamId = ref.read(activeTeamIdProvider);
+    if (teamId == null) return;
+    state = value;
+    await ref.read(groupSettingsRepositoryProvider).setInt(teamId, key, value);
+  }
+}
+
+class MinPlayersNotifier extends GroupIntSettingNotifier {
+  MinPlayersNotifier({super.initialValue});
+
+  @override
+  String get key => kMinPlayersKey;
+
+  @override
+  int get defaultValue => kDefaultMinPlayers;
+
   Future<void> setMinPlayers(int count) async {
     if (count < 2) return;
-    state = count;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(kMinPlayersKey, count);
+    await _save(count);
   }
 }
 
@@ -47,35 +89,18 @@ final NotifierProvider<MinPlayersNotifier, int> minPlayersPerSessionProvider =
   MinPlayersNotifier.new,
 );
 
-const String kTournamentDrawPointsKey = 'tournament_draw_points';
-const int kDefaultTournamentDrawPoints = 1;
-
-class TournamentDrawPointsNotifier extends Notifier<int> {
-  TournamentDrawPointsNotifier({this.initialValue});
-
-  final int? initialValue;
+class TournamentDrawPointsNotifier extends GroupIntSettingNotifier {
+  TournamentDrawPointsNotifier({super.initialValue});
 
   @override
-  int build() {
-    if (initialValue != null) return initialValue!;
+  String get key => kTournamentDrawPointsKey;
 
-    unawaited(
-      SharedPreferences.getInstance().then((prefs) {
-        final saved = prefs.getInt(kTournamentDrawPointsKey);
-        if (saved != null && saved != state) {
-          state = saved;
-        }
-      }),
-    );
-
-    return kDefaultTournamentDrawPoints;
-  }
+  @override
+  int get defaultValue => kDefaultTournamentDrawPoints;
 
   Future<void> setDrawPoints(int points) async {
     if (points != 1 && points != 2) return;
-    state = points;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(kTournamentDrawPointsKey, points);
+    await _save(points);
   }
 }
 
