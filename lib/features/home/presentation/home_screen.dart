@@ -76,6 +76,7 @@ class HomeScreen extends ConsumerWidget {
             icon: Remix.add_line,
             onPressed: () => context.push('/seances/nouvelle'),
           ),
+          _buildPlayerOfTheMonth(context, ref),
           const SizedBox(height: 32),
           _buildSectionHeader(context, 'Classement', '/classement'),
           const SizedBox(height: 16),
@@ -222,6 +223,108 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPlayerOfTheMonth(BuildContext context, WidgetRef ref) {
+    final mvpAsync = ref.watch(playerOfTheMonthProvider);
+
+    return mvpAsync.maybeWhen(
+      data: (mvp) {
+        if (mvp == null) return const SizedBox.shrink();
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: AppCard(
+            child: InkWell(
+              onTap: () => context.go('/classement'),
+              borderRadius: BorderRadius.circular(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Remix.trophy_fill, color: Color(0xFFFFD700), size: 18),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Joueur du mois',
+                        style: TextStyle(
+                          color: Color(0xFFFFD700),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFD700).withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.4)),
+                        ),
+                        child: Text(
+                          '${mvp.score.toStringAsFixed(2)} pts / m',
+                          style: const TextStyle(
+                            color: Color(0xFFFFD700),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      InitialAvatar(
+                        initial: mvp.name.isNotEmpty ? mvp.name[0].toUpperCase() : '?',
+                        baseColor: const Color(0xFFFFD700),
+                        size: 40,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    mvp.name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (mvp.nickname != null && mvp.nickname!.isNotEmpty) ...[
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '« ${mvp.nickname} »',
+                                    style: TextStyle(color: context.colors.foreground500, fontSize: 13),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${mvp.matchesPlayed} MJ · ${mvp.goals} buts · ${mvp.assists} passes',
+                              style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Remix.arrow_right_s_line, size: 20, color: context.colors.foreground500),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
     );
   }
 

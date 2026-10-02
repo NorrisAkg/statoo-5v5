@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../application/ranking_providers.dart';
 import '../domain/assist_entry.dart';
 import '../domain/card_entry.dart';
+import '../domain/mvp_entry.dart';
 import '../domain/scorer_entry.dart';
 import '../domain/standing_entry.dart';
 import '../domain/standing_per_match_entry.dart';
@@ -17,7 +19,7 @@ class StandingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Classement'),
@@ -37,16 +39,25 @@ class StandingsScreen extends ConsumerWidget {
               Tab(text: 'Buteurs'),
               Tab(text: 'Passeurs'),
               Tab(text: 'Cartons'),
+              Tab(text: 'MVP'),
             ],
           ),
         ),
-        body: TabBarView(
+        body: Column(
           children: [
-            _PointsTab(),
-            _PointsPerMatchTab(),
-            _ScorersTab(),
-            _AssistsTab(),
-            _CardsTab(),
+            const _MonthSelectorBar(),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _PointsTab(),
+                  _PointsPerMatchTab(),
+                  _ScorersTab(),
+                  _AssistsTab(),
+                  _CardsTab(),
+                  _MvpTab(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -964,6 +975,283 @@ class _CardsTab extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MonthSelectorBar extends ConsumerWidget {
+  const _MonthSelectorBar();
+
+  static const _frenchMonths = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
+  ];
+
+  String _formatMonth(String monthStr) {
+    final parts = monthStr.split('-');
+    if (parts.length == 2) {
+      final year = parts[0];
+      final monthIndex = int.tryParse(parts[1]);
+      if (monthIndex != null && monthIndex >= 1 && monthIndex <= 12) {
+        return '${_frenchMonths[monthIndex - 1]} $year';
+      }
+    }
+    return monthStr;
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final availableMonthsAsync = ref.watch(availableRankingMonthsProvider);
+    final selectedMonth = ref.watch(selectedRankingMonthProvider);
+
+    return availableMonthsAsync.maybeWhen(
+      data: (months) {
+        if (months.isEmpty) return const SizedBox.shrink();
+
+        return Container(
+          height: 48,
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: const Text('Général'),
+                  selected: selectedMonth == null,
+                  onSelected: (selected) {
+                    if (selected) {
+                      ref.read(selectedRankingMonthProvider.notifier).selectMonth(null);
+                    }
+                  },
+                ),
+              ),
+              for (final month in months) ...[
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ChoiceChip(
+                    label: Text(_formatMonth(month)),
+                    selected: selectedMonth == month,
+                    onSelected: (selected) {
+                      ref.read(selectedRankingMonthProvider.notifier).selectMonth(selected ? month : null);
+                    },
+                  ),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+      orElse: () => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _MvpTab extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mvpAsync = ref.watch(monthlyMvpRankingProvider);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.invalidate(monthlyMvpRankingProvider);
+      },
+      color: context.colors.primary500,
+      backgroundColor: context.colors.background900,
+      child: mvpAsync.when(
+        data: (entries) {
+          if (entries.isEmpty) {
+            return _buildEmptyState(context, 'Aucune donnée MVP pour cette période');
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            itemCount: entries.length,
+            itemBuilder: (context, index) {
+              final entry = entries[index];
+              return _buildMvpCard(context, entry);
+            },
+          );
+        },
+        loading: () => Center(
+          child: CircularProgressIndicator(color: context.colors.primary500),
+        ),
+        error: (err, stack) => _buildErrorState(context, err.toString(), () {
+          ref.invalidate(monthlyMvpRankingProvider);
+        }),
+      ),
+    );
+  }
+
+  Widget _buildMvpCard(BuildContext context, MvpEntry entry) {
+    final avatarColor = _getPlayerColor(context, entry.playerId);
+    final isTopEligible = entry.rank == 1 && entry.isEligible;
+    final cardBorderColor = isTopEligible
+        ? const Color(0xFFFFD700)
+        : entry.isEligible
+            ? context.colors.background700
+            : context.colors.background800;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        onTap: () => context.push('/joueurs/${entry.playerId}'),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: isTopEligible
+                ? const Color(0xFFFFD700).withValues(alpha: 0.08)
+                : context.colors.background900,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: cardBorderColor,
+              width: isTopEligible ? 2 : 1,
+            ),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isTopEligible) ...[
+                Row(
+                  children: [
+                    const Icon(Remix.trophy_fill, color: Color(0xFFFFD700), size: 16),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'Joueur du mois',
+                      style: TextStyle(
+                        color: Color(0xFFFFD700),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFD700).withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'MVP',
+                        style: TextStyle(
+                          color: Color(0xFFFFD700),
+                          fontWeight: FontWeight.w900,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ] else if (!entry.isEligible) ...[
+                Row(
+                  children: [
+                    Icon(Remix.information_line, color: context.colors.warning, size: 14),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Non éligible · ${entry.missingMatches} match(s) manquant(s)',
+                      style: TextStyle(
+                        color: context.colors.warning,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+              ],
+              Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: isTopEligible
+                          ? const Color(0xFFFFD700).withValues(alpha: 0.2)
+                          : context.colors.background800,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${entry.rank}',
+                      style: TextStyle(
+                        color: isTopEligible ? const Color(0xFFFFD700) : context.colors.foreground400,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  InitialAvatar(
+                    initial: entry.name.isNotEmpty ? entry.name[0].toUpperCase() : '?',
+                    baseColor: avatarColor,
+                    size: 36,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                entry.name,
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                              const SizedBox(width: 4),
+                              Text(
+                                '« ${entry.nickname} »',
+                                style: TextStyle(color: context.colors.foreground500, fontSize: 12),
+                              ),
+                            ],
+                          ],
+                        ),
+                        Text(
+                          '${entry.matchesPlayed}/${entry.totalSessions} MJ · ${entry.wins}V ${entry.draws}N ${entry.losses}D',
+                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '${entry.score.toStringAsFixed(2)} pts',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16,
+                          color: isTopEligible ? const Color(0xFFFFD700) : context.colors.primary400,
+                        ),
+                      ),
+                      Text(
+                        '${entry.goals} B · ${entry.assists} P · ${entry.yellowCards}J/${entry.redCards}R',
+                        style: TextStyle(color: context.colors.foreground500, fontSize: 10),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:statoo/features/ranking/domain/assist_entry.dart';
 import 'package:statoo/features/ranking/domain/card_entry.dart';
+import 'package:statoo/features/ranking/domain/mvp_entry.dart';
 import 'package:statoo/features/ranking/domain/scorer_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_entry.dart';
 import 'package:statoo/features/ranking/domain/standing_per_match_entry.dart';
@@ -144,5 +145,35 @@ void main() {
       expect(entry.redCards, 1);
       expect(entry.totalCards, 3);
     });
+
+    test('MvpEntry parses correctly from row', () {
+      final map = {
+        'rank': 1,
+        'player_id': 'p1',
+        'name': 'Lucas',
+        'nickname': 'Lulu',
+        'avatar_url': null,
+        'matches_played': 4,
+        'total_sessions': 4,
+        'wins': 3,
+        'draws': 1,
+        'losses': 0,
+        'goals': 5,
+        'assists': 3,
+        'yellow_cards': 1,
+        'red_cards': 0,
+        'score': 12.38,
+        'is_eligible': 1,
+        'missing_matches': 0,
+      };
+
+      final entry = MvpEntry.fromMap(map);
+      expect(entry.rank, 1);
+      expect(entry.playerId, 'p1');
+      expect(entry.name, 'Lucas');
+      expect(entry.score, 12.38);
+      expect(entry.isEligible, isTrue);
+    });
   });
 }
+
