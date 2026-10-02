@@ -180,7 +180,7 @@ void main() {
       expect(session?.unassignedGoalsB, 1);
     });
 
-    test('SessionsController updates player stats and synchronizes team score when adjustScore is true', () async {
+    test('SessionsController updates player stats and synchronizes team score', () async {
       final container = ProviderContainer(
         overrides: [
           sessionsRepositoryProvider.overrideWithValue(repo),
@@ -199,9 +199,6 @@ void main() {
         assists: 1,
         yellowCards: 0,
         redCards: 0,
-        adjustScore: true,
-        playerTeam: Team.a,
-        goalDelta: 2,
       );
 
       final session = await repo.getSession(sessionId, teamId: teamId);
@@ -215,7 +212,7 @@ void main() {
       expect(pA.participation.assists, 1);
     });
 
-    test('SessionsController updates unassigned goals and synchronizes team score when adjustScore is true', () async {
+    test('SessionsController updates unassigned goals and synchronizes team score', () async {
       final container = ProviderContainer(
         overrides: [
           sessionsRepositoryProvider.overrideWithValue(repo),
@@ -230,9 +227,6 @@ void main() {
       await controller.updateUnassignedGoals(
         sessionId: sessionId,
         unassignedGoalsB: 1,
-        adjustScore: true,
-        adjustedTeam: Team.b,
-        delta: 1,
       );
 
       final session = await repo.getSession(sessionId, teamId: teamId);

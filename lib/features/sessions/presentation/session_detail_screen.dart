@@ -10,6 +10,7 @@ import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../application/sessions_provider.dart';
+import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_close_rules.dart';
@@ -898,7 +899,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             IconButton(
-              tooltip: 'Ajouter un but CSC / non attribué (et incrémenter le score)',
+              tooltip: 'Ajouter un but CSC / non attribué',
               icon: const Icon(Remix.add_line, size: 16),
               color: teamColor,
               onPressed: () {
@@ -909,9 +910,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                     sessionId: session.id,
                     unassignedGoalsA: newA,
                     unassignedGoalsB: newB,
-                    adjustScore: true,
-                    adjustedTeam: team,
-                    delta: 1,
                   ),
                 );
               },
@@ -935,7 +933,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final part = item.participation;
 
     return InkWell(
-      onTap: isCurrentActive ? () => _editPlayerStats(context, ref, session.id, item) : null,
+      onTap: isCurrentActive ? () => _editPlayerStats(context, ref, session, item) : null,
       borderRadius: BorderRadius.circular(10),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
@@ -995,18 +993,49 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
   }
 
+  /// Tells whether saving [goalDelta] more goals for the player moves the team score.
+  /// Mirrors the repository rule: goals already in the score but without a scorer
+  /// are consumed first, and removing a goal never lowers the score.
+  String? _scoreImpactMessage(
+    WidgetRef ref,
+    Session session,
+    SessionParticipantDetail item,
+    int goalDelta,
+  ) {
+    if (session.sessionType == SessionType.tournament3 || goalDelta == 0) return null;
+    final team = item.participation.team;
+    if (team == Team.c) return null;
+    final label = team == Team.a ? 'A' : 'B';
+    if (goalDelta < 0) return "Le score de l'Équipe $label ne change pas.";
+
+    final participants = ref.read(sessionParticipantsProvider(session.id)).value ?? const [];
+    final assigned = participants
+        .where((p) => p.participation.team == team)
+        .fold<int>(0, (sum, p) => sum + p.participation.goals);
+    final score = (team == Team.a ? session.scoreA : session.scoreB) ?? 0;
+    final unassigned = team == Team.a ? session.unassignedGoalsA : session.unassignedGoalsB;
+    final increase = scoreIncreaseForAttributedGoals(
+      score: score,
+      assignedGoals: assigned,
+      unassignedGoals: unassigned,
+      added: goalDelta,
+    );
+    if (increase == 0) return 'Ces buts sont déjà comptés dans le score.';
+    return "Le score de l'Équipe $label passera de $score à ${score + increase}.";
+  }
+
   void _editPlayerStats(
     BuildContext context,
     WidgetRef ref,
-    String sessionId,
+    Session session,
     SessionParticipantDetail item,
   ) {
+    final sessionId = session.id;
     int goals = item.participation.goals;
     int assists = item.participation.assists;
     int yellowCards = item.participation.yellowCards;
     int redCards = item.participation.redCards;
     final initialGoals = goals;
-    bool autoAdjustScore = true;
 
     unawaited(
       showModalBottomSheet<void>(
@@ -1020,6 +1049,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           return StatefulBuilder(
             builder: (context, setModalState) {
               final goalDelta = goals - initialGoals;
+              final scoreImpact = _scoreImpactMessage(ref, session, item, goalDelta);
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -1076,22 +1106,20 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       maxValue: 1,
                       onChanged: (v) => setModalState(() => redCards = v),
                     ),
-                    if (goalDelta != 0) ...[
+                    if (scoreImpact != null) ...[
                       const SizedBox(height: 12),
-                      CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        dense: true,
-                        value: autoAdjustScore,
-                        onChanged: (v) => setModalState(() => autoAdjustScore = v ?? true),
-                        title: Text(
-                          "Ajuster le score de l'équipe (${goalDelta > 0 ? '+$goalDelta' : '$goalDelta'})",
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text(
-                          "Met à jour automatiquement le score global de l'Équipe ${item.participation.team.name.toUpperCase()}",
-                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
-                        ),
-                        activeColor: context.colors.primary500,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Remix.information_line, size: 16, color: context.colors.primary400),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              scoreImpact,
+                              style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                     const SizedBox(height: 24),
@@ -1105,9 +1133,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                           assists: assists,
                           yellowCards: yellowCards,
                           redCards: redCards,
-                          adjustScore: autoAdjustScore,
-                          playerTeam: item.participation.team,
-                          goalDelta: goalDelta,
                         );
                         if (context.mounted) Navigator.pop(ctx);
                       },

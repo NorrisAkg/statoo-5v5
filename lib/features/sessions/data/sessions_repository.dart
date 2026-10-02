@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
+import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_summary.dart';
@@ -507,18 +508,83 @@ class SqliteSessionsRepository implements SessionsRepository {
     int? unassignedGoalsC,
   }) async {
     final db = await _appDatabase.database;
-    final updates = <String, dynamic>{};
-    if (unassignedGoalsA != null) updates['unassigned_goals_a'] = unassignedGoalsA.clamp(0, 999);
-    if (unassignedGoalsB != null) updates['unassigned_goals_b'] = unassignedGoalsB.clamp(0, 999);
-    if (unassignedGoalsC != null) updates['unassigned_goals_c'] = unassignedGoalsC.clamp(0, 999);
-    if (updates.isEmpty) return;
+    final requested = <Team, int>{
+      if (unassignedGoalsA != null) Team.a: unassignedGoalsA.clamp(0, 999),
+      if (unassignedGoalsB != null) Team.b: unassignedGoalsB.clamp(0, 999),
+      if (unassignedGoalsC != null) Team.c: unassignedGoalsC.clamp(0, 999),
+    };
+    if (requested.isEmpty) return;
 
-    await db.update(
-      'sessions',
-      updates,
-      where: 'id = ? AND team_id = ?',
-      whereArgs: [sessionId, teamId],
-    );
+    await db.transaction((txn) async {
+      final rows = await txn.query(
+        'sessions',
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+        limit: 1,
+      );
+      if (rows.isEmpty) return;
+      final session = rows.first;
+      final scores = <Team, int>{
+        Team.a: (session['score_a'] as int?) ?? 0,
+        Team.b: (session['score_b'] as int?) ?? 0,
+      };
+      final updates = <String, dynamic>{};
+
+      for (final entry in requested.entries) {
+        final team = entry.key;
+        final suffix = _teamToString(team).toLowerCase();
+        final previous = (session['unassigned_goals_$suffix'] as int?) ?? 0;
+        updates['unassigned_goals_$suffix'] = entry.value;
+
+        // A tournament has no match score: wins decide, so the score is left alone.
+        if (!_isScoreTracked(session, team)) continue;
+        final increase = scoreIncreaseForAttributedGoals(
+          score: scores[team]!,
+          assignedGoals: await _assignedGoals(txn, sessionId, team),
+          unassignedGoals: previous,
+          added: entry.value - previous,
+        );
+        if (increase > 0) scores[team] = (scores[team]! + increase).clamp(0, 999);
+      }
+
+      if (_isScoreChanged(session, scores)) {
+        updates.addAll(_scoreColumns(scores));
+      }
+      await txn.update(
+        'sessions',
+        updates,
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+    });
+  }
+
+  /// Only the two-team format keeps a running match score.
+  bool _isScoreTracked(Map<String, Object?> session, Team team) =>
+      session['session_type'] != 'TOURNAMENT_3' && team != Team.c;
+
+  Future<int> _assignedGoals(DatabaseExecutor txn, String sessionId, Team team) async {
+    return Sqflite.firstIntValue(
+          await txn.rawQuery(
+            'SELECT COALESCE(SUM(goals), 0) FROM participations WHERE session_id = ? AND team = ?',
+            [sessionId, _teamToString(team)],
+          ),
+        ) ??
+        0;
+  }
+
+  bool _isScoreChanged(Map<String, Object?> session, Map<Team, int> scores) =>
+      scores[Team.a] != ((session['score_a'] as int?) ?? 0) ||
+      scores[Team.b] != ((session['score_b'] as int?) ?? 0);
+
+  Map<String, Object?> _scoreColumns(Map<Team, int> scores) {
+    final a = scores[Team.a]!;
+    final b = scores[Team.b]!;
+    return {
+      'score_a': a,
+      'score_b': b,
+      'result': a > b ? 'A' : (a < b ? 'B' : 'DRAW'),
+    };
   }
 
   @override
@@ -532,17 +598,65 @@ class SqliteSessionsRepository implements SessionsRepository {
     required int redCards,
   }) async {
     final db = await _appDatabase.database;
-    await db.update(
-      'participations',
-      {
-        'goals': goals,
-        'assists': assists,
-        'yellow_cards': yellowCards,
-        'red_cards': redCards,
-      },
-      where: 'id = ? AND session_id = ? AND session_id IN (SELECT id FROM sessions WHERE team_id = ?)',
-      whereArgs: [participationId, sessionId, teamId],
-    );
+    await db.transaction((txn) async {
+      final sessions = await txn.query(
+        'sessions',
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+        limit: 1,
+      );
+      if (sessions.isEmpty) return;
+      final parts = await txn.query(
+        'participations',
+        columns: ['team', 'goals'],
+        where: 'id = ? AND session_id = ?',
+        whereArgs: [participationId, sessionId],
+        limit: 1,
+      );
+      if (parts.isEmpty) return;
+
+      final session = sessions.first;
+      final team = _parseTeam(parts.first['team']! as String);
+      final previousGoals = (parts.first['goals'] as int?) ?? 0;
+
+      // Measured before the write: the player's previous goals are part of the sum.
+      final assignedBefore = await _assignedGoals(txn, sessionId, team);
+
+      await txn.update(
+        'participations',
+        {
+          'goals': goals,
+          'assists': assists,
+          'yellow_cards': yellowCards,
+          'red_cards': redCards,
+        },
+        where: 'id = ? AND session_id = ?',
+        whereArgs: [participationId, sessionId],
+      );
+
+      if (!_isScoreTracked(session, team)) return;
+      final suffix = _teamToString(team).toLowerCase();
+      final score = (session['score_$suffix'] as int?) ?? 0;
+      final increase = scoreIncreaseForAttributedGoals(
+        score: score,
+        assignedGoals: assignedBefore,
+        unassignedGoals: (session['unassigned_goals_$suffix'] as int?) ?? 0,
+        added: goals - previousGoals,
+      );
+      if (increase == 0) return;
+
+      final scores = <Team, int>{
+        Team.a: (session['score_a'] as int?) ?? 0,
+        Team.b: (session['score_b'] as int?) ?? 0,
+      };
+      scores[team] = (score + increase).clamp(0, 999);
+      await txn.update(
+        'sessions',
+        _scoreColumns(scores),
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+      );
+    });
   }
 
   @override

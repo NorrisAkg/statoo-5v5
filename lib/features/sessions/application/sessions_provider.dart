@@ -250,12 +250,10 @@ class SessionsController {
     int? unassignedGoalsA,
     int? unassignedGoalsB,
     int? unassignedGoalsC,
-    bool adjustScore = false,
-    Team? adjustedTeam,
-    int delta = 0,
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
+    // The repository keeps the team score in sync in the same transaction.
     await _repo.updateUnassignedGoals(
       sessionId: sessionId,
       teamId: teamId,
@@ -263,14 +261,6 @@ class SessionsController {
       unassignedGoalsB: unassignedGoalsB,
       unassignedGoalsC: unassignedGoalsC,
     );
-    if (adjustScore && adjustedTeam != null && delta != 0) {
-      await _repo.incrementScore(
-        sessionId: sessionId,
-        teamId: teamId,
-        team: adjustedTeam,
-        delta: delta,
-      );
-    }
     _invalidateAll(sessionId);
   }
   Future<void> updateParticipationStats({
@@ -280,9 +270,6 @@ class SessionsController {
     required int assists,
     required int yellowCards,
     required int redCards,
-    bool adjustScore = false,
-    Team? playerTeam,
-    int goalDelta = 0,
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
@@ -296,14 +283,6 @@ class SessionsController {
       yellowCards: yellowCards,
       redCards: redCards,
     );
-    if (adjustScore && playerTeam != null && goalDelta != 0) {
-      await _repo.incrementScore(
-        sessionId: sessionId,
-        teamId: teamId,
-        team: playerTeam,
-        delta: goalDelta,
-      );
-    }
     _invalidateAll(sessionId);
   }
 
