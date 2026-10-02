@@ -45,20 +45,20 @@ class AppTheme {
         iconTheme: IconThemeData(color: colors.onHeader),
         actionsIconTheme: IconThemeData(color: colors.onHeader),
         systemOverlayStyle: headerOverlayStyle(colors),
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.poppins(
           color: colors.onHeader,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
       ),
       extensions: [colors],
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        titleLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 16),
-        bodyMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 14),
-        bodySmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 12),
-        labelSmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 11),
+      textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).copyWith(
+        titleLarge: GoogleFonts.poppins(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
+        titleMedium: GoogleFonts.poppins(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
+        bodyLarge: GoogleFonts.poppins(color: colors.foreground50, fontSize: 16),
+        bodyMedium: GoogleFonts.poppins(color: colors.foreground50, fontSize: 14),
+        bodySmall: GoogleFonts.poppins(color: colors.foreground50, fontSize: 12),
+        labelSmall: GoogleFonts.poppins(color: colors.foreground50, fontSize: 11),
       ),
     );
   }
@@ -87,20 +87,20 @@ class AppTheme {
         iconTheme: IconThemeData(color: colors.onHeader),
         actionsIconTheme: IconThemeData(color: colors.onHeader),
         systemOverlayStyle: headerOverlayStyle(colors),
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.poppins(
           color: colors.onHeader,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
       ),
       extensions: [colors],
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        titleLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
-        bodyLarge: GoogleFonts.inter(color: colors.foreground50, fontSize: 16),
-        bodyMedium: GoogleFonts.inter(color: colors.foreground50, fontSize: 14),
-        bodySmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 12),
-        labelSmall: GoogleFonts.inter(color: colors.foreground50, fontSize: 11),
+      textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).copyWith(
+        titleLarge: GoogleFonts.poppins(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
+        titleMedium: GoogleFonts.poppins(color: colors.foreground50, fontSize: 16, fontWeight: FontWeight.w600),
+        bodyLarge: GoogleFonts.poppins(color: colors.foreground50, fontSize: 16),
+        bodyMedium: GoogleFonts.poppins(color: colors.foreground50, fontSize: 14),
+        bodySmall: GoogleFonts.poppins(color: colors.foreground50, fontSize: 12),
+        labelSmall: GoogleFonts.poppins(color: colors.foreground50, fontSize: 11),
       ),
     );
   }
