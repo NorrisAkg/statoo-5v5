@@ -375,10 +375,36 @@ class HomeScreen extends ConsumerWidget {
                                 ],
                               ],
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              '${mvp.matchesPlayed} MJ · ${mvp.goals} buts · ${mvp.assists} passes',
-                              style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                            const SizedBox(height: 6),
+                            Wrap(
+                              spacing: 10,
+                              runSpacing: 4,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                _buildStatIconCount(
+                                  icon: Remix.calendar_event_line,
+                                  count: mvp.matchesPlayed,
+                                  color: context.colors.foreground400,
+                                ),
+                                _buildStatIconCount(
+                                  icon: Remix.football_line,
+                                  count: mvp.goals,
+                                  color: context.colors.primary400,
+                                ),
+                                _buildStatIconCount(
+                                  icon: Remix.footprint_line,
+                                  count: mvp.assists,
+                                  color: context.colors.secondary400,
+                                ),
+                                _buildCardBadge(
+                                  color: context.colors.card,
+                                  count: mvp.yellowCards,
+                                ),
+                                _buildCardBadge(
+                                  color: context.colors.danger,
+                                  count: mvp.redCards,
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -395,6 +421,56 @@ class HomeScreen extends ConsumerWidget {
     ),
   );
 }
+
+  Widget _buildStatIconCount({
+    required IconData icon,
+    required int count,
+    required Color color,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 13, color: color),
+        const SizedBox(width: 4),
+        Text(
+          '$count',
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardBadge({
+    required Color color,
+    required int count,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 7,
+          height: 10,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(1.5),
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '$count',
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildSectionHeader(BuildContext context, String title, String route) {
     return Row(
