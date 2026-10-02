@@ -15,10 +15,10 @@ class _FakeSessionsRepository implements SessionsRepository {
   final List<Participation> addedParticipations = [];
 
   @override
-  Future<Session?> getSession(String id) async => id == session.id ? session : null;
+  Future<Session?> getSession(String id, {required String teamId}) async => id == session.id ? session : null;
 
   @override
-  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId) async => [
+  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId, {required String teamId}) async => [
         ...participants,
         ...addedParticipations.map(
           (p) => SessionParticipantDetail(
@@ -30,6 +30,7 @@ class _FakeSessionsRepository implements SessionsRepository {
 
   @override
   Future<void> addParticipations({
+    required String teamId,
     required String sessionId,
     required List<Participation> participations,
   }) async {

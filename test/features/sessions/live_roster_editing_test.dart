@@ -180,7 +180,7 @@ void main() {
         currentTeam: Team.a,
       );
 
-      final participants = await repo.getSessionParticipants(sessionId);
+      final participants = await repo.getSessionParticipants(sessionId, teamId: teamId);
       final pA1 = participants.firstWhere((p) => p.participation.id == partA1);
       expect(pA1.participation.team, Team.b);
     });
@@ -203,7 +203,7 @@ void main() {
         playerTeam: Team.a,
       );
 
-      final participants = await repo.getSessionParticipants(sessionId);
+      final participants = await repo.getSessionParticipants(sessionId, teamId: teamId);
       expect(participants.length, 3);
       expect(participants.any((p) => p.participation.id == partA1), isFalse);
 
@@ -233,7 +233,7 @@ void main() {
 
       await controller.reopenSession(sessionId);
 
-      final session = await repo.getSession(sessionId);
+      final session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.status, SessionStatus.draft);
     });
   });

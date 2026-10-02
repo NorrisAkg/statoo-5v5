@@ -19,15 +19,15 @@ class _MockPlayersRepository implements PlayersRepository {
       List.unmodifiable(_players);
 
   @override
-  Future<Player?> getPlayer(String id) async =>
+  Future<Player?> getPlayer(String id, {required String teamId}) async =>
       _players.cast<Player?>().firstWhere((p) => p?.id == id, orElse: () => null);
 
   @override
-  Future<PlayerDetailStats> getPlayerStats(String id) async =>
+  Future<PlayerDetailStats> getPlayerStats(String id, {required String teamId}) async =>
       const PlayerDetailStats.empty();
 
   @override
-  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id) async =>
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id, {required String teamId}) async =>
       const [];
 
   @override
@@ -53,6 +53,7 @@ class _MockPlayersRepository implements PlayersRepository {
 
   @override
   Future<void> updatePlayer({
+    required String teamId,
     required String id,
     required String name,
     String? nickname,
@@ -60,19 +61,20 @@ class _MockPlayersRepository implements PlayersRepository {
 
   @override
   Future<void> togglePlayerActive({
+    required String teamId,
     required String id,
     required bool isActive,
   }) async {}
 
   @override
-  Future<bool> canDeletePlayer(String id) async => true;
+  Future<bool> canDeletePlayer(String id, {required String teamId}) async => true;
 
   @override
-  Future<Set<String>> getDeletablePlayerIds() async =>
+  Future<Set<String>> getDeletablePlayerIds({required String teamId}) async =>
       _players.map((p) => p.id).toSet();
 
   @override
-  Future<void> deletePlayer(String id) async {
+  Future<void> deletePlayer(String id, {required String teamId}) async {
     _players.removeWhere((p) => p.id == id);
   }
 

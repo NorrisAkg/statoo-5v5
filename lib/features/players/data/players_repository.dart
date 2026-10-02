@@ -5,9 +5,9 @@ import '../domain/player_detail_data.dart';
 
 abstract class PlayersRepository {
   Future<List<Player>> getPlayers({String? teamId});
-  Future<Player?> getPlayer(String id);
-  Future<PlayerDetailStats> getPlayerStats(String id);
-  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id);
+  Future<Player?> getPlayer(String id, {required String teamId});
+  Future<PlayerDetailStats> getPlayerStats(String id, {required String teamId});
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id, {required String teamId});
   Future<Player> createPlayer({
     required String name,
     String? nickname,
@@ -16,13 +16,18 @@ abstract class PlayersRepository {
   });
   Future<void> updatePlayer({
     required String id,
+    required String teamId,
     required String name,
     String? nickname,
   });
-  Future<void> togglePlayerActive({required String id, required bool isActive});
-  Future<bool> canDeletePlayer(String id);
-  Future<Set<String>> getDeletablePlayerIds();
-  Future<void> deletePlayer(String id);
+  Future<void> togglePlayerActive({
+    required String id,
+    required String teamId,
+    required bool isActive,
+  });
+  Future<bool> canDeletePlayer(String id, {required String teamId});
+  Future<Set<String>> getDeletablePlayerIds({required String teamId});
+  Future<void> deletePlayer(String id, {required String teamId});
 
   /// Returns true if a player with the same [name] (case-insensitive) already
   /// exists in the given [teamId]. If [excludePlayerId] is provided, that
@@ -65,9 +70,14 @@ class SqlitePlayersRepository implements PlayersRepository {
   }
 
   @override
-  Future<Player?> getPlayer(String id) async {
+  Future<Player?> getPlayer(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
-    final rows = await db.query('players', where: 'id = ?', whereArgs: [id], limit: 1);
+    final rows = await db.query(
+      'players',
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [id, teamId],
+      limit: 1,
+    );
     if (rows.isEmpty) return null;
     final row = rows.first;
     return Player(
@@ -83,7 +93,7 @@ class SqlitePlayersRepository implements PlayersRepository {
   }
 
   @override
-  Future<PlayerDetailStats> getPlayerStats(String id) async {
+  Future<PlayerDetailStats> getPlayerStats(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
     final rows = await db.rawQuery('''
       SELECT 
@@ -98,8 +108,9 @@ class SqlitePlayersRepository implements PlayersRepository {
         COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN red_cards ELSE 0 END), 0) AS red_cards,
         COUNT(CASE WHEN status = 'CLOSED' THEN 1 END) AS appearances
       FROM v_player_match_results
-      WHERE player_id = ?
-    ''', [id]);
+      WHERE player_id = ? AND team_id = ?
+        AND player_id IN (SELECT id FROM players WHERE team_id = ?)
+    ''', [id, teamId, teamId]);
 
     if (rows.isEmpty) {
       return const PlayerDetailStats.empty();
@@ -108,7 +119,7 @@ class SqlitePlayersRepository implements PlayersRepository {
   }
 
   @override
-  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id) async {
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
     final rows = await db.rawQuery('''
       SELECT 
@@ -128,9 +139,10 @@ class SqlitePlayersRepository implements PlayersRepository {
         s.result
       FROM participations pt
       JOIN sessions s ON s.id = pt.session_id
-      WHERE pt.player_id = ?
+      WHERE pt.player_id = ? AND s.team_id = ?
+        AND pt.player_id IN (SELECT id FROM players WHERE team_id = ?)
       ORDER BY s.played_at DESC
-    ''', [id]);
+    ''', [id, teamId, teamId]);
 
     return rows.map(PlayerMatchHistoryItem.fromMap).toList();
   }
@@ -177,6 +189,7 @@ class SqlitePlayersRepository implements PlayersRepository {
   @override
   Future<void> updatePlayer({
     required String id,
+    required String teamId,
     required String name,
     String? nickname,
   }) async {
@@ -188,13 +201,17 @@ class SqlitePlayersRepository implements PlayersRepository {
         'nickname': (nickname != null && nickname.trim().isNotEmpty) ? nickname.trim() : null,
         'updated_at': DateTime.now().toIso8601String(),
       },
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [id, teamId],
     );
   }
 
   @override
-  Future<void> togglePlayerActive({required String id, required bool isActive}) async {
+  Future<void> togglePlayerActive({
+    required String id,
+    required String teamId,
+    required bool isActive,
+  }) async {
     final db = await _appDatabase.database;
     await db.update(
       'players',
@@ -202,35 +219,41 @@ class SqlitePlayersRepository implements PlayersRepository {
         'is_active': isActive ? 1 : 0,
         'updated_at': DateTime.now().toIso8601String(),
       },
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [id, teamId],
     );
   }
 
   @override
-  Future<bool> canDeletePlayer(String id) async {
+  Future<bool> canDeletePlayer(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
     final count = Sqflite.firstIntValue(await db.rawQuery(
       'SELECT COUNT(*) FROM participations WHERE player_id = ?',
       [id],
     )) ?? 0;
-    return count == 0;
+    if (count > 0) return false;
+    // Only a player of this group can be deleted.
+    final owned = Sqflite.firstIntValue(await db.rawQuery(
+      'SELECT COUNT(*) FROM players WHERE id = ? AND team_id = ?',
+      [id, teamId],
+    )) ?? 0;
+    return owned > 0;
   }
 
   @override
-  Future<Set<String>> getDeletablePlayerIds() async {
+  Future<Set<String>> getDeletablePlayerIds({required String teamId}) async {
     final db = await _appDatabase.database;
     final rows = await db.rawQuery('''
       SELECT id FROM players 
-      WHERE id NOT IN (SELECT DISTINCT player_id FROM participations)
-    ''');
+      WHERE team_id = ? AND id NOT IN (SELECT DISTINCT player_id FROM participations)
+    ''', [teamId]);
     return rows.map((r) => r['id']! as String).toSet();
   }
 
   @override
-  Future<void> deletePlayer(String id) async {
+  Future<void> deletePlayer(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
-    await db.delete('players', where: 'id = ?', whereArgs: [id]);
+    await db.delete('players', where: 'id = ? AND team_id = ?', whereArgs: [id, teamId]);
   }
 
   @override

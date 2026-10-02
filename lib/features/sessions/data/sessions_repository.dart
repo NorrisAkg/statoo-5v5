@@ -9,8 +9,11 @@ abstract class SessionsRepository {
     required String teamId,
     String filter = 'all',
   });
-  Future<Session?> getSession(String id);
-  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId);
+  Future<Session?> getSession(String id, {required String teamId});
+  Future<List<SessionParticipantDetail>> getSessionParticipants(
+    String sessionId, {
+    required String teamId,
+  });
   Future<Session?> getActiveDraftSession({required String teamId});
   Future<String?> getActiveSessionId({required String teamId});
   Future<void> setActiveSessionId(String? sessionId, {required String teamId});
@@ -21,6 +24,7 @@ abstract class SessionsRepository {
   });
   Future<void> updateSessionScore({
     required String sessionId,
+    required String teamId,
     required int scoreA,
     required int scoreB,
   });
@@ -39,6 +43,7 @@ abstract class SessionsRepository {
   });
   Future<void> updateTournamentWins({
     required String sessionId,
+    required String teamId,
     required int winsA,
     required int winsB,
     required int winsC,
@@ -46,6 +51,8 @@ abstract class SessionsRepository {
   });
   Future<void> updateParticipationStats({
     required String participationId,
+    required String sessionId,
+    required String teamId,
     required int goals,
     required int assists,
     required int yellowCards,
@@ -53,6 +60,7 @@ abstract class SessionsRepository {
   });
   Future<void> addParticipations({
     required String sessionId,
+    required String teamId,
     required List<Participation> participations,
   });
   Future<void> switchPlayerTeam({
@@ -270,15 +278,23 @@ class SqliteSessionsRepository implements SessionsRepository {
   }
 
   @override
-  Future<Session?> getSession(String id) async {
+  Future<Session?> getSession(String id, {required String teamId}) async {
     final db = await _appDatabase.database;
-    final rows = await db.query('sessions', where: 'id = ?', whereArgs: [id], limit: 1);
+    final rows = await db.query(
+      'sessions',
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [id, teamId],
+      limit: 1,
+    );
     if (rows.isEmpty) return null;
     return _mapSessionRow(rows.first);
   }
 
   @override
-  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId) async {
+  Future<List<SessionParticipantDetail>> getSessionParticipants(
+    String sessionId, {
+    required String teamId,
+  }) async {
     final db = await _appDatabase.database;
     final rows = await db.rawQuery('''
       SELECT 
@@ -294,10 +310,11 @@ class SqliteSessionsRepository implements SessionsRepository {
         p.nickname as player_nickname,
         p.avatar_url as player_avatar_url
       FROM participations pt
-      JOIN players p ON p.id = pt.player_id
-      WHERE pt.session_id = ?
+      JOIN sessions s ON s.id = pt.session_id
+      JOIN players p ON p.id = pt.player_id AND p.team_id = s.team_id
+      WHERE pt.session_id = ? AND s.team_id = ?
       ORDER BY pt.team ASC, p.name ASC
-    ''', [sessionId]);
+    ''', [sessionId, teamId]);
 
     return rows.map((r) {
       final part = Participation(
@@ -323,7 +340,7 @@ class SqliteSessionsRepository implements SessionsRepository {
   Future<Session?> getActiveDraftSession({required String teamId}) async {
     final activeId = await getActiveSessionId(teamId: teamId);
     if (activeId == null) return null;
-    return await getSession(activeId);
+    return await getSession(activeId, teamId: teamId);
   }
 
   @override
@@ -334,6 +351,19 @@ class SqliteSessionsRepository implements SessionsRepository {
   }) async {
     final db = await _appDatabase.database;
     await db.transaction((txn) async {
+      // INSERT OR REPLACE on an id owned by another group would overwrite its data.
+      final existing = await txn.query(
+        'sessions',
+        columns: ['team_id'],
+        where: 'id = ?',
+        whereArgs: [session.id],
+        limit: 1,
+      );
+      if (existing.isNotEmpty && existing.first['team_id'] != teamId) {
+        throw StateError('Session ${session.id} belongs to another group');
+      }
+      await _assertPlayersInTeam(txn, teamId, participations);
+
       await txn.insert(
         'sessions',
         {
@@ -366,7 +396,7 @@ class SqliteSessionsRepository implements SessionsRepository {
       for (final p in participations) {
         await txn.insert('participations', {
           'id': p.id,
-          'session_id': p.sessionId,
+          'session_id': session.id,
           'player_id': p.playerId,
           'team': _teamToString(p.team),
           'goals': p.goals,
@@ -378,9 +408,32 @@ class SqliteSessionsRepository implements SessionsRepository {
     });
   }
 
+  /// Every participating player must belong to [teamId]; a stray id from
+  /// another group would leak its stats into this group's rankings.
+  Future<void> _assertPlayersInTeam(
+    DatabaseExecutor db,
+    String teamId,
+    List<Participation> participations,
+  ) async {
+    final ids = participations.map((p) => p.playerId).toSet().toList();
+    if (ids.isEmpty) return;
+    final placeholders = List.filled(ids.length, '?').join(',');
+    final count = Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM players WHERE team_id = ? AND id IN ($placeholders)',
+            [teamId, ...ids],
+          ),
+        ) ??
+        0;
+    if (count != ids.length) {
+      throw StateError('Some players do not belong to the active group');
+    }
+  }
+
   @override
   Future<void> updateSessionScore({
     required String sessionId,
+    required String teamId,
     required int scoreA,
     required int scoreB,
   }) async {
@@ -399,8 +452,8 @@ class SqliteSessionsRepository implements SessionsRepository {
         'score_b': scoreB,
         'result': result,
       },
-      where: 'id = ?',
-      whereArgs: [sessionId],
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [sessionId, teamId],
     );
   }
 
@@ -471,6 +524,8 @@ class SqliteSessionsRepository implements SessionsRepository {
   @override
   Future<void> updateParticipationStats({
     required String participationId,
+    required String sessionId,
+    required String teamId,
     required int goals,
     required int assists,
     required int yellowCards,
@@ -485,24 +540,35 @@ class SqliteSessionsRepository implements SessionsRepository {
         'yellow_cards': yellowCards,
         'red_cards': redCards,
       },
-      where: 'id = ?',
-      whereArgs: [participationId],
+      where: 'id = ? AND session_id = ? AND session_id IN (SELECT id FROM sessions WHERE team_id = ?)',
+      whereArgs: [participationId, sessionId, teamId],
     );
   }
 
   @override
   Future<void> addParticipations({
     required String sessionId,
+    required String teamId,
     required List<Participation> participations,
   }) async {
     final db = await _appDatabase.database;
     await db.transaction((txn) async {
+      final owned = await txn.query(
+        'sessions',
+        columns: ['id'],
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+        limit: 1,
+      );
+      if (owned.isEmpty) throw StateError('Session $sessionId not found in the active group');
+      await _assertPlayersInTeam(txn, teamId, participations);
+
       for (final p in participations) {
         await txn.insert(
           'participations',
           {
             'id': p.id,
-            'session_id': p.sessionId,
+            'session_id': sessionId,
             'player_id': p.playerId,
             'team': _teamToString(p.team),
             'goals': p.goals,
@@ -519,6 +585,7 @@ class SqliteSessionsRepository implements SessionsRepository {
   @override
   Future<void> updateTournamentWins({
     required String sessionId,
+    required String teamId,
     required int winsA,
     required int winsB,
     required int winsC,
@@ -534,8 +601,8 @@ class SqliteSessionsRepository implements SessionsRepository {
         'wins_c': winsC,
         'result': resStr,
       },
-      where: 'id = ?',
-      whereArgs: [sessionId],
+      where: 'id = ? AND team_id = ?',
+      whereArgs: [sessionId, teamId],
     );
   }
 

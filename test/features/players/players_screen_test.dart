@@ -22,14 +22,14 @@ class _FakePlayersRepository implements PlayersRepository {
   Future<List<Player>> getPlayers({String? teamId}) async => List.unmodifiable(_players);
 
   @override
-  Future<Player?> getPlayer(String id) async =>
+  Future<Player?> getPlayer(String id, {required String teamId}) async =>
       _players.cast<Player?>().firstWhere((p) => p?.id == id, orElse: () => null);
 
   @override
-  Future<PlayerDetailStats> getPlayerStats(String id) async => const PlayerDetailStats.empty();
+  Future<PlayerDetailStats> getPlayerStats(String id, {required String teamId}) async => const PlayerDetailStats.empty();
 
   @override
-  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id) async => const [];
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id, {required String teamId}) async => const [];
 
   @override
   Future<Player> createPlayer({
@@ -41,22 +41,23 @@ class _FakePlayersRepository implements PlayersRepository {
 
   @override
   Future<void> updatePlayer({
+    required String teamId,
     required String id,
     required String name,
     String? nickname,
   }) async {}
 
   @override
-  Future<void> togglePlayerActive({required String id, required bool isActive}) async {}
+  Future<void> togglePlayerActive({required String teamId, required String id, required bool isActive}) async {}
 
   @override
-  Future<void> deletePlayer(String id) async {}
+  Future<void> deletePlayer(String id, {required String teamId}) async {}
 
   @override
-  Future<bool> canDeletePlayer(String id) async => id == 'p_3';
+  Future<bool> canDeletePlayer(String id, {required String teamId}) async => id == 'p_3';
 
   @override
-  Future<Set<String>> getDeletablePlayerIds() async => {'p_3'};
+  Future<Set<String>> getDeletablePlayerIds({required String teamId}) async => {'p_3'};
 
   @override
   Future<bool> isNameTaken({

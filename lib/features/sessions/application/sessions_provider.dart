@@ -65,14 +65,18 @@ final FutureProvider<Session?> activeDraftSessionProvider = FutureProvider<Sessi
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final sessionDetailProvider = FutureProvider.autoDispose.family<Session?, String>((ref, id) {
-  return ref.watch(sessionsRepositoryProvider).getSession(id);
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return null;
+  return ref.watch(sessionsRepositoryProvider).getSession(id, teamId: teamId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final sessionParticipantsProvider =
     FutureProvider.autoDispose.family<List<SessionParticipantDetail>, String>((ref, sessionId) {
-  return ref.watch(sessionsRepositoryProvider).getSessionParticipants(sessionId);
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return const <SessionParticipantDetail>[];
+  return ref.watch(sessionsRepositoryProvider).getSessionParticipants(sessionId, teamId: teamId);
 });
 
 class SessionsController {
@@ -178,11 +182,11 @@ class SessionsController {
     if (currentActiveId != null && currentActiveId != sessionId) {
       return false; // Another session is already running
     }
-    final session = await _repo.getSession(sessionId);
-    if (session != null &&
-        session.sessionType == SessionType.classic2 &&
+    final session = await _repo.getSession(sessionId, teamId: teamId);
+    if (session == null) return false;
+    if (session.sessionType == SessionType.classic2 &&
         (session.scoreA == null || session.scoreB == null || session.result == null)) {
-      await _repo.updateSessionScore(sessionId: sessionId, scoreA: 0, scoreB: 0);
+      await _repo.updateSessionScore(sessionId: sessionId, teamId: teamId, scoreA: 0, scoreB: 0);
     }
     await _repo.setActiveSessionId(sessionId, teamId: teamId);
     _invalidateAll(sessionId);
@@ -194,8 +198,11 @@ class SessionsController {
     required int scoreA,
     required int scoreB,
   }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
     await _repo.updateSessionScore(
       sessionId: sessionId,
+      teamId: teamId,
       scoreA: scoreA,
       scoreB: scoreB,
     );
@@ -225,8 +232,11 @@ class SessionsController {
     required int winsC,
     MatchResult? result,
   }) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
     await _repo.updateTournamentWins(
       sessionId: sessionId,
+      teamId: teamId,
       winsA: winsA,
       winsB: winsB,
       winsC: winsC,
@@ -279,6 +289,8 @@ class SessionsController {
 
     await _repo.updateParticipationStats(
       participationId: participationId,
+      sessionId: sessionId,
+      teamId: teamId,
       goals: goals,
       assists: assists,
       yellowCards: yellowCards,
@@ -304,9 +316,9 @@ class SessionsController {
 
     if (playerTeamAssignments.isEmpty) return;
 
-    final session = await _repo.getSession(sessionId);
+    final session = await _repo.getSession(sessionId, teamId: teamId);
     if (session == null) throw StateError('Session $sessionId not found');
-    final participants = await _repo.getSessionParticipants(sessionId);
+    final participants = await _repo.getSessionParticipants(sessionId, teamId: teamId);
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;
@@ -349,6 +361,7 @@ class SessionsController {
 
     await _repo.addParticipations(
       sessionId: sessionId,
+      teamId: teamId,
       participations: participations,
     );
     _invalidateAll(sessionId);
@@ -360,9 +373,9 @@ class SessionsController {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
-    final session = await _repo.getSession(sessionId);
+    final session = await _repo.getSession(sessionId, teamId: teamId);
     if (session == null) throw SessionCloseException('Session $sessionId not found');
-    final participants = await _repo.getSessionParticipants(sessionId);
+    final participants = await _repo.getSessionParticipants(sessionId, teamId: teamId);
 
     final isTournament = session.sessionType == SessionType.tournament3;
     final teamAParts = participants.where((p) => p.participation.team == Team.a);
@@ -389,6 +402,7 @@ class SessionsController {
       if (tournamentResult != null && tournamentResult != session.result) {
         await _repo.updateTournamentWins(
           sessionId: sessionId,
+          teamId: teamId,
           winsA: session.winsA,
           winsB: session.winsB,
           winsC: session.winsC,
@@ -412,9 +426,9 @@ class SessionsController {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
-    final session = await _repo.getSession(sessionId);
+    final session = await _repo.getSession(sessionId, teamId: teamId);
     if (session == null) throw StateError('Session $sessionId not found');
-    final participants = await _repo.getSessionParticipants(sessionId);
+    final participants = await _repo.getSessionParticipants(sessionId, teamId: teamId);
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;
@@ -472,9 +486,9 @@ class SessionsController {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
-    final session = await _repo.getSession(sessionId);
+    final session = await _repo.getSession(sessionId, teamId: teamId);
     if (session == null) throw StateError('Session $sessionId not found');
-    final participants = await _repo.getSessionParticipants(sessionId);
+    final participants = await _repo.getSessionParticipants(sessionId, teamId: teamId);
 
     final currentA = participants.where((p) => p.participation.team == Team.a).length;
     final currentB = participants.where((p) => p.participation.team == Team.b).length;

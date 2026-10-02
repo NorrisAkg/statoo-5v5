@@ -10,6 +10,7 @@ import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
 import 'package:statoo/features/sessions/presentation/session_detail_screen.dart';
+import 'package:statoo/features/team/application/team_provider.dart';
 
 class _FakeSessionDetailRepository implements SessionsRepository {
   _FakeSessionDetailRepository({
@@ -21,10 +22,10 @@ class _FakeSessionDetailRepository implements SessionsRepository {
   final List<SessionParticipantDetail> participants;
 
   @override
-  Future<Session?> getSession(String id) async => session;
+  Future<Session?> getSession(String id, {required String teamId}) async => session;
 
   @override
-  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId) async => participants;
+  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId, {required String teamId}) async => participants;
 
   @override
   Future<String?> getActiveSessionId({required String teamId}) async => session.id;
@@ -72,6 +73,7 @@ void main() {
       overrides: [
         sessionsRepositoryProvider.overrideWithValue(repo),
         activeSessionIdProvider.overrideWith((ref) async => 's_test'),
+        activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_test')),
       ],
       child: MaterialApp(
         theme: AppTheme.darkTheme,

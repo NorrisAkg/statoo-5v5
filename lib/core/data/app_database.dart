@@ -170,6 +170,38 @@ class AppDatabase {
     for (final view in views) {
       await db.execute('DROP VIEW IF EXISTS $view');
     }
+    for (final trigger in _tenantTriggers) {
+      await db.execute('DROP TRIGGER IF EXISTS $trigger');
+    }
+  }
+
+  static const _tenantTriggers = [
+    'trg_participations_same_team_insert',
+    'trg_participations_same_team_update',
+  ];
+
+  /// Defense in depth for multi-tenancy: a participation must link a player and
+  /// a session of the same group, otherwise its stats would leak across groups.
+  Future<void> _createTenantTriggers(Database db) async {
+    const guard = '''
+      SELECT RAISE(ABORT, 'participation links a player and a session of different groups')
+      WHERE (SELECT team_id FROM players WHERE id = NEW.player_id)
+         IS NOT (SELECT team_id FROM sessions WHERE id = NEW.session_id);
+    ''';
+    await db.execute('''
+      CREATE TRIGGER IF NOT EXISTS trg_participations_same_team_insert
+      BEFORE INSERT ON participations
+      BEGIN
+        $guard
+      END;
+    ''');
+    await db.execute('''
+      CREATE TRIGGER IF NOT EXISTS trg_participations_same_team_update
+      BEFORE UPDATE OF player_id, session_id ON participations
+      BEGIN
+        $guard
+      END;
+    ''');
   }
 
   @visibleForTesting
@@ -259,6 +291,7 @@ class AppDatabase {
   }
 
   Future<void> _createViews(Database db) async {
+    await _createTenantTriggers(db);
     await db.execute('''
       CREATE VIEW IF NOT EXISTS v_player_match_results AS
       SELECT 

@@ -18,10 +18,10 @@ class _FakeSessionsRepository implements SessionsRepository {
   void Function(Session)? onSaveSession;
 
   @override
-  Future<Session?> getSession(String id) async => id == session.id ? session : null;
+  Future<Session?> getSession(String id, {required String teamId}) async => id == session.id ? session : null;
 
   @override
-  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId) async => participants;
+  Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId, {required String teamId}) async => participants;
 
   @override
   Future<String?> getActiveSessionId({required String teamId}) async => null;
@@ -41,6 +41,7 @@ class _FakeSessionsRepository implements SessionsRepository {
 
   @override
   Future<void> updateSessionScore({
+    required String teamId,
     required String sessionId,
     required int scoreA,
     required int scoreB,

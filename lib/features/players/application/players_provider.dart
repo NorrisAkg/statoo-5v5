@@ -40,6 +40,12 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
     return player;
   }
 
+  String _requireTeamId() {
+    final teamId = ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+    return teamId;
+  }
+
   Future<void> updatePlayer({
     required String id,
     required String name,
@@ -47,6 +53,7 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
   }) async {
     await ref.read(playersRepositoryProvider).updatePlayer(
       id: id,
+      teamId: _requireTeamId(),
       name: name,
       nickname: nickname,
     );
@@ -69,7 +76,11 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
   }
 
   Future<void> togglePlayerActive({required String id, required bool isActive}) async {
-    await ref.read(playersRepositoryProvider).togglePlayerActive(id: id, isActive: isActive);
+    await ref.read(playersRepositoryProvider).togglePlayerActive(
+      id: id,
+      teamId: _requireTeamId(),
+      isActive: isActive,
+    );
     final currentList = state.value;
     if (currentList != null) {
       state = AsyncData(
@@ -88,9 +99,10 @@ class PlayersNotifier extends AsyncNotifier<List<Player>> {
   }
 
   Future<bool> removePlayer(String id) async {
-    final canDelete = await ref.read(playersRepositoryProvider).canDeletePlayer(id);
+    final teamId = _requireTeamId();
+    final canDelete = await ref.read(playersRepositoryProvider).canDeletePlayer(id, teamId: teamId);
     if (!canDelete) return false;
-    await ref.read(playersRepositoryProvider).deletePlayer(id);
+    await ref.read(playersRepositoryProvider).deletePlayer(id, teamId: teamId);
     final currentList = state.value;
     if (currentList != null) {
       state = AsyncData(
@@ -138,32 +150,42 @@ final AsyncNotifierProvider<PlayersNotifier, List<Player>> playersListProvider =
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final playerDetailProvider = FutureProvider.autoDispose.family<Player?, String>((ref, playerId) async {
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return null;
   final playersAsync = ref.watch(playersListProvider);
-  final inMemory = playersAsync.value?.where((p) => p.id == playerId).firstOrNull;
+  final inMemory = playersAsync.value?.where((p) => p.id == playerId && p.teamId == teamId).firstOrNull;
   if (inMemory != null) return inMemory;
-  return await ref.watch(playersRepositoryProvider).getPlayer(playerId);
+  return await ref.watch(playersRepositoryProvider).getPlayer(playerId, teamId: teamId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final playerStatsProvider = FutureProvider.autoDispose.family<PlayerDetailStats, String>((ref, playerId) {
-  return ref.watch(playersRepositoryProvider).getPlayerStats(playerId);
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return const PlayerDetailStats.empty();
+  return ref.watch(playersRepositoryProvider).getPlayerStats(playerId, teamId: teamId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final playerMatchHistoryProvider =
     FutureProvider.autoDispose.family<List<PlayerMatchHistoryItem>, String>((ref, playerId) {
-  return ref.watch(playersRepositoryProvider).getPlayerMatchHistory(playerId);
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return const <PlayerMatchHistoryItem>[];
+  return ref.watch(playersRepositoryProvider).getPlayerMatchHistory(playerId, teamId: teamId);
 });
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
 final canDeletePlayerProvider = FutureProvider.autoDispose.family<bool, String>((ref, playerId) {
-  return ref.watch(playersRepositoryProvider).canDeletePlayer(playerId);
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return false;
+  return ref.watch(playersRepositoryProvider).canDeletePlayer(playerId, teamId: teamId);
 });
 
 final FutureProvider<Set<String>> deletablePlayerIdsProvider =
     FutureProvider<Set<String>>((ref) {
-  return ref.watch(playersRepositoryProvider).getDeletablePlayerIds();
+  final teamId = ref.watch(activeTeamIdProvider);
+  if (teamId == null) return const <String>{};
+  return ref.watch(playersRepositoryProvider).getDeletablePlayerIds(teamId: teamId);
 });

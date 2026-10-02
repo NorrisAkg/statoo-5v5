@@ -140,28 +140,28 @@ void main() {
     test('incrementScore updates team scores atomically and recalculates match result', () async {
       // Team A scores -> 1-0 (A)
       await repo.incrementScore(sessionId: sessionId, teamId: teamId, team: Team.a, delta: 1);
-      var session = await repo.getSession(sessionId);
+      var session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.scoreA, 1);
       expect(session?.scoreB, 0);
       expect(session?.result, MatchResult.teamA);
 
       // Team B scores twice -> 1-2 (B)
       await repo.incrementScore(sessionId: sessionId, teamId: teamId, team: Team.b, delta: 2);
-      session = await repo.getSession(sessionId);
+      session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.scoreA, 1);
       expect(session?.scoreB, 2);
       expect(session?.result, MatchResult.teamB);
 
       // Team B goal cancelled -> 1-1 (DRAW)
       await repo.incrementScore(sessionId: sessionId, teamId: teamId, team: Team.b, delta: -1);
-      session = await repo.getSession(sessionId);
+      session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.scoreA, 1);
       expect(session?.scoreB, 1);
       expect(session?.result, MatchResult.draw);
 
       // Negative clamping check: decrementing Team A by 5 keeps score clamped to 0
       await repo.incrementScore(sessionId: sessionId, teamId: teamId, team: Team.a, delta: -5);
-      session = await repo.getSession(sessionId);
+      session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.scoreA, 0);
       expect(session?.scoreB, 1);
       expect(session?.result, MatchResult.teamB);
@@ -175,7 +175,7 @@ void main() {
         unassignedGoalsB: 1,
       );
 
-      final session = await repo.getSession(sessionId);
+      final session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.unassignedGoalsA, 2);
       expect(session?.unassignedGoalsB, 1);
     });
@@ -204,12 +204,12 @@ void main() {
         goalDelta: 2,
       );
 
-      final session = await repo.getSession(sessionId);
+      final session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.scoreA, 2);
       expect(session?.scoreB, 0);
       expect(session?.result, MatchResult.teamA);
 
-      final participants = await repo.getSessionParticipants(sessionId);
+      final participants = await repo.getSessionParticipants(sessionId, teamId: teamId);
       final pA = participants.firstWhere((p) => p.participation.id == partIdA);
       expect(pA.participation.goals, 2);
       expect(pA.participation.assists, 1);
@@ -235,7 +235,7 @@ void main() {
         delta: 1,
       );
 
-      final session = await repo.getSession(sessionId);
+      final session = await repo.getSession(sessionId, teamId: teamId);
       expect(session?.unassignedGoalsB, 1);
       expect(session?.scoreB, 1);
       expect(session?.scoreA, 0);
