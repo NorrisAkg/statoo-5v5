@@ -74,12 +74,16 @@ void main() {
       expect(find.text('Passeurs'), findsOneWidget);
       expect(find.text('Cartons'), findsOneWidget);
 
-      // Check Month filter chips are displayed
-      expect(find.text('Général'), findsOneWidget);
+      // Month filter chips are not in Championship mode
+      expect(find.text('Général'), findsNothing);
 
       // Switch to MVP du mois mode
       await tester.tap(find.text('MVP du mois'));
       await tester.pumpAndSettle();
+
+      // In MVP mode, only actual months are displayed, no 'Général' chip
+      expect(find.text('Général'), findsNothing);
+      expect(find.text('Octobre 2026'), findsOneWidget);
 
       // Verify Karim is displayed as Joueur du mois (Rank 1 eligible)
       expect(find.text('Karim'), findsOneWidget);

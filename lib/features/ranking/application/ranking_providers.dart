@@ -85,10 +85,14 @@ final topCardsProvider = FutureProvider<List<CardEntry>>((ref) {
   return repo.getTopCards(teamId: activeTeamId, sortBy: filter, month: selectedMonth);
 });
 
+final selectedMvpMonthProvider = NotifierProvider<RankingMonthNotifier, String?>(
+  RankingMonthNotifier.new,
+);
+
 final monthlyMvpRankingProvider = FutureProvider<List<MvpEntry>>((ref) async {
   final repo = ref.watch(rankingRepositoryProvider);
   final activeTeamId = ref.watch(activeTeamIdProvider);
-  final selectedMonth = ref.watch(selectedRankingMonthProvider);
+  final selectedMonth = ref.watch(selectedMvpMonthProvider);
   if (activeTeamId == null) return const [];
 
   String? targetMonth = selectedMonth;

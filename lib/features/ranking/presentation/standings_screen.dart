@@ -160,7 +160,6 @@ class _ChampionshipView extends StatelessWidget {
               Tab(text: 'Cartons'),
             ],
           ),
-          const _MonthSelectorBar(),
           Expanded(
             child: TabBarView(
               children: [
@@ -1211,11 +1210,13 @@ class _MonthSelectorBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final availableMonthsAsync = ref.watch(availableRankingMonthsProvider);
-    final selectedMonth = ref.watch(selectedRankingMonthProvider);
+    final selectedMonth = ref.watch(selectedMvpMonthProvider);
 
     return availableMonthsAsync.maybeWhen(
       data: (months) {
         if (months.isEmpty) return const SizedBox.shrink();
+
+        final activeMonth = selectedMonth ?? months.first;
 
         return Container(
           height: 48,
@@ -1224,30 +1225,18 @@ class _MonthSelectorBar extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
-                  label: const Text('Général'),
-                  selected: selectedMonth == null,
-                  onSelected: (selected) {
-                    if (selected) {
-                      ref
-                          .read(selectedRankingMonthProvider.notifier)
-                          .selectMonth(null);
-                    }
-                  },
-                ),
-              ),
               for (final month in months) ...[
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
                     label: Text(_formatMonth(month)),
-                    selected: selectedMonth == month,
+                    selected: activeMonth == month,
                     onSelected: (selected) {
-                      ref
-                          .read(selectedRankingMonthProvider.notifier)
-                          .selectMonth(selected ? month : null);
+                      if (selected) {
+                        ref
+                            .read(selectedMvpMonthProvider.notifier)
+                            .selectMonth(month);
+                      }
                     },
                   ),
                 ),
