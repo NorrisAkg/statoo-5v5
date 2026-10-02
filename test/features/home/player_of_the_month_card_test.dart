@@ -8,7 +8,7 @@ import 'package:statoo/features/ranking/domain/mvp_entry.dart';
 
 void main() {
   group('HomeScreen Player of the Month card', () {
-    testWidgets('displays Joueur du mois card when MVP exists', (tester) async {
+    testWidgets('displays Joueur du mois card with month label when MVP exists', (tester) async {
       const mockMvp = MvpEntry(
         rank: 1,
         playerId: 'p2',
@@ -26,6 +26,7 @@ void main() {
         score: 11.33,
         isEligible: true,
         missingMatches: 0,
+        month: '2026-10',
       );
 
       await tester.pumpWidget(
@@ -41,13 +42,14 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Joueur du mois'), findsOneWidget);
+      expect(find.textContaining('Joueur du mois'), findsOneWidget);
+      expect(find.textContaining('Octobre 2026'), findsOneWidget);
       expect(find.text('Karim'), findsOneWidget);
       expect(find.text('« Kaka »'), findsOneWidget);
       expect(find.textContaining('11.33'), findsOneWidget);
     });
 
-    testWidgets('does not show Joueur du mois card when MVP is null', (tester) async {
+    testWidgets('displays pending state card when MVP is null', (tester) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -61,7 +63,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Joueur du mois'), findsNothing);
+      expect(find.text('Joueur du mois'), findsOneWidget);
+      expect(find.textContaining('En attente'), findsOneWidget);
     });
   });
 }

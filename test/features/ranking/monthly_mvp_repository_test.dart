@@ -313,18 +313,71 @@ void main() {
       expect(sofiane.missingMatches, 2);
     });
 
-    test('getPlayerOfTheMonth returns top eligible player for month or latest month', () async {
+    test('getPlayerOfTheMonth returns top eligible player for month or latest month with MVP', () async {
       // Specified month: Karim
       final mvpOct = await rankingRepo.getPlayerOfTheMonth(teamId: 'team_1', month: '2026-10');
       expect(mvpOct, isNotNull);
       expect(mvpOct!.playerId, 'p2');
       expect(mvpOct.name, 'Karim');
       expect(mvpOct.isEligible, isTrue);
+      expect(mvpOct.month, '2026-10');
 
-      // Null month: defaults to latest month ('2026-10')
+      // Null month: defaults to latest month with an eligible MVP ('2026-10')
       final latestMvp = await rankingRepo.getPlayerOfTheMonth(teamId: 'team_1');
       expect(latestMvp, isNotNull);
       expect(latestMvp!.playerId, 'p2');
+      expect(latestMvp.month, '2026-10');
+
+      // Add a session in November 2026 where players don't meet eligibility or no one played
+      // Let's add 3 sessions in November, but a new player played only 1 (not eligible: missed 2 > 1)
+      await db.insert('sessions', {
+        'id': 's_nov_1',
+        'team_id': 'team_1',
+        'played_at': '2026-11-01 20:00:00',
+        'status': 'CLOSED',
+        'is_ranked': 1,
+        'score_a': 1,
+        'score_b': 0,
+        'result': 'A',
+      });
+      await db.insert('sessions', {
+        'id': 's_nov_2',
+        'team_id': 'team_1',
+        'played_at': '2026-11-08 20:00:00',
+        'status': 'CLOSED',
+        'is_ranked': 1,
+        'score_a': 1,
+        'score_b': 0,
+        'result': 'A',
+      });
+      await db.insert('sessions', {
+        'id': 's_nov_3',
+        'team_id': 'team_1',
+        'played_at': '2026-11-15 20:00:00',
+        'status': 'CLOSED',
+        'is_ranked': 1,
+        'score_a': 1,
+        'score_b': 0,
+        'result': 'A',
+      });
+      // Participations in Nov: only Sofiane played 1 session (out of 3 -> missed 2 -> ineligible)
+      await db.insert('participations', {
+        'id': 'pt_nov_1',
+        'session_id': 's_nov_1',
+        'player_id': 'p3',
+        'team': 'A',
+        'goals': 1,
+        'assists': 0,
+        'yellow_cards': 0,
+        'red_cards': 0,
+      });
+
+      // Now, November has 3 sessions, but NO eligible player.
+      // Calling getPlayerOfTheMonth without month should fall back to October!
+      final fallbackMvp = await rankingRepo.getPlayerOfTheMonth(teamId: 'team_1');
+      expect(fallbackMvp, isNotNull);
+      expect(fallbackMvp!.playerId, 'p2');
+      expect(fallbackMvp.month, '2026-10');
 
       // Month with 0 sessions
       final emptyMvp = await rankingRepo.getPlayerOfTheMonth(teamId: 'team_1', month: '2025-01');

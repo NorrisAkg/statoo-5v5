@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
@@ -18,13 +17,125 @@ class StandingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final viewMode = ref.watch(standingsViewModeProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Classement'),
+        centerTitle: false,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _ViewModeSwitcher(currentMode: viewMode),
+          ),
+          Expanded(
+            child: viewMode == StandingsViewMode.championship
+                ? const _ChampionshipView()
+                : const _MvpView(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ViewModeSwitcher extends ConsumerWidget {
+  const _ViewModeSwitcher({required this.currentMode});
+
+  final StandingsViewMode currentMode;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.colors.background700),
+      ),
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildSegment(
+              context,
+              ref,
+              mode: StandingsViewMode.championship,
+              label: 'Championnat',
+              icon: Remix.trophy_line,
+              isSelected: currentMode == StandingsViewMode.championship,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Expanded(
+            child: _buildSegment(
+              context,
+              ref,
+              mode: StandingsViewMode.mvp,
+              label: 'MVP du mois',
+              icon: Remix.medal_line,
+              isSelected: currentMode == StandingsViewMode.mvp,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegment(
+    BuildContext context,
+    WidgetRef ref, {
+    required StandingsViewMode mode,
+    required String label,
+    required IconData icon,
+    required bool isSelected,
+  }) {
+    return InkWell(
+      onTap: () {
+        ref.read(standingsViewModeProvider.notifier).selectMode(mode);
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? context.colors.primary500 : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isSelected ? context.colors.background950 : context.colors.foreground400,
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: isSelected ? context.colors.background950 : context.colors.foreground400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChampionshipView extends StatelessWidget {
+  const _ChampionshipView();
+
+  @override
+  Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Classement'),
-          centerTitle: false,
-          bottom: TabBar(
+      length: 5,
+      child: Column(
+        children: [
+          TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             indicatorColor: context.colors.primary500,
@@ -39,27 +150,21 @@ class StandingsScreen extends ConsumerWidget {
               Tab(text: 'Buteurs'),
               Tab(text: 'Passeurs'),
               Tab(text: 'Cartons'),
-              Tab(text: 'MVP'),
             ],
           ),
-        ),
-        body: Column(
-          children: [
-            const _MonthSelectorBar(),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _PointsTab(),
-                  _PointsPerMatchTab(),
-                  _ScorersTab(),
-                  _AssistsTab(),
-                  _CardsTab(),
-                  _MvpTab(),
-                ],
-              ),
+          const _MonthSelectorBar(),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _PointsTab(),
+                _PointsPerMatchTab(),
+                _ScorersTab(),
+                _AssistsTab(),
+                _CardsTab(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -1059,38 +1164,81 @@ class _MonthSelectorBar extends ConsumerWidget {
   }
 }
 
-class _MvpTab extends ConsumerWidget {
+class _MvpView extends ConsumerWidget {
+  const _MvpView();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mvpAsync = ref.watch(monthlyMvpRankingProvider);
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(monthlyMvpRankingProvider);
-      },
-      color: context.colors.primary500,
-      backgroundColor: context.colors.background900,
-      child: mvpAsync.when(
-        data: (entries) {
-          if (entries.isEmpty) {
-            return _buildEmptyState(context, 'Aucune donnée MVP pour cette période');
-          }
-
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            itemCount: entries.length,
-            itemBuilder: (context, index) {
-              final entry = entries[index];
-              return _buildMvpCard(context, entry);
+    return Column(
+      children: [
+        const _MonthSelectorBar(),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(monthlyMvpRankingProvider);
             },
-          );
-        },
-        loading: () => Center(
-          child: CircularProgressIndicator(color: context.colors.primary500),
+            color: context.colors.primary500,
+            backgroundColor: context.colors.background900,
+            child: mvpAsync.when(
+              data: (entries) {
+                if (entries.isEmpty) {
+                  return _buildEmptyState(context, 'Aucune donnée MVP pour cette période');
+                }
+
+                return ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  children: [
+                    for (final entry in entries) _buildMvpCard(context, entry),
+                    const SizedBox(height: 16),
+                    _buildMvpRulesCard(context),
+                  ],
+                );
+              },
+              loading: () => Center(
+                child: CircularProgressIndicator(color: context.colors.primary500),
+              ),
+              error: (err, stack) => _buildErrorState(context, err.toString(), () {
+                ref.invalidate(monthlyMvpRankingProvider);
+              }),
+            ),
+          ),
         ),
-        error: (err, stack) => _buildErrorState(context, err.toString(), () {
-          ref.invalidate(monthlyMvpRankingProvider);
-        }),
+      ],
+    );
+  }
+
+  Widget _buildMvpRulesCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.background800),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Remix.information_line, size: 16, color: context.colors.primary400),
+              const SizedBox(width: 6),
+              const Text(
+                'Règles MVP & Éligibilité',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '• Éligibilité : au moins N-1 séances jouées dans le mois (max 1 séance manquée).\n'
+            '• Match : Victoire (+10 pts), Nul (+3 pts), Défaite (0 pt).\n'
+            '• Actions : But (+2 pts), Passe décisive (+1 pt).\n'
+            '• Fair-play : Carton jaune (-0.5 pt), Carton rouge (-1 pt).',
+            style: TextStyle(color: context.colors.foreground400, fontSize: 12, height: 1.4),
+          ),
+        ],
       ),
     );
   }

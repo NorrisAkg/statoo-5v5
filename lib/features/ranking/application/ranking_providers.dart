@@ -107,3 +107,23 @@ final playerOfTheMonthProvider = FutureProvider<MvpEntry?>((ref) async {
   if (activeTeamId == null) return null;
   return await repo.getPlayerOfTheMonth(teamId: activeTeamId);
 });
+
+enum StandingsViewMode {
+  championship,
+  mvp,
+}
+
+class StandingsViewModeNotifier extends Notifier<StandingsViewMode> {
+  @override
+  StandingsViewMode build() => StandingsViewMode.championship;
+
+  void selectMode(StandingsViewMode mode) {
+    if (state != mode) {
+      state = mode;
+    }
+  }
+}
+
+final standingsViewModeProvider = NotifierProvider<StandingsViewModeNotifier, StandingsViewMode>(
+  StandingsViewModeNotifier.new,
+);

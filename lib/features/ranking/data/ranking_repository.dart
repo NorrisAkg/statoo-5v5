@@ -403,6 +403,7 @@ class SqliteRankingRepository implements RankingRepository {
           score: entries[i].score,
           isEligible: entries[i].isEligible,
           missingMatches: entries[i].missingMatches,
+          month: month,
         ),
     ];
   }
@@ -411,14 +412,19 @@ class SqliteRankingRepository implements RankingRepository {
   Future<MvpEntry?> getPlayerOfTheMonth({String? teamId, String? month}) async {
     if (teamId == null || teamId.isEmpty) return null;
 
-    String? targetMonth = month;
-    if (targetMonth == null || targetMonth.isEmpty) {
-      final availableMonths = await getAvailableMonths(teamId: teamId);
-      if (availableMonths.isEmpty) return null;
-      targetMonth = availableMonths.first;
+    if (month != null && month.isNotEmpty) {
+      final mvpList = await getMvpRanking(month: month, teamId: teamId);
+      return mvpList.where((e) => e.isEligible).firstOrNull;
     }
 
-    final mvpList = await getMvpRanking(month: targetMonth, teamId: teamId);
-    return mvpList.where((e) => e.isEligible).firstOrNull;
+    final availableMonths = await getAvailableMonths(teamId: teamId);
+    for (final m in availableMonths) {
+      final mvpList = await getMvpRanking(month: m, teamId: teamId);
+      final eligible = mvpList.where((e) => e.isEligible).firstOrNull;
+      if (eligible != null) {
+        return eligible;
+      }
+    }
+    return null;
   }
 }

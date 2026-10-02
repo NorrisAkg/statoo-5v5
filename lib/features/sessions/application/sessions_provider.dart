@@ -94,6 +94,9 @@ class SessionsController {
       ..invalidate(topScorersProvider)
       ..invalidate(topAssistsProvider)
       ..invalidate(topCardsProvider)
+      ..invalidate(availableRankingMonthsProvider)
+      ..invalidate(monthlyMvpRankingProvider)
+      ..invalidate(playerOfTheMonthProvider)
       ..invalidate(groupTotalsProvider)
       ..invalidate(playersListProvider)
       ..invalidate(deletablePlayerIdsProvider);

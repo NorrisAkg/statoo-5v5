@@ -18,9 +18,10 @@ class MvpEntry {
     this.isActive = true,
     this.nickname,
     this.avatarUrl,
+    this.month,
   });
 
-  factory MvpEntry.fromMap(Map<String, dynamic> map) {
+  factory MvpEntry.fromMap(Map<String, dynamic> map, [String? month]) {
     return MvpEntry(
       rank: (map['rank'] as num?)?.toInt() ?? 0,
       playerId: map['player_id'] as String,
@@ -40,6 +41,7 @@ class MvpEntry {
       score: (map['score'] as num?)?.toDouble() ?? 0.0,
       isEligible: (map['is_eligible'] as num?)?.toInt() == 1 || map['is_eligible'] == true,
       missingMatches: (map['missing_matches'] as num?)?.toInt() ?? 0,
+      month: month ?? map['month'] as String?,
     );
   }
 
@@ -61,4 +63,49 @@ class MvpEntry {
   final double score;
   final bool isEligible;
   final int missingMatches;
+  final String? month;
+
+  MvpEntry copyWith({
+    int? rank,
+    String? playerId,
+    String? name,
+    String? nickname,
+    String? avatarUrl,
+    bool? isActive,
+    int? matchesPlayed,
+    int? totalSessions,
+    int? wins,
+    int? draws,
+    int? losses,
+    int? goals,
+    int? assists,
+    int? yellowCards,
+    int? redCards,
+    double? score,
+    bool? isEligible,
+    int? missingMatches,
+    String? month,
+  }) {
+    return MvpEntry(
+      rank: rank ?? this.rank,
+      playerId: playerId ?? this.playerId,
+      name: name ?? this.name,
+      nickname: nickname ?? this.nickname,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      isActive: isActive ?? this.isActive,
+      matchesPlayed: matchesPlayed ?? this.matchesPlayed,
+      totalSessions: totalSessions ?? this.totalSessions,
+      wins: wins ?? this.wins,
+      draws: draws ?? this.draws,
+      losses: losses ?? this.losses,
+      goals: goals ?? this.goals,
+      assists: assists ?? this.assists,
+      yellowCards: yellowCards ?? this.yellowCards,
+      redCards: redCards ?? this.redCards,
+      score: score ?? this.score,
+      isEligible: isEligible ?? this.isEligible,
+      missingMatches: missingMatches ?? this.missingMatches,
+      month: month ?? this.month,
+    );
+  }
 }

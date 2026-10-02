@@ -226,18 +226,86 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  static const _frenchMonths = [
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+  ];
+
+  static String _formatMonthLabel(String? monthStr) {
+    if (monthStr == null || monthStr.isEmpty) return '';
+    final parts = monthStr.split('-');
+    if (parts.length == 2) {
+      final year = parts[0];
+      final monthIndex = int.tryParse(parts[1]);
+      if (monthIndex != null && monthIndex >= 1 && monthIndex <= 12) {
+        return '${_frenchMonths[monthIndex - 1]} $year';
+      }
+    }
+    return monthStr;
+  }
+
   Widget _buildPlayerOfTheMonth(BuildContext context, WidgetRef ref) {
     final mvpAsync = ref.watch(playerOfTheMonthProvider);
 
-    return mvpAsync.maybeWhen(
-      data: (mvp) {
-        if (mvp == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: mvpAsync.maybeWhen(
+        data: (mvp) {
+          if (mvp == null) {
+            return AppCard(
+              child: InkWell(
+                onTap: () {
+                  ref.read(standingsViewModeProvider.notifier).selectMode(StandingsViewMode.mvp);
+                  context.go('/classement');
+                },
+                borderRadius: BorderRadius.circular(16),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Remix.trophy_line, color: Color(0xFFFFD700), size: 22),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Joueur du mois',
+                            style: TextStyle(
+                              color: Color(0xFFFFD700),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'En attente des séances · Aucun MVP désigné',
+                            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Remix.arrow_right_s_line, size: 20, color: context.colors.foreground500),
+                  ],
+                ),
+              ),
+            );
+          }
 
-        return Padding(
-          padding: const EdgeInsets.only(top: 24),
-          child: AppCard(
+          final monthLabel = _formatMonthLabel(mvp.month);
+
+          return AppCard(
             child: InkWell(
-              onTap: () => context.go('/classement'),
+              onTap: () {
+                ref.read(standingsViewModeProvider.notifier).selectMode(StandingsViewMode.mvp);
+                context.go('/classement');
+              },
               borderRadius: BorderRadius.circular(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,9 +314,9 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       const Icon(Remix.trophy_fill, color: Color(0xFFFFD700), size: 18),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Joueur du mois',
-                        style: TextStyle(
+                      Text(
+                        monthLabel.isNotEmpty ? 'Joueur du mois · $monthLabel' : 'Joueur du mois',
+                        style: const TextStyle(
                           color: Color(0xFFFFD700),
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -321,12 +389,12 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
       orElse: () => const SizedBox.shrink(),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSectionHeader(BuildContext context, String title, String route) {
     return Row(

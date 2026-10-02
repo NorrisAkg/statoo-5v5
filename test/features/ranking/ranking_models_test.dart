@@ -165,6 +165,7 @@ void main() {
         'score': 12.38,
         'is_eligible': 1,
         'missing_matches': 0,
+        'month': '2026-10',
       };
 
       final entry = MvpEntry.fromMap(map);
@@ -173,7 +174,11 @@ void main() {
       expect(entry.name, 'Lucas');
       expect(entry.score, 12.38);
       expect(entry.isEligible, isTrue);
+      expect(entry.month, '2026-10');
+
+      final copied = entry.copyWith(month: '2026-09');
+      expect(copied.month, '2026-09');
+      expect(copied.playerId, 'p1');
     });
   });
 }
-
