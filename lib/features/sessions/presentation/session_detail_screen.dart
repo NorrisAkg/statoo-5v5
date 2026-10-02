@@ -59,7 +59,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               return IconButton(
                 icon: const Icon(Remix.delete_bin_line),
                 tooltip: 'Supprimer',
-                color: context.colors.danger,
                 onPressed: () => unawaited(_confirmDelete(context, ref, session.status == SessionStatus.draft)),
               );
             },

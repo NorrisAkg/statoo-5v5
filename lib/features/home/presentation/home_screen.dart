@@ -41,13 +41,13 @@ class HomeScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: context.colors.primary500.withValues(alpha: 0.15),
+                    color: context.colors.onHeader.withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     Remix.shield_user_line,
                     size: 16,
-                    color: context.colors.primary500,
+                    color: context.colors.onHeader,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -66,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
                 Icon(
                   Remix.arrow_down_s_line,
                   size: 18,
-                  color: context.colors.foreground400,
+                  color: context.colors.onHeader.withValues(alpha: 0.8),
                 ),
               ],
             ),

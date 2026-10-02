@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
   AppTheme._();
+
+  /// Status bar painted with the header color so both read as a single block.
+  /// Both headers are dark enough for light system icons.
+  static SystemUiOverlayStyle headerOverlayStyle(AppColorsExtension colors) => SystemUiOverlayStyle(
+        statusBarColor: colors.header,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      );
+
+  /// For screens whose app bar is transparent over the page background.
+  static SystemUiOverlayStyle pageOverlayStyle(Brightness brightness) => SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: brightness,
+      );
 
   static ThemeData get darkTheme {
     final base = ThemeData.dark();
@@ -20,12 +36,17 @@ class AppTheme {
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: colors.background950,
+        backgroundColor: colors.header,
+        foregroundColor: colors.onHeader,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        iconTheme: IconThemeData(color: colors.foreground50),
+        iconTheme: IconThemeData(color: colors.onHeader),
+        actionsIconTheme: IconThemeData(color: colors.onHeader),
+        systemOverlayStyle: headerOverlayStyle(colors),
         titleTextStyle: GoogleFonts.inter(
-          color: colors.foreground50,
+          color: colors.onHeader,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
@@ -57,12 +78,17 @@ class AppTheme {
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: colors.background950,
+        backgroundColor: colors.header,
+        foregroundColor: colors.onHeader,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
-        iconTheme: IconThemeData(color: colors.foreground50),
+        iconTheme: IconThemeData(color: colors.onHeader),
+        actionsIconTheme: IconThemeData(color: colors.onHeader),
+        systemOverlayStyle: headerOverlayStyle(colors),
         titleTextStyle: GoogleFonts.inter(
-          color: colors.foreground50,
+          color: colors.onHeader,
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),

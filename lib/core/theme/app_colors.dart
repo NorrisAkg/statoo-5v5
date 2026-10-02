@@ -25,6 +25,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.danger,
     required this.warning,
     required this.gold,
+    required this.header,
+    required this.onHeader,
   });
 
   final Color background950;
@@ -56,6 +58,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color warning;
   final Color gold;
 
+  /// App bar background and the foreground drawn on it.
+  final Color header;
+  final Color onHeader;
+
   @override
   AppColorsExtension copyWith({
     Color? background950,
@@ -81,6 +87,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? danger,
     Color? warning,
     Color? gold,
+    Color? header,
+    Color? onHeader,
   }) {
     return AppColorsExtension(
       background950: background950 ?? this.background950,
@@ -106,6 +114,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       danger: danger ?? this.danger,
       warning: warning ?? this.warning,
       gold: gold ?? this.gold,
+      header: header ?? this.header,
+      onHeader: onHeader ?? this.onHeader,
     );
   }
 
@@ -136,6 +146,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       danger: Color.lerp(danger, other.danger, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       gold: Color.lerp(gold, other.gold, t)!,
+      header: Color.lerp(header, other.header, t)!,
+      onHeader: Color.lerp(onHeader, other.onHeader, t)!,
     );
   }
 }
@@ -173,10 +185,12 @@ class AppColors {
     danger: Color(0xFFEF4444),
     warning: Color(0xFFF59E0B),
     gold: Color(0xFFFFD700),
+    header: Color(0xFF0B0F14), // same as the page: cards provide the contrast
+    onHeader: Color(0xFFF8FAFC),
   );
 
   static const AppColorsExtension light = AppColorsExtension(
-    background950: Color(0xFFF8FAFC), // very light
+    background950: Color(0xFFE9EEF3), // light grey so white cards and the header stand out
     background900: Color(0xFFFFFFFF), // pure white for cards
     background800: Color(0xFFF1F5F9),
     background700: Color(0xFFE2E8F0),
@@ -199,5 +213,7 @@ class AppColors {
     danger: Color(0xFFB91C1C),
     warning: Color(0xFFB45309),
     gold: Color(0xFFD97706), // Warm darker golden orange for white background
+    header: Color(0xFF15803D), // brand green, extends under the status bar
+    onHeader: Color(0xFFFFFFFF),
   );
 }

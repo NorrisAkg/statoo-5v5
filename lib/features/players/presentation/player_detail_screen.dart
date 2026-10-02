@@ -94,7 +94,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               ),
               if (canDelete)
                 IconButton(
-                  icon: Icon(Remix.delete_bin_line, color: context.colors.danger),
+                  icon: const Icon(Remix.delete_bin_line),
                   tooltip: 'Supprimer le joueur',
                   onPressed: () => unawaited(_confirmDelete(context, ref, player)),
                 ),
