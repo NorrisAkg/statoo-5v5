@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/core/widgets/app_card.dart';
+import 'package:statoo/core/widgets/soccer_shoe_icon.dart';
 import 'package:statoo/features/home/presentation/home_screen.dart';
 import 'package:statoo/features/players/application/players_provider.dart';
 import 'package:statoo/features/players/domain/player.dart';
@@ -125,10 +127,14 @@ void main() {
       final seancesTile = find.ancestor(of: find.text('Séances'), matching: find.byType(AppCard));
       expect(find.descendant(of: seancesTile, matching: find.text('3')), findsOneWidget);
 
-      // Check Stats tile: must display total goals and assists "18 B · 12 P" instead of "-"
+      // Check Stats tile: must display football and soccer shoe icons with values 18 and 12
       final statsTile = find.ancestor(of: find.text('Stats'), matching: find.byType(AppCard));
-      expect(find.descendant(of: statsTile, matching: find.text('18 B · 12 P')), findsOneWidget);
+      expect(find.descendant(of: statsTile, matching: find.byIcon(Remix.football_line)), findsOneWidget);
+      expect(find.descendant(of: statsTile, matching: find.byType(SoccerShoeIcon)), findsOneWidget);
+      expect(find.descendant(of: statsTile, matching: find.text('18')), findsOneWidget);
+      expect(find.descendant(of: statsTile, matching: find.text('12')), findsOneWidget);
       expect(find.descendant(of: statsTile, matching: find.text('-')), findsNothing);
+      expect(find.descendant(of: statsTile, matching: find.text('18 B · 12 P')), findsNothing);
     });
   });
 }

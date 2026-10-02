@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/core/widgets/app_card.dart';
+import 'package:statoo/core/widgets/soccer_shoe_icon.dart';
 import 'package:statoo/features/home/presentation/home_screen.dart';
 import 'package:statoo/features/ranking/application/ranking_providers.dart';
 import 'package:statoo/features/ranking/domain/mvp_entry.dart';
@@ -57,7 +58,8 @@ void main() {
 
       // Icons must be used instead of text labels within the MVP card
       expect(find.descendant(of: mvpCard, matching: find.byIcon(Remix.football_line)), findsOneWidget);
-      expect(find.descendant(of: mvpCard, matching: find.byIcon(Remix.footprint_line)), findsOneWidget);
+      expect(find.descendant(of: mvpCard, matching: find.byType(SoccerShoeIcon)), findsOneWidget);
+      expect(find.descendant(of: mvpCard, matching: find.byIcon(Remix.footprint_line)), findsNothing);
       expect(find.descendant(of: mvpCard, matching: find.byIcon(Remix.calendar_event_line)), findsOneWidget);
       expect(find.descendant(of: mvpCard, matching: find.text('5')), findsOneWidget); // goals
       expect(find.descendant(of: mvpCard, matching: find.text('2')), findsOneWidget); // assists

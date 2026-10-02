@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../application/ranking_providers.dart';
@@ -20,10 +21,7 @@ class StandingsScreen extends ConsumerWidget {
     final viewMode = ref.watch(standingsViewModeProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Classement'),
-        centerTitle: false,
-      ),
+      appBar: AppBar(title: const Text('Classement'), centerTitle: false),
       body: Column(
         children: [
           Padding(
@@ -108,7 +106,9 @@ class _ViewModeSwitcher extends ConsumerWidget {
             Icon(
               icon,
               size: 16,
-              color: isSelected ? context.colors.background950 : context.colors.foreground400,
+              color: isSelected
+                  ? context.colors.background950
+                  : context.colors.foreground400,
             ),
             const SizedBox(width: 6),
             Text(
@@ -116,7 +116,9 @@ class _ViewModeSwitcher extends ConsumerWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
-                color: isSelected ? context.colors.background950 : context.colors.foreground400,
+                color: isSelected
+                    ? context.colors.background950
+                    : context.colors.foreground400,
               ),
             ),
           ],
@@ -142,8 +144,14 @@ class _ChampionshipView extends StatelessWidget {
             indicatorWeight: 3,
             labelColor: context.colors.primary500,
             unselectedLabelColor: context.colors.foreground500,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+            ),
             tabs: const [
               Tab(text: 'Points'),
               Tab(text: 'Pts / Match'),
@@ -246,7 +254,8 @@ class _PointsTab extends ConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                        if (entry.nickname != null &&
+                            entry.nickname!.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Text(
                             '« ${entry.nickname} »',
@@ -262,11 +271,16 @@ class _PointsTab extends ConsumerWidget {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: context.colors.background800,
                             borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: context.colors.background700),
+                            border: Border.all(
+                              color: context.colors.background700,
+                            ),
                           ),
                           child: Text(
                             'J ${entry.matchesPlayed}',
@@ -312,7 +326,11 @@ class _PointsTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 4),
-              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+              Icon(
+                Remix.arrow_right_s_line,
+                color: context.colors.foreground500,
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -346,7 +364,11 @@ class _PointsPerMatchTab extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             children: [
-              _buildEligibilityInfoBanner(context, requiredMatches, totalSessions),
+              _buildEligibilityInfoBanner(
+                context,
+                requiredMatches,
+                totalSessions,
+              ),
               const SizedBox(height: 12),
               if (eligibleList.isNotEmpty) ...[
                 Text(
@@ -358,13 +380,19 @@ class _PointsPerMatchTab extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                ...eligibleList.map((entry) => _buildEligibleCard(context, entry)),
+                ...eligibleList.map(
+                  (entry) => _buildEligibleCard(context, entry),
+                ),
               ],
               if (ineligibleList.isNotEmpty) ...[
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Icon(Remix.error_warning_line, color: context.colors.warning, size: 14),
+                    Icon(
+                      Remix.error_warning_line,
+                      color: context.colors.warning,
+                      size: 14,
+                    ),
                     const SizedBox(width: 6),
                     Text(
                       'MOINS DE 50% DE PRÉSENCE (${ineligibleList.length})',
@@ -377,7 +405,9 @@ class _PointsPerMatchTab extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                ...ineligibleList.map((entry) => _buildIneligibleCard(context, entry)),
+                ...ineligibleList.map(
+                  (entry) => _buildIneligibleCard(context, entry),
+                ),
               ],
             ],
           );
@@ -392,17 +422,27 @@ class _PointsPerMatchTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildEligibilityInfoBanner(BuildContext context, int requiredMatches, int totalSessions) {
+  Widget _buildEligibilityInfoBanner(
+    BuildContext context,
+    int requiredMatches,
+    int totalSessions,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: context.colors.primary500.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.colors.primary500.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: context.colors.primary500.withValues(alpha: 0.2),
+        ),
       ),
       child: Row(
         children: [
-          Icon(Remix.information_line, color: context.colors.primary400, size: 20),
+          Icon(
+            Remix.information_line,
+            color: context.colors.primary400,
+            size: 20,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -489,7 +529,11 @@ class _PointsPerMatchTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 4),
-              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+              Icon(
+                Remix.arrow_right_s_line,
+                color: context.colors.foreground500,
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -497,7 +541,10 @@ class _PointsPerMatchTab extends ConsumerWidget {
     );
   }
 
-  Widget _buildIneligibleCard(BuildContext context, StandingPerMatchEntry entry) {
+  Widget _buildIneligibleCard(
+    BuildContext context,
+    StandingPerMatchEntry entry,
+  ) {
     final avatarColor = _getPlayerColor(context, entry.playerId);
 
     return Padding(
@@ -551,9 +598,14 @@ class _PointsPerMatchTab extends ConsumerWidget {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
-                              color: context.colors.warning.withValues(alpha: 0.15),
+                              color: context.colors.warning.withValues(
+                                alpha: 0.15,
+                              ),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -600,7 +652,11 @@ class _PointsPerMatchTab extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(width: 4),
-                Icon(Remix.arrow_right_s_line, color: context.colors.foreground600, size: 20),
+                Icon(
+                  Remix.arrow_right_s_line,
+                  color: context.colors.foreground600,
+                  size: 20,
+                ),
               ],
             ),
           ),
@@ -696,7 +752,11 @@ class _ScorersTab extends ConsumerWidget {
               const SizedBox(width: 8),
               Row(
                 children: [
-                  Icon(Remix.football_line, color: context.colors.primary400, size: 18),
+                  Icon(
+                    Remix.football_line,
+                    color: context.colors.primary400,
+                    size: 18,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     '${entry.goals}',
@@ -709,7 +769,11 @@ class _ScorersTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 8),
-              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+              Icon(
+                Remix.arrow_right_s_line,
+                color: context.colors.foreground500,
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -732,7 +796,10 @@ class _AssistsTab extends ConsumerWidget {
       child: assistsAsync.when(
         data: (assists) {
           if (assists.isEmpty) {
-            return _buildEmptyState(context, 'Aucune passe décisive enregistrée');
+            return _buildEmptyState(
+              context,
+              'Aucune passe décisive enregistrée',
+            );
           }
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -804,7 +871,11 @@ class _AssistsTab extends ConsumerWidget {
               const SizedBox(width: 8),
               Row(
                 children: [
-                  Icon(Remix.magic_line, color: context.colors.accent400, size: 18),
+                  Icon(
+                    Remix.magic_line,
+                    color: context.colors.accent400,
+                    size: 18,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     '${entry.assists}',
@@ -817,7 +888,11 @@ class _AssistsTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 8),
-              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+              Icon(
+                Remix.arrow_right_s_line,
+                color: context.colors.foreground500,
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -848,7 +923,8 @@ class _CardsTab extends ConsumerWidget {
                   context,
                   label: 'Tous',
                   isSelected: activeFilter == 'all',
-                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'all',
+                  onTap: () =>
+                      ref.read(cardsFilterProvider.notifier).filter = 'all',
                 ),
                 const SizedBox(width: 8),
                 _buildFilterChip(
@@ -856,7 +932,8 @@ class _CardsTab extends ConsumerWidget {
                   label: 'Cartons jaunes',
                   cardColor: context.colors.card,
                   isSelected: activeFilter == 'yellow',
-                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'yellow',
+                  onTap: () =>
+                      ref.read(cardsFilterProvider.notifier).filter = 'yellow',
                 ),
                 const SizedBox(width: 8),
                 _buildFilterChip(
@@ -864,7 +941,8 @@ class _CardsTab extends ConsumerWidget {
                   label: 'Cartons rouges',
                   cardColor: context.colors.danger,
                   isSelected: activeFilter == 'red',
-                  onTap: () => ref.read(cardsFilterProvider.notifier).filter = 'red',
+                  onTap: () =>
+                      ref.read(cardsFilterProvider.notifier).filter = 'red',
                 ),
               ],
             ),
@@ -876,7 +954,10 @@ class _CardsTab extends ConsumerWidget {
                   return _buildEmptyState(context, 'Aucun carton enregistré');
                 }
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   itemCount: cards.length,
                   itemBuilder: (context, index) {
                     final entry = cards[index];
@@ -885,11 +966,14 @@ class _CardsTab extends ConsumerWidget {
                 );
               },
               loading: () => Center(
-                child: CircularProgressIndicator(color: context.colors.primary500),
+                child: CircularProgressIndicator(
+                  color: context.colors.primary500,
+                ),
               ),
-              error: (err, stack) => _buildErrorState(context, err.toString(), () {
-                ref.invalidate(topCardsProvider);
-              }),
+              error: (err, stack) =>
+                  _buildErrorState(context, err.toString(), () {
+                    ref.invalidate(topCardsProvider);
+                  }),
             ),
           ),
         ],
@@ -906,8 +990,8 @@ class _CardsTab extends ConsumerWidget {
   }) {
     final bg = isSelected
         ? (cardColor != null
-            ? cardColor.withValues(alpha: 0.18)
-            : context.colors.primary500.withValues(alpha: 0.18))
+              ? cardColor.withValues(alpha: 0.18)
+              : context.colors.primary500.withValues(alpha: 0.18))
         : context.colors.background800;
     final borderColor = isSelected
         ? (cardColor ?? context.colors.primary500)
@@ -995,7 +1079,8 @@ class _CardsTab extends ConsumerWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                        if (entry.nickname != null &&
+                            entry.nickname!.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Text(
                             '« ${entry.nickname} »',
@@ -1036,7 +1121,11 @@ class _CardsTab extends ConsumerWidget {
                 ],
               ),
               const SizedBox(width: 8),
-              Icon(Remix.arrow_right_s_line, color: context.colors.foreground500, size: 20),
+              Icon(
+                Remix.arrow_right_s_line,
+                color: context.colors.foreground500,
+                size: 20,
+              ),
             ],
           ),
         ),
@@ -1053,10 +1142,14 @@ class _CardsTab extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
       decoration: BoxDecoration(
-        color: hasCards ? color.withValues(alpha: 0.15) : context.colors.background800,
+        color: hasCards
+            ? color.withValues(alpha: 0.15)
+            : context.colors.background800,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: hasCards ? color.withValues(alpha: 0.4) : context.colors.background700,
+          color: hasCards
+              ? color.withValues(alpha: 0.4)
+              : context.colors.background700,
         ),
       ),
       child: Row(
@@ -1138,7 +1231,9 @@ class _MonthSelectorBar extends ConsumerWidget {
                   selected: selectedMonth == null,
                   onSelected: (selected) {
                     if (selected) {
-                      ref.read(selectedRankingMonthProvider.notifier).selectMonth(null);
+                      ref
+                          .read(selectedRankingMonthProvider.notifier)
+                          .selectMonth(null);
                     }
                   },
                 ),
@@ -1150,7 +1245,9 @@ class _MonthSelectorBar extends ConsumerWidget {
                     label: Text(_formatMonth(month)),
                     selected: selectedMonth == month,
                     onSelected: (selected) {
-                      ref.read(selectedRankingMonthProvider.notifier).selectMonth(selected ? month : null);
+                      ref
+                          .read(selectedRankingMonthProvider.notifier)
+                          .selectMonth(selected ? month : null);
                     },
                   ),
                 ),
@@ -1184,11 +1281,17 @@ class _MvpView extends ConsumerWidget {
             child: mvpAsync.when(
               data: (entries) {
                 if (entries.isEmpty) {
-                  return _buildEmptyState(context, 'Aucune donnée MVP pour cette période');
+                  return _buildEmptyState(
+                    context,
+                    'Aucune donnée MVP pour cette période',
+                  );
                 }
 
                 return ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   children: [
                     for (final entry in entries) _buildMvpCard(context, entry),
                     const SizedBox(height: 16),
@@ -1197,11 +1300,14 @@ class _MvpView extends ConsumerWidget {
                 );
               },
               loading: () => Center(
-                child: CircularProgressIndicator(color: context.colors.primary500),
+                child: CircularProgressIndicator(
+                  color: context.colors.primary500,
+                ),
               ),
-              error: (err, stack) => _buildErrorState(context, err.toString(), () {
-                ref.invalidate(monthlyMvpRankingProvider);
-              }),
+              error: (err, stack) =>
+                  _buildErrorState(context, err.toString(), () {
+                    ref.invalidate(monthlyMvpRankingProvider);
+                  }),
             ),
           ),
         ),
@@ -1222,7 +1328,11 @@ class _MvpView extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Icon(Remix.information_line, size: 16, color: context.colors.primary400),
+              Icon(
+                Remix.information_line,
+                size: 16,
+                color: context.colors.primary400,
+              ),
               const SizedBox(width: 6),
               const Text(
                 'Règles MVP & Éligibilité',
@@ -1236,7 +1346,11 @@ class _MvpView extends ConsumerWidget {
             '• Match : Victoire (+10 pts), Nul (+3 pts), Défaite (0 pt).\n'
             '• Actions : But (+2 pts), Passe décisive (+1 pt).\n'
             '• Fair-play : Carton jaune (-0.5 pt), Carton rouge (-1 pt).',
-            style: TextStyle(color: context.colors.foreground400, fontSize: 12, height: 1.4),
+            style: TextStyle(
+              color: context.colors.foreground400,
+              fontSize: 12,
+              height: 1.4,
+            ),
           ),
         ],
       ),
@@ -1249,8 +1363,8 @@ class _MvpView extends ConsumerWidget {
     final cardBorderColor = isTopEligible
         ? const Color(0xFFFFD700)
         : entry.isEligible
-            ? context.colors.background700
-            : context.colors.background800;
+        ? context.colors.background700
+        : context.colors.background800;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -1273,32 +1387,20 @@ class _MvpView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isTopEligible) ...[
-                Row(
+                const Row(
                   children: [
-                    const Icon(Remix.trophy_fill, color: Color(0xFFFFD700), size: 16),
-                    const SizedBox(width: 6),
-                    const Text(
+                    Icon(
+                      Remix.trophy_fill,
+                      color: Color(0xFFFFD700),
+                      size: 16,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
                       'Joueur du mois',
                       style: TextStyle(
                         color: Color(0xFFFFD700),
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFD700).withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'MVP',
-                        style: TextStyle(
-                          color: Color(0xFFFFD700),
-                          fontWeight: FontWeight.w900,
-                          fontSize: 11,
-                        ),
                       ),
                     ),
                   ],
@@ -1307,7 +1409,11 @@ class _MvpView extends ConsumerWidget {
               ] else if (!entry.isEligible) ...[
                 Row(
                   children: [
-                    Icon(Remix.information_line, color: context.colors.warning, size: 14),
+                    Icon(
+                      Remix.information_line,
+                      color: context.colors.warning,
+                      size: 14,
+                    ),
                     const SizedBox(width: 6),
                     Text(
                       'Non éligible · ${entry.missingMatches} match(s) manquant(s)',
@@ -1336,7 +1442,9 @@ class _MvpView extends ConsumerWidget {
                     child: Text(
                       '${entry.rank}',
                       style: TextStyle(
-                        color: isTopEligible ? const Color(0xFFFFD700) : context.colors.foreground400,
+                        color: isTopEligible
+                            ? const Color(0xFFFFD700)
+                            : context.colors.foreground400,
                         fontWeight: FontWeight.bold,
                         fontSize: 13,
                       ),
@@ -1344,7 +1452,9 @@ class _MvpView extends ConsumerWidget {
                   ),
                   const SizedBox(width: 10),
                   InitialAvatar(
-                    initial: entry.name.isNotEmpty ? entry.name[0].toUpperCase() : '?',
+                    initial: entry.name.isNotEmpty
+                        ? entry.name[0].toUpperCase()
+                        : '?',
                     baseColor: avatarColor,
                     size: 36,
                   ),
@@ -1358,22 +1468,32 @@ class _MvpView extends ConsumerWidget {
                             Flexible(
                               child: Text(
                                 entry.name,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                            if (entry.nickname != null &&
+                                entry.nickname!.isNotEmpty) ...[
                               const SizedBox(width: 4),
                               Text(
                                 '« ${entry.nickname} »',
-                                style: TextStyle(color: context.colors.foreground500, fontSize: 12),
+                                style: TextStyle(
+                                  color: context.colors.foreground500,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ],
                         ),
                         Text(
                           '${entry.matchesPlayed}/${entry.totalSessions} MJ · ${entry.wins}V ${entry.draws}N ${entry.losses}D',
-                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                          style: TextStyle(
+                            color: context.colors.foreground500,
+                            fontSize: 11,
+                          ),
                         ),
                       ],
                     ),
@@ -1386,12 +1506,17 @@ class _MvpView extends ConsumerWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 16,
-                          color: isTopEligible ? const Color(0xFFFFD700) : context.colors.primary400,
+                          color: isTopEligible
+                              ? const Color(0xFFFFD700)
+                              : context.colors.primary400,
                         ),
                       ),
                       Text(
                         '${entry.goals} B · ${entry.assists} P · ${entry.yellowCards}J/${entry.redCards}R',
-                        style: TextStyle(color: context.colors.foreground500, fontSize: 10),
+                        style: TextStyle(
+                          color: context.colors.foreground500,
+                          fontSize: 10,
+                        ),
                       ),
                     ],
                   ),
@@ -1440,7 +1565,11 @@ Widget _buildRankBadge(BuildContext context, int rank) {
         color: context.colors.foreground300.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
-      child: Icon(Remix.medal_fill, color: context.colors.foreground300, size: 16),
+      child: Icon(
+        Remix.medal_fill,
+        color: context.colors.foreground300,
+        size: 16,
+      ),
     );
   } else if (rank == 3) {
     return Container(
@@ -1451,7 +1580,11 @@ Widget _buildRankBadge(BuildContext context, int rank) {
         color: context.colors.secondary500.withValues(alpha: 0.15),
         shape: BoxShape.circle,
       ),
-      child: Icon(Remix.medal_fill, color: context.colors.secondary500, size: 16),
+      child: Icon(
+        Remix.medal_fill,
+        color: context.colors.secondary500,
+        size: 16,
+      ),
     );
   }
   return Container(
@@ -1481,7 +1614,11 @@ Widget _buildEmptyState(BuildContext context, String message) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Remix.trophy_line, size: 56, color: context.colors.foreground500),
+                Icon(
+                  Remix.trophy_line,
+                  size: 56,
+                  color: context.colors.foreground500,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   message,
@@ -1500,7 +1637,11 @@ Widget _buildEmptyState(BuildContext context, String message) {
   );
 }
 
-Widget _buildErrorState(BuildContext context, String error, VoidCallback onRetry) {
+Widget _buildErrorState(
+  BuildContext context,
+  String error,
+  VoidCallback onRetry,
+) {
   return LayoutBuilder(
     builder: (context, constraints) {
       return ListView(
@@ -1513,7 +1654,11 @@ Widget _buildErrorState(BuildContext context, String error, VoidCallback onRetry
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Remix.error_warning_line, size: 48, color: context.colors.danger),
+                Icon(
+                  Remix.error_warning_line,
+                  size: 48,
+                  color: context.colors.danger,
+                ),
                 const SizedBox(height: 12),
                 Text(
                   'Erreur lors du chargement',

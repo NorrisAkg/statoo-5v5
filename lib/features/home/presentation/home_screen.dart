@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../../core/widgets/soccer_shoe_icon.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
@@ -42,19 +44,30 @@ class HomeScreen extends ConsumerWidget {
                     color: context.colors.primary500.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(Remix.shield_user_line, size: 16, color: context.colors.primary500),
+                  child: Icon(
+                    Remix.shield_user_line,
+                    size: 16,
+                    color: context.colors.primary500,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 180),
                   child: Text(
                     activeTeam?.name ?? 'Mon groupe',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(width: 4),
-                Icon(Remix.arrow_down_s_line, size: 18, color: context.colors.foreground400),
+                Icon(
+                  Remix.arrow_down_s_line,
+                  size: 18,
+                  color: context.colors.foreground400,
+                ),
               ],
             ),
           ),
@@ -70,7 +83,11 @@ class HomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildSessionHeader(context, activeDraftAsync.value, sessionsAsync.value),
+          _buildSessionHeader(
+            context,
+            activeDraftAsync.value,
+            sessionsAsync.value,
+          ),
           const SizedBox(height: 16),
           PrimaryButton(
             label: 'Nouvelle séance',
@@ -98,7 +115,10 @@ class HomeScreen extends ConsumerWidget {
   ) {
     // 1. If active draft session exists, show active session banner
     if (activeDraft != null) {
-      final playedAtStr = DateFormat("EEE d MMM · HH'h'mm", 'fr_FR').format(activeDraft.playedAt);
+      final playedAtStr = DateFormat(
+        "EEE d MMM · HH'h'mm",
+        'fr_FR',
+      ).format(activeDraft.playedAt);
 
       return AppCard(
         child: Column(
@@ -125,7 +145,10 @@ class HomeScreen extends ConsumerWidget {
                 const Spacer(),
                 Text(
                   playedAtStr,
-                  style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                  style: TextStyle(
+                    color: context.colors.foreground400,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -133,16 +156,46 @@ class HomeScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Équipe A', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.bold)),
+                Text(
+                  'Équipe A',
+                  style: TextStyle(
+                    color: context.colors.accent400,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(width: 12),
-                Text('${activeDraft.scoreA ?? 0}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
+                Text(
+                  '${activeDraft.scoreA ?? 0}',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('-', style: TextStyle(fontSize: 28, color: context.colors.foreground600)),
+                  child: Text(
+                    '-',
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: context.colors.foreground600,
+                    ),
+                  ),
                 ),
-                Text('${activeDraft.scoreB ?? 0}', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900)),
+                Text(
+                  '${activeDraft.scoreB ?? 0}',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 const SizedBox(width: 12),
-                Text('Équipe B', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.bold)),
+                Text(
+                  'Équipe B',
+                  style: TextStyle(
+                    color: context.colors.secondary400,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -153,8 +206,12 @@ class HomeScreen extends ConsumerWidget {
                 label: const Text('Reprendre le match en direct'),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: context.colors.warning,
-                  side: BorderSide(color: context.colors.warning.withValues(alpha: 0.5)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  side: BorderSide(
+                    color: context.colors.warning.withValues(alpha: 0.5),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 onPressed: () => context.push('/seances/${activeDraft.id}'),
@@ -177,27 +234,74 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  Icon(Remix.check_double_line, size: 16, color: context.colors.primary500),
+                  Icon(
+                    Remix.check_double_line,
+                    size: 16,
+                    color: context.colors.primary500,
+                  ),
                   const SizedBox(width: 6),
-                  Text('Dernière séance', style: TextStyle(color: context.colors.primary400, fontWeight: FontWeight.bold, fontSize: 13)),
+                  Text(
+                    'Dernière séance',
+                    style: TextStyle(
+                      color: context.colors.primary400,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
                   const Spacer(),
-                  Text(recentClosed.formattedDateTime, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
+                  Text(
+                    recentClosed.formattedDateTime,
+                    style: TextStyle(
+                      color: context.colors.foreground400,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Équipe A', style: TextStyle(color: context.colors.accent400, fontWeight: FontWeight.w600)),
+                  Text(
+                    'Équipe A',
+                    style: TextStyle(
+                      color: context.colors.accent400,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(width: 12),
-                  Text('${s.scoreA ?? 0}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+                  Text(
+                    '${s.scoreA ?? 0}',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('-', style: TextStyle(fontSize: 24, color: context.colors.foreground600)),
+                    child: Text(
+                      '-',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: context.colors.foreground600,
+                      ),
+                    ),
                   ),
-                  Text('${s.scoreB ?? 0}', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+                  Text(
+                    '${s.scoreB ?? 0}',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                   const SizedBox(width: 12),
-                  Text('Équipe B', style: TextStyle(color: context.colors.secondary400, fontWeight: FontWeight.w600)),
+                  Text(
+                    'Équipe B',
+                    style: TextStyle(
+                      color: context.colors.secondary400,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -210,11 +314,16 @@ class HomeScreen extends ConsumerWidget {
     return AppCard(
       child: Column(
         children: [
-          Icon(Remix.football_line, size: 48, color: context.colors.primary500.withValues(alpha: 0.5)),
+          Icon(
+            Remix.football_line,
+            size: 48,
+            color: context.colors.primary500.withValues(alpha: 0.5),
+          ),
           const SizedBox(height: 16),
           Text(
             'Aucune séance pour le moment',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
@@ -228,8 +337,18 @@ class HomeScreen extends ConsumerWidget {
   }
 
   static const _frenchMonths = [
-    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
   ];
 
   static String _formatMonthLabel(String? monthStr) {
@@ -256,7 +375,9 @@ class HomeScreen extends ConsumerWidget {
             return AppCard(
               child: InkWell(
                 onTap: () {
-                  ref.read(standingsViewModeProvider.notifier).selectMode(StandingsViewMode.mvp);
+                  ref
+                      .read(standingsViewModeProvider.notifier)
+                      .selectMode(StandingsViewMode.mvp);
                   context.go('/classement');
                 },
                 borderRadius: BorderRadius.circular(16),
@@ -269,7 +390,11 @@ class HomeScreen extends ConsumerWidget {
                         color: const Color(0xFFFFD700).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Remix.trophy_line, color: Color(0xFFFFD700), size: 22),
+                      child: const Icon(
+                        Remix.trophy_line,
+                        color: Color(0xFFFFD700),
+                        size: 22,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -287,12 +412,19 @@ class HomeScreen extends ConsumerWidget {
                           const SizedBox(height: 2),
                           Text(
                             'En attente des séances · Aucun MVP désigné',
-                            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                            style: TextStyle(
+                              color: context.colors.foreground400,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Icon(Remix.arrow_right_s_line, size: 20, color: context.colors.foreground500),
+                    Icon(
+                      Remix.arrow_right_s_line,
+                      size: 20,
+                      color: context.colors.foreground500,
+                    ),
                   ],
                 ),
               ),
@@ -304,7 +436,9 @@ class HomeScreen extends ConsumerWidget {
           return AppCard(
             child: InkWell(
               onTap: () {
-                ref.read(standingsViewModeProvider.notifier).selectMode(StandingsViewMode.mvp);
+                ref
+                    .read(standingsViewModeProvider.notifier)
+                    .selectMode(StandingsViewMode.mvp);
                 context.go('/classement');
               },
               borderRadius: BorderRadius.circular(16),
@@ -313,10 +447,16 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(Remix.trophy_fill, color: Color(0xFFFFD700), size: 18),
+                      const Icon(
+                        Remix.trophy_fill,
+                        color: Color(0xFFFFD700),
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
                       Text(
-                        monthLabel.isNotEmpty ? 'Joueur du mois · $monthLabel' : 'Joueur du mois',
+                        monthLabel.isNotEmpty
+                            ? 'Joueur du mois · $monthLabel'
+                            : 'Joueur du mois',
                         style: const TextStyle(
                           color: Color(0xFFFFD700),
                           fontWeight: FontWeight.bold,
@@ -325,14 +465,21 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       const Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFD700).withValues(alpha: 0.15),
+                          color: const Color(0xFFFFD700)
+                              .withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: const Color(0xFFFFD700)
+                                .withValues(alpha: 0.4),
+                          ),
                         ),
                         child: Text(
-                          '${mvp.score.toStringAsFixed(2)} pts / m',
+                          '${mvp.score.toStringAsFixed(2)} pts',
                           style: const TextStyle(
                             color: Color(0xFFFFD700),
                             fontWeight: FontWeight.bold,
@@ -346,7 +493,9 @@ class HomeScreen extends ConsumerWidget {
                   Row(
                     children: [
                       InitialAvatar(
-                        initial: mvp.name.isNotEmpty ? mvp.name[0].toUpperCase() : '?',
+                        initial: mvp.name.isNotEmpty
+                            ? mvp.name[0].toUpperCase()
+                            : '?',
                         baseColor: const Color(0xFFFFD700),
                         size: 40,
                       ),
@@ -367,11 +516,15 @@ class HomeScreen extends ConsumerWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (mvp.nickname != null && mvp.nickname!.isNotEmpty) ...[
+                                if (mvp.nickname != null &&
+                                    mvp.nickname!.isNotEmpty) ...[
                                   const SizedBox(width: 4),
                                   Text(
                                     '« ${mvp.nickname} »',
-                                    style: TextStyle(color: context.colors.foreground500, fontSize: 13),
+                                    style: TextStyle(
+                                      color: context.colors.foreground500,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ],
                               ],
@@ -393,7 +546,10 @@ class HomeScreen extends ConsumerWidget {
                                   color: context.colors.primary400,
                                 ),
                                 _buildStatIconCount(
-                                  icon: Remix.footprint_line,
+                                  customIcon: SoccerShoeIcon(
+                                    size: 13,
+                                    color: context.colors.secondary400,
+                                  ),
                                   count: mvp.assists,
                                   color: context.colors.secondary400,
                                 ),
@@ -410,7 +566,11 @@ class HomeScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      Icon(Remix.arrow_right_s_line, size: 20, color: context.colors.foreground500),
+                      Icon(
+                        Remix.arrow_right_s_line,
+                        size: 20,
+                        color: context.colors.foreground500,
+                      ),
                     ],
                   ),
                 ],
@@ -418,20 +578,24 @@ class HomeScreen extends ConsumerWidget {
             ),
           );
         },
-      orElse: () => const SizedBox.shrink(),
-    ),
-  );
-}
+        orElse: () => const SizedBox.shrink(),
+      ),
+    );
+  }
 
   Widget _buildStatIconCount({
-    required IconData icon,
     required int count,
     required Color color,
+    IconData? icon,
+    Widget? customIcon,
   }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 13, color: color),
+        if (customIcon != null)
+          customIcon
+        else if (icon != null)
+          Icon(icon, size: 13, color: color),
         const SizedBox(width: 4),
         Text(
           '$count',
@@ -445,10 +609,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCardBadge({
-    required Color color,
-    required int count,
-  }) {
+  Widget _buildCardBadge({required Color color, required int count}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -480,7 +641,14 @@ class HomeScreen extends ConsumerWidget {
         Text(title, style: Theme.of(context).textTheme.titleMedium),
         GestureDetector(
           onTap: () => context.go(route),
-          child: Text('Voir tout', style: TextStyle(color: context.colors.primary400, fontSize: 14, fontWeight: FontWeight.w600)),
+          child: Text(
+            'Voir tout',
+            style: TextStyle(
+              color: context.colors.primary400,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ],
     );
@@ -500,7 +668,10 @@ class HomeScreen extends ConsumerWidget {
       ),
       error: (_, _) => _buildEmptyRanking(context),
       data: (standings) {
-        final playedStandings = standings.where((s) => s.matchesPlayed > 0).take(3).toList();
+        final playedStandings = standings
+            .where((s) => s.matchesPlayed > 0)
+            .take(3)
+            .toList();
         if (playedStandings.isEmpty) {
           return _buildEmptyRanking(context);
         }
@@ -519,12 +690,16 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHomeStandingRow(BuildContext context, StandingEntry entry, int rank) {
+  Widget _buildHomeStandingRow(
+    BuildContext context,
+    StandingEntry entry,
+    int rank,
+  ) {
     final rankColor = rank == 1
         ? const Color(0xFFFFD700)
         : rank == 2
-            ? const Color(0xFFC0C0C0)
-            : const Color(0xFFCD7F32);
+        ? const Color(0xFFC0C0C0)
+        : const Color(0xFFCD7F32);
 
     return InkWell(
       onTap: () => context.go('/classement'),
@@ -553,7 +728,9 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(width: 10),
             InitialAvatar(
-              initial: entry.name.isNotEmpty ? entry.name[0].toUpperCase() : '?',
+              initial: entry.name.isNotEmpty
+                  ? entry.name[0].toUpperCase()
+                  : '?',
               baseColor: context.colors.foreground300,
               size: 28,
             ),
@@ -567,22 +744,32 @@ class HomeScreen extends ConsumerWidget {
                       Flexible(
                         child: Text(
                           entry.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      if (entry.nickname != null && entry.nickname!.isNotEmpty) ...[
+                      if (entry.nickname != null &&
+                          entry.nickname!.isNotEmpty) ...[
                         const SizedBox(width: 4),
                         Text(
                           '« ${entry.nickname} »',
-                          style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                          style: TextStyle(
+                            color: context.colors.foreground500,
+                            fontSize: 11,
+                          ),
                         ),
                       ],
                     ],
                   ),
                   Text(
                     '${entry.matchesPlayed} MJ · ${entry.wins}V ${entry.draws}N ${entry.losses}D',
-                    style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                    style: TextStyle(
+                      color: context.colors.foreground500,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),
@@ -600,7 +787,10 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 Text(
                   '${entry.goals} buts',
-                  style: TextStyle(color: context.colors.foreground500, fontSize: 11),
+                  style: TextStyle(
+                    color: context.colors.foreground500,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -617,17 +807,27 @@ class HomeScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Column(
             children: [
-              Icon(Remix.medal_line, size: 32, color: context.colors.foreground600),
+              Icon(
+                Remix.medal_line,
+                size: 32,
+                color: context.colors.foreground600,
+              ),
               const SizedBox(height: 8),
               Text(
                 'Le classement est vide',
-                style: TextStyle(color: context.colors.foreground400, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: context.colors.foreground400,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 "Clôturez une séance classée pour l'alimenter.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: context.colors.foreground500, fontSize: 12),
+                style: TextStyle(
+                  color: context.colors.foreground500,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -650,9 +850,29 @@ class HomeScreen extends ConsumerWidget {
     );
 
     final groupTotalsAsync = ref.watch(groupTotalsProvider);
-    final statsCount = groupTotalsAsync.maybeWhen(
-      data: (totals) => '${totals.totalGoals} B · ${totals.totalAssists} P',
-      orElse: () => '-',
+    final statsWidget = groupTotalsAsync.maybeWhen(
+      data: (totals) => Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Remix.football_line, size: 16, color: context.colors.primary400),
+          const SizedBox(width: 4),
+          Text(
+            '${totals.totalGoals}',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(width: 8),
+          SoccerShoeIcon(size: 16, color: context.colors.secondary400),
+          const SizedBox(width: 4),
+          Text(
+            '${totals.totalAssists}',
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+      orElse: () => const Text(
+        '-',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
     );
 
     return Row(
@@ -662,7 +882,7 @@ class HomeScreen extends ConsumerWidget {
             context,
             Remix.user_line,
             'Joueurs',
-            playersCount,
+            value: playersCount,
             onTap: () => context.go('/joueurs'),
           ),
         ),
@@ -672,7 +892,7 @@ class HomeScreen extends ConsumerWidget {
             context,
             Remix.calendar_event_line,
             'Séances',
-            sessionsCount,
+            value: sessionsCount,
             onTap: () => context.go('/seances'),
           ),
         ),
@@ -682,7 +902,7 @@ class HomeScreen extends ConsumerWidget {
             context,
             Remix.pie_chart_line,
             'Stats',
-            statsCount,
+            customValue: statsWidget,
             onTap: () => context.go('/stats'),
           ),
         ),
@@ -693,8 +913,9 @@ class HomeScreen extends ConsumerWidget {
   Widget _buildTile(
     BuildContext context,
     IconData icon,
-    String title,
-    String value, {
+    String title, {
+    String? value,
+    Widget? customValue,
     VoidCallback? onTap,
   }) {
     return AppCard(
@@ -709,18 +930,32 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Icon(icon, color: context.colors.primary500, size: 24),
               const SizedBox(height: 12),
-              Text(title, style: TextStyle(color: context.colors.foreground400, fontSize: 12)),
-              if (value.isNotEmpty) ...[
-                const SizedBox(height: 2),
+              Text(
+                title,
+                style: TextStyle(
+                  color: context.colors.foreground400,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 2),
+              if (customValue != null)
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: customValue,
+                )
+              else if (value != null && value.isNotEmpty)
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
                   child: Text(
                     value,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ],
             ],
           ),
         ),
@@ -732,13 +967,27 @@ class HomeScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Remix.cloud_windy_line, color: context.colors.foreground500, size: 16),
+        Icon(
+          Remix.cloud_windy_line,
+          color: context.colors.foreground500,
+          size: 16,
+        ),
         const SizedBox(width: 8),
-        Text('Aucune sauvegarde cloud', style: TextStyle(color: context.colors.foreground500, fontSize: 12)),
+        Text(
+          'Aucune sauvegarde cloud',
+          style: TextStyle(color: context.colors.foreground500, fontSize: 12),
+        ),
         const SizedBox(width: 8),
         GestureDetector(
           onTap: () => context.push('/reglages'),
-          child: Text('Sauvegarder', style: TextStyle(color: context.colors.primary400, fontSize: 12, fontWeight: FontWeight.w600)),
+          child: Text(
+            'Sauvegarder',
+            style: TextStyle(
+              color: context.colors.primary400,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ],
     );
