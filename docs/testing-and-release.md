@@ -50,3 +50,7 @@ Projet Xcode et RunnerTests présents. Compilation/signature nécessitent macOS/
 Aucun pipeline .github ni Fastlane versionné trouvé. La distribution réelle reste à confirmer. Documenter pour chaque release : commit, SDK/dépendances, analyse/tests, certificat/profil, appareils vérifiés et compatibilité DB/backups. Un APK présent dans build ne prouve pas une validation.
 
 Sources : `ios/Runner/Info.plist`, `ios/Runner.xcodeproj/project.pbxproj`, `ios/RunnerTests/RunnerTests.swift`, `lib/features/players/presentation/new_player_bottom_sheet.dart`.
+
+## Vérification de la personnalisation des équipes
+
+Le test team_appearance_test.dart ajouté après l'inventaire initial porte le total à 32 fichiers. Il vérifie la migration additive v7 vers v8 (pas toute la chaîne onUpgrade), les doublons, les valeurs par défaut, la palette et la persistance via backup. Le formulaire réel vérifie le blocage du bouton sur noms/couleurs identiques. 90 tests séances/backup et ce nouveau scénario formulaire passent ; l'analyse ciblée base/séances est sans problème. La validation sur appareil reste distincte de ces tests.

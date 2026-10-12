@@ -15,8 +15,10 @@ import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
+import '../domain/team_appearance.dart';
 import 'add_late_players_bottom_sheet.dart';
 import 'session_header.dart';
+import 'session_team_colors.dart';
 
 class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
@@ -56,11 +58,16 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         actions: [
           sessionAsync.maybeWhen(
             data: (session) {
-              if (session == null) return const SizedBox.shrink();
+              if (session == null || session.status != SessionStatus.draft || session.id != activeSessionId) {
+                return const SizedBox.shrink();
+              }
+              final participants = participantsAsync.value;
               return IconButton(
-                icon: const Icon(Remix.delete_bin_line),
-                tooltip: 'Supprimer',
-                onPressed: () => unawaited(_confirmDelete(context, ref, session.status == SessionStatus.draft)),
+                icon: const Icon(Remix.stop_circle_line),
+                tooltip: 'Clôturer la séance',
+                onPressed: participants == null
+                    ? null
+                    : () => unawaited(_confirmClose(context, ref, session, participants)),
               );
             },
             orElse: () => const SizedBox.shrink(),
@@ -284,7 +291,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Remix.trophy_line, size: 16, color: context.colors.primary400),
+            Icon(Remix.trophy_line, size: 16, color: session.teamColor(context, Team.c)),
             const SizedBox(width: 6),
             Text(
               'Compteur de victoires',
@@ -302,10 +309,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTournamentTeamWinCard(
                 context,
-                title: 'Équipe A',
+                title: session.teamName(Team.a),
                 wins: session.winsA,
-                color: context.colors.accent500,
-                textColor: context.colors.accent400,
+                color: session.teamColor(context, Team.a),
+                textColor: session.teamColor(context, Team.a),
                 isLeader: session.winsA > 0 && session.winsA == maxWins,
                 isEditable: isCurrentActive,
                 onDecrement: session.winsA > 0 ? () => changeWins(a: session.winsA - 1) : null,
@@ -316,10 +323,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTournamentTeamWinCard(
                 context,
-                title: 'Équipe B',
+                title: session.teamName(Team.b),
                 wins: session.winsB,
-                color: context.colors.secondary500,
-                textColor: context.colors.secondary400,
+                color: session.teamColor(context, Team.b),
+                textColor: session.teamColor(context, Team.b),
                 isLeader: session.winsB > 0 && session.winsB == maxWins,
                 isEditable: isCurrentActive,
                 onDecrement: session.winsB > 0 ? () => changeWins(b: session.winsB - 1) : null,
@@ -330,10 +337,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTournamentTeamWinCard(
                 context,
-                title: 'Équipe C',
+                title: session.teamName(Team.c),
                 wins: session.winsC,
-                color: context.colors.primary500,
-                textColor: context.colors.primary400,
+                color: session.teamColor(context, Team.c),
+                textColor: session.teamColor(context, Team.c),
                 isLeader: session.winsC > 0 && session.winsC == maxWins,
                 isEditable: isCurrentActive,
                 onDecrement: session.winsC > 0 ? () => changeWins(c: session.winsC - 1) : null,
@@ -494,10 +501,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTeamTabButton(
                 context,
-                title: isTournament ? 'Éq. A' : 'Équipe A',
+                title: session.teamName(Team.a),
                 playerCount: teamAPlayers.length,
-                color: context.colors.accent500,
-                textColor: context.colors.accent400,
+                color: session.teamColor(context, Team.a),
+                textColor: session.teamColor(context, Team.a),
                 isSelected: _selectedTeamTab == Team.a,
                 onTap: () => setState(() => _selectedTeamTab = Team.a),
               ),
@@ -506,10 +513,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             Expanded(
               child: _buildTeamTabButton(
                 context,
-                title: isTournament ? 'Éq. B' : 'Équipe B',
+                title: session.teamName(Team.b),
                 playerCount: teamBPlayers.length,
-                color: context.colors.secondary500,
-                textColor: context.colors.secondary400,
+                color: session.teamColor(context, Team.b),
+                textColor: session.teamColor(context, Team.b),
                 isSelected: _selectedTeamTab == Team.b,
                 onTap: () => setState(() => _selectedTeamTab = Team.b),
               ),
@@ -519,10 +526,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               Expanded(
                 child: _buildTeamTabButton(
                   context,
-                  title: 'Éq. C',
+                  title: session.teamName(Team.c),
                   playerCount: teamCPlayers.length,
-                  color: context.colors.primary500,
-                  textColor: context.colors.primary400,
+                  color: session.teamColor(context, Team.c),
+                  textColor: session.teamColor(context, Team.c),
                   isSelected: _selectedTeamTab == Team.c,
                   onTap: () => setState(() => _selectedTeamTab = Team.c),
                 ),
@@ -539,8 +546,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   context,
                   ref,
                   session,
-                  'Équipe A',
-                  context.colors.accent500,
+                  session.teamName(Team.a),
+                  session.teamColor(context, Team.a),
                   Team.a,
                   teamAPlayers,
                   isCurrentActive,
@@ -551,8 +558,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       context,
                       ref,
                       session,
-                      'Équipe B',
-                      context.colors.secondary500,
+                      session.teamName(Team.b),
+                      session.teamColor(context, Team.b),
                       Team.b,
                       teamBPlayers,
                       isCurrentActive,
@@ -562,8 +569,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       context,
                       ref,
                       session,
-                      'Équipe C',
-                      context.colors.primary500,
+                      session.teamName(Team.c),
+                      session.teamColor(context, Team.c),
                       Team.c,
                       teamCPlayers,
                       isCurrentActive,
@@ -941,7 +948,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       icon: null,
                       isYellowCard: true,
                       value: yellowCards,
-                      maxValue: 2,
                       onChanged: (v) => setModalState(() => yellowCards = v),
                     ),
                     const SizedBox(height: 12),
@@ -951,7 +957,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       icon: null,
                       isRedCard: true,
                       value: redCards,
-                      maxValue: 1,
                       onChanged: (v) => setModalState(() => redCards = v),
                     ),
                     if (scoreImpact != null) ...[
@@ -1080,11 +1085,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     required IconData? icon,
     required int value,
     required ValueChanged<int> onChanged,
-    int? maxValue,
     bool isYellowCard = false,
     bool isRedCard = false,
   }) {
-    final canIncrement = maxValue == null || value < maxValue;
     return Row(
       children: [
         if (icon != null) ...[
@@ -1109,7 +1112,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           tooltip: 'Augmenter $label',
           icon: const Icon(Remix.add_line),
           color: context.colors.primary500,
-          onPressed: canIncrement ? () => onChanged(value + 1) : null,
+          onPressed: () => onChanged(value + 1),
         ),
       ],
     );

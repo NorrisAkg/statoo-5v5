@@ -5,6 +5,8 @@ import '../../../core/theme/app_colors.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_summary.dart';
+import '../domain/team_appearance.dart';
+import 'session_team_colors.dart';
 
 /// Scoreboard and scorers from this session's participations only.
 class SessionHeader extends StatelessWidget {
@@ -48,12 +50,12 @@ class SessionHeader extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 Color.alphaBlend(
-                  colors.accent500.withValues(alpha: 0.18),
+                  _teamColor(context, Team.a).withValues(alpha: 0.18),
                   colors.background900,
                 ),
                 colors.background900,
                 Color.alphaBlend(
-                  colors.secondary500.withValues(alpha: 0.18),
+                  _teamColor(context, Team.b).withValues(alpha: 0.18),
                   colors.background900,
                 ),
               ],
@@ -196,17 +198,9 @@ class SessionHeader extends StatelessWidget {
     );
   }
 
-  Color _teamColor(BuildContext context, Team team) => switch (team) {
-    Team.a => context.colors.accent500,
-    Team.b => context.colors.secondary500,
-    Team.c => context.colors.primary500,
-  };
+  Color _teamColor(BuildContext context, Team team) => session.teamColor(context, team);
 
-  String _teamName(Team team) => switch (team) {
-    Team.a => 'Équipe A',
-    Team.b => 'Équipe B',
-    Team.c => 'Équipe C',
-  };
+  String _teamName(Team team) => session.teamName(team);
 
   Widget _teamIdentity(BuildContext context, Team team) {
     final color = _teamColor(context, team);

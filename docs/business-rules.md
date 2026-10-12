@@ -49,3 +49,9 @@ Les statistiques brutes incluent les amicaux clos. Les totaux de buts du groupe 
 MVP mensuel : séances closes classées, au moins une participation, au plus une absence. Poids par défaut : victoire 10, nul 3, défaite 0, but +2, passe +1, jaune -0,5, rouge -1. Score moyen arrondi à deux décimales ; poids configurables par groupe. Le poids MVP du nul est distinct des points d'égalité du championnat.
 
 Sources : `lib/core/data/app_database.dart`, `lib/features/ranking/data/ranking_repository.dart`, `lib/features/ranking/domain/mvp_calculator.dart`, `lib/features/ranking/domain/mvp_weights.dart`.
+
+## Noms et couleurs des camps
+
+Après affectation des présents, chaque camp peut recevoir un nom et une couleur parmi huit pastilles. Les champs sont facultatifs : un nom vide utilise Équipe A/B/C et une couleur non choisie garde le défaut. La création est bloquée si les noms effectifs sont identiques après trim et sans distinction de casse, ou si les couleurs effectives sont identiques. En tournoi, les trois camps doivent être distincts. Les noms/couleurs sont conservés par séance et affichés dans son détail. Une réinitialisation restaure le défaut du camp.
+
+Sources : lib/features/sessions/domain/team_appearance.dart, lib/features/sessions/presentation/team_appearance_editor.dart, lib/features/sessions/application/sessions_provider.dart.

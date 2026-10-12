@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
 import '../domain/goal_score_sync.dart';
@@ -179,6 +181,8 @@ class SqliteSessionsRepository implements SessionsRepository {
       unassignedGoalsB: (row['unassigned_goals_b'] as int?) ?? 0,
       unassignedGoalsC: (row['unassigned_goals_c'] as int?) ?? 0,
       notes: row['notes'] as String?,
+      teamNames: row['team_names'] == null ? const {} : Map<String, String>.from(jsonDecode(row['team_names']! as String) as Map),
+      teamColors: row['team_colors'] == null ? const {} : Map<String, int>.from(jsonDecode(row['team_colors']! as String) as Map),
     );
   }
 
@@ -388,6 +392,8 @@ class SqliteSessionsRepository implements SessionsRepository {
           'unassigned_goals_b': session.unassignedGoalsB,
           'unassigned_goals_c': session.unassignedGoalsC,
           'notes': session.notes,
+          'team_names': jsonEncode(session.teamNames),
+          'team_colors': jsonEncode(session.teamColors),
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );

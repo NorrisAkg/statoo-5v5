@@ -9,6 +9,7 @@ import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
+import '../domain/team_appearance.dart';
 
 final Provider<SessionsRepository> sessionsRepositoryProvider = Provider<SessionsRepository>((ref) {
   return SqliteSessionsRepository(AppDatabase.instance);
@@ -124,10 +125,14 @@ class SessionsController {
     SessionType sessionType = SessionType.classic2,
     int drawPoints = 1,
     bool startImmediately = true,
+    Map<String, String> teamNames = const {},
+    Map<String, int> teamColors = const {},
   }) async {
     final teamId = _ref.read(activeTeamIdProvider);
     if (teamId == null) throw StateError('No active team selected');
 
+    final appearanceError = teamAppearanceError(sessionType, teamNames, teamColors);
+    if (appearanceError != null) throw ArgumentError(appearanceError);
     final isTournament = sessionType == SessionType.tournament3;
     final sessionId = 's_${DateTime.now().millisecondsSinceEpoch}';
     final session = Session(
@@ -141,6 +146,8 @@ class SessionsController {
       scoreA: isTournament ? null : 0,
       scoreB: isTournament ? null : 0,
       drawPoints: drawPoints,
+      teamNames: {for (final entry in teamNames.entries) if (entry.value.trim().isNotEmpty) entry.key: entry.value.trim()},
+      teamColors: teamColors,
       result: isTournament ? null : MatchResult.draw,
     );
 

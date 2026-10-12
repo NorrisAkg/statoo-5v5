@@ -31,7 +31,7 @@ class AppDatabase {
 
     return await openDatabase(
       path,
-      version: 7,
+      version: 8,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
       },
@@ -147,6 +147,9 @@ class AppDatabase {
           await db.execute('ALTER TABLE sessions_new RENAME TO sessions;');
           await db.execute('PRAGMA foreign_keys = ON;');
         }
+        if (oldVersion < 8) {
+          await migrateTeamAppearance(db);
+        }
         await _dropViews(db);
         await _createViews(db);
       },
@@ -155,6 +158,12 @@ class AppDatabase {
         await _createViews(db);
       },
     );
+  }
+
+  @visibleForTesting
+  Future<void> migrateTeamAppearance(DatabaseExecutor db) async {
+    await db.execute('ALTER TABLE sessions ADD COLUMN team_names TEXT;');
+    await db.execute('ALTER TABLE sessions ADD COLUMN team_colors TEXT;');
   }
 
   Future<void> _dropViews(Database db) async {
@@ -260,7 +269,9 @@ class AppDatabase {
         unassigned_goals_a INTEGER DEFAULT 0,
         unassigned_goals_b INTEGER DEFAULT 0,
         unassigned_goals_c INTEGER DEFAULT 0,
-        notes TEXT
+        notes TEXT,
+        team_names TEXT,
+        team_colors TEXT
       );
     ''');
 

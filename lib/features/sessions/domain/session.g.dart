@@ -32,6 +32,16 @@ _Session _$SessionFromJson(Map<String, dynamic> json) => _Session(
   unassignedGoalsB: (json['unassignedGoalsB'] as num?)?.toInt() ?? 0,
   unassignedGoalsC: (json['unassignedGoalsC'] as num?)?.toInt() ?? 0,
   notes: json['notes'] as String?,
+  teamNames:
+      (json['teamNames'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ) ??
+      const <String, String>{},
+  teamColors:
+      (json['teamColors'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toInt()),
+      ) ??
+      const <String, int>{},
 );
 
 Map<String, dynamic> _$SessionToJson(_Session instance) => <String, dynamic>{
@@ -54,6 +64,8 @@ Map<String, dynamic> _$SessionToJson(_Session instance) => <String, dynamic>{
   'unassignedGoalsB': instance.unassignedGoalsB,
   'unassignedGoalsC': instance.unassignedGoalsC,
   'notes': instance.notes,
+  'teamNames': instance.teamNames,
+  'teamColors': instance.teamColors,
 };
 
 const _$SessionStatusEnumMap = {

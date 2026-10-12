@@ -13,6 +13,8 @@ import '../../players/presentation/new_player_bottom_sheet.dart';
 import '../../settings/application/settings_provider.dart';
 import '../application/sessions_provider.dart';
 import '../domain/session.dart';
+import '../domain/team_appearance.dart';
+import 'team_appearance_editor.dart';
 
 class NewSessionScreen extends ConsumerStatefulWidget {
   const NewSessionScreen({super.key});
@@ -37,6 +39,8 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   bool _isSubmitting = false;
+  final Map<String, String> _teamNames = {};
+  final Map<String, int> _teamColors = {};
 
   @override
   void dispose() {
@@ -93,6 +97,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   }
 
   Future<void> _startSession() async {
+    final appearanceError = teamAppearanceError(_sessionType, _teamNames, _teamColors);
+    if (appearanceError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(appearanceError)));
+      return;
+    }
     final minPlayers = ref.read(minPlayersPerSessionProvider);
     if (_selectedPlayerIds.length < minPlayers) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -178,6 +187,8 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         allowUnevenTeams: _allowUnevenTeams,
         playerTeamAssignments: _playerTeamAssignments,
         startImmediately: startImmediately,
+        teamNames: _teamNames,
+        teamColors: _teamColors,
       );
 
       if (mounted) {
@@ -399,7 +410,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                   return PrimaryButton(
                     label: label,
                     icon: icon,
-                    onPressed: _isSubmitting ? null : _nextStep,
+                    onPressed: _isSubmitting || (_currentStep == 2 && teamAppearanceError(_sessionType, _teamNames, _teamColors) != null) ? null : _nextStep,
                   );
                 },
               ),
@@ -818,6 +829,15 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                 ),
                 const SizedBox(height: 14),
 
+                if (_playerTeamAssignments.isNotEmpty && _playerTeamAssignments.length == _selectedPlayerIds.length) ...[
+                  TeamAppearanceEditor(
+                    type: _sessionType, names: _teamNames, colors: _teamColors,
+                    onNameChanged: (team, name) => setState(() => _teamNames[teamKey(team)] = name),
+                    onColorChanged: (team, color) => setState(() => _teamColors[teamKey(team)] = color),
+                    onReset: (team) => setState(() { _teamNames.remove(teamKey(team)); _teamColors.remove(teamKey(team)); }),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 // Search bar
                 TextField(
                   controller: _searchController,

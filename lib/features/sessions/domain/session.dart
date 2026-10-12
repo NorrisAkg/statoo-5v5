@@ -30,6 +30,8 @@ sealed class Session with _$Session {
     @Default(0) int unassignedGoalsB,
     @Default(0) int unassignedGoalsC,
     String? notes,
+    @Default(<String, String>{}) Map<String, String> teamNames,
+    @Default(<String, int>{}) Map<String, int> teamColors,
   }) = _Session;
 
   factory Session.fromJson(Map<String, dynamic> json) => _$SessionFromJson(json);
