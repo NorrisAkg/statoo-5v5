@@ -8,7 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../../../core/widgets/status_badge.dart';
+
 import '../application/sessions_provider.dart';
 import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
@@ -16,6 +16,7 @@ import '../domain/session.dart';
 import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 import 'add_late_players_bottom_sheet.dart';
+import 'session_header.dart';
 
 class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
@@ -130,9 +131,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           session,
           formattedDate,
           isCurrentActive,
-          isWaitingDraft,
-          scoreA,
-          scoreB,
+          participants: participants,
           formatLabel: (teamAPlayers.isNotEmpty || teamBPlayers.isNotEmpty)
               ? '${teamAPlayers.length}v${teamBPlayers.length}'
               : '5v5',
@@ -228,139 +227,28 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     WidgetRef ref,
     Session session,
     String formattedDate,
-    bool isCurrentActive,
-    bool isWaitingDraft,
-    int scoreA,
-    int scoreB, {
+    bool isCurrentActive, {
     required String formatLabel,
+    required List<SessionParticipantDetail> participants,
   }) {
-    return AppCard(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (isCurrentActive)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: context.colors.warning.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(9999),
-                    border: Border.all(color: context.colors.warning.withValues(alpha: 0.5)),
-                  ),
-                  child: Text(
-                    'EN COURS',
-                    style: TextStyle(
-                      color: context.colors.warning,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              else if (isWaitingDraft)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: context.colors.background800,
-                    borderRadius: BorderRadius.circular(9999),
-                    border: Border.all(color: context.colors.foreground600),
-                  ),
-                  child: Text(
-                    'BROUILLON (EN ATTENTE)',
-                    style: TextStyle(
-                      color: context.colors.foreground300,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              else
-                const StatusBadge(status: BadgeStatus.closed),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: context.colors.background800,
-                  borderRadius: BorderRadius.circular(9999),
-                ),
-                child: Text(
-                  session.sessionType == SessionType.tournament3 ? 'TOURNOI 3 ÉQUIPES' : formatLabel,
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
-                ),
-              ),
-              if (!session.isRanked) ...[
-                const SizedBox(width: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: context.colors.background800,
-                    borderRadius: BorderRadius.circular(9999),
-                  ),
-                  child: const Text('AMICAL', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                ),
-              ],
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            formattedDate,
-            style: TextStyle(color: context.colors.foreground400, fontSize: 14),
-          ),
-          const SizedBox(height: 20),
-          if (session.sessionType == SessionType.tournament3)
-            _buildTournamentWinsBoard(context, ref, session, isCurrentActive)
-          else
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildTeamScore(
-                  context,
-                  ref,
-                  title: 'Équipe A',
-                  score: scoreA,
-                  color: context.colors.accent500,
-                  isDraft: isCurrentActive,
-                  onScoreIncrement: (delta) {
-                    unawaited(
-                      ref.read(sessionsControllerProvider).incrementScore(
-                        sessionId: session.id,
-                        team: Team.a,
-                        delta: delta,
-                      ),
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    '-',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: context.colors.foreground600),
-                  ),
-                ),
-                _buildTeamScore(
-                  context,
-                  ref,
-                  title: 'Équipe B',
-                  score: scoreB,
-                  color: context.colors.secondary500,
-                  isDraft: isCurrentActive,
-                  onScoreIncrement: (delta) {
-                    unawaited(
-                      ref.read(sessionsControllerProvider).incrementScore(
-                        sessionId: session.id,
-                        team: Team.b,
-                        delta: delta,
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-        ],
-      ),
+    return SessionHeader(
+      session: session,
+      participants: participants,
+      formattedDate: formattedDate,
+      formatLabel: formatLabel,
+      isCurrentActive: isCurrentActive,
+      tournamentBoard: session.sessionType == SessionType.tournament3
+          ? _buildTournamentWinsBoard(context, ref, session, isCurrentActive)
+          : null,
+      onScoreIncrement: (team, delta) {
+        unawaited(ref.read(sessionsControllerProvider).incrementScore(
+          sessionId: session.id,
+          team: team,
+          delta: delta,
+        ));
+      },
     );
   }
-
   Widget _buildTournamentWinsBoard(
     BuildContext context,
     WidgetRef ref,
@@ -530,45 +418,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ],
         ],
       ),
-    );
-  }
-
-  Widget _buildTeamScore(
-    BuildContext context,
-    WidgetRef ref, {
-    required String title,
-    required int? score,
-    required Color color,
-    required bool isDraft,
-    required void Function(int delta) onScoreIncrement,
-  }) {
-    final displayScore = score ?? 0;
-    return Column(
-      children: [
-        Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w600)),
-        const SizedBox(height: 8),
-        Text('$displayScore', style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900)),
-        if (isDraft) ...[
-          const SizedBox(height: 8),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                tooltip: 'Diminuer le score de $title',
-                icon: const Icon(Remix.subtract_line),
-                color: context.colors.foreground400,
-                onPressed: displayScore > 0 ? () => onScoreIncrement(-1) : null,
-              ),
-              IconButton(
-                tooltip: 'Augmenter le score de $title',
-                icon: const Icon(Remix.add_line),
-                color: color,
-                onPressed: () => onScoreIncrement(1),
-              ),
-            ],
-          ),
-        ],
-      ],
     );
   }
 
