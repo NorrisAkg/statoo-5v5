@@ -12,6 +12,7 @@ val keystoreProperties = Properties().apply {
     if (file.exists()) file.inputStream().use { load(it) }
 }
 
+
 android {
     namespace = "com.kysolutions.statoo"
     compileSdk = flutter.compileSdkVersion
