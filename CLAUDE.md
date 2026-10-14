@@ -15,6 +15,7 @@ La branche `refonte` porte la réécriture Flutter ; l'historique antérieur (Nu
 ## Commandes
 
 ```bash
+cd mobile
 flutter pub get
 dart run build_runner build --delete-conflicting-outputs   # après toute modif @riverpod / @freezed / @JsonSerializable
 dart analyze <fichiers>          # ciblé, ~4 s — à privilégier
@@ -31,11 +32,11 @@ flutter run
 Feature-first inspirée Clean Architecture :
 
 ```
-lib/core/        data/ (AppDatabase), router/, theme/, widgets/, domain/
-lib/features/<f>/domain/        entités freezed, calculs purs — aucune dépendance Flutter ni Riverpod
-lib/features/<f>/data/          interface abstraite + implémentation Sqlite<Nom>Repository
-lib/features/<f>/application/   providers Riverpod, contrôleurs (ex. SessionsController)
-lib/features/<f>/presentation/  écrans *_screen.dart, *_bottom_sheet.dart
+mobile/lib/core/ data/ (AppDatabase), router/, theme/, widgets/, domain/
+mobile/lib/features/<f>/domain/        entités freezed, calculs purs — aucune dépendance Flutter ni Riverpod
+mobile/lib/features/<f>/data/          interface abstraite + implémentation Sqlite<Nom>Repository
+mobile/lib/features/<f>/application/   providers Riverpod, contrôleurs (ex. SessionsController)
+mobile/lib/features/<f>/presentation/  écrans *_screen.dart, *_bottom_sheet.dart
 ```
 
 Features : home, onboarding, team, players, sessions, ranking, stats, settings.

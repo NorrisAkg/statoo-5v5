@@ -18,7 +18,9 @@ process.stdin.on('end', () => {
   filePath = filePath.replace(/^\/([a-zA-Z])\//, '$1:/');
   if (!fs.existsSync(filePath)) process.exit(0);
 
-  const projectDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  const rootDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+  const projectDir = fs.existsSync(path.join(rootDir, 'mobile', 'pubspec.yaml'))
+    ? path.join(rootDir, 'mobile') : rootDir;
   // shell is needed on Windows (dart is a .bat), so quote: the project path contains a space.
   const res = spawnSync('dart', ['analyze', `"${path.relative(projectDir, filePath)}"`], {
     cwd: projectDir,

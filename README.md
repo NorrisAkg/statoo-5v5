@@ -1,55 +1,64 @@
-# Statoo
+# Statoo — monorepo
 
-Application mobile Flutter de suivi de football entre amis : groupes, joueurs, compositions, séances, scores, statistiques et classements. Les données restent dans SQLite local. Les sauvegardes sont des fichiers JSON partagés depuis le téléphone ; aucun backend métier ni synchronisation cloud n'est branché dans le code actuel.
+Application de football entre amis avec suivi sportif et financier. Le dépôt contient trois composants :
 
-## Démarrer
+| Dossier | Contenu |
+| --- | --- |
+| `mobile/` | Application Flutter Android/iOS, SQLite et saisie hors ligne |
+| `backend/` | API Python FastAPI, rôles, synchronisation et arbitrage |
+| `web/` | Portail de consultation en français, HTML/CSS/JavaScript |
+| `docs/` | Documentation commune et références historiques |
 
-Prérequis : Flutter avec Dart compatible avec `^3.13.4`, SDK Android ; macOS et Xcode pour iOS. Le SDK Flutter exact de release reste à confirmer. `.metadata` enregistre la révision de création, pas un verrouillage du SDK ; `pubspec.lock` conserve les dépendances résolues.
+La branche de travail est `codex/finances-et-groupe-partage`. Le mode local reste disponible ; un groupe partagé utilise le backend comme source des versions publiées.
+
+## Mobile
+
+Depuis la racine :
 
 ```powershell
-flutter --version
-flutter doctor
+cd mobile
 flutter pub get
-flutter devices
-flutter run
-```
-
-Au premier lancement, suivre l'onboarding puis créer un groupe ou restaurer une sauvegarde. Les données de démonstration ne sont pas injectées automatiquement en production.
-
-## Développer et vérifier
-
-```powershell
-# Après modification Freezed/JSON ou providers annotés
-dart run build_runner build --delete-conflicting-outputs
-dart analyze lib/features/sessions
-flutter analyze
+dart run build_runner build
 flutter test
-flutter test test/features/sessions/
+flutter run --dart-define=STATOO_API=https://votre-api.example
 ```
 
-Ne pas modifier manuellement les fichiers `*.g.dart` et `*.freezed.dart`. Ces commandes décrivent les procédures ; elles n'ont pas été exécutées lors de l'onboarding documentaire du 12 octobre 2026.
+La compilation Android se lance aussi depuis `mobile/` : `flutter build apk --release`. La signature reste configurée dans `mobile/android/key.properties`, ignoré par Git. L’absence de signature de production doit être corrigée avant distribution.
 
-## Structure et documentation
+## Backend
 
-`lib/core/` contient base, router, thème et widgets ; `lib/features/` regroupe home, onboarding, team, players, sessions, ranking, stats et settings. `test/` contient tests métier, widgets et SQLite ; `android/` et `ios/` les projets natifs ; `assets/` les images et polices Poppins.
-
-- [Architecture et modules](docs/architecture.md)
-- [Règles et workflows métier](docs/business-rules.md)
-- [Données et migrations](docs/database.md)
-- [Conventions](docs/conventions.md)
-- [Sauvegarde et restauration](docs/backup.md)
-- [Tests et livraison](docs/testing-and-release.md)
-- [Décisions, risques et questions ouvertes](docs/decisions-and-risks.md)
-
-Ces documents décrivent le code examiné sur `refonte`, à partir de `40f13fc`. Ils distinguent faits, risques non reproduits et décisions à confirmer. Le [CDC](docs/Statoo_Cahier_des_Charges_v1.1.pdf), le [brief initial](specs/prompt-agent-flutter-statoo.md) et les audits de septembre restent des références historiques ; leurs écarts avec le code sont recensés dans le registre.
-
-## Construire Android
+Python 3.12 ou supérieur :
 
 ```powershell
-flutter build apk --release
-flutter build appbundle --release
+cd backend
+python -m venv .venv
+.venv/Scripts/python.exe -m pip install -r requirements-dev.txt
+.venv/Scripts/python.exe -m uvicorn app.main:app --reload
+.venv/Scripts/python.exe -m pytest
 ```
 
-La signature lit `android/key.properties`, exclu de Git avec les keystores. Sans cette configuration, le build release utilise la clé debug : un build réussi ne prouve pas qu'il est prêt à publier. Voir la procédure de livraison.
+Par défaut, SQLite est utilisé uniquement pour le développement. Pour Neon, renseigner `DATABASE_URL` avec l’URL PostgreSQL fournie par Neon et `sslmode=require`. Ne jamais placer cette URL dans le mobile ou le web. `CORS_ORIGINS` contient les origines du portail séparées par des virgules.
 
-Sources : `pubspec.yaml`, `pubspec.lock`, `.metadata`, `lib/main.dart`, `lib/core/data/app_database.dart`, `lib/features/settings/data/backup_service.dart`, `android/app/build.gradle.kts`.
+Le fichier `render.yaml` décrit le service backend ; il ne déclenche aucun déploiement. Le backend refuse de démarrer sur Render sans base distante configurée.
+
+## Web
+
+```powershell
+python -m http.server 8080 --directory web
+node --test web/tests/summary.test.mjs
+```
+
+Ouvrir `http://localhost:8080`. Le portail demande l’URL de l’API et les identifiants du groupe. Les membres utilisent l’accès collectif en lecture seule. Aucun outil de compilation n’est nécessaire.
+
+## Documentation
+
+- [Groupe partagé, finances et synchronisation](docs/shared-group-and-finance.md)
+- [Backend](backend/README.md)
+- [Mobile](mobile/README.md)
+- [Web](web/README.md)
+- [Architecture historique Flutter](docs/architecture.md)
+- [Règles sportives](docs/business-rules.md)
+- [Sauvegardes](docs/backup.md)
+- [Tests et livraison](docs/testing-and-release.md)
+
+Les anciens documents citent `lib/`, `test/`, `android/` et `ios/` relativement au projet Flutter : leurs chemins sont désormais sous `mobile/`. Les décisions de cette branche concernant les groupes partagés complètent ces documents.

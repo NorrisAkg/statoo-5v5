@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statoo · Groupe partagé</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+<header><a class="brand" href="./">⚽ Statoo</a><span>Votre groupe, ensemble</span></header>
+<main>
+<section id="login" class="card narrow">
+<p class="eyebrow">CONSULTATION DU GROUPE</p><h1>Bienvenue dans Statoo</h1>
+<p>Retrouvez les séances, les classements et les finances du groupe. Les identifiants vous sont communiqués par l’Admin.</p>
+<form id="login-form">
+<label>Adresse de l’API<input id="api" type="url" placeholder="https://statoo-api.onrender.com" required autocomplete="url"></label>
+<label>Identifiant du groupe<input id="group" required autocomplete="off"></label>
+<label>Identifiant de connexion<input id="username" required autocomplete="username"></label>
+<label>Mot de passe<input id="password" type="password" required autocomplete="current-password"></label>
+<button type="submit" id="connect">Se connecter</button>
+</form></section>
+<section id="dashboard" hidden>
+<div class="heading"><div><p class="eyebrow">GROUPE PARTAGÉ · LECTURE SEULE</p><h1 id="group-name"></h1>
+<p id="updated"></p></div><div class="actions"><button id="refresh">Actualiser</button><button id="logout" class="secondary">Se déconnecter</button></div></div>
+<nav aria-label="Sections"><button data-tab="sessions" class="selected">Séances</button><button data-tab="standings">Classement</button><button data-tab="finances">Finances</button></nav>
+<section id="sessions" class="panel"><h2>Séances publiées</h2><div id="session-list" class="grid"></div></section>
+<section id="standings" class="panel" hidden><h2>Classement du groupe</h2><div class="table-wrap"><table><thead><tr><th>Membre</th><th>Points</th><th>Matchs</th><th>Buts</th><th>Passes</th></tr></thead><tbody id="standing-list"></tbody></table></div></section>
+<section id="finances" class="panel" hidden><h2>Finances du groupe</h2>
+<div class="card cash"><span>Caisse disponible</span><strong id="cash"></strong><small>Encaissements − dépenses, avec solde d’ouverture</small></div>
+<p>Les avances de cotisation ne couvrent pas les retards ni les sanctions.</p>
+<div class="table-wrap"><table><thead><tr><th>Membre</th><th>Cotisations dues</th><th>Avance cotisations</th><th>Pénalités dues</th></tr></thead><tbody id="balance-list"></tbody></table></div>
+<h2>Points financiers publiés</h2><div id="point-list" class="grid"></div></section>
+</section>
+<p id="message" role="status" aria-live="polite"></p>
+</main><footer>Statoo · Les saisies hors ligne apparaissent après synchronisation et validation par le serveur.</footer>
+<script type="module" src="app.mjs"></script>
+</body></html>

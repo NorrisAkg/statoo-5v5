@@ -1,0 +1,298 @@
+import 'dart:convert';
+
+import 'package:sqflite/sqflite.dart';
+
+import '../../../core/data/app_database.dart';
+import '../../shared/data/shared_service.dart';
+import '../domain/financial_defaults.dart';
+import '../domain/financial_point.dart';
+
+class FinanceRepository {
+  FinanceRepository(this.database, this.shared);
+  final AppDatabase database;
+  final SharedService shared;
+  Future<FinancialDefaults> getDefaults(String group) async {
+    final db = await database.database;
+    final rows = await db.query(
+      'meta',
+      where: 'key IN (?,?)',
+      whereArgs: ['finance_rate_$group', 'finance_late_penalty_$group'],
+    );
+    final values = {
+      for (final row in rows) row['key']: int.tryParse(row['value']! as String),
+    };
+    return FinancialDefaults(
+      contribution: values['finance_rate_$group'] ?? 100,
+      latePenalty: values['finance_late_penalty_$group'] ?? 0,
+    );
+  }
+
+  Future<void> saveDefaults(String group, FinancialDefaults value) async {
+    value.validate();
+    await shared.requireWrite(group, 'finance_settings');
+    if (shared.connected && group == shared.groupId) {
+      await shared.request('PUT', '/groups/$group/financial-settings', {
+        'contribution': value.contribution,
+        'late_penalty': value.latePenalty,
+      });
+      await shared.importSnapshot(
+        await shared.request('GET', '/groups/$group'),
+      );
+    }
+    final db = await database.database;
+    await db.transaction((txn) async {
+      await txn.insert('meta', {
+        'key': 'finance_rate_$group',
+        'value': '${value.contribution}',
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await txn.insert('meta', {
+        'key': 'finance_late_penalty_$group',
+        'value': '${value.latePenalty}',
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+  }
+
+  String key(String group, String session) => 'finance_point_${group}_$session';
+
+  Future<String> canonical(
+    String group,
+    String session, {
+    DateTime? date,
+  }) async {
+    final db = await database.database;
+    final occurrenceRows = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: ['shared_occurrence_$session'],
+    );
+    String? occurrence = occurrenceRows.isEmpty
+        ? null
+        : occurrenceRows.single['value']! as String;
+    if (occurrence == null) {
+      final sessions = await db.query(
+        'sessions',
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [session, group],
+      );
+      final playedAt =
+          date?.toIso8601String() ??
+          (sessions.isEmpty ? null : sessions.single['played_at'] as String?);
+      if (playedAt == null) return session;
+      occurrence = '${playedAt.substring(0, 10)}-1';
+      await db.insert('meta', {
+        'key': 'shared_occurrence_$session',
+        'value': occurrence,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    }
+    final alias = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: ['shared_finance_alias_${group}_$occurrence'],
+    );
+    if (alias.isNotEmpty) return alias.single['value']! as String;
+    await db.insert('meta', {
+      'key': 'shared_finance_alias_${group}_$occurrence',
+      'value': session,
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    return session;
+  }
+
+  Future<FinancialPoint?> getPoint(String group, String session) async {
+    final id = await canonical(group, session);
+    final db = await database.database;
+    final rows = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: [key(group, id)],
+    );
+    return rows.isEmpty
+        ? null
+        : FinancialPoint.fromJson(
+            jsonDecode(rows.single['value']! as String) as Map<String, dynamic>,
+          );
+  }
+
+  Future<bool> isValidated(String group, String session) async {
+    final id = await canonical(group, session);
+    final db = await database.database;
+    return (await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: ['finance_validated_${group}_$id'],
+    )).isNotEmpty;
+  }
+
+  Future<void> savePoint(
+    String group,
+    String session,
+    FinancialPoint point, {
+    String reason = '',
+  }) async {
+    point.validate();
+    final id = await canonical(group, session, date: point.playedAt);
+    await shared.requireWrite(group, 'finance', sessionId: id);
+    if (await isValidated(group, id) && reason.trim().isEmpty) {
+      throw const FormatException('Indiquez le motif de correction.');
+    }
+    final db = await database.database;
+    final known = (await db.query(
+      'players',
+      where: 'team_id = ?',
+      whereArgs: [group],
+    )).map((p) => p['id']).toSet();
+    if (point.lines.any((l) => !known.contains(l.memberId))) {
+      throw const FormatException('Membre inconnu dans ce groupe.');
+    }
+    final previous = await db.query(
+      'meta',
+      where: 'substr(key,1,?) = ? AND key != ?',
+      whereArgs: [
+        'finance_point_${group}_'.length,
+        'finance_point_${group}_',
+        key(group, id),
+      ],
+    );
+    final otherPoints = previous.map(
+      (p) => FinancialPoint.fromJson(
+        jsonDecode(p['value']! as String) as Map<String, dynamic>,
+      ),
+    );
+    final opening = group == shared.groupId
+        ? (shared.snapshot?['opening'] as Map?)
+        : null;
+    final balances = FinancialTotals.calculate(
+      [...otherPoints, point],
+      openingCash: opening?['cash'] as int? ?? 0,
+      openingDate: DateTime.tryParse(opening?['start_date'] as String? ?? ''),
+      openingMembers: {
+        for (final e in (opening?['members'] as Map? ?? {}).entries)
+          e.key as String: MemberBalance(
+            contributionBalance:
+                (e.value as Map)['contribution_balance'] as int,
+            penaltyDebt: (e.value as Map)['penalty_debt'] as int,
+          ),
+      },
+    );
+    if (balances.members.values.any((b) => b.penaltyDebt < 0)) {
+      throw const FormatException(
+        'Le paiement dépasse les pénalités dues. Enregistrez la pénalité due ou corrigez le paiement.',
+      );
+    }
+    await db.transaction((txn) async {
+      final old = await txn.query(
+        'meta',
+        where: 'key = ?',
+        whereArgs: [key(group, id)],
+      );
+      await txn.insert('meta', {
+        'key': 'finance_history_${group}_${shared.operationId()}',
+        'value': jsonEncode({
+          'session': id,
+          'reason': reason,
+          'previous': old.isEmpty ? null : old.single['value'],
+          'actor': shared.accountId,
+          'at': DateTime.now().toIso8601String(),
+        }),
+      });
+      await txn.insert('meta', {
+        'key': 'finance_validated_${group}_$id',
+        'value': '1',
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await txn.insert('meta', {
+        'key': key(group, id),
+        'value': jsonEncode(point.toJson()),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      await shared.enqueue(
+        txn,
+        group,
+        'finance',
+        id,
+        point.toJson(),
+        reason: reason,
+      );
+    });
+  }
+
+  Future<Map<String, FinancialPoint>> periods(String group) async {
+    final db = await database.database;
+    final prefix = 'finance_point_${group}_';
+    final rows = await db.query(
+      'meta',
+      where: 'substr(key,1,?) = ?',
+      whereArgs: [prefix.length, prefix],
+    );
+    return {
+      for (final row in rows)
+        (row['key']! as String).substring(
+          prefix.length,
+        ): FinancialPoint.fromJson(
+          jsonDecode(row['value']! as String) as Map<String, dynamic>,
+        ),
+    };
+  }
+
+  Future<List<FinancialPoint>> allPoints(String group) async =>
+      (await periods(group)).values.toList();
+
+  Future<FinancialPoint> prepare(
+    String group,
+    String session,
+    DateTime date,
+  ) async {
+    final id = await canonical(group, session, date: date);
+    final saved = await getPoint(group, id);
+    if (saved != null) return saved;
+    final db = await database.database;
+    final members = await db.query(
+      'players',
+      where: 'team_id = ? AND is_active = 1',
+      whereArgs: [group],
+    );
+    final setting = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: ['finance_rate_$group'],
+    );
+    final rate = setting.isEmpty
+        ? 100
+        : int.tryParse(setting.single['value']! as String) ?? 100;
+    return FinancialPoint(
+      playedAt: date,
+      rate: rate,
+      lines: members
+          .map((p) => FinancialLine(memberId: p['id']! as String))
+          .toList(),
+    );
+  }
+
+  Future<String> createPeriod(
+    String group,
+    DateTime date,
+    String reference,
+  ) async {
+    await shared.requireWrite(group, 'finance');
+    final db = await database.database;
+    final existing = await db.query(
+      'meta',
+      where: 'key = ?',
+      whereArgs: ['shared_finance_alias_${group}_$reference'],
+    );
+    if (existing.isNotEmpty) {
+      throw const FormatException('Cette échéance existe déjà.');
+    }
+    final id = 'period_${shared.operationId()}';
+    await db.insert('meta', {
+      'key': 'shared_occurrence_$id',
+      'value': reference,
+    });
+    final point = await prepare(group, id, date);
+    await db.transaction((txn) async {
+      await txn.insert('meta', {
+        'key': key(group, id),
+        'value': jsonEncode(point.toJson()),
+      });
+      await shared.enqueue(txn, group, 'finance', id, point.toJson());
+    });
+    return id;
+  }
+}
