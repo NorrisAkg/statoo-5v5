@@ -27,6 +27,30 @@ La compilation Android se lance aussi depuis `mobile/` : `flutter build apk --re
 
 ## Backend
 
+### Neon et lancement depuis la racine
+
+`neon deploy` applique `neon.ts` au projet lié dans `.neon` et écrit les secrets
+dans `.env.local` (ou `.env` si ce fichier existe). Le backend charge ces fichiers
+automatiquement, sans remplacer les variables définies par l'hébergeur.
+`DATABASE_URL` sert aux requêtes ; `DATABASE_URL_UNPOOLED` sert à la création
+initiale du schéma. Les secrets restent côté serveur et sont ignorés par Git.
+
+Après installation des dépendances Python ci-dessous et `npm install` :
+
+```powershell
+npm run build
+npm start
+```
+
+Le build compile l'API, exécute les tests backend et portail, puis copie le portail
+dans `web/dist`. Il ne compile pas l'application mobile Flutter.
+Le serveur expose l'API sur `http://127.0.0.1:8000` et le portail sur
+`http://127.0.0.1:8000/portal/`. Utiliser cette même URL d'API dans le portail.
+`PYTHON` permet de choisir l'interpréteur et `PORT` le port.
+Le test distant `backend/.venv/Scripts/python.exe scripts/neon_smoke.py` vérifie
+création, persistance PostgreSQL, connexion, lecture et révocation d'accès ;
+il nettoie uniquement les données de son propre groupe de test.
+
 Python 3.12 ou supérieur :
 
 ```powershell

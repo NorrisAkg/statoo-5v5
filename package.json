@@ -1,0 +1,12 @@
+{
+  "name": "statoo",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/app.mjs build",
+    "start": "node scripts/app.mjs start"
+  },
+  "dependencies": {
+    "@neon/config": "^1.9.1",
+    "@neon/env": "^1.6.2"
+  }
+}

@@ -12,11 +12,14 @@ from typing import Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from pydantic import BaseModel, Field, StrictInt, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .finance import Point, totals, validate_point
+from .config import load_environment
 from .models import Base, Group, Token, database
 from .security import password_hash, password_matches, token_digest
 
@@ -127,16 +130,28 @@ def validate_sport_acceptance(state, occurrence, payload):
 
 
 def create_app(url: str | None = None):
+    load_environment()
     if url is None and os.getenv("RENDER") and not os.getenv("DATABASE_URL"):
         raise RuntimeError("DATABASE_URL is required on Render; use persistent Neon PostgreSQL")
     engine = database(url or os.getenv("DATABASE_URL", "sqlite:///statoo.db"))
     @asynccontextmanager
     async def lifespan(app):
-        Base.metadata.create_all(engine)
-        yield
-        engine.dispose()
+        schema_url = os.getenv("DATABASE_URL_UNPOOLED") if url is None else None
+        schema_engine = database(schema_url) if schema_url else engine
+        try:
+            Base.metadata.create_all(schema_engine)
+        finally:
+            if schema_engine is not engine:
+                schema_engine.dispose()
+        try:
+            yield
+        finally:
+            engine.dispose()
 
     app = FastAPI(title="Statoo", version="0.1.0", lifespan=lifespan)
+    portal = Path(__file__).resolve().parents[2] / "web"
+    if portal.is_dir():
+        app.mount("/portal", StaticFiles(directory=portal, html=True), name="portal")
     app.add_middleware(CORSMiddleware, allow_origins=os.getenv("CORS_ORIGINS", "").split(","),
                        allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type"])
     # Also serialize SQLite development transactions. PostgreSQL uses row locks across workers.
