@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
+import '../../../core/data/occurrence_registry.dart';
 import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
@@ -401,12 +402,8 @@ class SqliteSessionsRepository implements SessionsRepository {
       final rateRows = await txn.query('meta', where: 'key = ?', whereArgs: ['finance_rate_$teamId']);
       final rate = rateRows.isEmpty ? 100 : int.tryParse(rateRows.single['value']! as String) ?? 100;
       final members = await txn.query('players', where: 'team_id = ? AND is_active = 1', whereArgs: [teamId]);
-      final occurrenceRows = await txn.query('meta', where:'key = ?', whereArgs:['shared_occurrence_${session.id}']);
-      final occurrence = occurrenceRows.isEmpty ? '${session.playedAt.toIso8601String().substring(0,10)}-1' : occurrenceRows.single['value']! as String;
-      final aliases = await txn.query('meta', where:'key = ?', whereArgs:['shared_finance_alias_${teamId}_$occurrence']);
-      final financialId = aliases.isEmpty ? session.id : aliases.single['value']! as String;
-      await txn.insert('meta',{'key':'shared_occurrence_${session.id}','value':occurrence},conflictAlgorithm:ConflictAlgorithm.ignore);
-      await txn.insert('meta',{'key':'shared_finance_alias_${teamId}_$occurrence','value':financialId},conflictAlgorithm:ConflictAlgorithm.ignore);
+      final identity = await reserveOccurrence(txn, teamId, session.id, session.playedAt);
+      final financialId = identity.canonicalId;
       await txn.insert('meta', {'key': 'finance_point_${teamId}_$financialId', 'value': jsonEncode({
         'played_at': session.playedAt.toIso8601String(), 'rate': rate, 'cancelled': false,
         'lines': members.map((p) => {'member_id': p['id'], 'contribution': 0, 'penalty_paid': 0, 'penalty_due': 0, 'reason': ''}).toList(),

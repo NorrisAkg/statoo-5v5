@@ -9,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../sessions/domain/session.dart';
+import '../../sessions/domain/session_close_rules.dart';
 import '../domain/backup_payload.dart';
 
 final backupServiceProvider = Provider<BackupService>((ref) {
@@ -119,6 +121,7 @@ class BackupService {
     BackupPayload payload, {
     required bool merge,
     String? targetTeamId,
+    Map<String, String>? expectedGroups,
   }) async {
     if (merge && payload.meta.keys.any((key) => key.startsWith('finance_') || key.startsWith('shared_') || key.startsWith('outbox_'))) {
       throw const FormatException('Cette sauvegarde contient des finances ou un groupe partagé. Utilisez la restauration complète pour conserver leurs identifiants et leur historique.');
@@ -126,7 +129,19 @@ class BackupService {
     final db = await _appDatabase.database;
 
     return await db.transaction((txn) async {
+      var normalizedCount = 0;
+      Map<String, dynamic> normalize(Map<String, dynamic> session) {
+        final value = _withValidStatus(session);
+        if (value['status'] != session['status']) normalizedCount++;
+        return value;
+      }
       if (!merge) {
+        if (expectedGroups != null) {
+          final groups = await txn.query('teams', columns: ['id', 'name']);
+          if (groups.length != expectedGroups.length || groups.any((g) => expectedGroups[g['id']] != g['name'])) {
+            throw StateError('Les groupes locaux ont changé. Rouvrez la restauration pour vérifier à nouveau tous les groupes remplacés.');
+          }
+        }
         // --- MODE ÉCRASEMENT ---
         // 1. Suppression dans l'ordre strict des clés étrangères (enfants d'abord)
         await txn.delete('participations');
@@ -161,7 +176,7 @@ class BackupService {
           final effectiveTeamId = (rawTeamId != null && validTeamIds.contains(rawTeamId))
               ? rawTeamId
               : defaultTeamId;
-          final sessionRow = {..._withValidStatus(s), 'team_id': effectiveTeamId};
+          final sessionRow = {...normalize(s), 'team_id': effectiveTeamId};
           await txn.insert('sessions', sessionRow, conflictAlgorithm: ConflictAlgorithm.replace);
         }
 
@@ -195,6 +210,7 @@ class BackupService {
           importedPlayersCount: payload.players.length,
           importedSessionsCount: payload.sessions.length,
           importedParticipationsCount: payload.participations.length,
+          normalizedSessionsCount: normalizedCount,
         );
       } else {
         // --- MODE FUSION INTELLIGENTE ---
@@ -302,7 +318,7 @@ class BackupService {
             continue;
           }
 
-          final newSession = Map<String, dynamic>.from(_withValidStatus(bs));
+          final newSession = Map<String, dynamic>.from(normalize(bs));
           newSession['team_id'] = localTeamId;
 
           await txn.insert('sessions', newSession);
@@ -340,6 +356,7 @@ class BackupService {
           importedParticipationsCount: importedParticipationsCount,
           reusedPlayersCount: reusedPlayersCount,
           skippedSessionsCount: skippedSessionsCount,
+          normalizedSessionsCount: normalizedCount,
         );
       }
     });
@@ -364,7 +381,22 @@ class BackupService {
     if (res != null) {
       normalized['result'] = res;
     }
-    final unscored = normalized['score_a'] == null || normalized['score_b'] == null || normalized['result'] == null;
+    final bool unscored;
+    if (normalized['session_type'] == 'TOURNAMENT_3') {
+      final wins = [normalized['wins_a'], normalized['wins_b'], normalized['wins_c']];
+      final expected = wins.every((v) => v is int && v >= 0)
+          ? computeTournamentResult(wins[0]! as int, wins[1]! as int, wins[2]! as int)
+          : null;
+      final expectedCode = switch (expected) {
+        MatchResult.teamA => 'A', MatchResult.teamB => 'B', MatchResult.teamC => 'C',
+        MatchResult.drawAB => 'DRAW_AB', MatchResult.drawAC => 'DRAW_AC',
+        MatchResult.drawBC => 'DRAW_BC', MatchResult.drawAll => 'DRAW_ALL',
+        _ => null,
+      };
+      unscored = expectedCode == null || normalized['result'] != expectedCode;
+    } else {
+      unscored = normalized['score_a'] == null || normalized['score_b'] == null || normalized['result'] == null;
+    }
     return normalized['status'] == 'CLOSED' && unscored ? {...normalized, 'status': 'DRAFT'} : normalized;
   }
 }

@@ -1,0 +1,264 @@
+{
+  "backend": {
+    "documents": {
+      "finance:qa-finance": {
+        "domain": "finance",
+        "occurrence_id": "qa-finance",
+        "owner": "522ea461-5950-43f1-ad1f-344ff44eff5b",
+        "generation": 1,
+        "revision": 2,
+        "payload": {
+          "played_at": "2026-10-14T18:00:00",
+          "rate": 100,
+          "cancelled": false,
+          "lines": [
+            {
+              "member_id": "a",
+              "contribution": 100,
+              "penalty_paid": 10,
+              "penalty_due": 20,
+              "reason": "Retard QA"
+            },
+            {
+              "member_id": "b",
+              "contribution": 100,
+              "penalty_paid": 0,
+              "penalty_due": 0,
+              "reason": ""
+            },
+            {
+              "member_id": "c",
+              "contribution": 100,
+              "penalty_paid": 0,
+              "penalty_due": 0,
+              "reason": ""
+            },
+            {
+              "member_id": "d",
+              "contribution": 100,
+              "penalty_paid": 0,
+              "penalty_due": 0,
+              "reason": ""
+            },
+            {
+              "member_id": "e",
+              "contribution": 100,
+              "penalty_paid": 0,
+              "penalty_due": 0,
+              "reason": ""
+            },
+            {
+              "member_id": "f",
+              "contribution": 100,
+              "penalty_paid": 0,
+              "penalty_due": 0,
+              "reason": ""
+            }
+          ],
+          "expenses": [
+            {
+              "id": "expense",
+              "label": "Terrain QA",
+              "amount": 30
+            }
+          ],
+          "donations": [
+            {
+              "id": "don",
+              "label": "Soutien QA",
+              "amount": 40
+            }
+          ]
+        },
+        "updated_at": "2026-10-14T17:43:47.226044+00:00",
+        "candidates": []
+      },
+      "sport:2026-10-15-1": {
+        "domain": "sport",
+        "occurrence_id": "2026-10-15-1",
+        "owner": "e1166071-477a-47d6-9644-75b7cd1c379f",
+        "generation": 0,
+        "revision": 1,
+        "payload": {
+          "session": {
+            "id": "s_e0a1b71d5faa7046de525d0392086246",
+            "team_id": "qa-depart",
+            "played_at": "2026-10-15T07:51:00.000",
+            "status": "DRAFT",
+            "split_mode": "RANDOM",
+            "session_type": "CLASSIC_2",
+            "allow_uneven_teams": 0,
+            "is_ranked": 1,
+            "score_a": 0,
+            "score_b": 0,
+            "score_c": null,
+            "wins_a": 0,
+            "wins_b": 0,
+            "wins_c": 0,
+            "draw_points": 1,
+            "result": "DRAW",
+            "unassigned_goals_a": 0,
+            "unassigned_goals_b": 0,
+            "unassigned_goals_c": 0,
+            "notes": null,
+            "team_names": "{}",
+            "team_colors": "{}"
+          },
+          "participations": [
+            {
+              "id": "p_s_e0a1b71d5faa7046de525d0392086246_a",
+              "session_id": "s_e0a1b71d5faa7046de525d0392086246",
+              "player_id": "a",
+              "team": "B",
+              "goals": 0,
+              "assists": 0,
+              "yellow_cards": 0,
+              "red_cards": 0
+            },
+            {
+              "id": "p_s_e0a1b71d5faa7046de525d0392086246_b",
+              "session_id": "s_e0a1b71d5faa7046de525d0392086246",
+              "player_id": "b",
+              "team": "A",
+              "goals": 0,
+              "assists": 0,
+              "yellow_cards": 0,
+              "red_cards": 0
+            }
+          ]
+        },
+        "updated_at": "2026-10-15T06:58:23.698287+00:00",
+        "candidates": []
+      }
+    },
+    "opening": {
+      "cash": 1000,
+      "start_date": "2026-10-01",
+      "members": {
+        "a": {
+          "contribution_balance": 200,
+          "penalty_debt": 30
+        },
+        "b": {
+          "contribution_balance": -100,
+          "penalty_debt": 0
+        }
+      }
+    },
+    "audit": [
+      {
+        "actor": "a86ba28f-33a3-45ac-a74f-5c34e7cd04a6",
+        "action": "account_created",
+        "reason": "",
+        "at": "2026-10-14T14:32:59.267946+00:00"
+      },
+      {
+        "actor": "a86ba28f-33a3-45ac-a74f-5c34e7cd04a6",
+        "action": "account_created",
+        "reason": "",
+        "at": "2026-10-14T14:33:00.190771+00:00"
+      },
+      {
+        "actor": "a86ba28f-33a3-45ac-a74f-5c34e7cd04a6",
+        "action": "account_created",
+        "reason": "",
+        "at": "2026-10-14T14:33:01.132630+00:00"
+      },
+      {
+        "actor": "a86ba28f-33a3-45ac-a74f-5c34e7cd04a6",
+        "action": "account_created",
+        "reason": "",
+        "at": "2026-10-14T14:33:01.990080+00:00"
+      },
+      {
+        "actor": "522ea461-5950-43f1-ad1f-344ff44eff5b",
+        "action": "opening_proposed",
+        "reason": "",
+        "at": "2026-10-14T14:33:02.874905+00:00"
+      },
+      {
+        "actor": "e1166071-477a-47d6-9644-75b7cd1c379f",
+        "action": "opening_approved",
+        "reason": "",
+        "at": "2026-10-14T17:37:18.336994+00:00"
+      },
+      {
+        "actor": "522ea461-5950-43f1-ad1f-344ff44eff5b",
+        "action": "finance_sync",
+        "reason": "Version QA",
+        "at": "2026-10-14T17:43:47.226593+00:00"
+      },
+      {
+        "actor": "1dc22348-d07b-4053-90ce-4cc597c6fc6f",
+        "action": "finance_sync",
+        "reason": "Version QA",
+        "at": "2026-10-14T17:43:47.597203+00:00"
+      },
+      {
+        "actor": "e1166071-477a-47d6-9644-75b7cd1c379f",
+        "action": "finance_conflict_resolved",
+        "reason": "Controle-QA",
+        "at": "2026-10-14T17:54:08.271702+00:00"
+      },
+      {
+        "actor": "a86ba28f-33a3-45ac-a74f-5c34e7cd04a6",
+        "action": "roles_changed",
+        "reason": "Essai QA du contrôle des rôles",
+        "at": "2026-10-15T06:43:06.731464+00:00"
+      },
+      {
+        "actor": "e1166071-477a-47d6-9644-75b7cd1c379f",
+        "action": "sport_sync",
+        "reason": "Actualisation de la séance",
+        "at": "2026-10-15T06:58:23.706409+00:00"
+      }
+    ]
+  },
+  "device": {
+    "font_scale": "0.9",
+    "sessions": [
+      {
+        "id": "s_e0a1b71d5faa7046de525d0392086246",
+        "team_id": "qa-depart",
+        "played_at": "2026-10-15T07:51:00.000",
+        "status": "DRAFT"
+      },
+      {
+        "id": "s_f4e7ab6388e3bf9a5b7bb0c68cd7e039",
+        "team_id": "qa-depart",
+        "played_at": "2026-10-15T08:23:00.000",
+        "status": "DRAFT"
+      }
+    ],
+    "occurrences": [
+      {
+        "key": "shared_finance_alias_qa-depart_qa-finance",
+        "value": "remote_qa-depart_qa-finance"
+      },
+      {
+        "key": "shared_occurrence_s_9def23ee45249b171c8ee0da0f58d716",
+        "value": "2026-10-14-1"
+      },
+      {
+        "key": "shared_finance_alias_qa-depart_2026-10-15-1",
+        "value": "s_e0a1b71d5faa7046de525d0392086246"
+      },
+      {
+        "key": "shared_occurrence_s_f4e7ab6388e3bf9a5b7bb0c68cd7e039",
+        "value": "2026-10-15-2"
+      },
+      {
+        "key": "shared_finance_alias_qa-depart_2026-10-15-2",
+        "value": "s_f4e7ab6388e3bf9a5b7bb0c68cd7e039"
+      },
+      {
+        "key": "shared_occurrence_remote_qa-depart_qa-finance",
+        "value": "qa-finance"
+      },
+      {
+        "key": "shared_occurrence_s_e0a1b71d5faa7046de525d0392086246",
+        "value": "2026-10-15-1"
+      }
+    ]
+  }
+}

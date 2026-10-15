@@ -1,0 +1,235 @@
+{
+  "app": "statoo_5v5",
+  "version": 2,
+  "exported_at": "2026-10-14T10:00:00",
+  "team": {
+    "id": "qa-alpha",
+    "name": "QA Alpha",
+    "format": "5v5",
+    "created_at": "2026-10-14T10:00:00"
+  },
+  "teams": [
+    {
+      "id": "qa-alpha",
+      "name": "QA Alpha",
+      "format": "5v5",
+      "created_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "qa-beta",
+      "name": "QA Beta",
+      "format": "5v5",
+      "created_at": "2026-10-14T10:00:00"
+    }
+  ],
+  "players": [
+    {
+      "id": "a",
+      "team_id": "qa-alpha",
+      "name": "Alice QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "b",
+      "team_id": "qa-alpha",
+      "name": "Benoit QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "c",
+      "team_id": "qa-alpha",
+      "name": "Camille QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "d",
+      "team_id": "qa-alpha",
+      "name": "Diane QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "e",
+      "team_id": "qa-alpha",
+      "name": "Eli QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    },
+    {
+      "id": "f",
+      "team_id": "qa-alpha",
+      "name": "Farid QA",
+      "is_active": 1,
+      "created_at": "2026-10-14T10:00:00",
+      "updated_at": "2026-10-14T10:00:00"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "qa-tournament-1",
+      "team_id": "qa-alpha",
+      "played_at": "2026-10-13T18:00:00",
+      "status": "CLOSED",
+      "session_type": "TOURNAMENT_3",
+      "is_ranked": 1,
+      "wins_a": 3,
+      "wins_b": 1,
+      "wins_c": 0,
+      "result": "A",
+      "score_a": null,
+      "score_b": null,
+      "team_names": "{\"A\": \"Lions QA\", \"B\": \"Aigles QA\", \"C\": \"Tigres QA\"}"
+    },
+    {
+      "id": "qa-tournament-2",
+      "team_id": "qa-alpha",
+      "played_at": "2026-10-13T19:00:00",
+      "status": "CLOSED",
+      "session_type": "TOURNAMENT_3",
+      "is_ranked": 1,
+      "wins_a": 2,
+      "wins_b": 2,
+      "wins_c": 2,
+      "result": "DRAW_ALL",
+      "score_a": null,
+      "score_b": null,
+      "team_names": "{\"A\": \"Lions QA\", \"B\": \"Aigles QA\", \"C\": \"Tigres QA\"}"
+    }
+  ],
+  "participations": [
+    {
+      "id": "pt-qa-tournament-1-a",
+      "session_id": "qa-tournament-1",
+      "player_id": "a",
+      "team": "A",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-1-b",
+      "session_id": "qa-tournament-1",
+      "player_id": "b",
+      "team": "A",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-1-c",
+      "session_id": "qa-tournament-1",
+      "player_id": "c",
+      "team": "B",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-1-d",
+      "session_id": "qa-tournament-1",
+      "player_id": "d",
+      "team": "B",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-1-e",
+      "session_id": "qa-tournament-1",
+      "player_id": "e",
+      "team": "C",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-1-f",
+      "session_id": "qa-tournament-1",
+      "player_id": "f",
+      "team": "C",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-a",
+      "session_id": "qa-tournament-2",
+      "player_id": "a",
+      "team": "A",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-b",
+      "session_id": "qa-tournament-2",
+      "player_id": "b",
+      "team": "A",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-c",
+      "session_id": "qa-tournament-2",
+      "player_id": "c",
+      "team": "B",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-d",
+      "session_id": "qa-tournament-2",
+      "player_id": "d",
+      "team": "B",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-e",
+      "session_id": "qa-tournament-2",
+      "player_id": "e",
+      "team": "C",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    },
+    {
+      "id": "pt-qa-tournament-2-f",
+      "session_id": "qa-tournament-2",
+      "player_id": "f",
+      "team": "C",
+      "goals": 0,
+      "assists": 0,
+      "yellow_cards": 0,
+      "red_cards": 0
+    }
+  ],
+  "meta": {
+    "active_team_id": "qa-alpha"
+  },
+  "settings": {
+    "min_players_per_session": 2
+  }
+}

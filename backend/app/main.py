@@ -94,6 +94,10 @@ class Opening(BaseModel):
     members: dict[str, dict[str, StrictInt]]
 
 
+class OpeningApproval(BaseModel):
+    proposal: Opening
+
+
 def fail(code, message):
     raise HTTPException(code, message)
 
@@ -279,6 +283,8 @@ def create_app(url: str | None = None):
         _, group, state, actor = scoped(group_id, auth)
         require(actor, {"ADMIN"})
         roles = check_roles(body.roles)
+        if not set(roles) & SINGULAR:
+            fail(422, "Un compte individuel nécessite au moins un rôle de responsable. Les membres utilisent l’accès collectif.")
         if body.member_id not in {m["id"] for m in state["members"]}:
             fail(422, "Membre inconnu")
         if any(a["username"].casefold() == body.username.strip().casefold() for a in state["accounts"]):
@@ -376,11 +382,13 @@ def create_app(url: str | None = None):
         return {"ok": True}
 
     @app.post("/groups/{group_id}/opening/approve")
-    def approve_opening(group_id: str, auth=Depends(authenticate)):
+    def approve_opening(group_id: str, body: OpeningApproval, auth=Depends(authenticate)):
         _, group, state, actor = scoped(group_id, auth)
         require(actor, {"PDT", "VP"})
         if state["opening"] is not None or state["opening_proposal"] is None:
             fail(409, "Aucun solde à approuver")
+        if body.proposal.model_dump() != state["opening_proposal"]:
+            fail(409, "La proposition a changé. Actualisez et vérifiez les nouveaux soldes avant approbation.")
         state["opening"] = state["opening_proposal"]
         state["opening_proposal"] = None
         audit(state, actor, "opening_approved")

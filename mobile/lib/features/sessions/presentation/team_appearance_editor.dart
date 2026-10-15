@@ -15,10 +15,12 @@ class TeamAppearanceEditor extends StatefulWidget {
     required this.onNameChanged,
     required this.onColorChanged,
     required this.onReset,
+    this.editableNames = true,
     super.key,
   });
 
   final SessionType type;
+  final bool editableNames;
   final Map<String, String> names;
   final Map<String, int> colors;
   final void Function(Team team, String name) onNameChanged;
@@ -77,12 +79,16 @@ class _TeamAppearanceEditorState extends State<TeamAppearanceEditor> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Personnaliser les équipes',
+          widget.editableNames
+              ? 'Personnaliser les équipes'
+              : 'Équipes & couleurs',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 4),
         Text(
-          'Facultatif · Conservez les noms et couleurs par défaut ou choisissez les vôtres.',
+          widget.editableNames
+              ? 'Facultatif · Conservez les noms et couleurs par défaut ou choisissez les vôtres.'
+              : 'Noms attribués au hasard · Choisissez les couleurs.',
           style: TextStyle(color: context.colors.foreground400, fontSize: 12),
         ),
         for (final team in teams) ...[
@@ -115,19 +121,21 @@ class _TeamAppearanceEditorState extends State<TeamAppearanceEditor> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  key: ValueKey('team-name-${teamKey(team)}'),
-                  controller: _nameControllers[team],
-                  maxLength: 30,
-                  decoration: InputDecoration(
-                    labelText: 'Nom de ${defaultTeamName(team)}',
-                    hintText: defaultTeamName(team),
-                    counterText: '',
-                    border: const OutlineInputBorder(),
+                if (widget.editableNames) ...[
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    key: ValueKey('team-name-${teamKey(team)}'),
+                    controller: _nameControllers[team],
+                    maxLength: 30,
+                    decoration: InputDecoration(
+                      labelText: 'Nom de ${defaultTeamName(team)}',
+                      hintText: defaultTeamName(team),
+                      counterText: '',
+                      border: const OutlineInputBorder(),
+                    ),
+                    onChanged: (name) => onNameChanged(team, name),
                   ),
-                  onChanged: (name) => onNameChanged(team, name),
-                ),
+                ],
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 4,

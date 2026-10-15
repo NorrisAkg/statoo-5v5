@@ -28,6 +28,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
           hasSeenOnboardingProvider.overrideWith(
             () => OnboardingNotifier(initialValue: true),
           ),

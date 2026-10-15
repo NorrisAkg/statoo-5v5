@@ -1,0 +1,13 @@
+identites-test.json
+window.xml
+*.db
+*.db-journal
+captures/00-*
+captures/01-*
+captures/04-*
+captures/14-*
+captures/24-*
+captures/36-*
+captures/37-*
+captures/38-*
+captures/39-*

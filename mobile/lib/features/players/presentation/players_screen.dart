@@ -8,6 +8,7 @@ import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
+import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/players_provider.dart';
@@ -47,6 +48,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final writable = ref.watch(canWriteProvider('members'));
     final playersAsync = ref.watch(playersListProvider);
     final deletableIdsAsync = ref.watch(deletablePlayerIdsProvider);
     final deletableIds = deletableIdsAsync.value ?? const <String>{};
@@ -74,7 +76,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
             child: playersAsync.when(
               data: (players) => Text(
                 '${players.where((p) => p.isActive).length} actifs${activeTeam != null ? ' · ${activeTeam.name}' : ''}',
-                style: TextStyle(color: context.colors.foreground400, fontSize: 14),
+                style: TextStyle(color: context.colors.onHeader, fontSize: 14),
               ),
               loading: () => const SizedBox(),
               error: (_, _) => const SizedBox(),
@@ -152,7 +154,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
         loading: () => Center(child: CircularProgressIndicator(color: context.colors.primary500)),
         error: (err, _) => Center(child: Text('Erreur: $err', style: TextStyle(color: context.colors.danger))),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: writable ? FloatingActionButton(
         onPressed: () async {
           await showModalBottomSheet<void>(
             context: context,
@@ -164,7 +166,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
         backgroundColor: context.colors.primary500,
         foregroundColor: context.colors.background950,
         child: const Icon(Remix.add_line),
-      ),
+      ) : null,
     );
   }
 
@@ -204,9 +206,11 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
   Widget _buildPlayerCard(
     BuildContext context,
     Player player,
-    bool canDelete, {
+    bool deletable, {
     StandingEntry? standing,
   }) {
+    final writable = ref.watch(canWriteProvider('members'));
+    final canDelete = deletable && writable;
     final initial = player.name.isNotEmpty ? player.name[0].toUpperCase() : '?';
     final color = InitialAvatar.colorForName(player.name);
 
@@ -214,7 +218,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () => unawaited(context.push('/joueurs/${player.id}')),
-        onLongPress: () => unawaited(_showPlayerOptions(player, canDelete)),
+        onLongPress: writable ? () => unawaited(_showPlayerOptions(player, canDelete)) : null,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),

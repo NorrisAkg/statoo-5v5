@@ -85,6 +85,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: context.colors.foreground50,
+        iconTheme: IconThemeData(color: context.colors.foreground50),
         systemOverlayStyle: AppTheme.pageOverlayStyle(Theme.of(context).brightness),
         elevation: 0,
         leading: Navigator.of(context).canPop()

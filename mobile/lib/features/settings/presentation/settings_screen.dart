@@ -20,6 +20,7 @@ import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/settings_provider.dart';
 import '../data/backup_service.dart';
 import '../domain/backup_payload.dart';
+import 'confirm_replacement.dart';
 import 'financial_defaults_section.dart';
 import 'mvp_weights_section.dart';
 
@@ -671,6 +672,12 @@ class SettingsScreen extends ConsumerWidget {
     BackupPayload payload,
     bool isMerge,
   ) async {
+    Map<String, String>? expectedGroups;
+    if (!isMerge) {
+      final teams = await ref.read(allTeamsProvider.future);
+      if (!context.mounted || !await confirmReplacement(context, payload, teams) || !context.mounted) return;
+      expectedGroups = {for (final team in teams) team.id: team.name};
+    }
     final colors = context.colors;
 
     unawaited(
@@ -705,6 +712,7 @@ class SettingsScreen extends ConsumerWidget {
       final result = await ref.read(backupServiceProvider).restoreBackup(
             payload,
             merge: isMerge,
+            expectedGroups: expectedGroups,
           );
 
       await ref.read(sharedServiceProvider).load();
@@ -739,9 +747,10 @@ class SettingsScreen extends ConsumerWidget {
       if (!context.mounted) return;
       Navigator.of(context, rootNavigator: true).pop(); // dismiss loading
 
-      final message = isMerge
+      final message = (isMerge
           ? 'Fusion réussie : +${result.importedPlayersCount} joueurs, +${result.importedSessionsCount} séances (${result.reusedPlayersCount} joueurs réconciliés)'
-          : 'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés';
+          : 'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés') +
+          (result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.');
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

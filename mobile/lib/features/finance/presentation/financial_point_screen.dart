@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +39,54 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   bool _savedBefore = false;
   bool _saving = false;
   bool _cancelled = false;
+  String? _baseline;
+  bool _allowExit = false;
+  bool _exitDialog = false;
+
+  String _fingerprint() => jsonEncode({
+    'point': _current().toJson(),
+    'invalid': {
+      for (final entry in {
+        ..._contributions.map((k, v) => MapEntry('c$k', v)),
+        ..._penalties.map((k, v) => MapEntry('p$k', v)),
+      }.entries)
+        if (entry.value.text.isNotEmpty &&
+            int.tryParse(entry.value.text) == null)
+          entry.key: entry.value.text,
+    },
+  });
+  bool get _dirty => _loaded && _baseline != _fingerprint();
+
+  Future<void> _confirmExit() async {
+    if (_saving || _exitDialog) return;
+    _exitDialog = true;
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Quitter sans enregistrer ?'),
+        content: const Text(
+          'Les modifications de ce point ne sont pas enregistrées. Vous pouvez continuer la saisie ou les abandonner.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Continuer la saisie'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Abandonner les modifications'),
+          ),
+        ],
+      ),
+    );
+    _exitDialog = false;
+    if (discard != true || !mounted) return;
+    setState(() => _allowExit = true);
+    // Laisser PopScope publier la nouvelle autorisation avant le pop.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop();
+    });
+  }
 
   @override
   void initState() {
@@ -79,6 +128,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       }
       _expenses.addAll(point.expenses);
       _donations.addAll(point.donations);
+      _baseline = _fingerprint();
       setState(() => _loaded = true);
     } on Object catch (error) {
       if (mounted) setState(() => _error = '$error');
@@ -117,6 +167,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   );
 
   Future<void> _save() async {
+    if (_saving) return;
     if (ref.read(activeTeamIdProvider) != _group) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -128,6 +179,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       return;
     }
     final point = _current();
+    setState(() => _saving = true);
     try {
       point.validate();
       final reason = TextEditingController();
@@ -173,7 +225,6 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       final correction = reason.text.trim();
       reason.dispose();
       if (confirm != true || !mounted) return;
-      setState(() => _saving = true);
       await ref
           .read(financeRepositoryProvider)
           .savePoint(_group!, widget.sessionId, point, reason: correction);
@@ -181,6 +232,10 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       ref.invalidate(financialTotalsProvider);
       if (mounted) {
         _savedBefore = true;
+        _baseline = jsonEncode({
+          'point': point.toJson(),
+          'invalid': <String, String>{},
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Point enregistré sur ce téléphone.')),
         );
@@ -324,103 +379,111 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
     final canWrite = shared.canWrite(_group, 'finance');
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text('Point financier'),
-          bottom: TabBar(
-            labelColor: context.colors.onHeader,
-            unselectedLabelColor: context.colors.onHeader,
-            tabs: const [
-              Tab(text: 'Encaissements'),
-              Tab(text: 'Dépenses'),
-            ],
+      child: PopScope(
+        canPop: _allowExit || (!_dirty && !_saving),
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) unawaited(_confirmExit());
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: const Text('Point financier'),
+            bottom: TabBar(
+              labelColor: context.colors.onHeader,
+              unselectedLabelColor: context.colors.onHeader,
+              tabs: const [
+                Tab(text: 'Encaissements'),
+                Tab(text: 'Dépenses'),
+              ],
+            ),
           ),
-        ),
-        body: _error != null
-            ? Center(child: Text(_error!))
-            : !_loaded
-            ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Cotisation : ${_point!.rate} F · ${_point!.playedAt.day}/${_point!.playedAt.month}/${_point!.playedAt.year}',
-                          ),
-                        ),
-                        if (canWrite)
-                          TextButton(
-                            onPressed: () async {
-                              final value = await _askRate();
-                              if (value != null && mounted) {
-                                setState(
-                                  () => _point = FinancialPoint(
-                                    playedAt: _point!.playedAt,
-                                    rate: value,
-                                    lines: _point!.lines,
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text('Modifier'),
-                          ),
-                      ],
-                    ),
-                  ),
-                  if (canWrite)
-                    SwitchListTile(
-                      title: const Text('Séance annulée'),
-                      subtitle: const Text(
-                        'Cotisations dues, aucun mouvement de caisse',
+          body: _error != null
+              ? Center(child: Text(_error!))
+              : !_loaded
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                      value: _cancelled,
-                      onChanged: (value) => setState(() => _cancelled = value),
-                    ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        _receipts(canWrite && !_cancelled),
-                        _expenseList(canWrite && !_cancelled),
-                      ],
-                    ),
-                  ),
-                  SafeArea(
-                    maintainBottomViewPadding: true,
-                    top: false,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
+                      child: Row(
                         children: [
-                          _total('Total encaissé', _current().received),
-                          _total('Total dépensé', _current().spent),
-                          if (canWrite)
-                            SizedBox(
-                              width: double.infinity,
-                              child: FilledButton(
-                                onPressed: _saving
-                                    ? null
-                                    : () => unawaited(_save()),
-                                child: Text(
-                                  _saving
-                                      ? 'Enregistrement…'
-                                      : 'Valider le point',
-                                ),
-                              ),
+                          Expanded(
+                            child: Text(
+                              'Cotisation : ${_point!.rate} F · ${_point!.playedAt.day}/${_point!.playedAt.month}/${_point!.playedAt.year}',
                             ),
-                          if (!canWrite) const Text('Consultation uniquement'),
+                          ),
+                          if (canWrite)
+                            TextButton(
+                              onPressed: () async {
+                                final value = await _askRate();
+                                if (value != null && mounted) {
+                                  setState(
+                                    () => _point = FinancialPoint(
+                                      playedAt: _point!.playedAt,
+                                      rate: value,
+                                      lines: _point!.lines,
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text('Modifier'),
+                            ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    if (canWrite)
+                      SwitchListTile(
+                        title: const Text('Séance annulée'),
+                        subtitle: const Text(
+                          'Cotisations dues, aucun mouvement de caisse',
+                        ),
+                        value: _cancelled,
+                        onChanged: (value) =>
+                            setState(() => _cancelled = value),
+                      ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _receipts(canWrite && !_cancelled),
+                          _expenseList(canWrite && !_cancelled),
+                        ],
+                      ),
+                    ),
+                    SafeArea(
+                      maintainBottomViewPadding: true,
+                      top: false,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            _total('Total encaissé', _current().received),
+                            _total('Total dépensé', _current().spent),
+                            if (canWrite)
+                              SizedBox(
+                                width: double.infinity,
+                                child: FilledButton(
+                                  onPressed: _saving
+                                      ? null
+                                      : () => unawaited(_save()),
+                                  child: Text(
+                                    _saving
+                                        ? 'Enregistrement…'
+                                        : 'Valider le point',
+                                  ),
+                                ),
+                              ),
+                            if (!canWrite)
+                              const Text('Consultation uniquement'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

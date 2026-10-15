@@ -8,6 +8,8 @@ Le monorepo sépare le client Flutter (`mobile/`), l’API FastAPI (`backend/`) 
 
 Tous les comptes ont MEMBER. ADMIN est le créateur et gère les comptes et le répertoire. Les titulaires peuvent cumuler des rôles ; chaque rôle de direction a au plus un titulaire par groupe. PDT et TR doivent être attribués avant la première synchronisation métier.
 
+Les simples membres consultent via l'accès collectif : aucun compte individuel n'est à créer pour eux. Toute nouvelle création de compte individuel exige au moins un rôle de responsable (y compris Censeur). Les comptes existants sont conservés ; un ancien responsable ayant transmis son dernier rôle garde son accès de consultation et son historique. Le rôle MEMBER demeure ajouté automatiquement aux comptes des responsables.
+
 | Rôle | Action |
 | --- | --- |
 | ADMIN | Comptes, attribution et transfert explicite de rôles, accès collectif, répertoire |

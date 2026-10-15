@@ -16,3 +16,7 @@ node_modules/
 web/dist/
 coverage/
 .neon
+
+# Local audit screenshots
+/docs/audit-ui-ux-2026-10-14/*.png
+/docs/essais-appareil-2026-10-14/captures/

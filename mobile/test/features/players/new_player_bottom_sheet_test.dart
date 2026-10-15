@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:statoo/features/shared/application/shared_providers.dart';
+import '../../support/local_shared_service.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statoo/core/theme/app_theme.dart';
@@ -106,6 +108,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
+            sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
             playersRepositoryProvider.overrideWithValue(repo),
             activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
           ],

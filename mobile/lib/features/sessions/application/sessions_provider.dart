@@ -201,7 +201,7 @@ class SessionsController {
     }).toList();
 
     if (occurrenceId != null && occurrenceId.trim().isNotEmpty) {
-      final db = await AppDatabase.instance.database;
+      final db = await _ref.read(sharedServiceProvider).database.database;
       await db.insert('meta', {
         'key': 'shared_occurrence_$sessionId',
         'value': occurrenceId.trim(),

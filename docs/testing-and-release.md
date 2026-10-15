@@ -4,6 +4,10 @@ Inventaire au 12 octobre 2026. Tests, analyse Flutter et builds non exécutés l
 
 ## Tests
 
+Depuis le 14 octobre 2026, le workflow demandé est le TDD : voir [les conventions](conventions.md) et [les scénarios des huit majeurs UI/UX](tdd-majeurs-ui-ux.md). Les inventaires et résultats historiques ci-dessous ne remplacent pas une exécution actuelle. Un scénario spécifié n'est pas un test exécuté.
+
+Pour le lot UX01–UX08, les résultats observés, le changement de contrat d'approbation serveur et les vérifications appareil restantes sont consignés dans le [journal TDD](tdd-majeurs-journal.md).
+
 31 fichiers *test.dart : règles/calculs purs, widgets avec overrides Riverpod et SQLite en mémoire via sqflite_common_ffi.
 
 | Sujet | Exemple |

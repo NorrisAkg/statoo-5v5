@@ -24,9 +24,17 @@ Sources : `lib/core/theme/app_theme.dart`, `lib/core/widgets/initial_avatar.dart
 
 ## Workflow et références
 
+### TDD — instruction utilisateur du 14 octobre 2026
+
+Précision utilisateur du 15 octobre 2026 : **tous les scénarios de test du périmètre prévu et leurs résultats attendus doivent être écrits avant tout code applicatif**, même pour une modification simple. Inclure les cas nominaux, variantes, limites, erreurs et régressions pertinents. Pour tout cas découvert ensuite, écrire son scénario et son test avant le code correspondant. Cette consigne persistante figure également dans `AGENTS.md` à la racine et s'applique à toutes les sessions du projet.
+
+Les corrections et évolutions suivent désormais le TDD : scénarios et résultats attendus écrits avant le code applicatif, test comportemental qui échoue pour la raison attendue, correction minimale, puis refactorisation et régression. Un échec de fixture, de compilation ou d'environnement ne constitue pas une preuve du défaut. Ne pas annoncer un scénario exécuté sans résultat observé ; distinguer tests automatisés et contrôles sur appareil.
+
+Le premier lot couvre les huit majeurs de l'audit UI/UX : [catalogue de scénarios](tdd-majeurs-ui-ux.md). Conserver la traçabilité entre identifiant du scénario, test, preuve RED et résultat GREEN. Toute nouvelle règle découverte reçoit son scénario avant implémentation.
+
 CLAUDE.md et GEMINI.md demandent une revue dédiée après implémentation avant commit. Pour un commit demandé, consulter la compétence .agents/skills/commit/SKILL.md. Aucun commit n'a été réalisé pour cet onboarding.
 
-Les règles Windows sont dans .agents/rules/powershell_windows.md. Aucun AGENTS.md n'a été trouvé dans le dépôt ni aux niveaux parents examinés lors de l'onboarding.
+Les règles Windows sont dans .agents/rules/powershell_windows.md. Les consignes persistantes pour les agents sont dans `AGENTS.md` à la racine du dépôt.
 
 CDC pour les règles initiales, captures pour le design ; extensions et divergences dans [le registre](decisions-and-risks.md). Une intention produit ne doit pas être déduite de la seule présence de code.
 

@@ -15,9 +15,11 @@ import '../../ranking/domain/standing_entry.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
+import 'home_session_result.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
+import '../../shared/application/shared_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -25,7 +27,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activeDraftAsync = ref.watch(activeDraftSessionProvider);
-    final sessionsAsync = ref.watch(sessionsListProvider);
+    final sessionsAsync = ref.watch(allSessionsProvider);
     final activeTeam = ref.watch(activeTeamProvider).value;
 
     return Scaffold(
@@ -89,7 +91,7 @@ class HomeScreen extends ConsumerWidget {
             sessionsAsync.value,
           ),
           const SizedBox(height: 16),
-          PrimaryButton(
+            if (ref.watch(canWriteProvider('sport'))) PrimaryButton(
             label: 'Nouvelle séance',
             icon: Remix.add_line,
             onPressed: () => context.push('/seances/nouvelle'),
@@ -156,51 +158,7 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Équipe A',
-                  style: TextStyle(
-                    color: context.colors.accent400,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  '${activeDraft.scoreA ?? 0}',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    '-',
-                    style: TextStyle(
-                      fontSize: 28,
-                      color: context.colors.foreground600,
-                    ),
-                  ),
-                ),
-                Text(
-                  '${activeDraft.scoreB ?? 0}',
-                  style: const TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'Équipe B',
-                  style: TextStyle(
-                    color: context.colors.secondary400,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+            HomeSessionResult(session: activeDraft),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -226,7 +184,9 @@ class HomeScreen extends ConsumerWidget {
     }
 
     // 2. If recent closed session exists
-    final recentClosed = sessions?.where((s) => s.isClosed).firstOrNull;
+    final closedSessions = sessions?.where((s) => s.isClosed).toList()
+      ?..sort((a, b) => b.session.playedAt.compareTo(a.session.playedAt));
+    final recentClosed = closedSessions?.firstOrNull;
     if (recentClosed != null) {
       final s = recentClosed.session;
       return AppCard(
@@ -262,51 +222,7 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Équipe A',
-                    style: TextStyle(
-                      color: context.colors.accent400,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    '${s.scoreA ?? 0}',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text(
-                      '-',
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: context.colors.foreground600,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    '${s.scoreB ?? 0}',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Équipe B',
-                    style: TextStyle(
-                      color: context.colors.secondary400,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
+              HomeSessionResult(session: s),
             ],
           ),
         ),

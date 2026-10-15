@@ -1,0 +1,30 @@
+{
+  "capturedAt": "2026-10-14T13:07:46.809864",
+  "sourceHashesSHA256": {
+    "mobile/lib/features/team/presentation/create_team_screen.dart": "516ab658b0322b406e7da9ef37c056d68a85240b782a89f88e403a3d955082f2",
+    "mobile/lib/features/settings/data/backup_service.dart": "8da0b0a68b17a1b986316ae1529a3a13947f5189057d2c394d2aca574fd89df0",
+    "mobile/lib/features/finance/presentation/financial_point_screen.dart": "b9cb7362971a78ae6aa06c5e2665e08c81a790243bcebca89ebf375a2126bc94",
+    "mobile/lib/features/sessions/presentation/new_session_screen.dart": "845473c1570e265f4ba45606fdea3e65764137f84b01a6278d2af8dfb00229a7",
+    "mobile/lib/features/finance/data/finance_repository.dart": "e16ba63fe95cf94643ffb843d3d0e82fea3bc9965b1f2e2e354f9e13665c7a9b",
+    "mobile/lib/features/shared/presentation/shared_group_screen.dart": "1edf359dc9218b8a3b7f18129a2504847309c652deab85528dc18eaf1726677e",
+    "mobile/lib/features/players/presentation/players_screen.dart": "9bb21877ca5ea98811ab89548ba07633634a594267b084551d63c9f7de13f412",
+    "mobile/lib/features/players/presentation/new_player_bottom_sheet.dart": "eb6cb672cf5b1e4ccfd550c0c520a913aca47a0b12de5d351d7087de9d63c027",
+    "mobile/lib/features/players/application/players_provider.dart": "34589bba5ca4fc72962ee16673b6a9c4dac29018a04b921524e4696c43834277",
+    "mobile/lib/features/sessions/application/sessions_provider.dart": "8b24164f5b716067629b5cda50955a6796565b7b20c6a860b7569e1d203cc18c",
+    "mobile/lib/core/theme/app_colors.dart": "c74aa54f5adf90db897464724a05fa3db21dada31caae58561bfde6e02db1c9f",
+    "mobile/lib/core/widgets/primary_button.dart": "9d7bde6d0cf715654fd12deba45ffe07427481167daf0e072b261b9c56d5c4db",
+    "web/summary.mjs": "25fd880e78646941479eae9f6d88000b7e6b7219a2253095f3a3936a12bf3247",
+    "mobile/lib/core/data/app_database.dart": "00b3cddb9af624e834cfb305329763bd505873b0040daaff1a9363a5baf41c6b",
+    "mobile/lib/features/players/data/players_repository.dart": "ae006605a39836e5cf0953cb9c4032e8e6973188de03625b2e72931b4de4fa5b",
+    "mobile/lib/features/home/presentation/home_screen.dart": "5d0b74ffa673f339fc3312f9957d325db90d1250955f6f636b2aeb04bb50424a",
+    "mobile/lib/features/sessions/presentation/session_team_colors.dart": "5bdea838ee7515a9479610953882e9f26410b14fe4e22ea5e1d00ef7b80e4e55",
+    "mobile/lib/features/sessions/presentation/add_late_players_bottom_sheet.dart": "63b63fddbcb6bd2913bdcc61a2c672455fd8eaf617f4a58d07b81a2be38fd750",
+    "web/index.html": "89e85406cddb86477aa02de3fd778be50ee401817369415f966fd775e82d5457",
+    "web/app.mjs": "bafefb2d05feb73f80705656c5ad3cb4be6c79fbfc69dd0d7d80fd8940aec966",
+    "mobile/lib/features/sessions/presentation/sessions_screen.dart": "25410c6c0dca641cfdfbea694b4687656f58b7ca71fc4ddf3c0090f708f90aec",
+    "mobile/lib/features/settings/presentation/settings_screen.dart": "93865fb9bfef8d74d6ec2a01117e095164a5b9fa13a221d21e7ad2d494f3e685"
+  },
+  "gitHead": "2181ac889734168096c480e9f3001fcfff09b99f",
+  "gitBranch": "staging",
+  "gitStatus": "M CLAUDE.md\n M mobile/lib/features/finance/application/finance_providers.dart\n M mobile/lib/features/finance/data/finance_repository.dart\n M mobile/lib/features/finance/presentation/finances_screen.dart\n M mobile/lib/features/shared/presentation/shared_group_screen.dart\n?? docs/audit-ui-ux-2026-10-14/\n?? mobile/lib/features/finance/domain/financial_report.dart\n?? mobile/test/features/finance/finances_screen_test.dart\n?? mobile/test/features/finance/financial_report_test.dart\n?? mobile/test/features/shared/shared_group_screen_test.dart"
+}

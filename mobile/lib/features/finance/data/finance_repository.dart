@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/occurrence_registry.dart';
 import '../../shared/data/shared_service.dart';
 import '../domain/financial_defaults.dart';
 import '../domain/financial_point.dart';
+import '../domain/financial_report.dart';
 
 class FinanceRepository {
   FinanceRepository(this.database, this.shared);
@@ -60,16 +62,8 @@ class FinanceRepository {
     DateTime? date,
   }) async {
     final db = await database.database;
-    final occurrenceRows = await db.query(
-      'meta',
-      where: 'key = ?',
-      whereArgs: ['shared_occurrence_$session'],
-    );
-    String? occurrence = occurrenceRows.isEmpty
-        ? null
-        : occurrenceRows.single['value']! as String;
-    if (occurrence == null) {
-      final sessions = await db.query(
+    return db.transaction((txn) async {
+      final sessions = await txn.query(
         'sessions',
         where: 'id = ? AND team_id = ?',
         whereArgs: [session, group],
@@ -77,24 +71,13 @@ class FinanceRepository {
       final playedAt =
           date?.toIso8601String() ??
           (sessions.isEmpty ? null : sessions.single['played_at'] as String?);
-      if (playedAt == null) return session;
-      occurrence = '${playedAt.substring(0, 10)}-1';
-      await db.insert('meta', {
-        'key': 'shared_occurrence_$session',
-        'value': occurrence,
-      }, conflictAlgorithm: ConflictAlgorithm.ignore);
-    }
-    final alias = await db.query(
-      'meta',
-      where: 'key = ?',
-      whereArgs: ['shared_finance_alias_${group}_$occurrence'],
-    );
-    if (alias.isNotEmpty) return alias.single['value']! as String;
-    await db.insert('meta', {
-      'key': 'shared_finance_alias_${group}_$occurrence',
-      'value': session,
-    }, conflictAlgorithm: ConflictAlgorithm.ignore);
-    return session;
+      // Les échéances sans séance conservent aussi leur référence déjà connue.
+      final refs = await txn.query('meta', where: 'key = ?', whereArgs: ['shared_occurrence_$session']);
+      if (playedAt == null && refs.isEmpty) return session;
+      final identity = await reserveOccurrence(txn, group, session,
+          playedAt == null ? DateTime(1970) : DateTime.parse(playedAt));
+      return identity.canonicalId;
+    });
   }
 
   Future<FinancialPoint?> getPoint(String group, String session) async {
@@ -231,6 +214,35 @@ class FinanceRepository {
     };
   }
 
+  Future<List<PendingFinancialPeriod>> pendingPeriods(
+    String group, {
+    required DateTime asOf,
+    DateTime? since,
+  }) async {
+    final db = await database.database;
+    final known = await periods(group);
+    final sessions = await db.query(
+      'sessions',
+      where: 'team_id = ?',
+      whereArgs: [group],
+      orderBy: 'played_at DESC',
+    );
+    final end = DateTime(asOf.year, asOf.month, asOf.day + 1);
+    final seen = <String>{};
+    final pending = <PendingFinancialPeriod>[];
+    for (final session in sessions) {
+      final date = DateTime.parse(session['played_at']! as String);
+      if (!date.isBefore(end) || (since != null && date.isBefore(since)))
+        continue;
+      final id = session['id']! as String;
+      final financialId = await canonical(group, id, date: date);
+      if (!seen.add(financialId)) continue;
+      if (!known.containsKey(financialId))
+        pending.add(PendingFinancialPeriod(sessionId: id, date: date));
+    }
+    return pending;
+  }
+
   Future<List<FinancialPoint>> allPoints(String group) async =>
       (await periods(group)).values.toList();
 
@@ -272,21 +284,19 @@ class FinanceRepository {
   ) async {
     await shared.requireWrite(group, 'finance');
     final db = await database.database;
-    final existing = await db.query(
-      'meta',
-      where: 'key = ?',
-      whereArgs: ['shared_finance_alias_${group}_$reference'],
-    );
-    if (existing.isNotEmpty) {
-      throw const FormatException('Cette échéance existe déjà.');
-    }
+    final normalized = reference.trim();
+    if (normalized.isEmpty) throw const FormatException('Indiquez une référence pour cette échéance.');
     final id = 'period_${shared.operationId()}';
-    await db.insert('meta', {
-      'key': 'shared_occurrence_$id',
-      'value': reference,
-    });
-    final point = await prepare(group, id, date);
     await db.transaction((txn) async {
+      final existing = await txn.query('meta', where: 'key = ?', whereArgs: ['shared_finance_alias_${group}_$normalized']);
+      if (existing.isNotEmpty) throw const FormatException('Cette échéance existe déjà.');
+      await txn.insert('meta', {'key': 'shared_occurrence_$id', 'value': normalized});
+      await reserveOccurrence(txn, group, id, date);
+      final members = await txn.query('players', where: 'team_id = ? AND is_active = 1', whereArgs: [group]);
+      final settings = await txn.query('meta', where: 'key = ?', whereArgs: ['finance_rate_$group']);
+      final rate = settings.isEmpty ? 100 : int.tryParse(settings.single['value']! as String) ?? 100;
+      final point = FinancialPoint(playedAt: date, rate: rate,
+          lines: members.map((p) => FinancialLine(memberId: p['id']! as String)).toList());
       await txn.insert('meta', {
         'key': key(group, id),
         'value': jsonEncode(point.toJson()),

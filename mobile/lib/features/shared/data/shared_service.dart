@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/occurrence_registry.dart';
 
 class SharedService {
   SharedService(this.database, {FlutterSecureStorage? storage})
@@ -24,10 +25,16 @@ class SharedService {
       const [];
   bool get connected => identity != null;
   final Set<String> protectedGroups = {};
+  bool get identityValid {
+    final expiry = DateTime.tryParse('${identity?['expires_at'] ?? ''}');
+    return expiry != null && DateTime.now().toUtc().isBefore(expiry.toUtc());
+  }
   bool canWrite(String? group, String domain) =>
-      !protectedGroups.contains(group) ||
-      (connected && group == groupId && permits(domain));
-  bool permits(String domain) => roles.any(
+      group != null && (
+        (!protectedGroups.contains(group) && group != groupId) ||
+        (connected && group == groupId && identityValid && permits(domain))
+      );
+  bool permits(String domain) => (identity?['account'] as Map?)?['shared'] != true && roles.any(
     (r) =>
         (domain == 'sport'
                 ? ['SG', 'SGA']
@@ -165,14 +172,20 @@ class SharedService {
       whereArgs: ['shared_group_$group'],
     );
     if (marker.isNotEmpty) protectedGroups.add(group);
+    if (!protectedGroups.contains(group) && group != groupId) {
+      if (connected) {
+        final local = await localDb.query('teams', columns: ['id'], where: 'id = ?', whereArgs: [group]);
+        if (local.isEmpty) throw StateError('Groupe local introuvable ou autre groupe partagé.');
+      }
+      return;
+    }
     if (!connected) {
       if (protectedGroups.contains(group)) {
         throw StateError('Reconnectez-vous pour modifier ce groupe partagé.');
       }
       return;
     }
-    final expiry = DateTime.parse(identity!['expires_at'] as String);
-    if (DateTime.now().toUtc().isAfter(expiry.toUtc())) {
+    if (!identityValid) {
       throw StateError('Connexion expirée ; reconnectez-vous en ligne.');
     }
     if (group != groupId || !permits(domain)) {
@@ -213,20 +226,8 @@ class SharedService {
                 ? payload['played_at']
                 : (payload['session'] as Map)['played_at'])
             as String;
-    // The existing wizard creates a weekly occurrence. Its shared identity is the date
-    // plus the original start time; separate sessions on the same day stay distinct.
-    final occurrenceRows = await db.query(
-      'meta',
-      where: 'key = ?',
-      whereArgs: ['shared_occurrence_$sessionId'],
-    );
-    final occurrence = occurrenceRows.isEmpty
-        ? '${day.substring(0, 10)}-1'
-        : occurrenceRows.single['value']! as String;
-    await db.insert('meta', {
-      'key': 'shared_occurrence_$sessionId',
-      'value': occurrence,
-    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    final identity = await reserveOccurrence(db, group, sessionId, DateTime.parse(day));
+    final occurrence = identity.reference;
     final revisionRows = await db.query(
       'meta',
       where: 'key = ?',

@@ -119,6 +119,7 @@ class RestoreResult {
     required this.importedParticipationsCount,
     this.reusedPlayersCount = 0,
     this.skippedSessionsCount = 0,
+    this.normalizedSessionsCount = 0,
   });
 
   final bool isMerge;
@@ -128,4 +129,6 @@ class RestoreResult {
   final int importedParticipationsCount;
   final int reusedPlayersCount;
   final int skippedSessionsCount;
+  /// Séances récupérées en brouillon car leur résultat clôturé est incomplet.
+  final int normalizedSessionsCount;
 }

@@ -60,8 +60,11 @@ Features : home, onboarding, team, players, sessions, ranking, stats, settings.
 
 ## UI
 
+- Avant toute création ou refonte d’écran, examiner les écrans existants et le thème actuel. Respecter Poppins, les tailles et graisses, les couleurs via context.colors, les cartes, champs, boutons et espacements existants. Vérifier les états clair/sombre et les vues selon les rôles. Consacrer une attention particulière à la cohérence visuelle ; les consignes historiques ne remplacent pas le design réellement utilisé.
+
+
 - Couleurs uniquement via `context.colors` (`AppColorsExtension`, `core/theme/app_colors.dart`) ; thèmes clair et sombre (`AppTheme.lightTheme` / `darkTheme`). Pas de `Color(0x…)` en dur hors illustrations de l'onboarding.
-- Police Inter (`google_fonts`), icônes `remixicon` (jamais Material Icons à la place).
+- Police Poppins (`google_fonts`, polices embarquées), icônes `remixicon` (jamais Material Icons à la place).
 - Dates avec `intl`, locale `fr_FR` (`9 sept.`, `mer. 9 sept. 2026 · 20h30`).
 - Réutiliser `core/widgets/` (`AppCard`, `StatusBadge`, `InitialAvatar`, `PrimaryButton`, `Stepper3`…) avant d'en créer.
 - Pas de système l10n : les libellés français sont écrits directement dans les widgets.

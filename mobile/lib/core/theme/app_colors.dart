@@ -202,7 +202,7 @@ class AppColors {
     foreground500: Color(0xFF64748B),
     foreground600: Color(0xFF475569),
     primary500: Color(0xFF15803D), // High-contrast green (≥ 4.9:1)
-    primary400: Color(0xFF16A34A),
+    primary400: Color(0xFF166534), // Petits textes sur cartes et fond de page clair.
     primary300: Color(0xFF22C55E),
     secondary500: Color(0xFFC2410C), // High-contrast orange
     secondary400: Color(0xFFEA580C),

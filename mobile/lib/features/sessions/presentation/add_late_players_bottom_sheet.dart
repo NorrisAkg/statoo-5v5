@@ -9,6 +9,7 @@ import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
+import '../../shared/application/shared_providers.dart';
 import '../application/sessions_provider.dart';
 import '../domain/participation.dart';
 
@@ -388,7 +389,7 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
                 ],
                 const SizedBox(width: 8),
               ],
-              OutlinedButton.icon(
+              if (ref.watch(canWriteProvider('members'))) OutlinedButton.icon(
                 icon: const Icon(Remix.user_add_line, size: 16),
                 label: const Text('Créer'),
                 style: OutlinedButton.styleFrom(

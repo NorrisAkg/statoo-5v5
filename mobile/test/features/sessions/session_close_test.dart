@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:statoo/features/shared/application/shared_providers.dart';
+import '../../support/local_shared_service.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/data/sessions_repository.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
@@ -290,6 +292,7 @@ void main() {
     ProviderContainer containerFor(SessionsRepository repo) {
       final container = ProviderContainer(
         overrides: [
+          sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
         ],
@@ -381,6 +384,7 @@ void main() {
     ProviderContainer containerFor(SessionsRepository repo) {
       final container = ProviderContainer(
         overrides: [
+          sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
         ],
@@ -413,6 +417,7 @@ void main() {
     ProviderContainer containerFor(SessionsRepository repo) {
       final container = ProviderContainer(
         overrides: [
+          sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
         ],

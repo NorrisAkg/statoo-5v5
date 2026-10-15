@@ -74,7 +74,7 @@ class AppTheme {
         secondary: colors.secondary500,
         surface: colors.background900,
         error: colors.danger,
-        onPrimary: AppColors.onPrimaryDark,
+        onPrimary: Colors.white,
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(

@@ -35,7 +35,7 @@ class Stepper3 extends StatelessWidget {
       child: Text(
         '$step',
         style: TextStyle(
-          color: isActive ? AppColors.onPrimaryDark : context.colors.foreground400,
+          color: isActive ? Theme.of(context).colorScheme.onPrimary : context.colors.foreground400,
           fontSize: 12,
           fontWeight: FontWeight.bold,
         ),

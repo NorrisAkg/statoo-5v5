@@ -9,6 +9,7 @@ import '../../ranking/application/ranking_providers.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../settings/application/settings_provider.dart';
 import '../../settings/data/backup_service.dart';
+import '../../settings/presentation/confirm_replacement.dart';
 import '../../stats/application/stats_providers.dart';
 import '../application/team_provider.dart';
 import '../domain/team_info.dart';
@@ -65,12 +66,15 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
   }
 
   Future<void> _restoreFromBackup() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
     try {
       final payload = await ref.read(backupServiceProvider).pickBackupFile();
       if (payload == null || !mounted) return;
-
-      setState(() => _isLoading = true);
-      final result = await ref.read(backupServiceProvider).restoreBackup(payload, merge: false);
+      final teams = await ref.read(allTeamsProvider.future);
+      if (!mounted || !await confirmReplacement(context, payload, teams) || !mounted) return;
+      final result = await ref.read(backupServiceProvider).restoreBackup(payload, merge: false,
+          expectedGroups: {for (final team in teams) team.id: team.name});
 
       await ref.read(hasTeamProvider.notifier).reloadFromDb();
       await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
@@ -95,7 +99,8 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés.',
+              'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés.'
+              '${result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.'}',
             ),
           ),
         );
@@ -123,6 +128,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: context.colors.foreground50,
+        iconTheme: IconThemeData(color: context.colors.foreground50),
         systemOverlayStyle: AppTheme.pageOverlayStyle(Theme.of(context).brightness),
         elevation: 0,
         leading: Navigator.of(context).canPop()
@@ -357,7 +363,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                     onPressed: _isLoading ? null : _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colors.primary500,
-                      foregroundColor: AppColors.onPrimaryDark,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9999),
                       ),

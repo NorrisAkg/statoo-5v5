@@ -1,0 +1,113 @@
+{"at": "2026-10-14T15:35:42", "action": "capture", "values": ["01-qa-demarrage"], "capture": "01-qa-demarrage"}
+{"at": "2026-10-14T15:46:51", "action": "capture", "values": ["02-qa-installation"], "capture": "02-qa-installation"}
+{"at": "2026-10-14T15:47:21", "action": "capture", "values": ["03-qa-premier-ecran"], "capture": "03-qa-premier-ecran"}
+{"at": "2026-10-14T15:57:19", "action": "back", "values": [], "capture": "04-qa-creation"}
+{"at": "2026-10-14T15:58:06", "action": "launch", "values": [], "capture": "06-qa-reprise"}
+{"at": "2026-10-14T16:02:34", "action": "capture", "values": ["07-qa-etat"], "capture": "07-qa-etat"}
+{"at": "2026-10-14T16:02:58", "action": "tap", "values": ["540", "2197"], "capture": "08-choix-sauvegarde"}
+{"at": "2026-10-14T16:03:33", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-14T16:04:09", "action": "tap", "values": ["882", "160"], "capture": "09-recherche"}
+{"at": "2026-10-14T16:04:36", "action": "text", "values": ["Statoo-QA"], "capture": "10-recherche-qa"}
+{"at": "2026-10-14T16:04:59", "action": "tap", "values": ["992", "2180"], "capture": "11-resultats-fichiers"}
+{"at": "2026-10-14T16:05:34", "action": "tap", "values": ["500", "1160"], "capture": "12-import-recap"}
+{"at": "2026-10-14T16:06:01", "action": "tap", "values": ["560", "1680"], "capture": "13-restauration-qa"}
+{"at": "2026-10-14T16:10:57", "action": "back", "values": [], "capture": "14-apres-import"}
+{"at": "2026-10-14T16:11:35", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-14T16:12:10", "action": "capture", "values": ["15-qa-reprise-restauree"], "capture": "15-qa-reprise-restauree"}
+{"at": "2026-10-14T16:13:01", "action": "tap", "values": ["320", "2260"], "capture": "16-liste-tournois"}
+{"at": "2026-10-14T16:13:29", "action": "tap", "values": ["520", "1010"], "capture": "17-detail-tournoi"}
+{"at": "2026-10-14T16:14:00", "action": "swipe", "values": ["540", "2050", "540", "800", "500"], "capture": "18-detail-actions"}
+{"at": "2026-10-14T16:14:39", "action": "tap", "values": ["530", "1850"], "capture": "19-point-financier"}
+{"at": "2026-10-14T16:15:20", "action": "capture", "values": ["20-point-charge"], "capture": "20-point-charge"}
+{"at": "2026-10-14T16:15:58", "action": "tap", "values": ["592", "1290"], "capture": "21-saisie-focus"}
+{"at": "2026-10-14T16:17:12", "action": "text", "values": ["5"], "capture": "22-finance-modifiee"}
+{"at": "2026-10-14T16:20:02", "action": "capture", "values": ["24-etat-interruption"], "capture": "24-etat-interruption"}
+{"at": "2026-10-14T16:20:33", "action": "capture", "values": ["25-reveil"], "capture": "25-reveil"}
+{"at": "2026-10-14T16:21:28", "action": "tap", "values": ["75", "170"], "capture": "26-garde-retour"}
+{"at": "2026-10-14T16:22:40", "action": "tap", "values": ["702", "1365"], "capture": "27-saisie-conservee"}
+{"at": "2026-10-14T16:22:58", "action": "back", "values": [], "capture": "28-garde-android"}
+{"at": "2026-10-14T16:24:44", "action": "back", "values": [], "capture": "29-garde-android-sans-clavier"}
+{"at": "2026-10-14T16:25:31", "action": "tap", "values": ["570", "1500"], "capture": "30-abandon-explicite"}
+{"at": "2026-10-14T16:25:58", "action": "tap", "values": ["530", "1850"], "capture": "31-apres-abandon"}
+{"at": "2026-10-14T16:26:21", "action": "back", "values": [], "capture": "32-retour-propre"}
+{"at": "2026-10-14T16:26:49", "action": "back", "values": [], "capture": "33-retour-seances"}
+{"at": "2026-10-14T16:27:23", "action": "tap", "values": ["110", "2260"], "capture": "34-accueil-qa"}
+{"at": "2026-10-14T16:27:46", "action": "tap", "values": ["1015", "170"], "capture": "35-parametres"}
+{"at": "2026-10-14T16:28:32", "action": "font", "values": ["2.0"], "capture": "36-reglages-texte-200"}
+{"at": "2026-10-14T16:29:25", "action": "font", "values": ["0.9"], "capture": "37-reglages-texte-retabli"}
+{"at": "2026-10-14T17:49:07", "action": "launch", "values": [], "capture": "38-reprise-qa"}
+{"at": "2026-10-14T17:53:50", "action": "capture", "values": ["39-qa-visible"], "capture": "39-qa-visible"}
+{"at": "2026-10-14T17:54:52", "action": "launch", "values": [], "capture": "40-qa-reprise"}
+{"at": "2026-10-14T17:57:09", "action": "tap", "values": ["1015", "170"], "capture": "42-reglages-qa"}
+{"at": "2026-10-14T17:57:34", "action": "swipe", "values": ["530", "2100", "530", "550", "500"], "capture": "43-reglages-suite"}
+{"at": "2026-10-14T18:04:09", "action": "tap", "values": ["870", "1640"], "capture": "44-theme-menu"}
+{"at": "2026-10-14T18:05:35", "action": "tap", "values": ["850", "1900"], "capture": "45-theme-sombre"}
+{"at": "2026-10-14T18:14:02", "action": "launch", "values": [], "capture": "47-qa-reserve"}
+{"at": "2026-10-14T18:14:40", "action": "back", "values": [], "capture": "48-accueil-sombre"}
+{"at": "2026-10-14T18:15:05", "action": "swipe", "values": ["540", "2050", "540", "500", "500"], "capture": "49-accueil-bas"}
+{"at": "2026-10-14T18:16:10", "action": "tap", "values": ["540", "1960"], "capture": "50-partage-connexion"}
+{"at": "2026-10-14T18:18:45", "action": "tap", "values": ["500", "1270"], "capture": null}
+{"at": "2026-10-14T18:18:48", "action": "text", "values": ["qa-depart"], "capture": null}
+{"at": "2026-10-14T18:18:52", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:18:56", "action": "tap", "values": ["500", "1530"], "capture": null}
+{"at": "2026-10-14T18:19:00", "action": "text", "values": ["president"], "capture": null}
+{"at": "2026-10-14T18:19:04", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:19:08", "action": "tap", "values": ["500", "1780"], "capture": null}
+{"at": "2026-10-14T18:19:12", "action": "text", "values": ["Test-Password-2026"], "capture": null}
+{"at": "2026-10-14T18:19:16", "action": "back", "values": [], "capture": "51-identifiants-fictifs"}
+{"at": "2026-10-14T18:19:59", "action": "tap", "values": ["950", "2100"], "capture": "52-serveur-qa"}
+{"at": "2026-10-14T18:20:48", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-14T18:22:47", "action": "field", "values": ["0", "qa-depart"], "capture": "53-groupe-saisi"}
+{"at": "2026-10-14T18:23:36", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:23:43", "action": "field", "values": ["1", "president"], "capture": null}
+{"at": "2026-10-14T18:23:46", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:23:53", "action": "label", "values": ["Serveur\nConnexion à Statoo, Réduit"], "capture": "54-serveur-ouvert"}
+{"at": "2026-10-14T18:24:48", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-14T18:28:09", "action": "server", "values": [], "capture": "55-serveur-local"}
+{"at": "2026-10-14T18:29:25", "action": "back", "values": [], "capture": "56-url-sans-clavier"}
+{"at": "2026-10-14T18:29:57", "action": "swipe", "values": ["530", "2050", "530", "1000", "500"], "capture": "57-bouton-connexion"}
+{"at": "2026-10-14T18:31:22", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-14T18:32:30", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:32:43", "action": "label", "values": ["Se connecter"], "capture": "59-connexion-locale"}
+{"at": "2026-10-14T18:34:05", "action": "capture", "values": ["60-connexion-resultat"], "capture": "60-connexion-resultat"}
+{"at": "2026-10-14T18:35:42", "action": "tap", "values": ["550", "2020"], "capture": "61-recap-depart"}
+{"at": "2026-10-14T18:37:21", "action": "label", "values": ["Confirmer les soldes"], "capture": "62-approbation-perimee"}
+{"at": "2026-10-14T18:39:28", "action": "label", "values": ["Synchroniser maintenant"], "capture": "63-sync-apres-approbation"}
+{"at": "2026-10-14T18:41:31", "action": "launch", "values": [], "capture": "64-reprise-apres-fixture"}
+{"at": "2026-10-14T18:42:40", "action": "capture", "values": ["65-reprise-chargee"], "capture": "65-reprise-chargee"}
+{"at": "2026-10-14T18:46:24", "action": "swipe", "values": ["100", "2050", "100", "600", "500"], "capture": "66-acces-partage"}
+{"at": "2026-10-14T18:46:58", "action": "label", "values": ["Groupe partagé et synchronisation"], "capture": "67-conflit-disponible"}
+{"at": "2026-10-14T18:48:23", "action": "tap", "values": ["550", "1650"], "capture": "68-comparaison-conflit"}
+{"at": "2026-10-14T18:49:33", "action": "swipe", "values": ["700", "1850", "700", "500", "500"], "capture": "69-conflit-bas-version"}
+{"at": "2026-10-14T18:50:18", "action": "swipe", "values": ["700", "1850", "700", "500", "500"], "capture": "70-conflit-version-suivante"}
+{"at": "2026-10-14T18:51:09", "action": "swipe", "values": ["700", "1850", "700", "450", "600"], "capture": "71-conflit-motif"}
+{"at": "2026-10-14T18:51:50", "action": "label", "values": ["Retenir cette version"], "capture": "72-conflit-validation-vide"}
+{"at": "2026-10-14T18:52:23", "action": "field", "values": ["0", "Controle-QA"], "capture": "73-motif-saisi"}
+{"at": "2026-10-14T18:53:54", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:54:11", "action": "label", "values": ["Retenir cette version"], "capture": "74-conflit-decision"}
+{"at": "2026-10-14T18:56:47", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-14T18:56:59", "action": "tap", "values": ["390", "170"], "capture": "75-choix-groupe"}
+{"at": "2026-10-14T18:58:44", "action": "tap", "values": ["500", "1850"], "capture": "76-pdt-accueil"}
+{"at": "2026-10-14T18:59:04", "action": "tap", "values": ["540", "2260"], "capture": "77-pdt-joueurs"}
+{"at": "2026-10-15T07:45:38", "action": "launch", "values": [], "capture": "79-reprise-15-octobre"}
+{"at": "2026-10-15T07:46:40", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T07:48:09", "action": "label", "values": ["QA Alpha"], "capture": "80-groupes-reprise"}
+{"at": "2026-10-15T07:49:57", "action": "tap", "values": ["500", "1850"], "capture": "81-sg-accueil"}
+{"at": "2026-10-15T07:51:31", "action": "label", "values": ["Nouvelle séance"], "capture": "82-sg-nouvelle-seance"}
+{"at": "2026-10-15T07:52:37", "action": "label", "values": ["Continuer"], "capture": "83-sg-composition"}
+{"at": "2026-10-15T07:54:04", "action": "tap", "values": ["850", "1240"], "capture": "84-composition-alice"}
+{"at": "2026-10-15T07:55:47", "action": "tap", "values": ["850", "1590"], "capture": "85-deux-presents"}
+{"at": "2026-10-15T07:56:08", "action": "label", "values": ["Tirer au sort"], "capture": "86-equipes-test"}
+{"at": "2026-10-15T07:57:48", "action": "label", "values": ["Débuter la séance"], "capture": "87-seance-test-1"}
+{"at": "2026-10-15T08:00:11", "action": "label", "values": ["Ajouter des joueurs (retardataires)"], "capture": "88-sg-retardataires"}
+{"at": "2026-10-15T08:08:49", "action": "launch", "values": [], "capture": "90-reprise-reference"}
+{"at": "2026-10-15T08:11:46", "action": "tap", "values": ["960", "440"], "capture": null}
+{"at": "2026-10-15T08:11:50", "action": "back", "values": [], "capture": "91-retour-creation"}
+{"at": "2026-10-15T08:23:08", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T08:23:13", "action": "tap", "values": ["960", "2080"], "capture": null}
+{"at": "2026-10-15T08:23:21", "action": "label", "values": ["Continuer"], "capture": "92-composition-seconde"}
+{"at": "2026-10-15T08:23:28", "action": "label", "values": ["Tout cocher"], "capture": null}
+{"at": "2026-10-15T08:23:36", "action": "label", "values": ["Tirer au sort"], "capture": "93-equipes-seconde"}
+{"at": "2026-10-15T08:23:45", "action": "label", "values": ["Enregistrer en brouillon"], "capture": "94-seconde-seance"}
+{"at": "2026-10-15T08:26:18", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T08:26:22", "action": "font", "values": ["2.0"], "capture": "95-detail-texte-200"}

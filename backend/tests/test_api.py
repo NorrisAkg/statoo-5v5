@@ -32,7 +32,8 @@ def system():
 
 def initialize(c, t):
     assert c.post('/groups/g/opening', headers=t['finance'], json={'cash': 0, 'members': {}}).status_code == 200
-    assert c.post('/groups/g/opening/approve', headers=t['president']).status_code == 200
+    proposal = c.get('/groups/g', headers=t['president']).json()['opening_proposal']
+    assert c.post('/groups/g/opening/approve', json={'proposal': proposal}, headers=t['president']).status_code == 200
 
 
 def sport(status="DRAFT"):
@@ -58,6 +59,58 @@ def test_shared_members_are_read_only_and_isolated(system):
     for domain, payload in [("sport", sport()), ("finance", point())]:
         assert c.post("/groups/g/sync", json=event(domain, payload), headers=t["members"]).status_code == 403
     assert c.post("/groups/g/sync", json=event("sport", sport()), headers=t["admin"]).status_code == 403
+
+
+@pytest.mark.parametrize("roles", [[], ["MEMBER"]])
+def test_individual_account_requires_responsibility(system, roles):
+    c, t, _ = system
+    before = c.get('/groups/g', headers=t['admin']).json()['accounts']
+    response = c.post('/groups/g/accounts', headers=t['admin'], json={
+        'username': 'simple-member', 'password': PASSWORD, 'member_id': 'a', 'roles': roles})
+    assert response.status_code == 422
+    assert 'responsable' in response.json()['detail']
+    assert c.get('/groups/g', headers=t['admin']).json()['accounts'] == before
+
+
+@pytest.mark.parametrize('role', ['ADMIN', 'PDT', 'VP', 'TR', 'TGA', 'SG', 'SGA', 'CENSOR'])
+def test_responsible_individual_account_keeps_member_role(role):
+    with TestClient(create_app('sqlite:///:memory:')) as c:
+        response = c.post('/groups', json={
+            'group_id': 'g', 'name': 'Group', 'username': 'admin', 'password': PASSWORD,
+            'shared_username': 'members', 'shared_password': PASSWORD,
+            'members': [{'id': 'a', 'name': 'Alice'}]})
+        admin = {'Authorization': 'Bearer ' + response.json()['token']}
+        response = c.post('/groups/g/accounts', headers=admin, json={
+            'username': 'responsible', 'password': PASSWORD, 'member_id': 'a', 'roles': [role]})
+        assert response.status_code == (409 if role == 'ADMIN' else 201)
+        if role != 'ADMIN':
+            assert set(response.json()['roles']) == {role, 'MEMBER'}
+            assert response.json()['member_id'] == 'a'
+
+
+@pytest.mark.parametrize('roles', [['UNKNOWN'], ['CENSOR', 'CENSOR']])
+def test_invalid_responsibility_remains_rejected(system, roles):
+    c, t, _ = system
+    assert c.post('/groups/g/accounts', headers=t['admin'], json={
+        'username': 'invalid', 'password': PASSWORD, 'member_id': 'a', 'roles': roles}).status_code == 422
+
+
+def test_collective_cannot_create_individual_accounts(system):
+    c, t, _ = system
+    assert c.post('/groups/g/accounts', headers=t['members'], json={
+        'username': 'forbidden', 'password': PASSWORD, 'member_id': 'a', 'roles': ['CENSOR']}).status_code == 403
+
+
+def test_former_responsible_keeps_read_only_account_after_transfer(system):
+    c, t, accounts = system
+    response = c.put(f"/groups/g/accounts/{accounts['vice']}/roles", headers=t['admin'],
+                     json={'roles': ['VP', 'SGA', 'TGA', 'SG'], 'transfer': True, 'reason': 'Remplacement'})
+    assert response.status_code == 200
+    state = c.get('/groups/g', headers=t['admin']).json()
+    former = next(a for a in state['accounts'] if a['id'] == accounts['sport'])
+    assert former['roles'] == ['MEMBER']
+    assert c.get('/groups/g', headers=t['sport']).status_code == 200
+    assert c.post('/groups/g/sync', headers=t['sport'], json=event('sport', sport())).status_code == 403
 
 def test_single_roles_and_explicit_atomic_transfer(system):
     c, t, accounts = system
@@ -136,7 +189,8 @@ def test_opening_requires_approval_and_is_not_a_receipt(system):
     assert c.post("/groups/g/opening", json=opening, headers=t["sport"]).status_code == 403
     assert c.post("/groups/g/opening", json=opening, headers=t["finance"]).status_code == 200
     assert c.get("/groups/g", headers=t["members"]).json()["finances"]["cash"] == 0
-    assert c.post("/groups/g/opening/approve", headers=t["vice"]).status_code == 200
+    proposal = c.get('/groups/g', headers=t['vice']).json()['opening_proposal']
+    assert c.post("/groups/g/opening/approve", json={'proposal': proposal}, headers=t["vice"]).status_code == 200
     assert c.get("/groups/g", headers=t["members"]).json()["finances"]["cash"] == 1000
     assert c.post("/groups/g/opening", json=opening, headers=t["finance"]).status_code == 409
 

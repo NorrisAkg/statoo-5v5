@@ -11,6 +11,7 @@ import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/sessions_provider.dart';
 import '../domain/session.dart';
 import '../domain/session_summary.dart';
+import '../../shared/application/shared_providers.dart';
 
 class SessionsScreen extends ConsumerWidget {
   const SessionsScreen({super.key});
@@ -50,7 +51,7 @@ class SessionsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               subtitleText,
-              style: TextStyle(color: context.colors.foreground400, fontSize: 14),
+              style: TextStyle(color: context.colors.onHeader, fontSize: 14),
             ),
           ),
         ),
@@ -88,12 +89,12 @@ class SessionsScreen extends ConsumerWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: ref.watch(canWriteProvider('sport')) ? FloatingActionButton(
         onPressed: () => context.push('/seances/nouvelle'),
         backgroundColor: context.colors.primary500,
         foregroundColor: context.colors.background950,
         child: const Icon(Remix.add_line),
-      ),
+      ) : null,
     );
   }
 
@@ -185,7 +186,7 @@ class SessionsScreen extends ConsumerWidget {
                     style: TextStyle(color: context.colors.foreground400, fontSize: 13),
                   ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
+                    if (ref.watch(canWriteProvider('sport'))) PrimaryButton(
                     label: 'Nouvelle séance',
                     icon: Remix.add_line,
                     onPressed: () => context.push('/seances/nouvelle'),

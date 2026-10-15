@@ -1,18 +1,23 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../shared/application/shared_providers.dart';
+import '../../team/application/team_provider.dart';
 import '../application/players_provider.dart';
 
 class NewPlayerBottomSheet extends ConsumerStatefulWidget {
   const NewPlayerBottomSheet({super.key});
 
   @override
-  ConsumerState<NewPlayerBottomSheet> createState() => _NewPlayerBottomSheetState();
+  ConsumerState<NewPlayerBottomSheet> createState() =>
+      _NewPlayerBottomSheetState();
 }
 
 class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
@@ -22,8 +27,11 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
   String? _nameError;
+  bool _submitting = false;
+  late final String? _groupId = ref.read(activeTeamIdProvider);
 
   Future<void> _pickImage() async {
+    if (!ref.read(canWriteProvider('members'))) return;
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
@@ -43,32 +51,52 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   }
 
   Future<void> _submit({required bool createAnother}) async {
+    if (_submitting) return;
+    final group = _groupId;
     final name = _nameController.text.trim();
     if (name.isEmpty) return;
-
-    final taken = await ref.read(playersListProvider.notifier).isNameTaken(name);
-    if (taken) {
-      setState(() => _nameError = 'Un joueur nommé « $name » existe déjà. Modifiez légèrement le nom.');
-      return;
-    }
-
-    await ref.read(playersListProvider.notifier).addPlayer(
-      name: name,
-      nickname: _nicknameController.text.trim().isNotEmpty
-          ? _nicknameController.text.trim()
-          : null,
-      avatarUrl: _imageFile?.path,
-    );
-
-    if (mounted) {
-      if (createAnother) {
-        _clearForm();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Joueur ajouté avec succès !')),
+    setState(() => _submitting = true);
+    try {
+      final taken = await ref
+          .read(playersListProvider.notifier)
+          .isNameTaken(name);
+      if (!mounted) return;
+      if (group != ref.read(activeTeamIdProvider))
+        throw StateError(
+          'Le groupe actif a changé. Rouvrez le formulaire dans le bon groupe.',
         );
-      } else {
-        Navigator.pop(context);
+      if (taken) {
+        setState(
+          () => _nameError =
+              'Un joueur nommé « $name » existe déjà. Modifiez légèrement le nom.',
+        );
+        return;
       }
+
+      await ref
+          .read(playersListProvider.notifier)
+          .addPlayer(
+            name: name,
+            nickname: _nicknameController.text.trim().isNotEmpty
+                ? _nicknameController.text.trim()
+                : null,
+            avatarUrl: _imageFile?.path,
+          );
+
+      if (mounted) {
+        if (createAnother) {
+          _clearForm();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Joueur ajouté avec succès !')),
+          );
+        } else {
+          Navigator.pop(context);
+        }
+      }
+    } on Object catch (error) {
+      if (mounted) setState(() => _nameError = 'Ajout impossible : $error');
+    } finally {
+      if (mounted) setState(() => _submitting = false);
     }
   }
 
@@ -82,7 +110,11 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isFormValid = _nameController.text.trim().isNotEmpty && _nameError == null;
+    final writable = ref.watch(canWriteProvider('members'));
+    final isFormValid =
+        writable && !_submitting && _nameController.text.trim().isNotEmpty;
+    // Capturer le groupe dès l'ouverture, avant tout changement de contexte.
+    final _ = _groupId;
 
     return Container(
       decoration: BoxDecoration(
@@ -100,6 +132,10 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (!writable)
+              const Text(
+                'Consultation uniquement. Le rôle ADMIN est requis pour gérer les joueurs.',
+              ),
             Center(
               child: Container(
                 width: 48,
@@ -113,7 +149,8 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             const SizedBox(height: 24),
             Text(
               'Nouveau joueur',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
             Center(
@@ -122,14 +159,26 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 child: CircleAvatar(
                   radius: 48,
                   backgroundColor: context.colors.background800,
-                  backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
+                  backgroundImage: _imageFile != null
+                      ? FileImage(_imageFile!)
+                      : null,
                   child: _imageFile == null
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Remix.camera_lens_line, size: 28, color: context.colors.foreground500),
+                            Icon(
+                              Remix.camera_lens_line,
+                              size: 28,
+                              color: context.colors.foreground500,
+                            ),
                             const SizedBox(height: 4),
-                            Text('Photo', style: TextStyle(color: context.colors.foreground500, fontSize: 10)),
+                            Text(
+                              'Photo',
+                              style: TextStyle(
+                                color: context.colors.foreground500,
+                                fontSize: 10,
+                              ),
+                            ),
                           ],
                         )
                       : null,
@@ -137,9 +186,16 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('Nom *', style: TextStyle(color: context.colors.foreground300, fontWeight: FontWeight.bold)),
+            Text(
+              'Nom *',
+              style: TextStyle(
+                color: context.colors.foreground300,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             TextField(
+              enabled: writable && !_submitting,
               controller: _nameController,
               focusNode: _nameFocusNode,
               autofocus: true,
@@ -169,21 +225,35 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  Icon(Remix.error_warning_line, size: 14, color: Theme.of(context).colorScheme.error),
+                  Icon(
+                    Remix.error_warning_line,
+                    size: 14,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       _nameError!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ],
               ),
             ],
             const SizedBox(height: 16),
-            Text('Surnom', style: TextStyle(color: context.colors.foreground300, fontWeight: FontWeight.bold)),
+            Text(
+              'Surnom',
+              style: TextStyle(
+                color: context.colors.foreground300,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             TextField(
+              enabled: writable && !_submitting,
               controller: _nicknameController,
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.done,
@@ -214,7 +284,10 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             const SizedBox(height: 16),
             Text(
               "Sans photo, l'avatar affiche les initiales sur une couleur dérivée du nom.",
-              style: TextStyle(color: context.colors.foreground500, fontSize: 14),
+              style: TextStyle(
+                color: context.colors.foreground500,
+                fontSize: 14,
+              ),
             ),
             const SizedBox(height: 32),
             Row(
@@ -227,31 +300,51 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                       foregroundColor: context.colors.foreground50,
                       side: BorderSide(color: context.colors.background700),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
                     ),
-                    child: const Text('Annuler', style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: const Text(
+                      'Annuler',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 2,
                   child: OutlinedButton(
-                    onPressed: isFormValid ? () => _submit(createAnother: true) : null,
+                    onPressed: isFormValid
+                        ? () => _submit(createAnother: true)
+                        : null,
                     style: OutlinedButton.styleFrom(
                       foregroundColor: context.colors.primary500,
-                      side: BorderSide(color: isFormValid ? context.colors.primary500 : context.colors.background700),
+                      side: BorderSide(
+                        color: isFormValid
+                            ? context.colors.primary500
+                            : context.colors.background700,
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9999)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
                     ),
-                    child: Icon(Remix.add_line, color: isFormValid ? context.colors.primary500 : context.colors.foreground600),
+                    child: Icon(
+                      Remix.add_line,
+                      color: isFormValid
+                          ? context.colors.primary500
+                          : context.colors.foreground600,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 4,
                   child: PrimaryButton(
-                    label: 'Créer',
-                    onPressed: isFormValid ? () => _submit(createAnother: false) : null,
+                    label: _submitting ? 'Création…' : 'Créer',
+                    onPressed: isFormValid
+                        ? () => _submit(createAnother: false)
+                        : null,
                   ),
                 ),
               ],

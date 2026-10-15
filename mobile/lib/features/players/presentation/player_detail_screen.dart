@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../shared/application/shared_providers.dart';
 import '../application/players_provider.dart';
 import '../domain/player.dart';
 import '../domain/player_detail_data.dart';
@@ -26,6 +27,7 @@ class PlayerDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final writable = ref.watch(canWriteProvider('members'));
     final playerAsync = ref.watch(playerDetailProvider(playerId));
     final statsAsync = ref.watch(playerStatsProvider(playerId));
     final historyAsync = ref.watch(playerMatchHistoryProvider(playerId));
@@ -86,7 +88,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               },
             ),
             title: Text(player.name),
-            actions: [
+            actions: [if (writable) ...[
               IconButton(
                 icon: const Icon(Remix.pencil_line),
                 tooltip: 'Modifier le joueur',
@@ -98,7 +100,7 @@ class PlayerDetailScreen extends ConsumerWidget {
                   tooltip: 'Supprimer le joueur',
                   onPressed: () => unawaited(_confirmDelete(context, ref, player)),
                 ),
-            ],
+            ]],
           ),
           body: ListView(
             padding: const EdgeInsets.all(16),
@@ -116,7 +118,7 @@ class PlayerDetailScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               _buildHistorySection(context, history),
               const SizedBox(height: 24),
-              _buildActionButtons(context, ref, player, canDelete),
+              if (writable) _buildActionButtons(context, ref, player, canDelete),
               const SizedBox(height: 32),
             ],
           ),

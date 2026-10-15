@@ -19,6 +19,7 @@ import '../domain/team_appearance.dart';
 import 'add_late_players_bottom_sheet.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
+import '../../shared/application/shared_providers.dart';
 
 class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
@@ -34,6 +35,19 @@ class SessionDetailScreen extends ConsumerStatefulWidget {
 
 class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
   Team _selectedTeamTab = Team.a;
+  bool get _writable => ref.watch(canWriteSessionProvider((domain: 'sport', sessionId: widget.sessionId))).value ?? false;
+
+  Future<bool> _sportMutation(Future<void> Function() operation) async {
+    try {
+      await operation();
+      return true;
+    } on Object catch (error) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(error is StateError ? error.message : 'Modification impossible : $error'),
+      ));
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +72,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         actions: [
           sessionAsync.maybeWhen(
             data: (session) {
-              if (session == null || session.status != SessionStatus.draft || session.id != activeSessionId) {
+              if (!_writable || session == null || session.status != SessionStatus.draft || session.id != activeSessionId) {
                 return const SizedBox.shrink();
               }
               final participants = participantsAsync.value;
@@ -185,7 +199,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Composition & Équipes', style: Theme.of(context).textTheme.titleMedium),
-            if (isDraft)
+            if (isDraft && _writable)
               TextButton.icon(
                 icon: const Icon(Remix.user_add_line, size: 16),
                 label: const Text('Ajouter un joueur'),
@@ -199,8 +213,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildTeamsSection(context, ref, session, teamAPlayers, teamBPlayers, teamCPlayers, isCurrentActive),
-        if (isDraft) ...[
+        _buildTeamsSection(context, ref, session, teamAPlayers, teamBPlayers, teamCPlayers, isCurrentActive && _writable),
+        if (isDraft && _writable) ...[
           const SizedBox(height: 12),
           OutlinedButton.icon(
             icon: const Icon(Remix.user_add_line, size: 16),
@@ -218,7 +232,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         OutlinedButton.icon(onPressed: () => context.push('/seances/${session.id}/finances'),
           icon: const Icon(Remix.wallet_line), label: const Text('Point financier')),
         const SizedBox(height: 16),
-        _buildActions(
+        if (_writable) _buildActions(
           context,
           ref,
           session,
@@ -247,15 +261,16 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       formattedDate: formattedDate,
       formatLabel: formatLabel,
       isCurrentActive: isCurrentActive,
+      canEdit: _writable,
       tournamentBoard: session.sessionType == SessionType.tournament3
-          ? _buildTournamentWinsBoard(context, ref, session, isCurrentActive)
+          ? _buildTournamentWinsBoard(context, ref, session, isCurrentActive && _writable)
           : null,
       onScoreIncrement: (team, delta) {
-        unawaited(ref.read(sessionsControllerProvider).incrementScore(
+        unawaited(_sportMutation(() => ref.read(sessionsControllerProvider).incrementScore(
           sessionId: session.id,
           team: team,
           delta: delta,
-        ));
+        )));
       },
     );
   }
@@ -743,11 +758,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                       final newA = team == Team.a ? unassigned - 1 : null;
                       final newB = team == Team.b ? unassigned - 1 : null;
                       unawaited(
-                        ref.read(sessionsControllerProvider).updateUnassignedGoals(
+                        _sportMutation(() => ref.read(sessionsControllerProvider).updateUnassignedGoals(
                           sessionId: session.id,
                           unassignedGoalsA: newA,
                           unassignedGoalsB: newB,
-                        ),
+                        )),
                       );
                     }
                   : null,
@@ -764,11 +779,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 final newA = team == Team.a ? unassigned + 1 : null;
                 final newB = team == Team.b ? unassigned + 1 : null;
                 unawaited(
-                  ref.read(sessionsControllerProvider).updateUnassignedGoals(
+                  _sportMutation(() => ref.read(sessionsControllerProvider).updateUnassignedGoals(
                     sessionId: session.id,
                     unassignedGoalsA: newA,
                     unassignedGoalsB: newB,
-                  ),
+                  )),
                 );
               },
             ),
@@ -982,15 +997,15 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                     PrimaryButton(
                       label: 'Enregistrer les stats',
                       onPressed: () async {
-                        await ref.read(sessionsControllerProvider).updateParticipationStats(
+                        final saved = await _sportMutation(() => ref.read(sessionsControllerProvider).updateParticipationStats(
                           sessionId: sessionId,
                           participationId: item.participation.id,
                           goals: goals,
                           assists: assists,
                           yellowCards: yellowCards,
                           redCards: redCards,
-                        );
-                        if (context.mounted) Navigator.pop(ctx);
+                        ));
+                        if (saved && context.mounted) Navigator.pop(ctx);
                       },
                     ),
                     const SizedBox(height: 12),
@@ -1237,7 +1252,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       return;
     }
 
-    final started = await ref.read(sessionsControllerProvider).startSession(targetSessionId);
+    var started = false;
+    await _sportMutation(() async { started = await ref.read(sessionsControllerProvider).startSession(targetSessionId); });
     if (context.mounted && started) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Séance démarrée ! Saisie en direct activée.')),
@@ -1513,7 +1529,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
     if (proceed != true) return;
 
-    await ref.read(sessionsControllerProvider).reopenSession(widget.sessionId);
+    final reopened = await _sportMutation(() => ref.read(sessionsControllerProvider).reopenSession(widget.sessionId));
+    if (!reopened) return;
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -1549,7 +1566,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     );
 
     if (confirmed == true && context.mounted) {
-      await ref.read(sessionsControllerProvider).deleteSession(widget.sessionId);
+      final deleted = await _sportMutation(() => ref.read(sessionsControllerProvider).deleteSession(widget.sessionId));
+      if (!deleted) return;
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Séance supprimée.')),

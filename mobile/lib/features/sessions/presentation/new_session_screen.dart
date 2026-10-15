@@ -14,7 +14,9 @@ import '../../settings/application/settings_provider.dart';
 import '../application/sessions_provider.dart';
 import '../domain/session.dart';
 import '../../shared/application/shared_providers.dart';
+import '../../team/application/team_provider.dart';
 import '../domain/team_appearance.dart';
+import '../domain/session_team_names.dart';
 import 'team_appearance_editor.dart';
 
 class NewSessionScreen extends ConsumerStatefulWidget {
@@ -41,7 +43,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   String _searchQuery = '';
   bool _isSubmitting = false;
   final TextEditingController _occurrence = TextEditingController();
-  final Map<String, String> _teamNames = {};
+  final Map<String, String> _teamNames = drawSessionTeamNames(SessionType.tournament3);
   final Map<String, int> _teamColors = {};
 
   @override
@@ -100,6 +102,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   }
 
   Future<void> _startSession() async {
+    if (_isSubmitting || !ref.read(canWriteProvider('sport'))) return;
     final appearanceError = teamAppearanceError(_sessionType, _teamNames, _teamColors);
     if (appearanceError != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(appearanceError)));
@@ -182,6 +185,24 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
       final startImmediately = activeDraft == null;
       final drawPoints = ref.read(tournamentDrawPointsProvider);
 
+      final reference = _occurrence.text.trim();
+      if (reference.isNotEmpty) {
+        final group = ref.read(activeTeamIdProvider);
+        final db = await ref.read(sharedServiceProvider).database.database;
+        final aliases = await db.query('meta', where: 'key = ?', whereArgs: ['shared_finance_alias_${group}_$reference']);
+        if (aliases.isNotEmpty) {
+          if (!mounted) return;
+          final link = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
+            title: const Text('Rattacher à une échéance existante ?'),
+            content: Text('La référence « $reference » existe déjà. Cette séance partagera son point financier et ne créera pas une cotisation supplémentaire.'),
+            actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
+              FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Rattacher'))],
+          ));
+          if (link != true || !mounted) { if (mounted) setState(() => _isSubmitting = false); return; }
+        }
+        if (group != ref.read(activeTeamIdProvider)) throw StateError('Le groupe actif a changé. Rouvrez la création de séance.');
+      }
+
       final sessionId = await ref.read(sessionsControllerProvider).createDraftSession(
         playedAt: playedAt,
         isRanked: _isRanked,
@@ -190,7 +211,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         allowUnevenTeams: _allowUnevenTeams,
         playerTeamAssignments: _playerTeamAssignments,
         startImmediately: startImmediately,
-        teamNames: _teamNames,
+        teamNames: {for (final key in ['A', 'B', if (_sessionType == SessionType.tournament3) 'C']) key: _teamNames[key]!},
         teamColors: _teamColors,
         occurrenceId: _occurrence.text.trim().isEmpty ? null : _occurrence.text.trim(),
       );
@@ -277,6 +298,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final writable = ref.watch(canWriteProvider('sport'));
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
@@ -295,7 +317,8 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           ),
           title: const Text('Nouvelle séance'),
         ),
-      body: Column(
+      body: !writable ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Consultation uniquement. Le rôle SG ou SGA et une connexion valide sont requis pour gérer les séances du groupe partagé.')))
+      : Column(
         children: [
           const SizedBox(height: 16),
           _buildStepper(),
@@ -305,11 +328,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 if (_currentStep == 1) _buildStep1(),
-                if (_currentStep == 1 && ref.watch(sharedServiceProvider).connected) Padding(
+                if (_currentStep == 1) Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: TextField(controller: _occurrence, decoration: const InputDecoration(
-                    labelText: 'Référence commune de la séance',
-                    helperText: 'Par défaut : date + numéro 1. Même référence pour tous les gestionnaires.',
+                    labelText: 'Référence de la séance',
+                    helperText: 'Facultative : prochain numéro libre par date. Une référence existante rattache la séance à la même échéance.',
                     hintText: '2026-10-17-1', border: OutlineInputBorder())),
                 ),
                 if (_currentStep == 2) _buildStep2(),
@@ -690,7 +713,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                         style: TextStyle(color: context.colors.foreground300, fontSize: 16),
                       ),
                       const SizedBox(height: 24),
-                      PrimaryButton(
+                      if (ref.watch(canWriteProvider('members'))) PrimaryButton(
                         label: 'Ajouter un joueur',
                         icon: Remix.user_add_line,
                         onPressed: () {
@@ -821,7 +844,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                       ),
                     ],
                     if (_selectedPlayerIds.isNotEmpty) const SizedBox(width: 8),
-                    IconButton(
+                    if (ref.watch(canWriteProvider('members'))) IconButton(
                       icon: const Icon(Remix.user_add_line),
                       tooltip: 'Nouveau joueur',
                       color: context.colors.primary500,
@@ -842,10 +865,11 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
                 if (_playerTeamAssignments.isNotEmpty && _playerTeamAssignments.length == _selectedPlayerIds.length) ...[
                   TeamAppearanceEditor(
+                    editableNames: false,
                     type: _sessionType, names: _teamNames, colors: _teamColors,
                     onNameChanged: (team, name) => setState(() => _teamNames[teamKey(team)] = name),
                     onColorChanged: (team, color) => setState(() => _teamColors[teamKey(team)] = color),
-                    onReset: (team) => setState(() { _teamNames.remove(teamKey(team)); _teamColors.remove(teamKey(team)); }),
+                    onReset: (team) => setState(() { _teamColors.remove(teamKey(team)); }),
                   ),
                   const SizedBox(height: 16),
                 ],

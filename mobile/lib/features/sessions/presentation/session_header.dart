@@ -18,6 +18,7 @@ class SessionHeader extends StatelessWidget {
     required this.isCurrentActive,
     required this.onScoreIncrement,
     this.tournamentBoard,
+    this.canEdit = true,
     super.key,
   });
 
@@ -26,6 +27,7 @@ class SessionHeader extends StatelessWidget {
   final String formattedDate;
   final String formatLabel;
   final bool isCurrentActive;
+  final bool canEdit;
   final void Function(Team team, int delta) onScoreIncrement;
   final Widget? tournamentBoard;
 
@@ -122,7 +124,7 @@ class SessionHeader extends StatelessWidget {
                     Expanded(child: _teamIdentity(context, Team.b)),
                   ],
                 ),
-                if (isCurrentActive) ...[
+                if (isCurrentActive && canEdit) ...[
                   const SizedBox(height: 12),
                   Row(
                     children: [
