@@ -1,0 +1,56 @@
+[
+  {
+    "id": "AUD-01",
+    "draftBaseRevision": 1,
+    "serverRevision": 5,
+    "serverContribution": 900,
+    "restoredContribution": "150",
+    "sentBaseRevision": 5,
+    "sentContribution": 150
+  },
+  {
+    "id": "AUD-02",
+    "entered": "450",
+    "reopened": "0",
+    "confirmation": false
+  },
+  {
+    "id": "AUD-07",
+    "contentWhileCataloguePending": "Ouverture de Statoo…"
+  },
+  {
+    "id": "AUD-08",
+    "editorOpen": false,
+    "message": "Le catalogue d’équipes est indisponible. Actualisez la page en ligne."
+  },
+  {
+    "id": "AUD-09",
+    "body": "Aller au contenu\nS\nstatoo\n.\n◐\n\nOuverture de Statoo…\n\nStatoo · Le foot entre amis, les comptes au clair.",
+    "errors": [
+      "Storage denied"
+    ]
+  },
+  {
+    "id": "AUD-10",
+    "ratios": [
+      {
+        "name": "Racing Atlas",
+        "foreground": "rgb(250, 204, 21)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 1.5314188566852418
+      },
+      {
+        "name": "Union des Cèdres",
+        "foreground": "rgb(6, 182, 212)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 2.4278533783091234
+      },
+      {
+        "name": "Sporting du Port",
+        "foreground": "rgb(236, 72, 153)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 3.5273363438432357
+      }
+    ]
+  }
+]

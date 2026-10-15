@@ -17,10 +17,11 @@ from pathlib import Path
 from pydantic import BaseModel, Field, StrictInt, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from .finance import Point, totals, validate_point
 from .config import load_environment
-from .models import Base, Group, Token, database
+from .models import Base, Group, Token, RegistrationOperation, database
 from .security import password_hash, password_matches, token_digest
 
 ROLES = ["ADMIN", "PDT", "VP", "TR", "TGA", "SG", "SGA", "CENSOR", "MEMBER"]
@@ -35,6 +36,8 @@ class Credentials(BaseModel):
 
 
 class Registration(Credentials):
+    operation_id: str | None = Field(default=None, min_length=1, max_length=100)
+    group_id: str | None = Field(default=None, max_length=100)
     name: str = Field(min_length=1, max_length=100)
     shared_username: str = Field(min_length=1, max_length=100)
     shared_password: str = Field(min_length=8, max_length=200)
@@ -153,13 +156,22 @@ def create_app(url: str | None = None):
             engine.dispose()
 
     app = FastAPI(title="Statoo", version="0.1.0", lifespan=lifespan)
+    @app.get("/portal/config.json")
+    def portal_config():
+        # Explicit public allowlist: never serialize the server environment.
+        return {"api_url": os.getenv("STATOO_PUBLIC_API_URL", "").strip()}
+
     portal = Path(__file__).resolve().parents[2] / "web"
     if portal.is_dir():
         app.mount("/portal", StaticFiles(directory=portal, html=True), name="portal")
-    app.add_middleware(CORSMiddleware, allow_origins=os.getenv("CORS_ORIGINS", "").split(","),
+    origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", "").split(",") if origin.strip()]
+    if os.getenv("RENDER") == "true" and os.getenv("RENDER_GIT_BRANCH") == "staging":
+        origins.extend(["http://127.0.0.1:18085", "http://localhost:18085"])
+    app.add_middleware(CORSMiddleware, allow_origins=origins,
                        allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type"])
     # Also serialize SQLite development transactions. PostgreSQL uses row locks across workers.
-    lock = threading.RLock()
+    # FastAPI can enter and exit this dependency on different worker threads.
+    lock = threading.Lock()
     attempts = {}
 
     def db():
@@ -215,8 +227,23 @@ def create_app(url: str | None = None):
 
     @app.post("/groups", status_code=201)
     def register(body: Registration, session: Session = Depends(db)):
-        if session.get(Group, body.group_id):
-            fail(409, "Ce groupe existe déjà")
+        canonical = json.dumps(body.model_dump(exclude={'operation_id', 'group_id'}), sort_keys=True, ensure_ascii=False)
+
+        def replay():
+            previous = session.get(RegistrationOperation, body.operation_id) if body.operation_id else None
+            if previous is None:
+                return None
+            if not password_matches(canonical, previous.fingerprint):
+                fail(409, "Cette tentative existe déjà. Reprenez les mêmes informations et les mêmes accès.")
+            group = session.get(Group, previous.group_id)
+            account = next(a for a in group.state['accounts'] if a['username'] == body.username.strip() and not a['shared'])
+            if not password_matches(body.password, account['password']):
+                fail(409, "Les accès ont changé. Connectez-vous au groupe existant.")
+            return issue(session, group, account)
+
+        previous = replay()
+        if previous:
+            return previous
         if body.username.casefold() == body.shared_username.casefold():
             fail(422, "Identifiants individuels et collectifs distincts requis")
         ids = [m.get("id") for m in body.members]
@@ -228,12 +255,29 @@ def create_app(url: str | None = None):
                  "roles": ["ADMIN", "MEMBER"], "member_id": None, "shared": False}
         shared = {"id": str(uuid.uuid4()), "username": body.shared_username.strip(),
                   "password": password_hash(body.shared_password), "roles": ["MEMBER"], "member_id": None, "shared": True}
-        group = Group(id=body.group_id, state={"name": body.name, "roles": ROLES, "accounts": [admin, shared],
+        state = {"name": body.name, "roles": ROLES, "accounts": [admin, shared],
                     "members": body.members, "documents": {}, "operations": {}, "audit": [], "opening": None,
-                    "opening_proposal": None, "obligations": {}})
-        session.add(group)
-        session.flush()
-        return issue(session, group, admin)
+                    "opening_proposal": None, "obligations": {}}
+        for _ in range(20):
+            group_id = f"#{secrets.randbelow(100_000_000):08d}"
+            if session.get(Group, group_id):
+                continue
+            group = Group(id=group_id, state=state)
+            try:
+                # The primary key arbitrates collisions between server workers.
+                with session.begin_nested():
+                    session.add(group)
+                    session.flush()
+                    if body.operation_id:
+                        session.add(RegistrationOperation(id=body.operation_id, group_id=group_id, fingerprint=password_hash(canonical)))
+                        session.flush()
+            except IntegrityError:
+                previous = replay()
+                if previous:
+                    return previous
+                continue
+            return issue(session, group, admin)
+        fail(503, "Impossible d’attribuer un identifiant de groupe. Réessayez.")
 
     @app.post("/auth/login")
     def login(body: Credentials, request: Request, session: Session = Depends(db)):

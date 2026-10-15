@@ -3,10 +3,18 @@
   "private": true,
   "scripts": {
     "build": "node scripts/app.mjs build",
-    "start": "node scripts/app.mjs start"
+    "build:web": "node scripts/app.mjs build-web",
+    "start": "node scripts/app.mjs start",
+    "test:web": "node --test web/tests/*.test.mjs",
+    "test:web:browser": "node --test --test-concurrency=2 web/tests/browser.e2e.mjs web/tests/config.e2e.mjs web/tests/registration.e2e.mjs web/tests/offline-registration.e2e.mjs web/tests/desktop.e2e.mjs",
+    "format:web": "prettier --write web/*.mjs web/*.js web/*.html web/*.css web/*.webmanifest web/tests/*.mjs"
   },
   "dependencies": {
     "@neon/config": "^1.9.1",
     "@neon/env": "^1.6.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1",
+    "prettier": "^3.9.10"
   }
 }

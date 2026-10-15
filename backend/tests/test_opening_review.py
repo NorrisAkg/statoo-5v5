@@ -10,15 +10,15 @@ PROPOSAL = {'cash': 1000, 'start_date': '2026-10-01', 'members': {
 
 
 def propose(c, t, proposal=PROPOSAL):
-    assert c.post('/groups/g/opening', json=proposal, headers=t['finance']).status_code == 200
-    return c.get('/groups/g', headers=t['president']).json()['opening_proposal']
+    assert c.post('/groups/%2300000001/opening', json=proposal, headers=t['finance']).status_code == 200
+    return c.get('/groups/%2300000001', headers=t['president']).json()['opening_proposal']
 
 
 def test_UX05_16_approval_without_review_precondition_is_rejected(system):
     c, t, _ = system
     propose(c, t)
-    assert c.post('/groups/g/opening/approve', headers=t['president']).status_code == 422
-    assert c.get('/groups/g', headers=t['president']).json()['opening'] is None
+    assert c.post('/groups/%2300000001/opening/approve', headers=t['president']).status_code == 422
+    assert c.get('/groups/%2300000001', headers=t['president']).json()['opening'] is None
 
 
 @pytest.mark.parametrize('change', [
@@ -29,9 +29,9 @@ def test_UX05_06_07_stale_review_cannot_approve_replaced_proposal(system, change
     c, t, _ = system
     reviewed = propose(c, t)
     fresh = propose(c, t, {**PROPOSAL, **change})
-    response = c.post('/groups/g/opening/approve', json={'proposal': reviewed}, headers=t['president'])
+    response = c.post('/groups/%2300000001/opening/approve', json={'proposal': reviewed}, headers=t['president'])
     assert response.status_code == 409, response.text
-    state = c.get('/groups/g', headers=t['president']).json()
+    state = c.get('/groups/%2300000001', headers=t['president']).json()
     assert state['opening'] is None
     assert state['opening_proposal'] == fresh
 
@@ -41,9 +41,9 @@ def test_UX05_05_08_11_exact_review_approved_once(system, role):
     c, t, _ = system
     reviewed = propose(c, t)
     body = {'proposal': reviewed}
-    assert c.post('/groups/g/opening/approve', json=body, headers=t[role]).status_code == 200
-    assert c.post('/groups/g/opening/approve', json=body, headers=t[role]).status_code == 409
-    state = c.get('/groups/g', headers=t['president']).json()
+    assert c.post('/groups/%2300000001/opening/approve', json=body, headers=t[role]).status_code == 200
+    assert c.post('/groups/%2300000001/opening/approve', json=body, headers=t[role]).status_code == 409
+    state = c.get('/groups/%2300000001', headers=t['president']).json()
     assert state['opening'] == reviewed
     assert state['finances']['cash'] == 1000
 
@@ -52,4 +52,4 @@ def test_UX05_05_08_11_exact_review_approved_once(system, role):
 def test_UX05_10_other_roles_cannot_approve_even_with_correct_review(system, role):
     c, t, _ = system
     reviewed = propose(c, t)
-    assert c.post('/groups/g/opening/approve', json={'proposal': reviewed}, headers=t[role]).status_code == 403
+    assert c.post('/groups/%2300000001/opening/approve', json={'proposal': reviewed}, headers=t[role]).status_code == 403

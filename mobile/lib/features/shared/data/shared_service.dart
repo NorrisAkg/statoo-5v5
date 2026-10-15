@@ -88,7 +88,10 @@ class SharedService {
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 20);
     try {
-      final req = await client.openUrl(method, Uri.parse('$baseUrl$path'));
+      final req = await client.openUrl(
+        method,
+        Uri.parse('$baseUrl${path.replaceAll('#', '%23')}'),
+      );
       if (token != null) req.headers.set('Authorization', 'Bearer $token');
       req.headers.contentType = ContentType.json;
       if (body != null) req.write(jsonEncode(body));

@@ -1,0 +1,33 @@
+[
+  {
+    "id": "AUD-03",
+    "writes": 1,
+    "result": null,
+    "error": "Lecture indisponible"
+  },
+  {
+    "id": "AUD-04",
+    "expectedCash": 500,
+    "actualCash": 100
+  },
+  {
+    "id": "AUD-05",
+    "expected": [
+      "Zaki",
+      "Amine"
+    ],
+    "actual": [
+      "Amine",
+      "Zaki"
+    ]
+  },
+  {
+    "id": "AUD-06",
+    "mobileDefaultMinimum": 6,
+    "webAcceptedSinglePlayer": true
+  },
+  {
+    "id": "AUD-11",
+    "message": "Unexpected token '<', \"<html>Serv\"... is not valid JSON"
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "name": "PWA contract fixture",
+  "account": {
+    "id": "me",
+    "roles": [
+      "MEMBER"
+    ],
+    "shared": true
+  },
+  "members": [
+    {
+      "id": "a",
+      "name": "A",
+      "is_active": 1
+    },
+    {
+      "id": "b",
+      "name": "B",
+      "is_active": 1
+    },
+    {
+      "id": "c",
+      "name": "C",
+      "is_active": 1
+    }
+  ],
+  "documents": {
+    "sport:2026-10-15-1": {
+      "domain": "sport",
+      "occurrence_id": "2026-10-15-1",
+      "owner": "sg",
+      "revision": 1,
+      "generation": 0,
+      "candidates": [],
+      "history": [],
+      "payload": {
+        "session": {
+          "id": "pwa-s",
+          "team_id": "g",
+          "played_at": "2026-10-15T20:00:00",
+          "session_type": "TOURNAMENT_3",
+          "status": "CLOSED",
+          "is_ranked": 1,
+          "allow_uneven_teams": 0,
+          "team_names": "{\"A\":\"Racing Atlas\",\"B\":\"Union du Port\",\"C\":\"Sporting Atlas\"}",
+          "team_colors": "{\"A\":4282090230,\"B\":4294538006,\"C\":4280468830}",
+          "wins_a": 3,
+          "wins_b": 2,
+          "wins_c": 1,
+          "score_a": null,
+          "unassigned_goals_a": 0,
+          "score_b": null,
+          "unassigned_goals_b": 0,
+          "score_c": null,
+          "unassigned_goals_c": 0,
+          "draw_points": 1,
+          "result": "A"
+        },
+        "participations": [
+          {
+            "id": "pa",
+            "player_id": "a",
+            "session_id": "pwa-s",
+            "team": "A",
+            "goals": 1,
+            "assists": 0,
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "id": "pb",
+            "player_id": "b",
+            "session_id": "pwa-s",
+            "team": "B",
+            "goals": 2,
+            "assists": 0,
+            "yellow_cards": 0,
+            "red_cards": 0
+          },
+          {
+            "id": "pc",
+            "player_id": "c",
+            "session_id": "pwa-s",
+            "team": "C",
+            "goals": 3,
+            "assists": 0,
+            "yellow_cards": 0,
+            "red_cards": 0
+          }
+        ]
+      }
+    }
+  },
+  "obligations": {},
+  "financial_settings": {
+    "contribution": 100,
+    "late_penalty": 0
+  },
+  "finances": {
+    "cash": 0,
+    "members": {}
+  }
+}

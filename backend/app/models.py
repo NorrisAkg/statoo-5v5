@@ -22,6 +22,13 @@ class Token(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime)
 
 
+class RegistrationOperation(Base):
+    __tablename__ = "registration_operations"
+    id: Mapped[str] = mapped_column(String(100), primary_key=True)
+    group_id: Mapped[str] = mapped_column(ForeignKey("groups.id"))
+    fingerprint: Mapped[str] = mapped_column(String(200))
+
+
 def database(url: str):
     url = url.replace("postgres://", "postgresql+psycopg://", 1)
     if url.startswith("postgresql://"):

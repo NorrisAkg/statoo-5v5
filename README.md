@@ -6,7 +6,7 @@ Application de football entre amis avec suivi sportif et financier. Le dépôt c
 | --- | --- |
 | `mobile/` | Application Flutter Android/iOS, SQLite et saisie hors ligne |
 | `backend/` | API Python FastAPI, rôles, synchronisation et arbitrage |
-| `web/` | Portail de consultation en français, HTML/CSS/JavaScript |
+| `web/` | PWA en français, consultation et gestion par rôle, HTML/CSS/JavaScript |
 | `docs/` | Documentation commune et références historiques |
 
 La branche de travail est `codex/finances-et-groupe-partage`. Le mode local reste disponible ; un groupe partagé utilise le backend comme source des versions publiées.
@@ -69,10 +69,10 @@ Le fichier `render.yaml` décrit le service backend ; il ne déclenche aucun dé
 
 ```powershell
 python -m http.server 8080 --directory web
-node --test web/tests/summary.test.mjs
+npm run test:web
 ```
 
-Ouvrir `http://localhost:8080`. Le portail demande l’URL de l’API et les identifiants du groupe. Les membres utilisent l’accès collectif en lecture seule. Aucun outil de compilation n’est nécessaire.
+Ouvrir `http://localhost:8080` ou `/portal/` sur l'API. Les membres utilisent l'accès collectif ; les responsables disposent des actions de leur rôle. Installation, brouillons hors ligne et tests navigateur sont décrits dans [le guide web](web/README.md).
 
 ## Documentation
 
