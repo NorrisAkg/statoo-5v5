@@ -136,6 +136,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Continuer'), findsNothing);
       expect(find.textContaining('Consultation'), findsWidgets);
+      expect(find.textContaining('Admin, Président, Vice-président, SG ou SGA'), findsOneWidget);
     });
     testWidgets(
       'UX03-22 local creation exposes the optional occurrence reference',

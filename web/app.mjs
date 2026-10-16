@@ -788,7 +788,7 @@ function auth() {
         render();
         message(
           registration
-            ? "Groupe créé. Attribuez les rôles Président, Trésorier et Secrétaire général pour démarrer."
+            ? "Groupe créé. Attribuez les rôles Président et Trésorier pour démarrer. Votre accès Admin permet de gérer les séances."
             : "",
         );
         registration = false;
@@ -1046,11 +1046,11 @@ function home(parent) {
   parent.append(grid);
   if (currentCaps().admin) {
     const assigned = new Set((data.leaders || []).flatMap((a) => a.roles));
-    if (!["PDT", "TR", "SG"].every((r) => assigned.has(r)))
+    if (!["PDT", "TR"].every((r) => assigned.has(r)))
       parent.append(
         card(
           "Préparer votre groupe",
-          "Attribuez les rôles Président, Trésorier et Secrétaire général dans Gérer le groupe. Les soldes initiaux seront proposés par le Trésorier et approuvés par le Président.",
+          "Attribuez les rôles Président et Trésorier dans Gérer le groupe. Votre accès Admin permet de gérer les séances ; vous pouvez aussi déléguer au Secrétaire général ou à son adjoint. Les soldes initiaux seront proposés par le Trésorier et approuvés par le Président.",
         ),
       );
   }
@@ -2660,7 +2660,7 @@ function conflictEditor(doc) {
   });
 }
 function transferEditor(doc) {
-  const permitted = doc.domain === "sport" ? ["SG", "SGA"] : ["TR", "TGA"];
+  const permitted = doc.domain === "sport" ? ["ADMIN", "PDT", "VP", "SG", "SGA"] : ["TR", "TGA"];
   if (doc.candidates?.length) {
     message("Résolvez le conflit avant le transfert.", true);
     return;

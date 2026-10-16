@@ -1,0 +1,18 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: UX06-01 role MEMBER same UI and execution capabilities
+00:00 +1: UX06-01 role CENSOR same UI and execution capabilities
+00:00 +2: UX06-01 role PDT same UI and execution capabilities
+00:00 +3: UX06-01 role VP same UI and execution capabilities
+00:00 +4: UX06-01 role ADMIN same UI and execution capabilities
+00:00 +5: UX06-01 role SG same UI and execution capabilities
+00:00 +6: UX06-01 role SGA same UI and execution capabilities
+00:00 +7: UX06-01 role TR same UI and execution capabilities
+00:00 +8: UX06-01 role TGA same UI and execution capabilities
+00:00 +9: ADM-01 collective Admin stays read only
+00:00 +10: UX06-11 expired or malformed identity never grants UI write
+00:00 +11: UX06-12/13 unrelated local group remains writable with remote identity
+00:00 +12: UX06-14 protected group with identity for another group remains readonly
+00:00 +13: UX06-16 restored marker prevents disconnected write
+00:00 +14: (tearDownAll)
+00:00 +14: All tests passed!

@@ -60,7 +60,7 @@ def test_shared_members_are_read_only_and_isolated(system):
     assert c.get("/groups/other", headers=t["members"]).status_code == 403
     for domain, payload in [("sport", sport()), ("finance", point())]:
         assert c.post("/groups/%2300000001/sync", json=event(domain, payload), headers=t["members"]).status_code == 403
-    assert c.post("/groups/%2300000001/sync", json=event("sport", sport()), headers=t["admin"]).status_code == 403
+    assert c.post("/groups/%2300000001/sync", json=event("finance", point()), headers=t["admin"]).status_code == 403
 
 
 @pytest.mark.parametrize("roles", [[], ["MEMBER"]])
@@ -265,3 +265,94 @@ def test_group_financial_defaults_permissions_and_frozen_previous_dues(system):
     snapshot=c.get('/groups/%2300000001',headers=t['members']).json()
     assert snapshot['obligations']['saturday-2026-10-10']['rate']==200
     assert c.put(endpoint,headers=t['finance'],json={'contribution':-1,'late_penalty':100}).status_code == 422
+
+
+def test_admin_manages_own_sessions_with_existing_sport_validation(system):
+    c, t, _ = system
+    path = '/groups/%2300000001'
+    for revision, status in enumerate(['DRAFT', 'CLOSED', 'CANCELLED']):
+        r = c.post(path + '/sync', headers=t['admin'], json=event('sport', sport(status), revision=revision))
+        assert r.status_code == 200, r.text
+        assert r.json()['status'] == 'accepted'
+    invalid = event('sport', sport('CLOSED'))
+    invalid['occurrence_id'] = 'below-minimum'
+    invalid['payload']['participations'] = []
+    assert c.post(path + '/sync', headers=t['admin'], json=invalid).status_code == 422
+    assert c.post(path + '/sync', headers=t['finance'], json=event('sport', sport())).status_code == 403
+
+
+def test_admin_sport_keeps_ownership_and_can_receive_transfer(system):
+    c, t, accounts = system
+    path = '/groups/%2300000001'
+    body = event('sport', sport())
+    assert c.post(path + '/sync', headers=t['sport'], json=body).status_code == 200
+    proposed = sport()
+    proposed['session']['notes'] = 'Proposition Admin distincte'
+    r = c.post(path + '/sync', headers=t['admin'], json=event('sport', proposed, revision=1))
+    assert r.status_code == 200, r.text
+    assert r.json()['status'] == 'conflict'
+    doc = c.get(path, headers=t['president']).json()['documents']['sport:' + body['occurrence_id']]
+    assert doc['owner'] == accounts['sport']
+    assert len(doc['candidates']) == 1
+    # Use an uncontested second session for explicit transfers.
+    body = event('sport', sport())
+    body['occurrence_id'] = 'transfer-to-admin'
+    assert c.post(path + '/sync', headers=t['sport'], json=body).status_code == 200
+    admin_id = c.get(path, headers=t['admin']).json()['account']['id']
+    target = path + '/documents/sport/transfer-to-admin/transfer'
+    r = c.post(target, headers=t['sport'], json={'revision': 1, 'account_id': admin_id, 'reason': 'Relais Admin'})
+    assert r.status_code == 200, r.text
+    doc = c.get(path, headers=t['admin']).json()['documents']['sport:transfer-to-admin']
+    assert doc['owner'] == admin_id
+    r = c.post(target, headers=t['admin'], json={'revision': doc['revision'], 'account_id': accounts['sport'], 'reason': 'Relais SG'})
+    assert r.status_code == 200, r.text
+
+
+def test_sport_owner_can_transfer_to_admin(system):
+    c, t, _ = system
+    path = '/groups/%2300000001'
+    body = event('sport', sport())
+    assert c.post(path + '/sync', headers=t['sport'], json=body).status_code == 200
+    admin_id = c.get(path, headers=t['admin']).json()['account']['id']
+    r = c.post(path + '/documents/sport/' + body['occurrence_id'] + '/transfer', headers=t['sport'], json={
+        'revision': 1, 'account_id': admin_id, 'reason': 'Relais Admin'})
+    assert r.status_code == 200, r.text
+
+
+@pytest.mark.parametrize('author', ['president', 'vice'])
+def test_presidency_manages_sessions_without_secretary_role(system, author):
+    c, t, accounts = system
+    path = '/groups/%2300000001'
+    if author == 'vice':
+        r = c.put(path + '/accounts/' + accounts['vice'] + '/roles', headers=t['admin'], json={
+            'roles': ['VP'], 'reason': 'Tester le rôle VP seul'})
+        assert r.status_code == 200, r.text
+        login = c.post('/auth/login', json={'group_id': '#00000001', 'username': 'vice', 'password': PASSWORD})
+        t['vice'] = {'Authorization': 'Bearer ' + login.json()['token']}
+    for revision, status in enumerate(['DRAFT', 'CLOSED', 'CANCELLED']):
+        r = c.post(path + '/sync', headers=t[author], json=event('sport', sport(status), revision=revision))
+        assert r.status_code == 200, r.text
+        assert r.json()['status'] == 'accepted'
+    invalid = event('sport', sport('CLOSED'))
+    invalid['occurrence_id'] = 'below-minimum'
+    invalid['payload']['participations'] = []
+    assert c.post(path + '/sync', headers=t[author], json=invalid).status_code == 422
+    assert c.post(path + '/sync', headers=t[author], json=event('finance', point())).status_code == 403
+    body = event('sport', sport())
+    body['occurrence_id'] = 'transfer-presidency'
+    assert c.post(path + '/sync', headers=t['sport'], json=body).status_code == 200
+    proposal = event('sport', sport(), revision=1)
+    proposal['occurrence_id'] = body['occurrence_id']
+    r = c.post(path + '/sync', headers=t[author], json=proposal)
+    assert r.status_code == 200, r.text
+    assert r.json()['status'] == 'conflict'
+    doc = c.get(path, headers=t['president']).json()['documents']['sport:transfer-presidency']
+    assert doc['owner'] == accounts['sport']
+    body['operation_id'] = str(uuid.uuid4())
+    body['occurrence_id'] = 'uncontested-transfer'
+    assert c.post(path + '/sync', headers=t['sport'], json=body).status_code == 200
+    target = path + '/documents/sport/uncontested-transfer/transfer'
+    r = c.post(target, headers=t['sport'], json={'revision': 1, 'account_id': accounts[author], 'reason': 'Relais présidence'})
+    assert r.status_code == 200, r.text
+    transferred = c.get(path, headers=t[author]).json()['documents']['sport:uncontested-transfer']
+    assert transferred['owner'] == accounts[author]

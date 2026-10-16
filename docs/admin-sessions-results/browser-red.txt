@@ -1,0 +1,84 @@
+TAP version 13
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SGA"]}
+ok 1 - SPORT-13 permissions remain explicit {"roles":["SGA"]}
+  ---
+  duration_ms: 998.460554
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["TR"]}
+ok 2 - SPORT-13 permissions remain explicit {"roles":["TR"]}
+  ---
+  duration_ms: 825.295827
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+not ok 3 - SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+  ---
+  duration_ms: 839.217481
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:929:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:946:18)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+ok 4 - SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+  ---
+  duration_ms: 816.891006
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+ok 5 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+  ---
+  duration_ms: 896.555562
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+ok 6 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+  ---
+  duration_ms: 853.832075
+  type: 'test'
+  ...
+# Subtest: ADM-02 Admin creates and reopens their session from the web
+not ok 7 - ADM-02 Admin creates and reopens their session from the web
+  ---
+  duration_ms: 858.4639
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1343:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1346:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6705.02187

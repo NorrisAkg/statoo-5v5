@@ -42,7 +42,7 @@ export function capabilities(account) {
   const has = (roles) =>
     !account?.shared && (account?.roles || []).some((r) => roles.includes(r));
   return {
-    sport: has(["SG", "SGA"]),
+    sport: has(["ADMIN", "PDT", "VP", "SG", "SGA"]),
     finance: has(["TR", "TGA"]),
     admin: has(["ADMIN"]),
     arbitrate: has(["PDT", "VP"]),

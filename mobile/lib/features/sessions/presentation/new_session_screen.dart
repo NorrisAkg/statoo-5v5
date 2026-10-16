@@ -11,12 +11,12 @@ import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
 import '../../settings/application/settings_provider.dart';
-import '../application/sessions_provider.dart';
-import '../domain/session.dart';
 import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
-import '../domain/team_appearance.dart';
+import '../application/sessions_provider.dart';
+import '../domain/session.dart';
 import '../domain/session_team_names.dart';
+import '../domain/team_appearance.dart';
 import 'team_appearance_editor.dart';
 
 class NewSessionScreen extends ConsumerStatefulWidget {
@@ -317,7 +317,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           ),
           title: const Text('Nouvelle séance'),
         ),
-      body: !writable ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Consultation uniquement. Le rôle SG ou SGA et une connexion valide sont requis pour gérer les séances du groupe partagé.')))
+      body: !writable ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Consultation uniquement. Le rôle Admin, Président, Vice-président, SG ou SGA et une connexion valide sont requis pour gérer les séances du groupe partagé.')))
       : Column(
         children: [
           const SizedBox(height: 16),

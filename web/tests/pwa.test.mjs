@@ -117,6 +117,8 @@ test("PWA-06 activation removes only older Statoo caches in the same scope", asy
         "statoo-shell:/portal/:2026-10-15-9",
         "statoo-shell:/portal/:2026-10-16-sport-1",
         "statoo-shell:/portal/:2026-10-16-loading-zod-1",
+        "statoo-shell:/portal/:2026-10-16-admin-sport-1",
+        "statoo-shell:/portal/:2026-10-16-presidency-sport-1",
       ],
       delete: async (key) => deleted.push(key),
     },
@@ -143,6 +145,8 @@ test("PWA-06 activation removes only older Statoo caches in the same scope", asy
     "statoo-shell:/portal/:2026-10-15-8",
     "statoo-shell:/portal/:2026-10-15-9",
     "statoo-shell:/portal/:2026-10-16-sport-1",
+    "statoo-shell:/portal/:2026-10-16-loading-zod-1",
+    "statoo-shell:/portal/:2026-10-16-admin-sport-1",
   ]);
   assert.equal(claimed, true);
 });

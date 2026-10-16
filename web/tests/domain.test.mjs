@@ -69,7 +69,7 @@ test("WEB-03/04 capabilities are explicit and collective is always read only", (
     "VP",
   ]) {
     const c = capabilities({ roles: [role], shared: false });
-    assert.equal(c.sport, ["SG", "SGA"].includes(role));
+    assert.equal(c.sport, ["ADMIN", "PDT", "VP", "SG", "SGA"].includes(role));
     assert.equal(c.finance, ["TR", "TGA"].includes(role));
     assert.equal(c.admin, role === "ADMIN");
     assert.equal(c.arbitrate, ["PDT", "VP"].includes(role));

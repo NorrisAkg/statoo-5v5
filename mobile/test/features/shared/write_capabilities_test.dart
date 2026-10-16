@@ -28,9 +28,9 @@ void main() {
   const allowed = {
     'MEMBER': <String>[],
     'CENSOR': <String>[],
-    'PDT': <String>[],
-    'VP': <String>[],
-    'ADMIN': ['members', 'finance_settings'],
+    'PDT': ['sport'],
+    'VP': ['sport'],
+    'ADMIN': ['members', 'finance_settings', 'sport'],
     'SG': ['sport'],
     'SGA': ['sport'],
     'TR': ['finance', 'finance_settings'],
@@ -61,6 +61,14 @@ void main() {
       },
     );
   }
+  test('ADM-01 collective Admin stays read only', () async {
+    for (final role in ['ADMIN', 'PDT', 'VP']) {
+      identity([role]);
+      (service.identity!['account'] as Map)['shared'] = true;
+      expect(service.canWrite('g', 'sport'), isFalse);
+      await expectLater(service.requireWrite('g', 'sport'), throwsStateError);
+    }
+  });
   test('UX06-11 expired or malformed identity never grants UI write', () async {
     for (final expiry in ['2000-01-01T00:00:00Z', 'invalid']) {
       identity(['ADMIN', 'SG'], expiry: expiry);

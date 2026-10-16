@@ -25,7 +25,7 @@ Depuis la racine du dépôt. Ouvrir `http://localhost:8080`.
 
 - Membres et Censeur : consultation, via accès collectif ou compte existant. Les nouveaux comptes individuels sont réservés aux responsables.
 - Admin : créer un groupe avec membres et accès collectif, gérer/archiver/réactiver les membres, créer les comptes responsables, attribuer/transférer les rôles, renouveler l'accès collectif.
-- SG/SGA : composer un match ou tournoi, tirage équilibré, couleurs, statistiques, brouillon, clôture, correction motivée et annulation.
+- Admin/Président/Vice-président/SG/SGA : composer un match ou tournoi, tirage équilibré, couleurs, statistiques, brouillon, clôture, correction motivée et annulation.
 - TR/TGA : proposer les soldes initiaux ; saisir/corriger les points liés à une séance ou indépendants, avec cotisations, pénalités, dons et dépenses séparés.
 - PDT/VP : approuver la proposition exacte de soldes, comparer/arbitrer les versions et transférer les responsabilités.
 - Admin/TR/TGA : paramètres financiers des nouvelles échéances.

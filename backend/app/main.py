@@ -26,7 +26,7 @@ from .security import password_hash, password_matches, token_digest
 
 ROLES = ["ADMIN", "PDT", "VP", "TR", "TGA", "SG", "SGA", "CENSOR", "MEMBER"]
 SINGULAR = set(ROLES) - {"MEMBER"}
-AUTHORS = {"sport": {"SG", "SGA"}, "finance": {"TR", "TGA"}}
+AUTHORS = {"sport": {"ADMIN", "PDT", "VP", "SG", "SGA"}, "finance": {"TR", "TGA"}}
 
 
 class Credentials(BaseModel):

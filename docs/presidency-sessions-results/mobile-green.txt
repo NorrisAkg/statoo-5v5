@@ -1,0 +1,33 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: (setUpAll)
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role MEMBER same UI and execution capabilities
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role CENSOR same UI and execution capabilities
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role PDT same UI and execution capabilities
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role VP same UI and execution capabilities
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role ADMIN same UI and execution capabilities
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role SG same UI and execution capabilities
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role SGA same UI and execution capabilities
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role TR same UI and execution capabilities
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role TGA same UI and execution capabilities
+00:00 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: ADM-01 collective Admin stays read only
+00:00 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:01 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:01 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:01 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:01 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:01 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:05 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:05 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:06 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:06 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:06 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:07 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX03-22 local creation exposes the optional occurrence reference
+00:07 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: management shows only permitted actions (admin: false)
+00:07 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:07 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:09 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Search filters player list by name or nickname
+00:09 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:10 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:12 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:13 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: (tearDownAll)
+00:13 +28: All tests passed!

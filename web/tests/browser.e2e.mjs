@@ -250,13 +250,13 @@ async function boot(r, options = {}) {
 for (const [role, allowed] of [
   ["MEMBER", []],
   ["CENSOR", []],
-  ["ADMIN", ["Gérer le groupe"]],
+  ["ADMIN", ["Gérer le groupe", "Nouvelle séance"]],
   ["SG", ["Nouvelle séance"]],
   ["SGA", ["Nouvelle séance"]],
   ["TR", ["Nouveau point financier"]],
   ["TGA", ["Nouveau point financier"]],
-  ["PDT", ["Décisions"]],
-  ["VP", ["Décisions"]],
+  ["PDT", ["Décisions", "Nouvelle séance"]],
+  ["VP", ["Décisions", "Nouvelle séance"]],
 ]) {
   test("WEB-03/04 action matrix " + role, async () => {
     const x = await boot([role]);

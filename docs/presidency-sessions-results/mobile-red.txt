@@ -1,0 +1,76 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: (setUpAll)
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role MEMBER same UI and execution capabilities
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role CENSOR same UI and execution capabilities
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role PDT same UI and execution capabilities
+00:00 +2 -1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role PDT same UI and execution capabilities [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/shared/write_capabilities_test.dart 51:11  main.<fn>
+
+00:00 +2 -1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role VP same UI and execution capabilities
+00:00 +2 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role VP same UI and execution capabilities [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test/features/shared/write_capabilities_test.dart 51:11  main.<fn>
+
+00:00 +2 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role ADMIN same UI and execution capabilities
+00:00 +3 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role SG same UI and execution capabilities
+00:00 +4 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role SGA same UI and execution capabilities
+00:00 +5 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role TR same UI and execution capabilities
+00:00 +6 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role TGA same UI and execution capabilities
+00:00 +7 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: ADM-01 collective Admin stays read only
+00:00 +8 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-11 expired or malformed identity never grants UI write
+00:00 +9 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-12/13 unrelated local group remains writable with remote identity
+00:00 +10 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-14 protected group with identity for another group remains readonly
+00:00 +11 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-16 restored marker prevents disconnected write
+00:00 +12 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: (tearDownAll)
+00:01 +12 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: (setUpAll)
+00:01 +12 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:02 +13 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:03 +14 -2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-06 direct new session route prevents readonly input
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextContainingWidgetFinder:<Found 0 widgets with text containing Admin, Président,
+Vice-président, SG ou SGA: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart:139:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart line 139
+The test description was:
+  UX06-06 direct new session route prevents readonly input
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +14 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-06 direct new session route prevents readonly input [E]
+  Test failed. See exception logs above.
+  The test description was: UX06-06 direct new session route prevents readonly input
+
+00:03 +14 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX03-22 local creation exposes the optional occurrence reference
+00:03 +15 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:04 +16 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Search filters player list by name or nickname
+00:05 +17 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:05 +18 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:06 +19 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:07 +20 -3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: (tearDownAll)
+00:07 +20 -3: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-06 direct new session route prevents readonly input
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role PDT same UI and execution capabilities
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/write_capabilities_test.dart: UX06-01 role VP same UI and execution capabilities

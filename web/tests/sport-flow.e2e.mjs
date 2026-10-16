@@ -931,7 +931,9 @@ for (const options of [
     async () => {
       const x = await boot(options);
       try {
-        const allowed = options.roles.includes("SGA") && !options.shared;
+        const allowed =
+          options.roles.some((r) => ["ADMIN", "SGA"].includes(r)) &&
+          !options.shared;
         if (options.existing) {
           await x.page
             .getByRole("button", { name: "Voir la séance", exact: true })
@@ -1334,6 +1336,95 @@ test("SPORT-19 a player archived during an unpublished preparation can be explic
       "2",
     );
     assert.equal(x.sent.length, 0);
+  } finally {
+    await x.close();
+  }
+});
+
+for (const role of ["ADMIN", "PDT", "VP"]) {
+  test(`PRES-02 ${role} creates and reopens their session from the web`, async () => {
+    const x = await boot({ roles: [role] });
+    try {
+      assert.equal(
+        await x.page
+          .getByRole("button", { name: "Nouvelle séance", exact: true })
+          .count(),
+        1,
+      );
+      await flow(x.page);
+      await step(x.page, 3);
+      await x.page
+        .getByRole("button", { name: "Enregistrer le brouillon", exact: true })
+        .click();
+      await confirm(x.page);
+      await x.page.getByText("Données publiées.", { exact: true }).waitFor();
+      assert.equal(x.sent.length, 1);
+      assert.equal(x.sent[0].payload.session.status, "DRAFT");
+      await flow(x.page, true);
+      assert.equal(await x.page.getByRole("dialog").count(), 1);
+      assert.deepEqual(x.errors, []);
+    } finally {
+      await x.close();
+    }
+  });
+}
+
+for (const role of ["ADMIN", "PDT", "VP"]) {
+  test(`PRES-04 ${role} is offered as a sport transfer recipient`, async () => {
+    const x = await boot({ existing: true });
+    try {
+      x.data.leaders = [
+        {
+          id: "admin",
+          username: "Responsable du groupe",
+          roles: [role],
+          shared: false,
+        },
+      ];
+      await x.page
+        .getByRole("button", { name: "Actualiser", exact: true })
+        .click();
+      await x.page.getByText("Données actualisées.", { exact: true }).waitFor();
+      await x.page
+        .getByRole("button", { name: "Voir la séance", exact: true })
+        .click();
+      await x.page
+        .getByRole("button", {
+          name: "Transférer la responsabilité",
+          exact: true,
+        })
+        .click();
+      assert.equal(
+        await x.page
+          .getByLabel("Nouveau responsable", { exact: true })
+          .locator('option[value="admin"]')
+          .count(),
+        1,
+      );
+    } finally {
+      await x.close();
+    }
+  });
+}
+
+test("ADM-08 Admin with President and Treasurer needs no Secretary to start", async () => {
+  const x = await boot({ roles: ["ADMIN"] });
+  try {
+    x.data.leaders = [
+      { id: "me", roles: ["ADMIN"] },
+      { id: "president", roles: ["PDT"] },
+      { id: "treasurer", roles: ["TR"] },
+    ];
+    await x.page
+      .getByRole("button", { name: "Actualiser", exact: true })
+      .click();
+    await x.page.getByText("Données actualisées.", { exact: true }).waitFor();
+    assert.equal(
+      await x.page
+        .getByRole("heading", { name: "Préparer votre groupe", exact: true })
+        .count(),
+      0,
+    );
   } finally {
     await x.close();
   }

@@ -81,10 +81,11 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     try {
       await operation();
       container.read(sharedStatusProvider.notifier).refresh();
-      container.invalidate(allSessionsProvider);
-      container.invalidate(playersListProvider);
-      container.invalidate(financialPointsProvider);
-      container.invalidate(financialTotalsProvider);
+      container
+        ..invalidate(allSessionsProvider)
+        ..invalidate(playersListProvider)
+        ..invalidate(financialPointsProvider)
+        ..invalidate(financialTotalsProvider);
       if (mounted) setState(() => _message = 'Données mises à jour.');
     } on Object catch (e) {
       if (mounted) {
@@ -143,8 +144,9 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         .read(activeTeamIdProvider.notifier)
         .selectTeam(service.groupId!);
     await container.read(hasTeamProvider.notifier).reloadFromDb();
-    container.invalidate(teamInfoProvider);
-    container.invalidate(allTeamsProvider);
+    container
+      ..invalidate(teamInfoProvider)
+      ..invalidate(allTeamsProvider);
   }
 
   Future<void> _addAccount() async {
@@ -367,11 +369,12 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         }
       });
     } on Object catch (error) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _failed = true;
           _message = '$error';
         });
+      }
     } finally {
       _decisionOpen = false;
     }
@@ -383,11 +386,12 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     try {
       await _showArbitration(document);
     } on Object catch (error) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _failed = true;
           _message = 'Comparaison impossible : $error';
         });
+      }
     } finally {
       _decisionOpen = false;
     }
@@ -735,7 +739,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     final leaders = (service.snapshot?['leaders'] as List<dynamic>? ?? [])
         .cast<Map<String, dynamic>>();
     final permitted = document['domain'] == 'sport'
-        ? ['SG', 'SGA']
+        ? ['ADMIN', 'PDT', 'VP', 'SG', 'SGA']
         : ['TR', 'TGA'];
     final choices = leaders
         .where((a) => (a['roles'] as List<dynamic>).any(permitted.contains))

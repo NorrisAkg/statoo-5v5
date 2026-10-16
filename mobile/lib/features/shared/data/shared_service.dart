@@ -37,7 +37,7 @@ class SharedService {
   bool permits(String domain) => (identity?['account'] as Map?)?['shared'] != true && roles.any(
     (r) =>
         (domain == 'sport'
-                ? ['SG', 'SGA']
+                ? ['ADMIN', 'PDT', 'VP', 'SG', 'SGA']
                 : domain == 'finance_settings'
                 ? ['ADMIN', 'TR', 'TGA']
                 : domain == 'finance'

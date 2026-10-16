@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: WEB-03/04 capabilities are explicit and collective is always read only
+not ok 1 - WEB-03/04 capabilities are explicit and collective is always read only
+  ---
+  duration_ms: 2.19388
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/domain.test.mjs:59:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/domain.test.mjs:72:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: WEB-07/08/09 sport close computes result and unassigned goals without mutating input
+ok 2 - WEB-07/08/09 sport close computes result and unassigned goals without mutating input
+  ---
+  duration_ms: 7.965349
+  type: 'test'
+  ...
+# Subtest: WEB-09 tournament draws and no-victory rejection
+ok 3 - WEB-09 tournament draws and no-victory rejection
+  ---
+  duration_ms: 12.72712
+  type: 'test'
+  ...
+# Subtest: WEB-10 rejects invalid sports inputs
+ok 4 - WEB-10 rejects invalid sports inputs
+  ---
+  duration_ms: 6.49645
+  type: 'test'
+  ...
+# Subtest: WEB-06 summaries isolate session scorers, decode names/colors, include third team
+ok 5 - WEB-06 summaries isolate session scorers, decode names/colors, include third team
+  ---
+  duration_ms: 0.997952
+  type: 'test'
+  ...
+# Subtest: WEB-13 reference finds next free identity across sport and finance
+ok 6 - WEB-13 reference finds next free identity across sport and finance
+  ---
+  duration_ms: 0.339562
+  type: 'test'
+  ...
+# Subtest: WEB-22/23 finance preserves historical roster, rate and movement ids
+ok 7 - WEB-22/23 finance preserves historical roster, rate and movement ids
+  ---
+  duration_ms: 2.257642
+  type: 'test'
+  ...
+# Subtest: WEB-24 rejects fractional, negative, duplicate, cancelled movements and missing reason
+ok 8 - WEB-24 rejects fractional, negative, duplicate, cancelled movements and missing reason
+  ---
+  duration_ms: 2.776615
+  type: 'test'
+  ...
+# Subtest: WEB-12/28 operation carries immutable revision/generation and correction reason
+ok 9 - WEB-12/28 operation carries immutable revision/generation and correction reason
+  ---
+  duration_ms: 3.356235
+  type: 'test'
+  ...
+# Subtest: WEB-38 legacy session appearance gets stable defaults when editing
+ok 10 - WEB-38 legacy session appearance gets stable defaults when editing
+  ---
+  duration_ms: 1.433513
+  type: 'test'
+  ...
+# Subtest: WEB-41 sport wire format is compatible with mobile SQLite imports
+ok 11 - WEB-41 sport wire format is compatible with mobile SQLite imports
+  ---
+  duration_ms: 1.358398
+  type: 'test'
+  ...
+# Subtest: WEB-41 checked-in mobile fixture stays identical to current PWA serialization
+ok 12 - WEB-41 checked-in mobile fixture stays identical to current PWA serialization
+  ---
+  duration_ms: 1.859746
+  type: 'test'
+  ...
+# Subtest: WEB-07 team catalogue matches the mobile catalogue without duplicate names
+ok 13 - WEB-07 team catalogue matches the mobile catalogue without duplicate names
+  ---
+  duration_ms: 0.367583
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 12
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 141.524301
