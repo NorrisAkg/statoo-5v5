@@ -16,10 +16,10 @@ import 'package:statoo/features/team/application/team_provider.dart';
 class _DeniedController extends SessionsController {
   _DeniedController(super.ref);
   @override
-  Future<void> incrementScore({
-    required String sessionId,
-    required Team team,
-    required int delta,
+  Future<void> recordLive(
+    String id,
+    Map<String, dynamic>? action, {
+    String? edit,
   }) async {
     throw StateError('Le rôle SG a été retiré.');
   }
@@ -108,7 +108,15 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Augmenter le score de Équipe A'));
+    final goal = find.text('Ajouter un but');
+    await tester.scrollUntilVisible(
+      goal,
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(goal);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Buteur non renseigné'));
     await tester.pumpAndSettle();
     expect(find.textContaining('SG a été retiré'), findsWidgets);
     expect(tester.takeException(), isNull);

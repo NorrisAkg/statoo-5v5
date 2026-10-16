@@ -17,6 +17,7 @@ import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 import '../domain/team_appearance.dart';
 import 'add_late_players_bottom_sheet.dart';
+import 'live_stats_panel.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
 import '../../shared/application/shared_providers.dart';
@@ -261,9 +262,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       formattedDate: formattedDate,
       formatLabel: formatLabel,
       isCurrentActive: isCurrentActive,
-      canEdit: _writable,
+      canEdit: false,
       tournamentBoard: session.sessionType == SessionType.tournament3
-          ? _buildTournamentWinsBoard(context, ref, session, isCurrentActive && _writable)
+          ? LiveWinsBoard(session: session, editable: isCurrentActive && _writable)
           : null,
       onScoreIncrement: (team, delta) {
         unawaited(_sportMutation(() => ref.read(sessionsControllerProvider).incrementScore(
@@ -274,178 +275,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       },
     );
   }
-  Widget _buildTournamentWinsBoard(
-    BuildContext context,
-    WidgetRef ref,
-    Session session,
-    bool isCurrentActive,
-  ) {
-    Future<void> changeWins({int? a, int? b, int? c}) async {
-      final newA = a ?? session.winsA;
-      final newB = b ?? session.winsB;
-      final newC = c ?? session.winsC;
-      final result = computeTournamentResult(newA, newB, newC);
-      try {
-        await ref.read(sessionsControllerProvider).updateTournamentWins(
-          sessionId: session.id,
-          winsA: newA,
-          winsB: newB,
-          winsC: newC,
-          result: result,
-        );
-      } on Object catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erreur lors de la mise à jour des victoires : $e')),
-          );
-        }
-      }
-    }
-
-    final maxWins = [session.winsA, session.winsB, session.winsC].reduce((x, y) => x > y ? x : y);
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Remix.trophy_line, size: 16, color: session.teamColor(context, Team.c)),
-            const SizedBox(width: 6),
-            Text(
-              'Compteur de victoires',
-              style: TextStyle(
-                color: context.colors.foreground300,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildTournamentTeamWinCard(
-                context,
-                title: session.teamName(Team.a),
-                wins: session.winsA,
-                color: session.teamColor(context, Team.a),
-                textColor: session.teamColor(context, Team.a),
-                isLeader: session.winsA > 0 && session.winsA == maxWins,
-                isEditable: isCurrentActive,
-                onDecrement: session.winsA > 0 ? () => changeWins(a: session.winsA - 1) : null,
-                onIncrement: () => changeWins(a: session.winsA + 1),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildTournamentTeamWinCard(
-                context,
-                title: session.teamName(Team.b),
-                wins: session.winsB,
-                color: session.teamColor(context, Team.b),
-                textColor: session.teamColor(context, Team.b),
-                isLeader: session.winsB > 0 && session.winsB == maxWins,
-                isEditable: isCurrentActive,
-                onDecrement: session.winsB > 0 ? () => changeWins(b: session.winsB - 1) : null,
-                onIncrement: () => changeWins(b: session.winsB + 1),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildTournamentTeamWinCard(
-                context,
-                title: session.teamName(Team.c),
-                wins: session.winsC,
-                color: session.teamColor(context, Team.c),
-                textColor: session.teamColor(context, Team.c),
-                isLeader: session.winsC > 0 && session.winsC == maxWins,
-                isEditable: isCurrentActive,
-                onDecrement: session.winsC > 0 ? () => changeWins(c: session.winsC - 1) : null,
-                onIncrement: () => changeWins(c: session.winsC + 1),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTournamentTeamWinCard(
-    BuildContext context, {
-    required String title,
-    required int wins,
-    required Color color,
-    required Color textColor,
-    required bool isLeader,
-    required bool isEditable,
-    required VoidCallback? onDecrement,
-    required VoidCallback onIncrement,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isLeader ? color : color.withValues(alpha: 0.25),
-          width: isLeader ? 1.5 : 1.0,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(width: 8, height: 8, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  title,
-                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 13),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (isLeader) ...[
-                const SizedBox(width: 4),
-                const Icon(Remix.trophy_fill, size: 13, color: Color(0xFFFACC15)),
-              ],
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            '$wins',
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
-          ),
-          Text(
-            'victoire${wins > 1 ? 's' : ''}',
-            style: TextStyle(color: context.colors.foreground400, fontSize: 11),
-          ),
-          if (isEditable) ...[
-            const SizedBox(height: 6),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  icon: const Icon(Remix.subtract_line, size: 16),
-                  color: context.colors.foreground400,
-                  onPressed: onDecrement,
-                ),
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  icon: const Icon(Remix.add_line, size: 16),
-                  color: textColor,
-                  onPressed: onIncrement,
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
   Widget _buildWarningBanner(
     BuildContext context, {
     required int scoreA,
@@ -510,6 +339,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     bool isCurrentActive,
   ) {
     final isTournament = session.sessionType == SessionType.tournament3;
+
+    if (session.id == ref.watch(activeSessionIdProvider).value && session.status == SessionStatus.draft) {
+      return LiveStatsPanel(session: session, players: [...teamAPlayers, ...teamBPlayers, ...teamCPlayers], editable: isCurrentActive);
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

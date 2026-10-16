@@ -85,7 +85,7 @@ void main() {
       );
       expect(
         find.descendant(of: a, matching: find.byIcon(Remix.football_fill)),
-        findsNWidgets(3),
+        findsNWidgets(2),
       );
       expect(
         find.descendant(of: b, matching: find.text('Yassine')),
@@ -113,7 +113,8 @@ void main() {
         of: yassineRow,
         matching: find.byIcon(Remix.football_fill),
       );
-      expect(karimBalls, findsNWidgets(2));
+      expect(karimBalls, findsOneWidget);
+      expect(find.text('x2'), findsOneWidget);
       expect(
         tester.getCenter(find.text('Karim')).dx,
         lessThan(tester.getCenter(karimBalls.first).dx),
@@ -126,14 +127,17 @@ void main() {
     },
   );
 
-  testWidgets('empty camps and unassigned goals are explicit', (tester) async {
+  testWidgets('empty camps are blank and unassigned goals retain a count', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       header(value: session.copyWith(unassignedGoalsA: 2)),
     );
     await tester.pumpAndSettle();
     expect(find.text('Non attribués'), findsOneWidget);
-    expect(find.byIcon(Remix.football_fill), findsNWidgets(2));
-    expect(find.text('Aucun buteur'), findsOneWidget);
+    expect(find.byIcon(Remix.football_fill), findsOneWidget);
+    expect(find.text('x2'), findsOneWidget);
+    expect(find.text('Aucun buteur'), findsNothing);
   });
 
   testWidgets('long scorer names fit at 320px with enlarged text', (
@@ -156,7 +160,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.byIcon(Remix.football_fill), findsNWidgets(12));
+    expect(find.byIcon(Remix.football_fill), findsOneWidget);
+    expect(find.text('x12'), findsOneWidget);
   });
 
   testWidgets(
@@ -180,7 +185,7 @@ void main() {
       );
       expect(
         find.descendant(of: c, matching: find.byIcon(Remix.football_fill)),
-        findsNWidgets(3),
+        findsOneWidget,
       );
       expect(find.text('0 - 0'), findsNothing);
     },
