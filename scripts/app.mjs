@@ -19,7 +19,7 @@ function buildPortal() {
   const api_url = configured ? apiAddress({api_url: configured}) : '';
   run(process.execPath, ['--test', ...readdirSync('web/tests').filter(name => name.endsWith('.test.mjs')).map(name => `web/tests/${name}`)]);
   mkdirSync('web/dist', { recursive: true });
-  for (const file of ['index.html', 'app.mjs', 'config.mjs', 'registration-draft.mjs', 'client.mjs', 'domain.mjs', 'summary.mjs', 'pwa.mjs', 'sw.js', 'styles.css', 'manifest.webmanifest', 'team-names.json', 'icons', 'fonts']) {
+  for (const file of ['index.html', 'app.mjs', 'interaction.mjs', 'button-state.mjs', 'validation.mjs', 'vendor', 'config.mjs', 'registration-draft.mjs', 'client.mjs', 'domain.mjs', 'summary.mjs', 'pwa.mjs', 'sw.js', 'styles.css', 'manifest.webmanifest', 'team-names.json', 'icons', 'fonts']) {
     if (!existsSync(`web/${file}`)) throw new Error(`Missing PWA asset: ${file}`);
     cpSync(`web/${file}`, `web/dist/${file}`, { recursive: true });
   }

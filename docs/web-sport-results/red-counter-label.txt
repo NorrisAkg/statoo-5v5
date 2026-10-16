@@ -1,0 +1,41 @@
+TAP version 13
+# Subtest: SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+not ok 1 - SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+  ---
+  duration_ms: 31876.419594
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:345:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.click: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('.sport-counter label').first()[22m
+    [2m    - locator resolved to <label class="field">…</label>[22m
+    [2m  - attempting click action[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is not enabled[22m
+    [2m    - retrying click action[22m
+    [2m    - waiting 20ms[22m
+    [2m    2 × waiting for element to be visible, enabled and stable[22m
+    [2m      - element is not enabled[22m
+    [2m    - retrying click action[22m
+    [2m      - waiting 100ms[22m
+    [2m    58 × waiting for element to be visible, enabled and stable[22m
+    [2m       - element is not enabled[22m
+    [2m     - retrying click action[22m
+    [2m       - waiting 500ms[22m
+
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:350:58)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 33358.682721

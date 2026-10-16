@@ -1,10 +1,14 @@
 const SCOPE = new URL(self.registration.scope);
 const PREFIX = "statoo-shell:" + SCOPE.pathname + ":";
-const CACHE = PREFIX + "2026-10-15-7";
+const CACHE = PREFIX + "2026-10-16-loading-zod-1";
 const SHELL = [
   "./",
   "index.html",
   "app.mjs",
+  "interaction.mjs",
+  "button-state.mjs",
+  "validation.mjs",
+  "vendor/zod.mjs",
   "config.mjs",
   "registration-draft.mjs",
   "config.json",

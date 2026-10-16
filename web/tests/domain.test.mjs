@@ -45,6 +45,14 @@ const sport = (extra = {}) => ({
       goals: 1,
       assists: 0,
     },
+    {
+      id: "p2",
+      player_id: "b",
+      session_id: "s",
+      team: "B",
+      goals: 0,
+      assists: 0,
+    },
   ],
 });
 
@@ -76,7 +84,7 @@ test("WEB-03/04 capabilities are explicit and collective is always read only", (
 });
 test("WEB-07/08/09 sport close computes result and unassigned goals without mutating input", () => {
   const p = sport();
-  const result = prepareSport(p, members, "CLOSED");
+  const result = prepareSport(p, members, "CLOSED", 2);
   assert.equal(result.session.result, "A");
   assert.equal(result.session.unassigned_goals_a, 1);
   assert.equal(p.session.status, "DRAFT");
@@ -99,7 +107,7 @@ test("WEB-09 tournament draws and no-victory rejection", () => {
       score_a: null,
       score_b: null,
     });
-    assert.equal(prepareSport(p, members, "CLOSED").session.result, result);
+    assert.equal(prepareSport(p, members, "CLOSED", 2).session.result, result);
   }
   assert.throws(
     () =>
@@ -112,6 +120,7 @@ test("WEB-09 tournament draws and no-victory rejection", () => {
         }),
         members,
         "CLOSED",
+        2,
       ),
     /victoire/i,
   );
@@ -119,7 +128,7 @@ test("WEB-09 tournament draws and no-victory rejection", () => {
 test("WEB-10 rejects invalid sports inputs", () => {
   for (const value of [-1, 1.2, NaN])
     assert.throws(() =>
-      prepareSport(sport({ score_a: value }), members, "CLOSED"),
+      prepareSport(sport({ score_a: value }), members, "CLOSED", 2),
     );
   for (const mutate of [
     (p) => p.participations.push({ ...p.participations[0] }),
@@ -131,10 +140,10 @@ test("WEB-10 rejects invalid sports inputs", () => {
   ]) {
     const p = sport();
     mutate(p);
-    assert.throws(() => prepareSport(p, members, "CLOSED"));
+    assert.throws(() => prepareSport(p, members, "CLOSED", 2));
   }
   const p = sport({ score_a: 0 });
-  assert.throws(() => prepareSport(p, members, "CLOSED"), /buts/i);
+  assert.throws(() => prepareSport(p, members, "CLOSED", 2), /buts/i);
 });
 test("WEB-06 summaries isolate session scorers, decode names/colors, include third team", () => {
   const p = sport({
@@ -228,7 +237,7 @@ test("WEB-38 legacy session appearance gets stable defaults when editing", () =>
   const p = sport();
   delete p.session.team_names;
   delete p.session.team_colors;
-  const result = prepareSport(p, members, "CLOSED");
+  const result = prepareSport(p, members, "CLOSED", 2);
   assert.equal(result.session.team_names.A, "Équipe A");
   assert.equal(result.session.team_colors.A, 0xff3b82f6);
 });
@@ -238,6 +247,7 @@ test("WEB-41 sport wire format is compatible with mobile SQLite imports", () => 
     sport({ is_ranked: true, allow_uneven_teams: false }),
     members,
     "CLOSED",
+    2,
   );
   const op = operation("sport", "ref", payload);
   assert.equal(typeof op.payload.session.team_names, "string");
@@ -256,7 +266,7 @@ test("WEB-41 checked-in mobile fixture stays identical to current PWA serializat
     ),
   );
   const document = Object.values(snapshot.documents)[0];
-  const payload = prepareSport(document.payload, snapshot.members, "CLOSED");
+  const payload = prepareSport(document.payload, snapshot.members, "CLOSED", 2);
   assert.deepEqual(
     operation("sport", document.occurrence_id, payload).payload,
     document.payload,

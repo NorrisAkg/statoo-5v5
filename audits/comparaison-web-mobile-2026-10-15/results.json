@@ -1,0 +1,88 @@
+[
+  {
+    "id": "CMP-01",
+    "width": 390,
+    "bodyWidth": 390,
+    "viewport": 390
+  },
+  {
+    "id": "CMP-02",
+    "width": 390,
+    "searchAfter": "",
+    "focusAfter": "BODY"
+  },
+  {
+    "id": "CMP-05",
+    "width": 390,
+    "currentTab": "Accueil"
+  },
+  {
+    "id": "CMP-04",
+    "width": 390,
+    "ariaLabel": null,
+    "ariaLabelledby": null
+  },
+  {
+    "id": "CMP-03",
+    "width": 390,
+    "focusAfter": {
+      "tag": "BODY",
+      "label": null
+    }
+  },
+  {
+    "id": "CMP-07",
+    "width": 390,
+    "inputCount": 39,
+    "searchCount": 0,
+    "selectAllButtons": 0
+  },
+  {
+    "id": "CMP-06",
+    "width": 390,
+    "reopenedCash": "0"
+  },
+  {
+    "id": "CMP-01",
+    "width": 1440,
+    "bodyWidth": 1440,
+    "viewport": 1440
+  },
+  {
+    "id": "CMP-02",
+    "width": 1440,
+    "searchAfter": "",
+    "focusAfter": "BODY"
+  },
+  {
+    "id": "CMP-05",
+    "width": 1440,
+    "currentTab": "Accueil"
+  },
+  {
+    "id": "CMP-04",
+    "width": 1440,
+    "ariaLabel": null,
+    "ariaLabelledby": null
+  },
+  {
+    "id": "CMP-03",
+    "width": 1440,
+    "focusAfter": {
+      "tag": "BODY",
+      "label": null
+    }
+  },
+  {
+    "id": "CMP-07",
+    "width": 1440,
+    "inputCount": 39,
+    "searchCount": 0,
+    "selectAllButtons": 0
+  },
+  {
+    "id": "CMP-06",
+    "width": 1440,
+    "reopenedCash": "0"
+  }
+]

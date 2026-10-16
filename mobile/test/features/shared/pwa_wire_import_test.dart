@@ -35,7 +35,12 @@ void main() {
       final fixture = jsonDecode(
         await File('../web/tests/fixtures/mobile-snapshot.json').readAsString(),
       ) as Map<String, dynamic>;
+      fixture['sport_settings'] = {'min_players_per_session': 8};
       await service.importSnapshot(fixture);
+      expect(
+        (await db.query('meta', where: 'key = ?', whereArgs: ['min_players_per_session_g'])).single['value'],
+        '8',
+      );
       final repo = SqliteSessionsRepository(app);
       final session = (await repo.getSession('pwa-s', teamId: 'g'))!;
       expect(session.sessionType, SessionType.tournament3);

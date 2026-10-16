@@ -92,6 +92,9 @@
     }
   },
   "obligations": {},
+  "sport_settings": {
+    "min_players_per_session": 3
+  },
   "financial_settings": {
     "contribution": 100,
     "late_penalty": 0

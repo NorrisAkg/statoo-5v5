@@ -1,0 +1,86 @@
+
+> test:web
+> node --test web/tests/*.test.mjs
+
+TAP version 13
+# Subtest: web/tests/audit-fixes.test.mjs
+not ok 1 - web/tests/audit-fixes.test.mjs
+  ---
+  duration_ms: 259.313892
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/audit-fixes.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: web/tests/client.test.mjs
+ok 2 - web/tests/client.test.mjs
+  ---
+  duration_ms: 268.523734
+  type: 'test'
+  ...
+# Subtest: web/tests/config.test.mjs
+ok 3 - web/tests/config.test.mjs
+  ---
+  duration_ms: 166.362347
+  type: 'test'
+  ...
+# Subtest: web/tests/desktop.test.mjs
+ok 4 - web/tests/desktop.test.mjs
+  ---
+  duration_ms: 153.008364
+  type: 'test'
+  ...
+# Subtest: web/tests/domain.test.mjs
+ok 5 - web/tests/domain.test.mjs
+  ---
+  duration_ms: 163.997184
+  type: 'test'
+  ...
+# Subtest: web/tests/offline-registration.test.mjs
+ok 6 - web/tests/offline-registration.test.mjs
+  ---
+  duration_ms: 169.001108
+  type: 'test'
+  ...
+# Subtest: web/tests/pwa.test.mjs
+ok 7 - web/tests/pwa.test.mjs
+  ---
+  duration_ms: 217.174663
+  type: 'test'
+  ...
+# Subtest: web/tests/registration.test.mjs
+ok 8 - web/tests/registration.test.mjs
+  ---
+  duration_ms: 115.12025
+  type: 'test'
+  ...
+# Subtest: web/tests/summary.test.mjs
+ok 9 - web/tests/summary.test.mjs
+  ---
+  duration_ms: 115.076738
+  type: 'test'
+  ...
+# Subtest: web/tests/transparent-logo.test.mjs
+ok 10 - web/tests/transparent-logo.test.mjs
+  ---
+  duration_ms: 114.88846
+  type: 'test'
+  ...
+# Subtest: web/tests/update-button.test.mjs
+ok 11 - web/tests/update-button.test.mjs
+  ---
+  duration_ms: 126.677011
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 10
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 345.526417

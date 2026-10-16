@@ -4,6 +4,7 @@ import test, { before, after } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { sportStep } from "./sport-helpers.mjs";
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.STATOO_PLAYWRIGHT || "playwright");
 const base = process.env.STATOO_TEST_URL || "http://127.0.0.1:18085";
@@ -190,6 +191,7 @@ async function boot(r, options = {}) {
   });
   const page = await context.newPage();
   const data = snapshot(r, options.shared);
+  data.sport_settings = { min_players_per_session: 3 };
   const sent = [];
   if (options.setup) options.setup(data);
   await page.route("**/groups/g", (route) => route.fulfill({ json: data }));
@@ -281,8 +283,10 @@ test("WEB-07/08/09 sport form creates balanced tournament with three club names"
       .getByRole("button", { name: "Nouvelle séance", exact: true })
       .click();
     await x.page.getByLabel("Format de jeu").selectOption("TOURNAMENT_3");
+    await sportStep(x.page, 2);
     for (const m of members)
       await x.page.getByLabel("Présent : " + m.name, { exact: true }).check();
+    await sportStep(x.page, 3);
     await x.page.getByRole("button", { name: "Répartir les joueurs" }).click();
     for (const [name, team] of [
       ["Alice", "A"],
@@ -292,6 +296,7 @@ test("WEB-07/08/09 sport form creates balanced tournament with three club names"
       await x.page
         .getByLabel("Équipe de " + name, { exact: true })
         .selectOption(team);
+    await sportStep(x.page, 4);
     await x.page.getByLabel("Victoires A", { exact: true }).fill("2");
     await x.page
       .getByRole("button", { name: "Clôturer la séance", exact: true })
@@ -432,6 +437,7 @@ test("WEB-27 drafts survive reload; WEB-34 content is rendered as text", async (
     await x.page
       .getByRole("button", { name: "Nouvelle séance", exact: true })
       .click();
+    await sportStep(x.page, 4);
     await x.page.getByLabel("Notes de la séance").fill("Brouillon conservé");
     await x.page.reload();
     await x.page
@@ -513,6 +519,17 @@ test("WEB-02/17/20/21/09/22 real API journey from group creation to sport and fi
       .getByRole("button", { name: "Gérer le groupe", exact: true })
       .click();
     await p
+      .getByRole("button", { name: "Paramètres sportifs", exact: true })
+      .click();
+    await p
+      .getByLabel("Minimum de joueurs par séance", { exact: true })
+      .fill("3");
+    await p.getByRole("button", { name: "Enregistrer", exact: true }).click();
+    await p
+      .getByRole("button", { name: "Confirmer l’envoi", exact: true })
+      .click();
+    await p.getByText("Modification enregistrée.", { exact: true }).waitFor();
+    await p
       .getByRole("button", { name: "Modifier les rôles de admin", exact: true })
       .click();
     for (const role of ["Président", "Trésorier", "Secrétaire général"])
@@ -564,16 +581,21 @@ test("WEB-02/17/20/21/09/22 real API journey from group creation to sport and fi
       .getByRole("button", { name: "Nouvelle séance", exact: true })
       .click();
     await p.getByLabel("Format de jeu").selectOption("TOURNAMENT_3");
+    const ref = await p
+      .getByLabel("Référence de la séance", { exact: true })
+      .inputValue();
+    await sportStep(p, 2);
     for (const [i, m] of members.entries()) {
       await p.getByLabel("Présent : " + m.name, { exact: true }).check();
+    }
+    await sportStep(p, 3);
+    for (const [i, m] of members.entries()) {
       await p
         .getByLabel("Équipe de " + m.name, { exact: true })
         .selectOption(["A", "B", "C"][i]);
     }
+    await sportStep(p, 4);
     await p.getByLabel("Victoires A", { exact: true }).fill("3");
-    const ref = await p
-      .getByLabel("Référence de la séance", { exact: true })
-      .inputValue();
     await p
       .getByRole("button", { name: "Clôturer la séance", exact: true })
       .click();
@@ -760,6 +782,7 @@ test("PWA-03/04 offline reload retains shell and own snapshot", async () => {
     await x.page
       .getByRole("button", { name: "Nouvelle séance", exact: true })
       .click();
+    await sportStep(x.page, 4);
     await x.page.getByLabel("Notes de la séance").fill("Saisie hors ligne");
   } catch (error) {
     console.error("Offline page:", await x.page.locator("body").innerText());
@@ -854,6 +877,7 @@ for (const light of [false, true])
         await x.page
           .getByRole("button", { name: "Nouvelle séance", exact: true })
           .click();
+        await sportStep(x.page, 2);
         await x.page.getByLabel("Présent : Alice", { exact: true }).check();
         assert.equal(
           await x.page.evaluate(

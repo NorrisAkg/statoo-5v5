@@ -1,0 +1,11 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: defaults apply when nothing is stored
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: values are saved per group and never leak to another group
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: legacy global preferences seed groups that have no value yet
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: invalid values are rejected
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: FIX-06 shared minimum follows server updates and cannot be changed locally
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: FIX-06b disconnected protected group cannot change its cached common minimum
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (setUpAll)
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema
+00:01 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (tearDownAll)
+00:01 +7: All tests passed!

@@ -1,3 +1,8 @@
+import {
+  validate,
+  preparationSchema,
+  preparedNamesSchema,
+} from "./validation.mjs";
 import { parseMemberNames } from "./domain.mjs";
 const key = "statoo-registration-draft";
 export class RegistrationDraft {
@@ -42,7 +47,8 @@ export class RegistrationDraft {
       throw Error(
         "Publication à vérifier : reprenez la tentative avec les mêmes accès avant de modifier le groupe.",
       );
-    const names = parseMemberNames(roster);
+    ({ name, roster } = validate(preparationSchema, { name, roster }));
+    const names = validate(preparedNamesSchema, parseMemberNames(roster));
     if (!name.trim()) throw Error("Renseignez le nom du groupe.");
     if (!names.length) throw Error("Ajoutez au moins un membre.");
     if (name.trim().length > 100 || names.length > 1000)

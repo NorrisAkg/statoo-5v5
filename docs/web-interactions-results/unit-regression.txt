@@ -1,0 +1,80 @@
+
+> test:web
+> node --test web/tests/*.test.mjs
+
+TAP version 13
+# Subtest: web/tests/audit-fixes.test.mjs
+ok 1 - web/tests/audit-fixes.test.mjs
+  ---
+  duration_ms: 333.375532
+  type: 'test'
+  ...
+# Subtest: web/tests/client.test.mjs
+ok 2 - web/tests/client.test.mjs
+  ---
+  duration_ms: 531.469519
+  type: 'test'
+  ...
+# Subtest: web/tests/config.test.mjs
+ok 3 - web/tests/config.test.mjs
+  ---
+  duration_ms: 226.515476
+  type: 'test'
+  ...
+# Subtest: web/tests/desktop.test.mjs
+ok 4 - web/tests/desktop.test.mjs
+  ---
+  duration_ms: 245.102262
+  type: 'test'
+  ...
+# Subtest: web/tests/domain.test.mjs
+ok 5 - web/tests/domain.test.mjs
+  ---
+  duration_ms: 441.49992
+  type: 'test'
+  ...
+# Subtest: web/tests/offline-registration.test.mjs
+ok 6 - web/tests/offline-registration.test.mjs
+  ---
+  duration_ms: 240.05048
+  type: 'test'
+  ...
+# Subtest: web/tests/pwa.test.mjs
+ok 7 - web/tests/pwa.test.mjs
+  ---
+  duration_ms: 437.78719
+  type: 'test'
+  ...
+# Subtest: web/tests/registration.test.mjs
+ok 8 - web/tests/registration.test.mjs
+  ---
+  duration_ms: 360.42056
+  type: 'test'
+  ...
+# Subtest: web/tests/summary.test.mjs
+ok 9 - web/tests/summary.test.mjs
+  ---
+  duration_ms: 290.26796
+  type: 'test'
+  ...
+# Subtest: web/tests/transparent-logo.test.mjs
+ok 10 - web/tests/transparent-logo.test.mjs
+  ---
+  duration_ms: 252.188984
+  type: 'test'
+  ...
+# Subtest: web/tests/update-button.test.mjs
+ok 11 - web/tests/update-button.test.mjs
+  ---
+  duration_ms: 243.051603
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 630.268576

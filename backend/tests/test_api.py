@@ -17,6 +17,7 @@ def system(monkeypatch):
         response = client.post("/groups", json=body)
         assert response.status_code == 201, response.text
         admin = {"Authorization": "Bearer " + response.json()["token"]}
+        assert client.put("/groups/%2300000001/sport-settings", headers=admin, json={"min_players_per_session": 2}).status_code == 200
         tokens = {"admin": admin}
         accounts = {}
         for username, member, roles in [("president", "a", ["PDT"]), ("sport", "b", ["SG"]),
@@ -40,7 +41,7 @@ def initialize(c, t):
 def sport(status="DRAFT"):
     return {"session": {"id": "s", "team_id": "#00000001", "played_at": "2026-10-10T20:00:00",
                          "status": status, "score_a": 0, "score_b": 0, "result": "DRAW"},
-            "participations": []}
+            "participations": [{"player_id": x, "team": team, "session_id": "s"} for x, team in [("a", "A"), ("b", "B")]] if status == "CLOSED" else []}
 
 def point(cancelled=False):
     return {"played_at": "2026-10-10T20:00:00", "rate": 100, "cancelled": cancelled,

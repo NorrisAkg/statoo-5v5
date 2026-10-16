@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: SPORT-17 legacy invalid draw points guide back to the Options field
+not ok 1 - SPORT-17 legacy invalid draw points guide back to the Options field
+  ---
+  duration_ms: 2033.826561
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1099:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'step'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'step'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1111:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3124.82312

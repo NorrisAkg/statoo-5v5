@@ -1,0 +1,618 @@
+
+> test:web:browser
+> node --test --test-concurrency=2 web/tests/browser.e2e.mjs web/tests/config.e2e.mjs web/tests/registration.e2e.mjs web/tests/offline-registration.e2e.mjs web/tests/desktop.e2e.mjs web/tests/interactions.e2e.mjs web/tests/packaging.e2e.mjs web/tests/audit/browser.audit.mjs web/tests/sport-flow.e2e.mjs
+
+TAP version 13
+# Subtest: AUD-01 stale financial draft must not silently rebase on a newer server revision
+ok 1 - AUD-01 stale financial draft must not silently rebase on a newer server revision
+  ---
+  duration_ms: 3027.396946
+  type: 'test'
+  ...
+# Subtest: AUD-02 closing the opening-balance form preserves input or confirms abandonment
+ok 2 - AUD-02 closing the opening-balance form preserves input or confirms abandonment
+  ---
+  duration_ms: 2274.308498
+  type: 'test'
+  ...
+# Subtest: AUD-07 delayed optional catalogue must not block login and consultation
+ok 3 - AUD-07 delayed optional catalogue must not block login and consultation
+  ---
+  duration_ms: 881.08529
+  type: 'test'
+  ...
+# Subtest: AUD-08 existing session remains editable without the team name catalogue
+ok 4 - AUD-08 existing session remains editable without the team name catalogue
+  ---
+  duration_ms: 1143.423214
+  type: 'test'
+  ...
+# Subtest: AUD-09 denied local storage produces an actionable message rather than a frozen shell
+ok 5 - AUD-09 denied local storage produces an actionable message rather than a frozen shell
+  ---
+  duration_ms: 5589.151404
+  type: 'test'
+  ...
+# Subtest: AUD-10 team-name text has at least 4.5:1 contrast in light theme
+ok 6 - AUD-10 team-name text has at least 4.5:1 contrast in light theme
+  ---
+  duration_ms: 1209.739126
+  type: 'test'
+  ...
+# Subtest: FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+ok 7 - FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+  ---
+  duration_ms: 5175.94184
+  type: 'test'
+  ...
+# Subtest: FIX-02 opening draft persists all fields across reload and is removed after accepted write
+ok 8 - FIX-02 opening draft persists all fields across reload and is removed after accepted write
+  ---
+  duration_ms: 3188.859076
+  type: 'test'
+  ...
+# Subtest: FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+ok 9 - FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+  ---
+  duration_ms: 2571.504779
+  type: 'test'
+  ...
+# Subtest: FIX-10 all team palette colors remain readable in both themes
+ok 10 - FIX-10 all team palette colors remain readable in both themes
+  ---
+  duration_ms: 2890.449445
+  type: 'test'
+  ...
+# Subtest: WEB-03 collective identity cannot expose manager actions even with elevated role labels
+ok 11 - WEB-03 collective identity cannot expose manager actions even with elevated role labels
+  ---
+  duration_ms: 1583.724086
+  type: 'test'
+  ...
+# Subtest: WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+ok 12 - WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+  ---
+  duration_ms: 3476.219337
+  type: 'test'
+  ...
+# Subtest: WEB-12/14 sport cancellation requires a reason and sends current revision
+ok 13 - WEB-12/14 sport cancellation requires a reason and sends current revision
+  ---
+  duration_ms: 2080.108931
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix MEMBER
+ok 14 - WEB-03/04 action matrix MEMBER
+  ---
+  duration_ms: 904.242476
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix CENSOR
+ok 15 - WEB-03/04 action matrix CENSOR
+  ---
+  duration_ms: 787.10323
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix ADMIN
+ok 16 - WEB-03/04 action matrix ADMIN
+  ---
+  duration_ms: 561.130293
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SG
+ok 17 - WEB-03/04 action matrix SG
+  ---
+  duration_ms: 594.356554
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SGA
+ok 18 - WEB-03/04 action matrix SGA
+  ---
+  duration_ms: 681.93214
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TR
+ok 19 - WEB-03/04 action matrix TR
+  ---
+  duration_ms: 670.818246
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TGA
+ok 20 - WEB-03/04 action matrix TGA
+  ---
+  duration_ms: 676.600823
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix PDT
+ok 21 - WEB-03/04 action matrix PDT
+  ---
+  duration_ms: 616.954604
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix VP
+ok 22 - WEB-03/04 action matrix VP
+  ---
+  duration_ms: 763.744762
+  type: 'test'
+  ...
+# Subtest: WEB-07/08/09 sport form creates balanced tournament with three club names
+ok 23 - WEB-07/08/09 sport form creates balanced tournament with three club names
+  ---
+  duration_ms: 2332.700335
+  type: 'test'
+  ...
+# Subtest: WEB-22 finance includes every member, separates donations and expenses
+ok 24 - WEB-22 finance includes every member, separates donations and expenses
+  ---
+  duration_ms: 1481.605324
+  type: 'test'
+  ...
+# Subtest: WEB-15/16 Admin manages members and cannot create plain individual member
+ok 25 - WEB-15/16 Admin manages members and cannot create plain individual member
+  ---
+  duration_ms: 1467.321011
+  type: 'test'
+  ...
+# Subtest: WEB-21 proposal approval submits exactly the displayed balances
+ok 26 - WEB-21 proposal approval submits exactly the displayed balances
+  ---
+  duration_ms: 1491.632772
+  type: 'test'
+  ...
+# Subtest: WEB-27 drafts survive reload; WEB-34 content is rendered as text
+ok 27 - WEB-27 drafts survive reload; WEB-34 content is rendered as text
+  ---
+  duration_ms: 2316.839531
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 320
+ok 28 - WEB-35 page fits viewport 320
+  ---
+  duration_ms: 1682.489462
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 360
+ok 29 - WEB-35 page fits viewport 360
+  ---
+  duration_ms: 1576.701717
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 390
+ok 30 - WEB-35 page fits viewport 390
+  ---
+  duration_ms: 1802.815242
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 768
+ok 31 - WEB-35 page fits viewport 768
+  ---
+  duration_ms: 1424.376873
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 1440
+ok 32 - WEB-35 page fits viewport 1440
+  ---
+  duration_ms: 1098.094837
+  type: 'test'
+  ...
+# Subtest: WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+ok 33 - WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+  ---
+  duration_ms: 12021.243299
+  type: 'test'
+  ...
+# Subtest: WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+ok 34 - WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+  ---
+  duration_ms: 3042.980388
+  type: 'test'
+  ...
+# Failed request: http://127.0.0.1:18085/portal/button-state.mjs net::ERR_INTERNET_DISCONNECTED
+# Failed request: http://127.0.0.1:18085/portal/validation.mjs net::ERR_INTERNET_DISCONNECTED
+# Offline page: Aller au contenu
+# statoo.
+# ◐
+# Ouverture de Statoo…
+# Statoo · Le foot entre amis, les comptes au clair.
+# Worker state: {
+#   registrations: [
+#     {
+#       scope: 'http://127.0.0.1:18085/portal/',
+#       active: 'activated',
+#       installing: undefined,
+#       waiting: undefined
+#     }
+#   ],
+#   caches: [ 'statoo-shell:/portal/:2026-10-16-sport-1' ],
+#   storageKeys: [ 'statoo:http%3A%2F%2F127.0.0.1%3A18085|g|me:snapshot' ]
+# }
+# Subtest: PWA-03/04 offline reload retains shell and own snapshot
+not ok 35 - PWA-03/04 offline reload retains shell and own snapshot
+  ---
+  duration_ms: 9391.190141
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/browser.e2e.mjs:764:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.waitFor: Timeout 8000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('heading', { name: 'Les amis du terrain', exact: true }) to be visible[22m
+
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/browser.e2e.mjs:780:8)
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme dark
+ok 36 - WEB-35 populated tournament and narrow form, theme dark
+  ---
+  duration_ms: 1548.513112
+  type: 'test'
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme light
+ok 37 - WEB-35 populated tournament and narrow form, theme light
+  ---
+  duration_ms: 1339.579372
+  type: 'test'
+  ...
+# Subtest: CFG-01 configured API receives login and registration without server fields
+ok 38 - CFG-01 configured API receives login and registration without server fields
+  ---
+  duration_ms: 2616.600606
+  type: 'test'
+  ...
+# Subtest: DESK-06 tournament uses three columns on desktop and stacked teams on mobile
+ok 39 - DESK-06 tournament uses three columns on desktop and stacked teams on mobile
+  ---
+  duration_ms: 2587.363127
+  type: 'test'
+  ...
+# Subtest: DESK-01/02/03/04/07 responsive branded registration in both themes
+ok 40 - DESK-01/02/03/04/07 responsive branded registration in both themes
+  ---
+  duration_ms: 11723.782923
+  type: 'test'
+  ...
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 390px
+ok 41 - STAB-01/02 filters, focus and text selection survive refresh at 390px
+  ---
+  duration_ms: 1392.403315
+  type: 'test'
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+ok 42 - STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+  ---
+  duration_ms: 1868.792217
+  type: 'test'
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+ok 43 - STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+  ---
+  duration_ms: 1775.106593
+  type: 'test'
+  ...
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 1440px
+ok 44 - STAB-01/02 filters, focus and text selection survive refresh at 1440px
+  ---
+  duration_ms: 1166.533868
+  type: 'test'
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+ok 45 - STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+  ---
+  duration_ms: 3417.758732
+  type: 'test'
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+ok 46 - STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+  ---
+  duration_ms: 2324.805464
+  type: 'test'
+  ...
+# Subtest: STAB-05 late background refresh does not rebuild behind a newly opened dialog
+ok 47 - STAB-05 late background refresh does not rebuild behind a newly opened dialog
+  ---
+  duration_ms: 1571.76789
+  type: 'test'
+  ...
+# Subtest: STAB-01 an empty search result survives periodic refresh
+ok 48 - STAB-01 an empty search result survives periodic refresh
+  ---
+  duration_ms: 978.364488
+  type: 'test'
+  ...
+# Subtest: STAB-04 removing the last expense returns focus to adding an expense
+ok 49 - STAB-04 removing the last expense returns focus to adding an expense
+  ---
+  duration_ms: 1136.813736
+  type: 'test'
+  ...
+# Subtest: STAB-06 changing account resets in-memory session filters
+ok 50 - STAB-06 changing account resets in-memory session filters
+  ---
+  duration_ms: 925.02561
+  type: 'test'
+  ...
+# Subtest: STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+not ok 51 - STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+  ---
+  duration_ms: 30900.939245
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:498:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.waitFor: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('heading', { name: 'Groupe stabilité', exact: true }) to be visible[22m
+
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:517:8)
+  ...
+# Subtest: OFF-09 abandoning a preparation requires confirmation
+ok 52 - OFF-09 abandoning a preparation requires confirmation
+  ---
+  duration_ms: 1936.65329
+  type: 'test'
+  ...
+# Subtest: OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+ok 53 - OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+  ---
+  duration_ms: 6864.913564
+  type: 'test'
+  ...
+# Subtest: STAB-08 a clean static package contains every application module
+not ok 54 - STAB-08 a clean static package contains every application module
+  ---
+  duration_ms: 137.983059
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:17:1'
+  failureType: 'testCodeFailure'
+  error: 'Module importé absent du portail statique : /tmp/statoo-package-3mKUnD/web/dist/button-state.mjs'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    inspect (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:43:14)
+    inspect (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:53:9)
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:55:5)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: GRP-06/07/08/09 creation separates members and explains collective access
+ok 55 - GRP-06/07/08/09 creation separates members and explains collective access
+  ---
+  duration_ms: 1408.322446
+  type: 'test'
+  ...
+# Subtest: SPORT-14 a storage failure never claims the current preparation is saved
+ok 56 - SPORT-14 a storage failure never claims the current preparation is saved
+  ---
+  duration_ms: 2196.281189
+  type: 'test'
+  ...
+# Subtest: SPORT-14 storage recovery restores the preparation status after typing
+ok 57 - SPORT-14 storage recovery restores the preparation status after typing
+  ---
+  duration_ms: 1403.201523
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 390px dark
+ok 58 - SPORT-01/02/05 progressive layout 390px dark
+  ---
+  duration_ms: 2000.939967
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 390px light
+ok 59 - SPORT-01/02/05 progressive layout 390px light
+  ---
+  duration_ms: 2171.268558
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px dark
+ok 60 - SPORT-01/02/05 progressive layout 1440px dark
+  ---
+  duration_ms: 3020.533271
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px light
+ok 61 - SPORT-01/02/05 progressive layout 1440px light
+  ---
+  duration_ms: 3230.028199
+  type: 'test'
+  ...
+# Subtest: SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+ok 62 - SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+  ---
+  duration_ms: 1773.478473
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+ok 63 - SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+  ---
+  duration_ms: 2751.655854
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+ok 64 - SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+  ---
+  duration_ms: 2433.992128
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+ok 65 - SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+  ---
+  duration_ms: 2019.575905
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+ok 66 - SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+  ---
+  duration_ms: 2313.96745
+  type: 'test'
+  ...
+# Subtest: SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+ok 67 - SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+  ---
+  duration_ms: 2559.411953
+  type: 'test'
+  ...
+# Subtest: SPORT-08/10 format change never hides C players; validation guides back before any send
+ok 68 - SPORT-08/10 format change never hides C players; validation guides back before any send
+  ---
+  duration_ms: 2335.264425
+  type: 'test'
+  ...
+# Subtest: SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+ok 69 - SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+  ---
+  duration_ms: 2628.717561
+  type: 'test'
+  ...
+# Subtest: SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+ok 70 - SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+  ---
+  duration_ms: 2200.699493
+  type: 'test'
+  ...
+# Subtest: SPORT-11 refused write retains local preparation and no automatic retry occurs
+ok 71 - SPORT-11 refused write retains local preparation and no automatic retry occurs
+  ---
+  duration_ms: 2634.780269
+  type: 'test'
+  ...
+# Subtest: SPORT-12 stage, composition and scores survive Escape, reload and offline use
+ok 72 - SPORT-12 stage, composition and scores survive Escape, reload and offline use
+  ---
+  duration_ms: 3527.382776
+  type: 'test'
+  ...
+# Subtest: SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+ok 73 - SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+  ---
+  duration_ms: 2596.795904
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SGA"]}
+ok 74 - SPORT-13 permissions remain explicit {"roles":["SGA"]}
+  ---
+  duration_ms: 1087.213121
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["TR"]}
+ok 75 - SPORT-13 permissions remain explicit {"roles":["TR"]}
+  ---
+  duration_ms: 1147.833576
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+ok 76 - SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+  ---
+  duration_ms: 1223.556657
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+ok 77 - SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+  ---
+  duration_ms: 1096.807976
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+ok 78 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+  ---
+  duration_ms: 1250.684442
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+ok 79 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+  ---
+  duration_ms: 1144.787276
+  type: 'test'
+  ...
+# Subtest: SPORT-14 empty roster has an actionable state rather than empty composition
+ok 80 - SPORT-14 empty roster has an actionable state rather than empty composition
+  ---
+  duration_ms: 1450.839851
+  type: 'test'
+  ...
+# Subtest: SPORT-02/10 invalid options and duplicate colors guide correction without any request
+ok 81 - SPORT-02/10 invalid options and duplicate colors guide correction without any request
+  ---
+  duration_ms: 2170.375022
+  type: 'test'
+  ...
+# Subtest: SPORT-10 tournament refuses zero wins then keeps a draw and the chosen format on publication
+ok 82 - SPORT-10 tournament refuses zero wins then keeps a draw and the chosen format on publication
+  ---
+  duration_ms: 2383.491136
+  type: 'test'
+  ...
+# Subtest: SPORT-10 unequal teams need the existing explicit option, and invalid numeric input is never published
+ok 83 - SPORT-10 unequal teams need the existing explicit option, and invalid numeric input is never published
+  ---
+  duration_ms: 2814.441351
+  type: 'test'
+  ...
+# Subtest: SPORT-11/13 correcting a closed session keeps the original revision and requires a reason
+ok 84 - SPORT-11/13 correcting a closed session keeps the original revision and requires a reason
+  ---
+  duration_ms: 1964.370459
+  type: 'test'
+  ...
+# Subtest: SPORT-12 a legacy draft without a step retains data, and a stale sport draft still cannot publish
+ok 85 - SPORT-12 a legacy draft without a step retains data, and a stale sport draft still cannot publish
+  ---
+  duration_ms: 2313.536108
+  type: 'test'
+  ...
+# Subtest: SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+ok 86 - SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+  ---
+  duration_ms: 1926.972416
+  type: 'test'
+  ...
+# Subtest: SPORT-17 legacy invalid draw points guide back to the Options field
+ok 87 - SPORT-17 legacy invalid draw points guide back to the Options field
+  ---
+  duration_ms: 4452.979086
+  type: 'test'
+  ...
+# Subtest: SPORT-18 narrow action bars keep complete words and visible actions
+not ok 88 - SPORT-18 narrow action bars keep complete words and visible actions
+  ---
+  duration_ms: 1617.559565
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1239:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.evaluate: IndexSizeError: Failed to execute 'setEnd' on 'Range': There is no child at offset 11.
+        at eval (eval at evaluate (:311:30), <anonymous>:4:15)
+        at UtilityScript.evaluate (<anonymous>:313:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    eval (eval at evaluate (:311:30), <anonymous>:4:15)
+    UtilityScript.evaluate (<anonymous>:313:16)
+    UtilityScript.<anonymous> (<anonymous>:1:44)
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1250:36)
+  ...
+# Subtest: SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+ok 89 - SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+  ---
+  duration_ms: 3360.731102
+  type: 'test'
+  ...
+1..89
+# tests 89
+# suites 0
+# pass 85
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 147371.196339

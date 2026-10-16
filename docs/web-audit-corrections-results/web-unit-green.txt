@@ -1,0 +1,284 @@
+
+> test:web
+> node --test web/tests/*.test.mjs
+
+TAP version 13
+# Subtest: FIX-01 stale sport and finance bases cannot be silently published
+ok 1 - FIX-01 stale sport and finance bases cannot be silently published
+  ---
+  duration_ms: 90.221143
+  type: 'test'
+  ...
+# Subtest: FIX-03 accepted mutation warns without repeating the write, clears warning on next success
+ok 2 - FIX-03 accepted mutation warns without repeating the write, clears warning on next success
+  ---
+  duration_ms: 6.318358
+  type: 'test'
+  ...
+# Subtest: FIX-04 old response cannot overwrite cache after a newer failed refresh
+ok 3 - FIX-04 old response cannot overwrite cache after a newer failed refresh
+  ---
+  duration_ms: 3.636457
+  type: 'test'
+  ...
+# Subtest: FIX-09 blocked storage getters and methods do not crash restore or clear
+ok 4 - FIX-09 blocked storage getters and methods do not crash restore or clear
+  ---
+  duration_ms: 1.879928
+  type: 'test'
+  ...
+# Subtest: FIX-11 HTTP status survives HTML/invalid JSON and empty success is accepted
+ok 5 - FIX-11 HTTP status survives HTML/invalid JSON and empty success is accepted
+  ---
+  duration_ms: 12.786524
+  type: 'test'
+  ...
+# Subtest: FIX-05 wins then appearances then name break points ties; friendlies add no win
+ok 6 - FIX-05 wins then appearances then name break points ties; friendlies add no win
+  ---
+  duration_ms: 4.068533
+  type: 'test'
+  ...
+# Subtest: FIX-06 sport closure uses configured group minimum, default six, draft and cancellation remain possible
+ok 7 - FIX-06 sport closure uses configured group minimum, default six, draft and cancellation remain possible
+  ---
+  duration_ms: 5.118575
+  type: 'test'
+  ...
+# Subtest: WEB-01/08/30 connect, cache, 401 erases private state
+ok 8 - WEB-01/08/30 connect, cache, 401 erases private state
+  ---
+  duration_ms: 76.558309
+  type: 'test'
+  ...
+# Subtest: WEB-27/31 drafts survive same identity only and logout clears local data even offline
+ok 9 - WEB-27/31 drafts survive same identity only and logout clears local data even offline
+  ---
+  duration_ms: 5.306453
+  type: 'test'
+  ...
+# Subtest: WEB-28 timeout retries exact operation once without double accounting
+ok 10 - WEB-28 timeout retries exact operation once without double accounting
+  ---
+  duration_ms: 9.401174
+  type: 'test'
+  ...
+# Subtest: WEB-29 conflict does not remain queued or claim publication
+ok 11 - WEB-29 conflict does not remain queued or claim publication
+  ---
+  duration_ms: 4.054773
+  type: 'test'
+  ...
+# Subtest: WEB-03/32 no write for collective or when storage fails
+ok 12 - WEB-03/32 no write for collective or when storage fails
+  ---
+  duration_ms: 2.652326
+  type: 'test'
+  ...
+# Subtest: WEB-36 explicit server rejection allows corrected resubmission, unlike timeout
+ok 13 - WEB-36 explicit server rejection allows corrected resubmission, unlike timeout
+  ---
+  duration_ms: 2.759856
+  type: 'test'
+  ...
+# Subtest: WEB-37 corrupt/missing expiry is not a valid offline identity
+ok 14 - WEB-37 corrupt/missing expiry is not a valid offline identity
+  ---
+  duration_ms: 0.490068
+  type: 'test'
+  ...
+# Subtest: WEB-39 late refresh or 401 cannot overwrite or disconnect another account
+ok 15 - WEB-39 late refresh or 401 cannot overwrite or disconnect another account
+  ---
+  duration_ms: 2.777889
+  type: 'test'
+  ...
+# Subtest: WEB-30 server refusal refreshes revoked capabilities before further actions
+ok 16 - WEB-30 server refusal refreshes revoked capabilities before further actions
+  ---
+  duration_ms: 4.389786
+  type: 'test'
+  ...
+# Subtest: WEB-32 a corrupted pending queue blocks new sends instead of losing operation identity
+ok 17 - WEB-32 a corrupted pending queue blocks new sends instead of losing operation identity
+  ---
+  duration_ms: 3.853675
+  type: 'test'
+  ...
+# Subtest: CFG-01 login and registration never ask for the API address
+ok 18 - CFG-01 login and registration never ask for the API address
+  ---
+  duration_ms: 1.618299
+  type: 'test'
+  ...
+# Subtest: CFG-02/03/04 configuration resolves safely
+ok 19 - CFG-02/03/04 configuration resolves safely
+  ---
+  duration_ms: 17.724543
+  type: 'test'
+  ...
+# Subtest: CFG-06/07 build and offline shell include only public config
+ok 20 - CFG-06/07 build and offline shell include only public config
+  ---
+  duration_ms: 1.026142
+  type: 'test'
+  ...
+# Subtest: DESK-01/05 existing logo and favicon are integrated locally
+ok 21 - DESK-01/05 existing logo and favicon are integrated locally
+  ---
+  duration_ms: 6.669736
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 capabilities are explicit and collective is always read only
+ok 22 - WEB-03/04 capabilities are explicit and collective is always read only
+  ---
+  duration_ms: 3.564349
+  type: 'test'
+  ...
+# Subtest: WEB-07/08/09 sport close computes result and unassigned goals without mutating input
+ok 23 - WEB-07/08/09 sport close computes result and unassigned goals without mutating input
+  ---
+  duration_ms: 2.511378
+  type: 'test'
+  ...
+# Subtest: WEB-09 tournament draws and no-victory rejection
+ok 24 - WEB-09 tournament draws and no-victory rejection
+  ---
+  duration_ms: 3.648367
+  type: 'test'
+  ...
+# Subtest: WEB-10 rejects invalid sports inputs
+ok 25 - WEB-10 rejects invalid sports inputs
+  ---
+  duration_ms: 2.77032
+  type: 'test'
+  ...
+# Subtest: WEB-06 summaries isolate session scorers, decode names/colors, include third team
+ok 26 - WEB-06 summaries isolate session scorers, decode names/colors, include third team
+  ---
+  duration_ms: 2.917246
+  type: 'test'
+  ...
+# Subtest: WEB-13 reference finds next free identity across sport and finance
+ok 27 - WEB-13 reference finds next free identity across sport and finance
+  ---
+  duration_ms: 0.729198
+  type: 'test'
+  ...
+# Subtest: WEB-22/23 finance preserves historical roster, rate and movement ids
+ok 28 - WEB-22/23 finance preserves historical roster, rate and movement ids
+  ---
+  duration_ms: 4.273155
+  type: 'test'
+  ...
+# Subtest: WEB-24 rejects fractional, negative, duplicate, cancelled movements and missing reason
+ok 29 - WEB-24 rejects fractional, negative, duplicate, cancelled movements and missing reason
+  ---
+  duration_ms: 1.466152
+  type: 'test'
+  ...
+# Subtest: WEB-12/28 operation carries immutable revision/generation and correction reason
+ok 30 - WEB-12/28 operation carries immutable revision/generation and correction reason
+  ---
+  duration_ms: 6.241247
+  type: 'test'
+  ...
+# Subtest: WEB-38 legacy session appearance gets stable defaults when editing
+ok 31 - WEB-38 legacy session appearance gets stable defaults when editing
+  ---
+  duration_ms: 1.467842
+  type: 'test'
+  ...
+# Subtest: WEB-41 sport wire format is compatible with mobile SQLite imports
+ok 32 - WEB-41 sport wire format is compatible with mobile SQLite imports
+  ---
+  duration_ms: 0.975685
+  type: 'test'
+  ...
+# Subtest: WEB-41 checked-in mobile fixture stays identical to current PWA serialization
+ok 33 - WEB-41 checked-in mobile fixture stays identical to current PWA serialization
+  ---
+  duration_ms: 1.533145
+  type: 'test'
+  ...
+# Subtest: WEB-07 team catalogue matches the mobile catalogue without duplicate names
+ok 34 - WEB-07 team catalogue matches the mobile catalogue without duplicate names
+  ---
+  duration_ms: 1.09013
+  type: 'test'
+  ...
+# Subtest: OFF-02/04/05 drafts survive reload, exclude credentials and keep retry identity
+ok 35 - OFF-02/04/05 drafts survive reload, exclude credentials and keep retry identity
+  ---
+  duration_ms: 34.517618
+  type: 'test'
+  ...
+# Subtest: OFF-07/08 invalid or unavailable drafts never claim success
+ok 36 - OFF-07/08 invalid or unavailable drafts never claim success
+  ---
+  duration_ms: 4.890515
+  type: 'test'
+  ...
+# Subtest: PWA-01/02 installable shell exists at root and under /portal/
+ok 37 - PWA-01/02 installable shell exists at root and under /portal/
+  ---
+  duration_ms: 4.698364
+  type: 'test'
+  ...
+# Subtest: PWA-04/05 worker caches shell but never API or auth responses
+ok 38 - PWA-04/05 worker caches shell but never API or auth responses
+  ---
+  duration_ms: 72.558333
+  type: 'test'
+  ...
+# Subtest: PWA-06 activation removes only older Statoo caches in the same scope
+ok 39 - PWA-06 activation removes only older Statoo caches in the same scope
+  ---
+  duration_ms: 5.360669
+  type: 'test'
+  ...
+# Subtest: GRP-06/07 names support commas, lines, surrounding spaces and blank entries
+ok 40 - GRP-06/07 names support commas, lines, surrounding spaces and blank entries
+  ---
+  duration_ms: 15.033345
+  type: 'test'
+  ...
+# Subtest: GRP-09 registration does not supply a chosen group identifier
+ok 41 - GRP-09 registration does not supply a chosen group identifier
+  ---
+  duration_ms: 1.884206
+  type: 'test'
+  ...
+# Subtest: only accepted closed sport contributes to points; friendlies count goals
+ok 42 - only accepted closed sport contributes to points; friendlies count goals
+  ---
+  duration_ms: 3.117769
+  type: 'test'
+  ...
+# Subtest: LOGO-01/02/03 header uses an alpha PNG without a CSS background
+ok 43 - LOGO-01/02/03 header uses an alpha PNG without a CSS background
+  ---
+  duration_ms: 3.952997
+  type: 'test'
+  ...
+# Subtest: UPD-01/02/03 update notifications reuse one button targeting the current waiting worker
+ok 44 - UPD-01/02/03 update notifications reuse one button targeting the current waiting worker
+  ---
+  duration_ms: 14.237041
+  type: 'test'
+  ...
+# Subtest: UPD-04 no update button without waiting worker; controller change reloads once after first install
+ok 45 - UPD-04 no update button without waiting worker; controller change reloads once after first install
+  ---
+  duration_ms: 3.198797
+  type: 'test'
+  ...
+1..45
+# tests 45
+# suites 0
+# pass 45
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 370.632559

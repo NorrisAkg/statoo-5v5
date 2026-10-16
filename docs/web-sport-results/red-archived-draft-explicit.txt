@@ -1,0 +1,32 @@
+TAP version 13
+# Subtest: SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+not ok 1 - SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+  ---
+  duration_ms: 2708.067781
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1282:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Un ancien présent archivé doit rester disponible pour une réintégration explicite.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1293:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3645.055916

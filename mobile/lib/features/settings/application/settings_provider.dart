@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../data/group_settings_repository.dart';
 
@@ -78,8 +79,25 @@ class MinPlayersNotifier extends GroupIntSettingNotifier {
   @override
   int get defaultValue => kDefaultMinPlayers;
 
+  @override
+  int build() {
+    ref.watch(sharedStatusProvider);
+    final group = ref.watch(activeTeamIdProvider);
+    final service = ref.watch(sharedServiceProvider);
+    if (initialValue == null && group != null && group == service.groupId) {
+      final settings = service.snapshot?['sport_settings'] as Map?;
+      final minimum = settings?['min_players_per_session'];
+      return minimum is int && minimum >= 2 && minimum <= 30
+          ? minimum : kDefaultMinPlayers;
+    }
+    return super.build();
+  }
+
   Future<void> setMinPlayers(int count) async {
-    if (count < 2) return;
+    if (count < 2 || count > 30) return;
+    final group = ref.read(activeTeamIdProvider);
+    final service = ref.read(sharedServiceProvider);
+    if (group == service.groupId || service.protectedGroups.contains(group)) return;
     await _save(count);
   }
 }

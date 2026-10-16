@@ -1,3 +1,12 @@
+import {
+  validate,
+  parseInteger,
+  parseDate,
+  sportInputSchema,
+  financeInputSchema,
+  operationSchema,
+  correctionReasonSchema,
+} from "./validation.mjs";
 export const responsibleRoles = [
   "ADMIN",
   "PDT",
@@ -53,16 +62,10 @@ export function color(value, fallback = "#3b82f6") {
     : fallback;
 }
 export function integer(value, label = "Nombre", signed = false) {
-  const n = Number(value);
-  if (!Number.isSafeInteger(n) || (!signed && n < 0) || Math.abs(n) > 1e12)
-    throw Error(
-      label + " : entier " + (signed ? "" : "positif ou nul ") + "requis.",
-    );
-  return n;
+  return parseInteger(value, label, signed);
 }
 function validDate(value) {
-  if (!value || !Number.isFinite(Date.parse(value)))
-    throw Error("Date invalide.");
+  parseDate(value);
 }
 export function newReference(snapshot, day) {
   const date = day.slice(0, 10);
@@ -77,8 +80,8 @@ export function newReference(snapshot, day) {
   while (known.has(`${date}-${number}`)) number++;
   return `${date}-${number}`;
 }
-export function prepareSport(payload, members, status = "DRAFT") {
-  const p = structuredClone(payload),
+export function prepareSport(payload, members, status = "DRAFT", minimum = 6) {
+  const p = validate(sportInputSchema, structuredClone(payload)),
     s = p.session;
   validDate(s.played_at);
   if (!["DRAFT", "CLOSED", "CANCELLED"].includes(status))
@@ -139,6 +142,10 @@ export function prepareSport(payload, members, status = "DRAFT") {
   }
   s.draw_points = integer(s.draw_points ?? 1, "Points du nul");
   if (status === "CLOSED") {
+    if (p.participations.length < minimum)
+      throw Error(
+        `Sélectionnez au minimum ${minimum} joueurs pour clôturer la séance.`,
+      );
     const counts = teams.map(
       (t) => p.participations.filter((p) => p.team === t).length,
     );
@@ -165,7 +172,7 @@ export function prepareSport(payload, members, status = "DRAFT") {
   return p;
 }
 export function prepareFinance(payload, roster) {
-  const p = structuredClone(payload);
+  const p = validate(financeInputSchema, structuredClone(payload));
   validDate(p.played_at);
   p.rate = integer(p.rate, "Cotisation");
   if (
@@ -222,9 +229,11 @@ export function teamSummary(payload, members) {
   }));
 }
 export function operation(domain, reference, payload, document, reason = "") {
-  if (!reference?.trim() || reference.length > 150 || reference.includes("/"))
-    throw Error("Référence invalide.");
-  if (document && !reason.trim()) throw Error("Motif de correction requis.");
+  reference = validate(operationSchema.shape.occurrence_id, reference);
+  reason = validate(
+    document ? correctionReasonSchema : operationSchema.shape.reason,
+    reason,
+  );
   const wire = structuredClone(payload);
   if (domain === "sport" && wire.session) {
     const session = wire.session;
@@ -237,7 +246,7 @@ export function operation(domain, reference, payload, document, reason = "") {
       ? 1
       : 0;
   }
-  return {
+  return validate(operationSchema, {
     operation_id: crypto.randomUUID(),
     occurrence_id: reference.trim(),
     domain,
@@ -245,7 +254,7 @@ export function operation(domain, reference, payload, document, reason = "") {
     generation: document?.generation || 0,
     payload: wire,
     reason: reason.trim(),
-  };
+  });
 }
 export function parseMemberNames(value) {
   return value

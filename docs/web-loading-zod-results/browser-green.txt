@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=200
+ok 1 - LOAD-01 refresh loading state, duplicate protection and reset status=200
+  ---
+  duration_ms: 2248.96314
+  type: 'test'
+  ...
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=503
+ok 2 - LOAD-01 refresh loading state, duplicate protection and reset status=503
+  ---
+  duration_ms: 1902.016731
+  type: 'test'
+  ...
+# Subtest: LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+ok 3 - LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+  ---
+  duration_ms: 2043.310879
+  type: 'test'
+  ...
+# Subtest: LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+ok 4 - LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+  ---
+  duration_ms: 4374.284636
+  type: 'test'
+  ...
+# Subtest: LOAD-04 loader for Se déconnecter
+ok 5 - LOAD-04 loader for Se déconnecter
+  ---
+  duration_ms: 1581.864737
+  type: 'test'
+  ...
+# Subtest: LOAD-04 loader for Réessayer les envois
+ok 6 - LOAD-04 loader for Réessayer les envois
+  ---
+  duration_ms: 2274.570222
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 320
+ok 7 - LOAD-06 stable dimensions and reduced-motion loading 320
+  ---
+  duration_ms: 1607.939819
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 390
+ok 8 - LOAD-06 stable dimensions and reduced-motion loading 390
+  ---
+  duration_ms: 1915.870039
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 1440
+ok 9 - LOAD-06 stable dimensions and reduced-motion loading 1440
+  ---
+  duration_ms: 1608.760576
+  type: 'test'
+  ...
+# Subtest: ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+ok 10 - ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+  ---
+  duration_ms: 1958.867003
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23549.817131

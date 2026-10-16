@@ -1,0 +1,35 @@
+[
+  {
+    "id": "AUD-03",
+    "writes": 1,
+    "result": {
+      "ok": true
+    },
+    "error": null
+  },
+  {
+    "id": "AUD-04",
+    "expectedCash": 500,
+    "actualCash": 500
+  },
+  {
+    "id": "AUD-05",
+    "expected": [
+      "Zaki",
+      "Amine"
+    ],
+    "actual": [
+      "Zaki",
+      "Amine"
+    ]
+  },
+  {
+    "id": "AUD-06",
+    "mobileDefaultMinimum": 6,
+    "webAcceptedSinglePlayer": false
+  },
+  {
+    "id": "AUD-11",
+    "message": "Le serveur est indisponible. Réessayez plus tard."
+  }
+]

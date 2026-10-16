@@ -113,6 +113,10 @@ test("PWA-06 activation removes only older Statoo caches in the same scope", asy
         "statoo-shell:/other/:old",
         "statoo-shell:/portal/:old",
         "statoo-shell:/portal/:2026-10-15-7",
+        "statoo-shell:/portal/:2026-10-15-8",
+        "statoo-shell:/portal/:2026-10-15-9",
+        "statoo-shell:/portal/:2026-10-16-sport-1",
+        "statoo-shell:/portal/:2026-10-16-loading-zod-1",
       ],
       delete: async (key) => deleted.push(key),
     },
@@ -122,11 +126,23 @@ test("PWA-06 activation removes only older Statoo caches in the same scope", asy
   handlers.install({ waitUntil: (p) => (task = p) });
   await task;
   assert.ok(installed.includes("https://example.test/portal/app.mjs"));
+  assert.ok(installed.includes("https://example.test/portal/interaction.mjs"));
+  for (const asset of ["validation.mjs", "button-state.mjs", "vendor/zod.mjs"])
+    assert.ok(
+      installed.includes("https://example.test/portal/" + asset),
+      asset + " doit rester disponible hors ligne",
+    );
   assert.ok(
     installed.every((url) => url.startsWith("https://example.test/portal/")),
   );
   handlers.activate({ waitUntil: (p) => (task = p) });
   await task;
-  assert.deepEqual(deleted, ["statoo-shell:/portal/:old"]);
+  assert.deepEqual(deleted, [
+    "statoo-shell:/portal/:old",
+    "statoo-shell:/portal/:2026-10-15-7",
+    "statoo-shell:/portal/:2026-10-15-8",
+    "statoo-shell:/portal/:2026-10-15-9",
+    "statoo-shell:/portal/:2026-10-16-sport-1",
+  ]);
   assert.equal(claimed, true);
 });

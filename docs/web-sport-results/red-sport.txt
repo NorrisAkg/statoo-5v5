@@ -1,0 +1,437 @@
+TAP version 13
+# Subtest: SPORT-01/02/05 progressive layout 390px dark
+not ok 1 - SPORT-01/02/05 progressive layout 390px dark
+  ---
+  duration_ms: 1537.995419
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:67:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:70:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 390px light
+not ok 2 - SPORT-01/02/05 progressive layout 390px light
+  ---
+  duration_ms: 1236.544011
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:67:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:70:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px dark
+not ok 3 - SPORT-01/02/05 progressive layout 1440px dark
+  ---
+  duration_ms: 1223.56997
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:67:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:70:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px light
+not ok 4 - SPORT-01/02/05 progressive layout 1440px light
+  ---
+  duration_ms: 1118.344072
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:67:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:70:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+not ok 5 - SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+  ---
+  duration_ms: 1179.697429
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:97:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:100:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+not ok 6 - SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+  ---
+  duration_ms: 1174.671012
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:125:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:128:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+not ok 7 - SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+  ---
+  duration_ms: 1160.448175
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:125:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:128:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+not ok 8 - SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+  ---
+  duration_ms: 1266.454262
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:125:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:128:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+not ok 9 - SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+  ---
+  duration_ms: 1073.589938
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:125:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:128:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+not ok 10 - SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+  ---
+  duration_ms: 1076.715559
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:143:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:146:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-08/10 format change never hides C players; validation guides back before any send
+not ok 11 - SPORT-08/10 format change never hides C players; validation guides back before any send
+  ---
+  duration_ms: 1136.738547
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:169:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:172:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+not ok 12 - SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+  ---
+  duration_ms: 1211.83741
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:184:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:187:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+not ok 13 - SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+  ---
+  duration_ms: 1106.911015
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:202:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:205:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-11 refused write retains local preparation and no automatic retry occurs
+not ok 14 - SPORT-11 refused write retains local preparation and no automatic retry occurs
+  ---
+  duration_ms: 1154.112278
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:218:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:221:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-12 stage, composition and scores survive Escape, reload and offline use
+not ok 15 - SPORT-12 stage, composition and scores survive Escape, reload and offline use
+  ---
+  duration_ms: 1191.598024
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:233:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:236:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+not ok 16 - SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+  ---
+  duration_ms: 1404.504455
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:246:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:249:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SGA"]}
+ok 17 - SPORT-13 permissions remain explicit {"roles":["SGA"]}
+  ---
+  duration_ms: 1057.172508
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["TR"]}
+ok 18 - SPORT-13 permissions remain explicit {"roles":["TR"]}
+  ---
+  duration_ms: 1208.972967
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+ok 19 - SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+  ---
+  duration_ms: 1068.783383
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+ok 20 - SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+  ---
+  duration_ms: 1084.733258
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+ok 21 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+  ---
+  duration_ms: 1093.779729
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+ok 22 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+  ---
+  duration_ms: 1164.089739
+  type: 'test'
+  ...
+# Subtest: SPORT-14 empty roster has an actionable state rather than empty composition
+not ok 23 - SPORT-14 empty roster has an actionable state rather than empty composition
+  ---
+  duration_ms: 1178.303448
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:274:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    La séance doit proposer les quatre étapes du parcours sportif.
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    flow (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:50:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:276:7)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 6
+# fail 17
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 28737.50999

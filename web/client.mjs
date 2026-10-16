@@ -1,17 +1,47 @@
+import {
+  validate,
+  credentialsSchema,
+  registrationSchema,
+  validateMutation,
+} from "./validation.mjs";
 import { capabilities, operation } from "./domain.mjs";
 const connectionKey = "statoo-connection";
 export class PortalClient {
   constructor({
-    storage = localStorage,
-    session = sessionStorage,
+    storage,
+    session,
     fetch = globalThis.fetch.bind(globalThis),
   } = {}) {
-    this.storage = storage;
-    this.session = session;
+    const unavailable = {
+      getItem() {
+        throw Error("Le stockage local est indisponible.");
+      },
+      setItem() {
+        throw Error("Le stockage local est indisponible.");
+      },
+      removeItem() {
+        throw Error("Le stockage local est indisponible.");
+      },
+    };
+    const browserStorage = (name, supplied) => {
+      try {
+        const value = supplied ?? globalThis[name];
+        if (!value) throw Error();
+        return value;
+      } catch {
+        this.storageWarning =
+          "Le stockage local est indisponible. La conservation des saisies et la connexion nécessitent un stockage autorisé.";
+        return unavailable;
+      }
+    };
+    this.storage = browserStorage("localStorage", storage);
+    this.session = browserStorage("sessionStorage", session);
     this.fetch = fetch;
     this.connection = null;
     this.snapshot = null;
     this.busy = false;
+    this.refreshSequence = 0;
+    this.refreshWarning = null;
   }
   prefix() {
     const c = this.connection;
@@ -85,6 +115,8 @@ export class PortalClient {
       this.snapshot = cache?.data || null;
       this.updatedAt = cache?.at || null;
     } catch {
+      this.storageWarning =
+        "Le stockage local est indisponible. Autorisez-le pour retrouver votre connexion et vos brouillons.";
       this.clear();
     }
   }
@@ -102,7 +134,9 @@ export class PortalClient {
           if (key?.startsWith(prefix)) this.storage.removeItem(key);
       } catch {}
     }
-    this.session.removeItem(connectionKey);
+    try {
+      this.session.removeItem(connectionKey);
+    } catch {}
     this.connection = null;
     this.snapshot = null;
     this.updatedAt = null;
@@ -125,12 +159,28 @@ export class PortalClient {
         },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }),
       });
-      const data = await r.json();
+      let data;
+      try {
+        const text = await r.text();
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        if (r.ok)
+          throw Error(
+            "Réponse du serveur invalide. Réessayez l’actualisation.",
+          );
+        data = {};
+      }
       if (!r.ok) {
         const message =
-          typeof data.detail === "string"
+          typeof data?.detail === "string"
             ? data.detail
-            : "Vérifiez les champs saisis.";
+            : r.status === 401
+              ? "Connexion expirée. Reconnectez-vous."
+              : r.status >= 500
+                ? "Le serveur est indisponible. Réessayez plus tard."
+                : r.status === 403
+                  ? "Le serveur refuse cette action : vérifiez vos droits."
+                  : "Le serveur a refusé la demande. Vérifiez les champs saisis.";
         if (r.status === 401 && this.connection === connection) this.clear();
         const error = Error(message);
         error.status = r.status;
@@ -159,12 +209,15 @@ export class PortalClient {
       throw Error("Utilisez une adresse HTTPS.");
     if (url.username || url.password || url.search || url.hash)
       throw Error("Adresse du serveur invalide.");
+    const credentials = registration
+      ? validate(registrationSchema, registration)
+      : validate(credentialsSchema, { group_id: group, username, password });
     if (this.connection) this.clear();
     this.connection = { api: url.href.replace(/\/$/, ""), group };
     try {
       const identity = await this.request(
         registration ? "/groups" : "/auth/login",
-        registration || { group_id: group, username, password },
+        credentials,
       );
       this.connection = {
         ...this.connection,
@@ -181,10 +234,12 @@ export class PortalClient {
   async refresh() {
     if (!this.connection) return;
     const connection = this.connection;
+    const sequence = ++this.refreshSequence;
     const data = await this.request(
       "/groups/" + encodeURIComponent(this.connection.group),
     );
-    if (this.connection !== connection) return;
+    if (this.connection !== connection || sequence !== this.refreshSequence)
+      return;
     this.snapshot = data;
     this.connection.account = data.account;
     this.updatedAt = new Date().toISOString();
@@ -202,7 +257,9 @@ export class PortalClient {
   }
   async mutate(path, body, method = "POST") {
     if (!this.connection) throw Error("Connexion requise.");
+    body = validateMutation(path, body);
     const connection = this.connection;
+    this.refreshWarning = null;
     let result;
     try {
       result = await this.request(
@@ -220,13 +277,33 @@ export class PortalClient {
     }
     if (this.connection !== connection)
       throw Error("Le compte a changé pendant l’envoi.");
-    await this.refresh();
+    try {
+      await this.refresh();
+    } catch (error) {
+      if (error.status === 401) throw error;
+      this.refreshWarning =
+        "Modification enregistrée ; actualisation indisponible. Utilisez Actualiser pour relire les données.";
+    }
     return result;
+  }
+  assertCurrentDocument(domain, reference, document) {
+    const current = this.snapshot?.documents?.[domain + ":" + reference];
+    if (
+      !!current !== !!document ||
+      (current &&
+        (current.revision !== document.revision ||
+          current.generation !== document.generation ||
+          current.owner !== document.owner))
+    )
+      throw Error(
+        "Ce brouillon repose sur une version périmée. Relisez la version publiée avant de poursuivre.",
+      );
   }
   async send(domain, reference, payload, document, reason = "") {
     if (!capabilities(this.snapshot?.account)[domain])
       throw Error("Vous ne disposez pas du rôle requis.");
     if (this.busy) throw Error("Un envoi est déjà en cours.");
+    this.assertCurrentDocument(domain, reference, document);
     if (
       document &&
       (document.owner !== this.connection.account.id ||

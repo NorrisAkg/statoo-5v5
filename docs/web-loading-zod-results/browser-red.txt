@@ -1,0 +1,243 @@
+TAP version 13
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=200
+not ok 1 - LOAD-01 refresh loading state, duplicate protection and reset status=200
+  ---
+  duration_ms: 1229.162818
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:40:31'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:44:21)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=503
+not ok 2 - LOAD-01 refresh loading state, duplicate protection and reset status=503
+  ---
+  duration_ms: 610.789037
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:40:31'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:44:21)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+not ok 3 - LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+  ---
+  duration_ms: 746.898705
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:50:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:56:110)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+not ok 4 - LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+  ---
+  duration_ms: 1868.926338
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:62:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:69:126)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-04 loader for Se déconnecter
+not ok 5 - LOAD-04 loader for Se déconnecter
+  ---
+  duration_ms: 754.574981
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:76:61'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:78:94)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-04 loader for Réessayer les envois
+not ok 6 - LOAD-04 loader for Réessayer les envois
+  ---
+  duration_ms: 835.256671
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:76:61'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:78:94)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 320
+not ok 7 - LOAD-06 stable dimensions and reduced-motion loading 320
+  ---
+  duration_ms: 834.294376
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:80:65'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:83:134)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 390
+not ok 8 - LOAD-06 stable dimensions and reduced-motion loading 390
+  ---
+  duration_ms: 629.543445
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:80:65'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:83:134)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 1440
+not ok 9 - LOAD-06 stable dimensions and reduced-motion loading 1440
+  ---
+  duration_ms: 635.9335
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:80:65'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    null !== 'true'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'true'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    busy (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:35:10)
+    async TestContext.<anon# Subtest: ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+not ok 10 - ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+  ---
+  duration_ms: 30698.673724
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:88:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.fill: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for getByLabel('Identifiant', { exact: true })[22m
+
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:92:57)
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 0
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69629.27989
+tContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/loading-validation.e2e.mjs:95:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 0
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9872.171075

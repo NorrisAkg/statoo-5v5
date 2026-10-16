@@ -2,7 +2,15 @@ export function standings(snapshot) {
   const byId = new Map(
     snapshot.members.map((m) => [
       m.id,
-      { id: m.id, name: m.name, points: 0, matches: 0, goals: 0, assists: 0 },
+      {
+        id: m.id,
+        name: m.name,
+        points: 0,
+        wins: 0,
+        matches: 0,
+        goals: 0,
+        assists: 0,
+      },
     ]),
   );
   for (const doc of Object.values(snapshot.documents)) {
@@ -23,14 +31,17 @@ export function standings(snapshot) {
         DRAW_AC: ["A", "C"],
         DRAW_ALL: ["A", "B", "C"],
       };
-      if (s.result === p.team) row.points += 3;
-      else if (drawTeams[s.result]?.includes(p.team))
+      if (s.result === p.team) {
+        row.points += 3;
+        row.wins++;
+      } else if (drawTeams[s.result]?.includes(p.team))
         row.points += s.result === "DRAW" ? 1 : (s.draw_points ?? 1);
     }
   }
   return [...byId.values()].sort(
     (a, b) =>
       b.points - a.points ||
+      b.wins - a.wins ||
       b.matches - a.matches ||
       a.name.localeCompare(b.name, "fr"),
   );

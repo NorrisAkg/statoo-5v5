@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: ZOD-01 login rejects invalid credentials before network with structured French errors
+ok 1 - ZOD-01 login rejects invalid credentials before network with structured French errors
+  ---
+  duration_ms: 41.644342
+  type: 'test'
+  ...
+# Subtest: ZOD-01 registration checks names, passwords, roster and limits before network
+ok 2 - ZOD-01 registration checks names, passwords, roster and limits before network
+  ---
+  duration_ms: 8.21606
+  type: 'test'
+  ...
+# Subtest: ZOD-02/03/05 every administrative payload is validated before network
+ok 3 - ZOD-02/03/05 every administrative payload is validated before network
+  ---
+  duration_ms: 22.08722
+  type: 'test'
+  ...
+# Subtest: ZOD-03 controlled numeric conversion rejects empty, booleans, null and invalid numbers
+ok 4 - ZOD-03 controlled numeric conversion rejects empty, booleans, null and invalid numbers
+  ---
+  duration_ms: 4.635442
+  type: 'test'
+  ...
+# Subtest: ZOD-04 invalid structures and calendar dates produce validation errors, never TypeError
+ok 5 - ZOD-04 invalid structures and calendar dates produce validation errors, never TypeError
+  ---
+  duration_ms: 3.909311
+  type: 'test'
+  ...
+# Subtest: ZOD-05 valid signed balances and member metadata survive validation unchanged
+ok 6 - ZOD-05 valid signed balances and member metadata survive validation unchanged
+  ---
+  duration_ms: 3.100912
+  type: 'test'
+  ...
+# Subtest: ZOD-02 operation reference and correction reason keep structured validation
+ok 7 - ZOD-02 operation reference and correction reason keep structured validation
+  ---
+  duration_ms: 0.915363
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 103.571595

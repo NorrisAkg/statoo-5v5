@@ -1,0 +1,62 @@
+TAP version 13
+# Subtest: STAB-08 a clean static package contains every application module
+not ok 1 - STAB-08 a clean static package contains every application module
+  ---
+  duration_ms: 301.324548
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:17:1'
+  failureType: 'testCodeFailure'
+  error: 'Module importé absent du portail statique : /tmp/statoo-package-gwftGT/web/dist/button-state.mjs'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    inspect (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:43:14)
+    inspect (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:53:9)
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/packaging.e2e.mjs:55:5)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: PWA-01/02 installable shell exists at root and under /portal/
+ok 2 - PWA-01/02 installable shell exists at root and under /portal/
+  ---
+  duration_ms: 6.095299
+  type: 'test'
+  ...
+# Subtest: PWA-04/05 worker caches shell but never API or auth responses
+ok 3 - PWA-04/05 worker caches shell but never API or auth responses
+  ---
+  duration_ms: 96.161333
+  type: 'test'
+  ...
+# Subtest: PWA-06 activation removes only older Statoo caches in the same scope
+not ok 4 - PWA-06 activation removes only older Statoo caches in the same scope
+  ---
+  duration_ms: 6.894776
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/pwa.test.mjs:92:1'
+  failureType: 'testCodeFailure'
+  error: 'validation.mjs doit rester disponible hors ligne'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/pwa.test.mjs:131:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 2
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 491.679351

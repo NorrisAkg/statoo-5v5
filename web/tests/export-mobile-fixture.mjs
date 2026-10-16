@@ -39,6 +39,7 @@ const payload = prepareSport(
   },
   members,
   "CLOSED",
+  3,
 );
 const op = operation("sport", "2026-10-15-1", payload);
 const snapshot = {
@@ -58,6 +59,7 @@ const snapshot = {
     },
   },
   obligations: {},
+  sport_settings: { min_players_per_session: 3 },
   financial_settings: { contribution: 100, late_penalty: 0 },
   finances: { cash: 0, members: {} },
 };

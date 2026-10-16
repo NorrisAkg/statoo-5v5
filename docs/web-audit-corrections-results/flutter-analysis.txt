@@ -1,0 +1,6 @@
+Analyzing 3 items...
+
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/features/settings/presentation/settings_screen.dart:727:7 • cascade_invocations
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/features/shared/data/shared_service.dart:531:9 • cascade_invocations
+
+2 issues found. (ran in 15.5s)

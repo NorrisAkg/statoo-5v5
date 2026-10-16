@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statoo/features/settings/application/settings_provider.dart';
 import 'package:statoo/features/settings/data/group_settings_repository.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
+import 'package:statoo/features/shared/application/shared_providers.dart';
 
 class _MemoryGroupSettings implements GroupSettingsRepository {
   final Map<String, int> store = {};
@@ -98,5 +99,31 @@ void main() {
     await container.read(minPlayersPerSessionProvider.notifier).setMinPlayers(1);
     await container.read(tournamentDrawPointsProvider.notifier).setDrawPoints(3);
     expect(repo.store, isEmpty);
+  });
+
+  test('FIX-06 shared minimum follows server updates and cannot be changed locally', () async {
+    final service = container.read(sharedServiceProvider)
+      ..identity = {'group_id': 'team_1', 'account': {'roles': ['ADMIN']}}
+      ..snapshot = {'sport_settings': {'min_players_per_session': 8}};
+    expect(container.read(minPlayersPerSessionProvider), 8);
+    await container.read(minPlayersPerSessionProvider.notifier).setMinPlayers(4);
+    expect(container.read(minPlayersPerSessionProvider), 8);
+    expect(repo.store, isEmpty);
+    service.snapshot = {'sport_settings': {'min_players_per_session': 10}};
+    container.read(sharedStatusProvider.notifier).refresh();
+    expect(container.read(minPlayersPerSessionProvider), 10);
+    (container.read(activeTeamIdProvider.notifier) as _SwitchableTeam).switchTo('team_2');
+    await container.read(minPlayersPerSessionProvider.notifier).setMinPlayers(4);
+    expect(repo.store['min_players_per_session_team_2'], 4);
+  });
+
+  test('FIX-06b disconnected protected group cannot change its cached common minimum', () async {
+    repo.store['min_players_per_session_team_1'] = 8;
+    container.read(sharedServiceProvider).protectedGroups.add('team_1');
+    container.read(minPlayersPerSessionProvider);
+    await settle();
+    expect(container.read(minPlayersPerSessionProvider), 8);
+    await container.read(minPlayersPerSessionProvider.notifier).setMinPlayers(4);
+    expect(repo.store['min_players_per_session_team_1'], 8);
   });
 }

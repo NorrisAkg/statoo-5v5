@@ -1,3 +1,10 @@
+import { prepareBusyButton, withBusyButton } from "./button-state.mjs";
+import {
+  validate,
+  validateMutation,
+  registrationSchema,
+  credentialsSchema,
+} from "./validation.mjs";
 import { standings } from "./summary.mjs";
 import { PortalClient } from "./client.mjs";
 import {
@@ -16,6 +23,7 @@ import {
 import { registerPwa } from "./pwa.mjs";
 import { apiAddress } from "./config.mjs";
 import { RegistrationDraft } from "./registration-draft.mjs";
+import { preserveInteraction } from "./interaction.mjs";
 
 const $ = (id) => document.getElementById(id),
   client = new PortalClient();
@@ -25,6 +33,8 @@ let tab = "Accueil",
   registration = false,
   configuredApi = null,
   configurationError = null;
+let filtersIdentity = null;
+let sessionFilters = { status: "all", search: "" };
 const money = (n) => new Intl.NumberFormat("fr-FR").format(n || 0) + " F";
 const date = (value) =>
   Number.isFinite(Date.parse(value))
@@ -50,6 +60,78 @@ function button(text, action, className = "secondary") {
   b.addEventListener("click", action);
   return b;
 }
+function asyncButton(text, action, className = "secondary") {
+  const b = button(
+    text,
+    () => withBusyButton(b, action).catch(report),
+    className,
+  );
+  prepareBusyButton(b);
+  return b;
+}
+const fieldPaths = {
+  "Identifiant du groupe": "group_id",
+  "Identifiant de connexion": "username",
+  "Identifiant Admin": "username",
+  "Identifiant personnel": "username",
+  "Identifiant collectif": "shared_username",
+  "Nouvel identifiant collectif": "username",
+  "Mot de passe": "password",
+  "Mot de passe Admin": "password",
+  "Mot de passe personnel": "password",
+  "Nouveau mot de passe collectif": "password",
+  "Mot de passe collectif": "shared_password",
+  "Nom du groupe": "name",
+  "Nom du membre": "name",
+  "Minimum de joueurs par séance": "min_players_per_session",
+  "Cotisation par défaut": "contribution",
+  "Pénalité de retard par défaut": "late_penalty",
+  "Caisse initiale": "cash",
+  "Date de début des comptes": "start_date",
+  "Motif du changement": "reason",
+  "Motif du transfert": "reason",
+  "Motif de la décision": "reason",
+  "Motif de correction": "reason",
+  "Date et heure": "session.played_at",
+  "Date du point": "played_at",
+};
+let validationSequence = 0;
+function clearValidation(form) {
+  for (const input of form.querySelectorAll("[data-validation-error]")) {
+    const id = input.dataset.validationError;
+    const described = (input.getAttribute("aria-describedby") || "")
+      .split(" ")
+      .filter((value) => value && value !== id);
+    if (described.length)
+      input.setAttribute("aria-describedby", described.join(" "));
+    else input.removeAttribute("aria-describedby");
+    input.removeAttribute("aria-invalid");
+    delete input.dataset.validationError;
+  }
+  form.querySelectorAll(".field-error").forEach((node) => node.remove());
+}
+function showValidation(form, error) {
+  for (const issue of error.issues || []) {
+    const path = issue.path.join(".");
+    const input = [...form.querySelectorAll("[data-validation-path]")].find(
+      (node) =>
+        node.dataset.validationPath === path ||
+        node.dataset.validationPath === issue.path.at(-1),
+    );
+    if (!input || input.dataset.validationError) continue;
+    const help = el("span", issue.message, "error field-error");
+    help.id = "validation-error-" + ++validationSequence;
+    input.dataset.validationError = help.id;
+    input.setAttribute("aria-invalid", "true");
+    input.setAttribute(
+      "aria-describedby",
+      [input.getAttribute("aria-describedby"), help.id]
+        .filter(Boolean)
+        .join(" "),
+    );
+    input.parentElement.append(help);
+  }
+}
 function message(text, error = false) {
   $("message").textContent = text;
   $("message").classList.toggle("error", error);
@@ -68,6 +150,8 @@ function field(parent, label, value = "", options = {}) {
     }
   input.value = value ?? "";
   input.setAttribute("aria-label", label);
+  if (options.path || fieldPaths[label])
+    input.dataset.validationPath = options.path || fieldPaths[label];
   input.required = !!options.required;
   if (options.min !== undefined) input.min = options.min;
   if (options.maxLength) input.maxLength = options.maxLength;
@@ -209,19 +293,21 @@ function dialog(title) {
         label,
         async () => {
           if (!form.reportValidity()) return;
+          clearValidation(form);
           errors.textContent = "";
-          b.disabled = true;
-          try {
-            await action();
-          } catch (error) {
-            errors.textContent = error.message;
-            report(error);
-          } finally {
-            b.disabled = false;
-          }
+          await withBusyButton(b, async () => {
+            try {
+              await action();
+            } catch (error) {
+              errors.textContent = error.message;
+              showValidation(form, error);
+              report(error);
+            }
+          });
         },
         "primary",
       );
+      prepareBusyButton(b);
       actions.append(b);
       return b;
     },
@@ -267,7 +353,8 @@ function sportSummary(payload) {
     const block = el("section", "", "team"),
       heading = el("div", "", "team-heading"),
       name = el("h4", team.name);
-    name.style.color = team.color;
+    name.style.borderInlineStart = "4px solid " + team.color;
+    name.style.paddingInlineStart = "8px";
     heading.append(name, el("strong", String(team.value)));
     block.append(heading);
     for (const scorer of team.scorers) {
@@ -389,13 +476,13 @@ function mutationForm(title, path, build, method = "POST") {
   const f = dialog(title),
     collect = build(f.body, f);
   f.submit("Enregistrer", async () => {
-    const value = collect();
+    const value = validateMutation(path, collect());
     if (!(await confirmSend("Vérifier la modification", summaryValues(value))))
       return;
     await client.mutate(path, value, method);
     f.d.close();
     render();
-    message("Modification enregistrée.");
+    message(client.refreshWarning || "Modification enregistrée.");
   });
   return f;
 }
@@ -446,7 +533,7 @@ function summaryValues(value) {
   return out;
 }
 function auth() {
-  const preparation = new RegistrationDraft(localStorage);
+  const preparation = new RegistrationDraft(client.storage);
   let draft = null,
     draftError = null;
   try {
@@ -579,6 +666,7 @@ function auth() {
     "primary",
   );
   submit.type = "submit";
+  prepareBusyButton(submit);
   form.append(submit);
   const errors = el("p", "", "error");
   errors.setAttribute("role", "alert");
@@ -640,68 +728,82 @@ function auth() {
   if (draftError) errors.textContent = draftError.message;
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    submit.disabled = true;
-    errors.textContent = "";
-    try {
-      if (registration && !navigator.onLine) {
-        draft = preparation.save({ name: name.value, roster: roster.value });
-        status.textContent =
-          "Enregistré sur cet appareil — en attente de connexion.";
-        return;
-      }
-      if (configurationError) throw configurationError;
-      const members = registration
-        ? parseMemberNames(roster.value).map((name) => ({
-            id: crypto.randomUUID(),
-            name,
-            is_active: 1,
-          }))
-        : [];
-      if (registration && !members.length)
-        throw Error("Ajoutez au moins un membre.");
-      let pending;
-      if (registration) {
-        if (!draft?.pending)
+    if (submit.disabled) return;
+    await withBusyButton(submit, async () => {
+      clearValidation(form);
+      errors.textContent = "";
+      let attemptedConnection = false;
+      try {
+        if (registration && !navigator.onLine) {
           draft = preparation.save({ name: name.value, roster: roster.value });
-        pending = preparation.prepare(configuredApi);
-        draft = pending;
-        name.disabled = roster.disabled = true;
+          status.textContent =
+            "Enregistré sur cet appareil — en attente de connexion.";
+          return;
+        }
+        if (configurationError) throw configurationError;
+        const members = registration
+          ? parseMemberNames(roster.value).map((name) => ({
+              id: crypto.randomUUID(),
+              name,
+              is_active: 1,
+            }))
+          : [];
+        if (registration && !members.length)
+          throw Error("Ajoutez au moins un membre.");
+        let pending, registrationBody;
+        if (registration) {
+          if (!draft?.pending)
+            draft = preparation.save({
+              name: name.value,
+              roster: roster.value,
+            });
+          registrationBody = validate(registrationSchema, {
+            name: draft.name,
+            operation_id: draft.operation_id,
+            username: user.value.trim(),
+            password: pass.value,
+            shared_username: sharedUser.value.trim(),
+            shared_password: sharedPassword.value,
+            members: draft.members,
+          });
+          pending = preparation.prepare(configuredApi);
+          draft = pending;
+          name.disabled = roster.disabled = true;
+        }
+        if (!registration)
+          validate(credentialsSchema, {
+            group_id: group.value.trim(),
+            username: user.value.trim(),
+            password: pass.value,
+          });
+        attemptedConnection = true;
+        await client.connect(
+          configuredApi,
+          group?.value.trim() || "",
+          user.value.trim(),
+          pass.value,
+          registrationBody,
+        );
+        if (registration) preparation.clear();
+        render();
+        message(
+          registration
+            ? "Groupe créé. Attribuez les rôles Président, Trésorier et Secrétaire général pour démarrer."
+            : "",
+        );
+        registration = false;
+      } catch (error) {
+        errors.textContent = error.message;
+        showValidation(form, error);
+        if (registration && draft?.pending)
+          status.textContent =
+            "Publication à vérifier. Ressaisissez les mêmes accès pour reprendre sans créer de doublon.";
+      } finally {
+        if (attemptedConnection && pass) pass.value = "";
+        if (attemptedConnection && sharedPassword) sharedPassword.value = "";
       }
-      await client.connect(
-        configuredApi,
-        group?.value.trim() || "",
-        user.value.trim(),
-        pass.value,
-        registration
-          ? {
-              name: pending.name,
-              operation_id: pending.operation_id,
-              username: user.value.trim(),
-              password: pass.value,
-              shared_username: sharedUser.value.trim(),
-              shared_password: sharedPassword.value,
-              members: pending.members,
-            }
-          : undefined,
-      );
-      if (registration) preparation.clear();
-      render();
-      message(
-        registration
-          ? "Groupe créé. Attribuez les rôles Président, Trésorier et Secrétaire général pour démarrer."
-          : "",
-      );
-      registration = false;
-    } catch (error) {
-      errors.textContent = error.message;
-      if (registration && draft?.pending)
-        status.textContent =
-          "Publication à vérifier. Ressaisissez les mêmes accès pour reprendre sans créer de doublon.";
-    } finally {
-      if (pass) pass.value = "";
-      if (sharedPassword) sharedPassword.value = "";
-      submit.disabled = false;
-    }
+    });
+    if (registration && draft?.pending) name.disabled = roster.disabled = true;
   });
   if (!registration && draft)
     c.append(
@@ -724,9 +826,26 @@ function auth() {
   layout.append(intro, c);
   return layout;
 }
-function render() {
+function render({ preserve = false } = {}) {
+  if (preserve) return preserveInteraction($("content"), renderContent);
+  return renderContent();
+}
+function renderContent() {
+  const identityKey =
+    client.connection &&
+    JSON.stringify([
+      client.connection.api,
+      client.connection.group,
+      client.connection.account?.id,
+    ]);
+  if (identityKey !== filtersIdentity) {
+    filtersIdentity = identityKey;
+    sessionFilters = { status: "all", search: "" };
+  }
   const root = $("content");
   root.replaceChildren();
+  if (client.storageWarning)
+    root.append(el("p", client.storageWarning, "notice error"));
   if (!client.connection || !client.snapshot) {
     root.append(auth());
     return;
@@ -749,14 +868,14 @@ function render() {
   );
   const actions = el("div", "", "actions");
   actions.append(
-    button("Actualiser", () =>
+    asyncButton("Actualiser", () =>
       run(async () => {
         await client.refresh();
-        render();
+        if (!modal) render({ preserve: true });
         message("Données actualisées.");
       }),
     ),
-    button(
+    asyncButton(
       "Se déconnecter",
       () =>
         run(async () => {
@@ -804,7 +923,7 @@ function render() {
         pending.length +
           " envoi(s) en attente. Ils ne sont pas encore publiés.",
       ),
-      button("Réessayer les envois", () =>
+      asyncButton("Réessayer les envois", () =>
         run(async () => {
           await client.refresh();
           await client.retryPending();
@@ -940,22 +1059,21 @@ function sessions(parent) {
   parent.append(el("h2", "Les séances du groupe"));
   const controls = el("div", "", "filter-bar"),
     list = el("div", "", "grid");
-  let filter = "all",
-    search = "";
   function update() {
     list.replaceChildren();
     for (const doc of documents("sport").filter(
       (d) =>
-        (filter === "all" || d.payload.session.status === filter) &&
+        (sessionFilters.status === "all" ||
+          d.payload.session.status === sessionFilters.status) &&
         JSON.stringify([d.occurrence_id, d.payload.session.team_names])
           .toLocaleLowerCase("fr")
-          .includes(search.toLocaleLowerCase("fr")),
+          .includes(sessionFilters.search.toLocaleLowerCase("fr")),
     ))
       list.append(sessionCard(doc));
     if (!list.children.length)
       list.append(el("p", "Aucune séance pour ce filtre.", "muted"));
   }
-  field(controls, "État", "all", {
+  field(controls, "État", sessionFilters.status, {
     select: [
       ["all", "Toutes"],
       ["DRAFT", "En cours"],
@@ -963,13 +1081,13 @@ function sessions(parent) {
       ["CANCELLED", "Annulées"],
     ],
     change: (v) => {
-      filter = v;
+      sessionFilters.status = v;
       update();
     },
   });
-  field(controls, "Rechercher une séance", "", {
+  field(controls, "Rechercher une séance", sessionFilters.search, {
     change: (v) => {
-      search = v;
+      sessionFilters.search = v;
       update();
     },
   });
@@ -1125,6 +1243,57 @@ function financeDetail(doc) {
   history(f, doc);
 }
 
+function assertDraft(domain, state) {
+  if (!Object.hasOwn(state, "baseDocument"))
+    throw Error(
+      "Ce brouillon ancien ne contient pas sa version d’origine. Relisez la version publiée avant de poursuivre.",
+    );
+  client.assertCurrentDocument(domain, state.reference, state.baseDocument);
+}
+function draftNotice(f, domain, id, state) {
+  try {
+    assertDraft(domain, state);
+    return;
+  } catch (error) {
+    const notice = el("div", "", "notice");
+    notice.append(el("p", error.message));
+    notice.append(
+      button("Relire la version publiée", async () => {
+        const current =
+          client.snapshot.documents[domain + ":" + state.reference];
+        const review = el("div");
+        review.append(
+          el(
+            "p",
+            "Abandonner explicitement ce brouillon et repartir de la version publiée ? Les saisies de ce brouillon seront effacées.",
+          ),
+        );
+        if (current) review.append(payloadReview(domain, current.payload));
+        else
+          review.append(
+            el("p", "Aucune version publiée ne correspond à cette référence."),
+          );
+        if (
+          !(await confirmSend("Relire avant d’abandonner le brouillon", review))
+        )
+          return;
+        try {
+          client.removeDraft(domain, id);
+          if (current && !owned(current, domain)) {
+            f.d.close();
+            render();
+            return;
+          }
+          if (domain === "sport") sportEditor(current);
+          else financeEditor(current);
+        } catch (failure) {
+          report(failure);
+        }
+      }),
+    );
+    f.body.append(notice);
+  }
+}
 function shuffled(values) {
   const result = [...values];
   for (let i = result.length - 1; i > 0; i--) {
@@ -1137,18 +1306,21 @@ function shuffled(values) {
 }
 async function sportEditor(doc) {
   if (!currentCaps().sport || (doc && !owned(doc, "sport"))) return;
-  if (catalog.length < 3) {
+  const id = doc?.occurrence_id || "new",
+    saved = client.readDraft("sport", id);
+  if (!doc && !saved && catalog.length < 3) {
     message(
       "Le catalogue d’équipes est indisponible. Actualisez la page en ligne.",
       true,
     );
     return;
   }
-  const id = doc?.occurrence_id || "new",
-    saved = client.readDraft("sport", id),
-    now = localDate(),
-    names = shuffled(catalog).slice(0, 3);
+  const names = shuffled(catalog).slice(0, 3),
+    now = localDate();
   const state = saved || {
+    baseDocument: doc
+      ? { revision: doc.revision, generation: doc.generation, owner: doc.owner }
+      : null,
     reference: doc?.occurrence_id || newReference(client.snapshot, now),
     reason: "",
     payload: doc
@@ -1169,7 +1341,7 @@ async function sportEditor(doc) {
             wins_b: 0,
             wins_c: 0,
             team_names: Object.fromEntries(
-              ["A", "B", "C"].map((t, i) => [t, names[i]]),
+              ["A", "B", "C"].map((team, i) => [team, names[i]]),
             ),
             team_colors: {
               A: palette.Bleu,
@@ -1181,223 +1353,547 @@ async function sportEditor(doc) {
           participations: [],
         },
   };
+  state.step =
+    Number.isInteger(state.step) && state.step >= 0 && state.step <= 3
+      ? state.step
+      : doc
+        ? 3
+        : 0;
+  state.removedParticipants ??= {};
   const s = state.payload.session;
   s.team_names = objectMap(s.team_names);
   s.team_colors = objectMap(s.team_colors);
-  ["A", "B", "C"].forEach((t, i) => {
-    s.team_names[t] ??= "Équipe " + t;
-    s.team_colors[t] ??= Object.values(palette)[i];
+  ["A", "B", "C"].forEach((team, i) => {
+    s.team_names[team] ??= "Équipe " + team;
+    s.team_colors[team] ??= Object.values(palette)[i];
   });
   const f = dialog(doc ? "Modifier la séance" : "Nouvelle séance");
+  f.d.classList.add("sport-dialog");
+  f.d.setAttribute(
+    "aria-label",
+    doc ? "Modifier la séance" : "Nouvelle séance",
+  );
+  const navigation = el("nav", "", "sport-steps");
+  navigation.setAttribute("aria-label", "Étapes de la séance");
+  f.d.insertBefore(navigation, f.form);
+  const labels = ["Options", "Présents", "Équipes", "Match"];
+  let search = "",
+    expandedPlayer = null,
+    storageError = client.storageWarning || null;
+  const storageStatus = el("p");
+  function updateStorageStatus() {
+    storageStatus.textContent = storageError
+      ? "Préparation non enregistrée : le stockage local est indisponible."
+      : "Préparation conservée sur cet appareil. « Enregistrer le brouillon » la publie pour le groupe.";
+    storageStatus.className = storageError ? "error" : "muted";
+  }
+  const historical = new Set(
+    (doc?.payload.participations || []).map((p) => p.player_id),
+  );
+  const teams = () =>
+    s.session_type === "TOURNAMENT_3" ? ["A", "B", "C"] : ["A", "B"];
+  const participant = (memberId) =>
+    state.payload.participations.find((p) => p.player_id === memberId);
   function save() {
+    const previousError = storageError;
     try {
       client.saveDraft("sport", id, state);
+      storageError = null;
+      if (previousError && f.errors.textContent === previousError)
+        f.errors.textContent = "";
     } catch (error) {
+      storageError = error.message;
       f.errors.textContent = error.message;
     }
+    updateStorageStatus();
   }
-  function paint() {
-    f.body.replaceChildren();
-    const top = el("div", "", "form-grid");
-    field(top, "Date et heure", s.played_at.slice(0, 16), {
+  function select(member, selected) {
+    const part = participant(member.id);
+    if (selected && !part) {
+      const previous = state.removedParticipants[member.id];
+      const restored = previous || {
+        id: crypto.randomUUID(),
+        session_id: s.id,
+        player_id: member.id,
+        team: "",
+        goals: 0,
+        assists: 0,
+        yellow_cards: 0,
+        red_cards: 0,
+      };
+      if (!teams().includes(restored.team)) restored.team = "";
+      state.payload.participations.push(restored);
+      delete state.removedParticipants[member.id];
+    } else if (!selected && part) {
+      state.removedParticipants[member.id] = part;
+      state.payload.participations = state.payload.participations.filter(
+        (p) => p !== part,
+      );
+    }
+  }
+  function go(index) {
+    if (index > state.step && state.step === 0 && !f.form.reportValidity())
+      return;
+    state.step = index;
+    expandedPlayer = null;
+    f.errors.textContent = "";
+    save();
+    paint();
+    f.body.querySelector(".sport-step-title")?.focus({ preventScroll: true });
+    f.body.scrollTop = 0;
+  }
+  function counter(parent, label, noun, value, change) {
+    const group = el("div", "", "sport-counter");
+    const minus = button("−", () => adjust(-1)),
+      plus = button("+", () => adjust(1));
+    minus.setAttribute("aria-label", "Diminuer " + noun);
+    plus.setAttribute("aria-label", "Augmenter " + noun);
+    const input = field(group, label, value ?? 0, {
+      type: "number",
+      min: 0,
+      change: (v) => {
+        change(v);
+        save();
+        update();
+      },
+    });
+    const row = el("div", "", "sport-counter-controls");
+    const caption = group.querySelector("label");
+    input.id = "sport-counter-" + crypto.randomUUID();
+    caption.htmlFor = input.id;
+    row.append(minus, input, plus);
+    group.append(row);
+    function update() {
+      minus.disabled = Number(input.value) === 0;
+    }
+    function adjust(delta) {
+      try {
+        const number = integer(input.value, label);
+        const next = integer(Math.max(0, number + delta), label);
+        input.value = next;
+        change(next);
+        save();
+        update();
+      } catch (error) {
+        f.errors.textContent = error.message;
+      }
+    }
+    update();
+    parent.append(group);
+  }
+  function options() {
+    const grid = el("div", "", "form-grid");
+    const reference = field(grid, "Référence de la séance", state.reference, {
+      required: true,
+      maxLength: 150,
+      change: (value) => {
+        state.reference = value;
+        save();
+      },
+    });
+    reference.readOnly = !!doc;
+    const dateGrid = el("div", "", "form-grid");
+    field(dateGrid, "Date et heure", s.played_at.slice(0, 16), {
       type: "datetime-local",
       required: true,
-      change: (v) => {
-        s.played_at = v;
-        if (!doc) {
-          state.reference = newReference(client.snapshot, v);
+      change: (value) => {
+        s.played_at = value;
+        if (!doc && value) {
+          state.reference = newReference(client.snapshot, value);
           reference.value = state.reference;
         }
         save();
       },
     });
-    field(top, "Format de jeu", s.session_type, {
+    field(dateGrid, "Format de jeu", s.session_type, {
       select: [
         ["CLASSIC_2", "Match · 2 équipes"],
         ["TOURNAMENT_3", "Tournoi · 3 équipes"],
       ],
-      change: (v) => {
-        s.session_type = v;
-        if (v === "CLASSIC_2")
-          state.payload.participations.forEach((p) => {
-            if (p.team === "C") p.team = "";
-          });
+      change: (value) => {
+        s.session_type = value;
+        state.payload.participations.forEach((p) => {
+          if (!teams().includes(p.team)) p.team = "";
+        });
         save();
         paint();
       },
     });
-    const reference = field(top, "Référence de la séance", state.reference, {
-      required: true,
-      maxLength: 150,
-      change: (v) => {
-        state.reference = v;
-        save();
-      },
-    });
-    reference.readOnly = !!doc;
-    if (s.session_type === "TOURNAMENT_3")
-      field(top, "Points pour un nul", s.draw_points, {
-        type: "number",
-        min: 0,
-        change: (v) => {
-          s.draw_points = v;
-          save();
-        },
-      });
-    f.body.append(top);
-    check(f.body, "Séance classée", s.is_ranked, (v) => {
-      s.is_ranked = v ? 1 : 0;
+    f.body.append(dateGrid);
+    check(f.body, "Séance classée", s.is_ranked, (value) => {
+      s.is_ranked = value ? 1 : 0;
       save();
     });
     check(
       f.body,
       "Autoriser les équipes inégales",
       s.allow_uneven_teams,
-      (v) => {
-        s.allow_uneven_teams = v ? 1 : 0;
+      (value) => {
+        s.allow_uneven_teams = value ? 1 : 0;
         save();
       },
     );
-    const teams =
-      s.session_type === "TOURNAMENT_3" ? ["A", "B", "C"] : ["A", "B"];
-    f.body.append(
-      el("h3", "Les équipes"),
-      el("p", "Noms attribués au hasard · Choisissez les couleurs.", "muted"),
-    );
-    const teamGrid = el("div", "", "form-grid");
-    for (const t of teams) {
-      const c = card(s.team_names[t] || "Équipe " + t);
-      field(c, "Couleur " + t, String(s.team_colors[t]), {
-        select: Object.entries(palette).map(([name, n]) => [String(n), name]),
-        change: (v) => {
-          s.team_colors[t] = Number(v);
+    if (s.session_type === "TOURNAMENT_3")
+      field(grid, "Points pour un nul", s.draw_points, {
+        type: "number",
+        min: 0,
+        change: (value) => {
+          s.draw_points = value;
           save();
         },
       });
-      field(
-        c,
-        (s.session_type === "TOURNAMENT_3" ? "Victoires " : "Score ") + t,
-        s[
-          s.session_type === "TOURNAMENT_3"
-            ? "wins_" + t.toLowerCase()
-            : "score_" + t.toLowerCase()
-        ] ?? 0,
-        {
-          type: "number",
-          min: 0,
-          change: (v) => {
-            s[
-              (s.session_type === "TOURNAMENT_3" ? "wins_" : "score_") +
-                t.toLowerCase()
-            ] = v;
-            save();
-          },
-        },
-      );
-      teamGrid.append(c);
-    }
-    f.body.append(teamGrid, el("h3", "Composition et statistiques"));
     f.body.append(
-      button("Répartir les joueurs", () => {
-        shuffled(state.payload.participations).forEach(
-          (p, i) => (p.team = teams[i % teams.length]),
+      grid,
+      el(
+        "p",
+        "Les noms des équipes sont attribués au hasard. Vous choisirez leurs couleurs à l’étape Équipes.",
+        "muted",
+      ),
+    );
+  }
+  function presents() {
+    const roster = client.snapshot.members.filter(
+      (m) =>
+        m.is_active !== 0 ||
+        historical.has(m.id) ||
+        participant(m.id) ||
+        Object.hasOwn(state.removedParticipants, m.id),
+    );
+    const normalize = (value) =>
+      String(value)
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("fr");
+    const count = el("p", "", "notice");
+    count.setAttribute("role", "status");
+    const list = el("div", "", "sport-roster");
+    let visible = [];
+    const controls = el("div", "", "actions");
+    const choose = button("Sélectionner les joueurs affichés", () => {
+      visible.filter((m) => m.is_active !== 0).forEach((m) => select(m, true));
+      save();
+      paint();
+    });
+    const clear = button("Désélectionner les joueurs affichés", () => {
+      visible.forEach((m) => select(m, false));
+      save();
+      paint();
+    });
+    controls.append(choose, clear);
+    field(f.body, "Rechercher un joueur", search, {
+      type: "search",
+      change: (value) => {
+        search = value;
+        update();
+      },
+    });
+    f.body.append(
+      count,
+      controls,
+      el(
+        "p",
+        "La sélection collective concerne les joueurs affichés. Vos autres sélections sont conservées.",
+        "muted",
+      ),
+      list,
+    );
+    function update() {
+      const n = state.payload.participations.length;
+      count.textContent =
+        n +
+        " présent" +
+        (n === 1 ? "" : "s") +
+        " · Minimum pour clôturer : " +
+        (client.snapshot.sport_settings?.min_players_per_session ?? 6);
+      visible = roster.filter((m) =>
+        normalize(m.name + " " + (m.nickname || "")).includes(
+          normalize(search.trim()),
+        ),
+      );
+      choose.disabled = !visible.some((m) => m.is_active !== 0);
+      clear.disabled = !visible.some((m) => participant(m.id));
+      list.replaceChildren();
+      for (const member of visible) {
+        const row = el("div", "", "sport-presence");
+        check(
+          row,
+          "Présent : " + member.name,
+          !!participant(member.id),
+          (checked) => {
+            select(member, checked);
+            save();
+            paint();
+          },
         );
+        if (member.is_active === 0)
+          row.append(el("small", "Archivé · historique de la séance", "muted"));
+        list.append(row);
+      }
+      if (!roster.length)
+        list.append(
+          el("p", "Aucun membre actif dans ce groupe."),
+          el(
+            "p",
+            "L’Admin peut ajouter des membres depuis Gérer le groupe.",
+            "muted",
+          ),
+        );
+      else if (!visible.length)
+        list.append(el("p", "Aucun joueur pour cette recherche.", "muted"));
+    }
+    update();
+  }
+  function composition() {
+    const counts = el("div", "", "sport-team-counts"),
+      grid = el("div", "", "sport-team-grid");
+    function updateCounts() {
+      counts.replaceChildren();
+      for (const team of teams())
+        counts.append(
+          el(
+            "p",
+            "Équipe " +
+              team +
+              " · " +
+              state.payload.participations.filter((p) => p.team === team)
+                .length +
+              " joueur(s)",
+            "chip",
+          ),
+        );
+      counts.append(
+        el(
+          "p",
+          "À placer · " +
+            state.payload.participations.filter(
+              (p) => !teams().includes(p.team),
+            ).length,
+          "chip",
+        ),
+      );
+    }
+    f.body.append(
+      counts,
+      button("Répartir les joueurs", () => {
+        shuffled(state.payload.participations).forEach((p, i) => {
+          p.team = teams()[i % teams().length];
+        });
         save();
         paint();
       }),
-    );
-    const roster = [
-      ...client.snapshot.members.filter(
-        (m) =>
-          m.is_active !== 0 ||
-          state.payload.participations.some((p) => p.player_id === m.id),
+      el(
+        "p",
+        "La répartition équilibre le nombre de joueurs. Vous pouvez ensuite ajuster chaque équipe.",
+        "muted",
       ),
-    ];
-    for (const m of roster) {
-      const c = card(m.name),
-        part = state.payload.participations.find((p) => p.player_id === m.id);
-      check(c, "Présent : " + m.name, !!part, (selected) => {
-        if (selected)
-          state.payload.participations.push({
-            id: crypto.randomUUID(),
-            session_id: s.id,
-            player_id: m.id,
-            team: "",
-            goals: 0,
-            assists: 0,
-            yellow_cards: 0,
-            red_cards: 0,
-          });
-        else
-          state.payload.participations = state.payload.participations.filter(
-            (p) => p.player_id !== m.id,
-          );
-        save();
-        paint();
+    );
+    for (const team of teams()) {
+      const c = card(s.team_names[team]);
+      field(c, "Couleur " + team, String(s.team_colors[team]), {
+        select: Object.entries(palette).map(([name, value]) => [
+          String(value),
+          name,
+        ]),
+        change: (value) => {
+          s.team_colors[team] = Number(value);
+          save();
+        },
       });
-      if (part) {
-        const grid = el("div", "", "player-inputs");
-        field(grid, "Équipe de " + m.name, part.team, {
-          select: [
-            ["", "À placer"],
-            ...teams.map((t) => [t, t + " · " + s.team_names[t]]),
-          ],
-          change: (v) => {
-            part.team = v;
-            save();
-          },
-        });
-        for (const [label, key] of [
-          ["Buts", "goals"],
-          ["Passes", "assists"],
-          ["Jaunes", "yellow_cards"],
-          ["Rouges", "red_cards"],
-        ])
-          field(grid, label + " de " + m.name, part[key] || 0, {
-            type: "number",
-            min: 0,
-            change: (v) => {
-              part[key] = v;
-              save();
-            },
-          });
-        c.append(grid);
-      }
-      f.body.append(c);
+      grid.append(c);
     }
+    f.body.append(grid);
+    for (const part of state.payload.participations)
+      field(f.body, "Équipe de " + memberName(part.player_id), part.team, {
+        select: [
+          ["", "À placer"],
+          ...teams().map((team) => [team, team + " · " + s.team_names[team]]),
+        ],
+        change: (value) => {
+          part.team = value;
+          save();
+          updateCounts();
+        },
+      });
+    if (!state.payload.participations.length)
+      f.body.append(
+        el("p", "Sélectionnez les présents à l’étape précédente.", "muted"),
+      );
+    updateCounts();
+  }
+  function match() {
+    const scoreboard = el("div", "", "sport-team-grid");
+    for (const team of teams()) {
+      const c = card(s.team_names[team]);
+      const tournament = s.session_type === "TOURNAMENT_3",
+        key = (tournament ? "wins_" : "score_") + team.toLowerCase();
+      counter(
+        c,
+        (tournament ? "Victoires " : "Score ") + team,
+        (tournament ? "les victoires " : "le score ") + team,
+        s[key],
+        (value) => {
+          s[key] = value;
+        },
+      );
+      scoreboard.append(c);
+    }
+    f.body.append(
+      scoreboard,
+      el(
+        "p",
+        "Choisissez un joueur pour saisir ses buts, passes et cartons. Les modifications restent sur cet appareil jusqu’à confirmation de l’envoi.",
+        "muted",
+      ),
+    );
+    for (const team of [...teams(), ""]) {
+      const parts = state.payload.participations.filter(
+        (p) => (teams().includes(p.team) ? p.team : "") === team,
+      );
+      if (!parts.length) continue;
+      const group = card(team ? s.team_names[team] : "À placer");
+      for (const part of parts) {
+        const name = memberName(part.player_id),
+          row = el("div", "", "sport-player-row");
+        const edit = button(
+          "Statistiques",
+          () => {
+            expandedPlayer =
+              expandedPlayer === part.player_id ? null : part.player_id;
+            paint();
+          },
+          "text-button",
+        );
+        edit.setAttribute("aria-label", "Modifier les statistiques de " + name);
+        edit.setAttribute(
+          "aria-expanded",
+          String(expandedPlayer === part.player_id),
+        );
+        row.append(el("strong", name), edit);
+        group.append(row);
+        if (expandedPlayer === part.player_id) {
+          const details = el("div", "", "sport-player-stats");
+          for (const [label, key] of [
+            ["Buts", "goals"],
+            ["Passes", "assists"],
+            ["Jaunes", "yellow_cards"],
+            ["Rouges", "red_cards"],
+          ])
+            counter(
+              details,
+              label + " de " + name,
+              "les " + label.toLocaleLowerCase("fr") + " de " + name,
+              part[key],
+              (value) => {
+                part[key] = value;
+              },
+            );
+          group.append(details);
+        } else
+          group.append(
+            el(
+              "p",
+              [
+                "⚽ " + (part.goals || 0),
+                "Passes " + (part.assists || 0),
+                "Jaunes " + (part.yellow_cards || 0),
+                "Rouges " + (part.red_cards || 0),
+              ].join(" · "),
+              "muted",
+            ),
+          );
+      }
+      f.body.append(group);
+    }
+    if (!state.payload.participations.length)
+      f.body.append(
+        el(
+          "p",
+          "Aucun présent sélectionné. Complétez les étapes Présents et Équipes.",
+          "notice",
+        ),
+      );
     field(f.body, "Notes de la séance", s.notes || "", {
       textarea: true,
-      change: (v) => {
-        s.notes = v;
+      change: (value) => {
+        s.notes = value;
         save();
       },
     });
     if (doc)
       field(f.body, "Motif de correction", state.reason, {
         required: true,
-        change: (v) => {
-          state.reason = v;
+        change: (value) => {
+          state.reason = value;
           save();
         },
       });
-    f.body.append(
-      el(
-        "p",
-        "Brouillon conservé sur cet appareil pour votre compte. Les buts non attribués sont calculés à partir du score du match.",
-        "muted",
-      ),
-    );
+  }
+  function paint() {
+    preserveInteraction(f.body, () => {
+      navigation.replaceChildren();
+      labels.forEach((label, index) => {
+        const b = button(
+          index + 1 + " · " + label,
+          () => go(index),
+          state.step === index ? "selected" : "secondary",
+        );
+        if (state.step === index) b.setAttribute("aria-current", "step");
+        navigation.append(b);
+      });
+      f.body.replaceChildren();
+      draftNotice(f, "sport", id, state);
+      const title = el(
+        "h3",
+        [
+          "Options de la séance",
+          "Les présents",
+          "Composition des équipes",
+          "Le match",
+        ][state.step],
+        "sport-step-title",
+      );
+      title.tabIndex = -1;
+      f.body.append(
+        el("p", "Étape " + (state.step + 1) + " sur 4", "eyebrow"),
+        title,
+      );
+      [options, presents, composition, match][state.step]();
+      updateStorageStatus();
+      f.body.append(storageStatus);
+      previous.hidden = state.step === 0;
+      next.hidden = state.step === 3;
+      close.hidden = state.step !== 3;
+    });
   }
   async function send(status) {
-    const payload = prepareSport(
-      state.payload,
-      client.snapshot.members,
-      status,
-    );
-    if (!doc && client.snapshot.documents["sport:" + state.reference])
-      throw Error(
-        "Cette référence possède déjà une séance. Ouvrez-la pour la modifier.",
+    assertDraft("sport", state);
+    let payload;
+    try {
+      if (!state.reference.trim())
+        throw Error("Référence de la séance requise.");
+      payload = prepareSport(
+        state.payload,
+        client.snapshot.members,
+        status,
+        client.snapshot.sport_settings?.min_players_per_session ?? 6,
       );
+      if (doc && !state.reason.trim())
+        throw Error("Motif de correction requis.");
+    } catch (error) {
+      const target = /date|référence|points du nul/i.test(error.message)
+        ? 0
+        : /minimum|joueurs présents/i.test(error.message)
+          ? 1
+          : /équipe|participant|couleur|nom différent/i.test(error.message)
+            ? 2
+            : 3;
+      if (state.step !== target) expandedPlayer = null;
+      state.step = target;
+      save();
+      paint();
+      f.body.scrollTop = 0;
+      throw error;
+    }
     const preview = payloadReview("sport", payload);
     preview.prepend(el("p", "Référence : " + state.reference));
     if (
@@ -1413,7 +1909,7 @@ async function sportEditor(doc) {
       "sport",
       state.reference,
       payload,
-      doc,
+      state.baseDocument,
       state.reason,
     );
     client.removeDraft("sport", id);
@@ -1425,11 +1921,18 @@ async function sportEditor(doc) {
         : client.refreshWarning || "Données publiées.",
     );
   }
-  f.submit("Enregistrer le brouillon", () => send("DRAFT"));
-  f.submit("Clôturer la séance", () => send("CLOSED"));
+  const previous = button("Précédent", () => go(state.step - 1));
+  const next = button("Suivant", () => go(state.step + 1), "primary");
+  f.actions.append(previous, next);
+  const publishDraft = f.submit("Enregistrer le brouillon", () =>
+    send("DRAFT"),
+  );
+  publishDraft.className = "secondary";
+  const close = f.submit("Clôturer la séance", () => send("CLOSED"));
   if (doc) f.submit("Annuler la séance", () => send("CANCELLED"));
   paint();
 }
+
 function financeEditor(doc) {
   if (
     !currentCaps().finance ||
@@ -1453,6 +1956,14 @@ function financeEditor(doc) {
     now = localDate(),
     saved = client.readDraft("finance", id);
   const state = saved || {
+    baseDocument:
+      doc && !doc.obligation
+        ? {
+            revision: doc.revision,
+            generation: doc.generation,
+            owner: doc.owner,
+          }
+        : null,
     reference: doc?.occurrence_id || newReference(client.snapshot, now),
     reason: "",
     payload: doc
@@ -1485,7 +1996,11 @@ function financeEditor(doc) {
     }
   }
   function paint() {
+    return preserveInteraction(f.body, paintContent);
+  }
+  function paintContent() {
     f.body.replaceChildren();
+    draftNotice(f, "finance", id, state);
     if (!doc) {
       const choices = [
         ["new", "Nouvelle échéance indépendante"],
@@ -1630,6 +2145,14 @@ function financeEditor(doc) {
               p[key].splice(i, 1);
               save();
               paint();
+              [...f.body.querySelectorAll("button")]
+                .find(
+                  (node) =>
+                    node.textContent ===
+                    "Ajouter " +
+                      (key === "expenses" ? "une dépense" : "un don"),
+                )
+                ?.focus({ preventScroll: true });
             },
             "text-button",
           ),
@@ -1659,6 +2182,7 @@ function financeEditor(doc) {
     f.body.append(el("p", "Brouillon conservé sur cet appareil.", "muted"));
   }
   f.submit("Valider le point", async () => {
+    assertDraft("finance", state);
     const payload = prepareFinance(p, roster);
     if (
       !doc &&
@@ -1679,7 +2203,7 @@ function financeEditor(doc) {
       "finance",
       state.reference,
       payload,
-      doc?.obligation ? undefined : doc,
+      state.baseDocument,
       state.reason,
     );
     client.removeDraft("finance", id);
@@ -1741,6 +2265,7 @@ function management(parent) {
     button("Ajouter un gestionnaire", () => accountEditor(), "primary"),
     button("Ajouter un membre", () => memberEditor()),
     button("Renouveler l’accès collectif", rotateAccess),
+    button("Paramètres sportifs", sportSettings),
   );
   if (currentCaps().settings)
     actions.append(button("Paramètres financiers", financialSettings));
@@ -1818,6 +2343,12 @@ function accountEditor(account) {
             member_id: member,
             roles: [...roles],
           };
+      validateMutation(
+        account
+          ? "/accounts/" + encodeURIComponent(account.id) + "/roles"
+          : "/accounts",
+        body,
+      );
       if (!account && (!member || !roles.size))
         throw Error("Membre et responsabilité requis.");
       if (
@@ -1837,7 +2368,7 @@ function accountEditor(account) {
       if (password) password.value = "";
       f.d.close();
       render();
-      message("Modification enregistrée.");
+      message(client.refreshWarning || "Modification enregistrée.");
     },
   );
   function update() {
@@ -1869,6 +2400,33 @@ function rotateAccess() {
         group_id: client.connection.group,
         username: username.value.trim(),
         password: password.value,
+      });
+    },
+    "PUT",
+  );
+}
+function sportSettings() {
+  if (!currentCaps().admin) return;
+  mutationForm(
+    "Paramètres sportifs",
+    "/sport-settings",
+    (parent) => {
+      const minimum = field(
+        parent,
+        "Minimum de joueurs par séance",
+        client.snapshot.sport_settings?.min_players_per_session ?? 6,
+        { type: "number", min: 2 },
+      );
+      minimum.max = "30";
+      parent.append(
+        el(
+          "p",
+          "Règle commune au groupe, appliquée sur le web et le mobile. Entre 2 et 30 joueurs.",
+          "muted",
+        ),
+      );
+      return () => ({
+        min_players_per_session: integer(minimum.value, "Minimum de joueurs"),
       });
     },
     "PUT",
@@ -1910,20 +2468,34 @@ function openingEditor() {
   if (!currentCaps().finance || client.snapshot.opening) return;
   const f = dialog("Proposer les soldes initiaux"),
     p = structuredClone(
-      client.snapshot.opening_proposal || {
-        cash: 0,
-        start_date: null,
-        members: {},
-      },
+      client.readDraft("opening", "proposal") ||
+        client.snapshot.opening_proposal || {
+          cash: 0,
+          start_date: null,
+          members: {},
+        },
     );
+  function saveOpening() {
+    try {
+      client.saveDraft("opening", "proposal", p);
+    } catch (error) {
+      f.errors.textContent = error.message;
+    }
+  }
   field(f.body, "Caisse initiale", p.cash, {
     type: "number",
     min: 0,
-    change: (v) => (p.cash = v),
+    change: (v) => {
+      p.cash = v;
+      saveOpening();
+    },
   });
   field(f.body, "Date de début des comptes", p.start_date || "", {
     type: "date",
-    change: (v) => (p.start_date = v || null),
+    change: (v) => {
+      p.start_date = v || null;
+      saveOpening();
+    },
   });
   f.body.append(
     el(
@@ -1941,12 +2513,18 @@ function openingEditor() {
     const c = card(m.name);
     field(c, "Avance ou dette de " + m.name, balance.contribution_balance, {
       type: "number",
-      change: (v) => (balance.contribution_balance = v),
+      change: (v) => {
+        balance.contribution_balance = v;
+        saveOpening();
+      },
     });
     field(c, "Pénalités initiales de " + m.name, balance.penalty_debt, {
       type: "number",
       min: 0,
-      change: (v) => (balance.penalty_debt = v),
+      change: (v) => {
+        balance.penalty_debt = v;
+        saveOpening();
+      },
     });
     f.body.append(c);
   }
@@ -1960,12 +2538,17 @@ function openingEditor() {
       );
       b.penalty_debt = integer(b.penalty_debt, "Pénalité");
     }
+    validateMutation("/opening", p);
     if (!(await confirmSend("Vérifier les soldes proposés", openingReview(p))))
       return;
     await client.mutate("/opening", p);
+    client.removeDraft("opening", "proposal");
     f.d.close();
     render();
-    message("Proposition envoyée au Président ou Vice-président.");
+    message(
+      client.refreshWarning ||
+        "Proposition envoyée au Président ou Vice-président.",
+    );
   });
 }
 function decisions(parent) {
@@ -2004,6 +2587,7 @@ function approveOpening() {
   const f = dialog("Vérifier les soldes initiaux");
   f.body.append(openingReview(p));
   f.submit("Approuver ces soldes", async () => {
+    validateMutation("/opening/approve", { proposal: p });
     if (
       !(await confirmSend(
         "Approuver définitivement les soldes ?",
@@ -2014,7 +2598,7 @@ function approveOpening() {
     await client.mutate("/opening/approve", { proposal: p });
     f.d.close();
     render();
-    message("Modification enregistrée.");
+    message(client.refreshWarning || "Modification enregistrée.");
   });
 }
 function conflictEditor(doc) {
@@ -2059,6 +2643,11 @@ function conflictEditor(doc) {
     const selected = versions.find((v) => v.id === choice),
       preview = payloadReview(doc.domain, selected.payload);
     preview.prepend(el("p", "Motif : " + reason.value));
+    validateMutation(groupPath(doc) + "/resolve", {
+      revision: doc.revision,
+      candidate_id: choice,
+      reason: reason.value.trim(),
+    });
     if (!(await confirmSend("Vérifier la version retenue", preview))) return;
     await client.mutate(groupPath(doc) + "/resolve", {
       revision: doc.revision,
@@ -2132,7 +2721,7 @@ window.addEventListener("online", () => {
   if (!modal && client.connection)
     run(async () => {
       await client.refresh();
-      render();
+      if (!modal) render({ preserve: true });
     });
 });
 window.addEventListener("beforeunload", (event) => {
@@ -2152,21 +2741,31 @@ try {
 } catch (error) {
   configurationError = error;
 }
-try {
-  catalog = await fetch("./team-names.json").then((r) => r.json());
-} catch {}
+fetch("./team-names.json")
+  .then((r) => {
+    if (!r.ok) throw Error();
+    return r.json();
+  })
+  .then((names) => {
+    if (
+      Array.isArray(names) &&
+      names.every((n) => typeof n === "string" && n.trim())
+    )
+      catalog = [...new Set(names)];
+  })
+  .catch(() => {});
 client.restore();
 render();
 if (configurationError) message(configurationError.message, true);
 if (client.connection)
   run(async () => {
     await client.refresh();
-    render();
+    if (!modal) render({ preserve: true });
   });
 setInterval(() => {
   if (client.connection && !modal && navigator.onLine)
     run(async () => {
       await client.refresh();
-      render();
+      if (!modal) render({ preserve: true });
     });
 }, 45000);

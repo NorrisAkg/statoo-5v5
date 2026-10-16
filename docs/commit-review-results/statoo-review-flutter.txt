@@ -1,0 +1,314 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart: cash, arrears and prepaid contributions remain separate from penalties
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart: cancelled period consumes contribution advance, not cash
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart: serialization retains distinct receipts, penalty obligations and expense IDs
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart: SQLite corrections and local history group defaults are isolated and only new periods use the new rate
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finance_test.dart: SQLite corrections and local history correction replaces totals once and preserves an audit trail
+00:01 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: (setUpAll)
+00:01 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/occurrence_identity_test.dart: (setUpAll)
+00:01 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:02 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:05 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:05 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:05 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:06 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:07 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +30: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +31: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +32: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +33: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +34: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +35: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +36: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +37: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:09 +38: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:10 +39: /home/norris/my-projects/statoo-5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:11 +40: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:11 +41: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +42: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +43: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +44: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +45: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +46: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:12 +47: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:13 +48: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:15 +49: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:15 +50: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:17 +51: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:17 +52: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:18 +53: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_decisions_test.dart: UX05-01/02/04 review shows balances and cancel never approves
+00:19 +54: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_decisions_test.dart: UX05-01/02/04 review shows balances and cancel never approves
+00:20 +55: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_decisions_test.dart: UX05-01/02/04 review shows balances and cancel never approves
+00:20 +56: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_decisions_test.dart: UX05-01/02/04 review shows balances and cancel never approves
+00:21 +57: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_decisions_test.dart: UX05-01/02/04 review shows balances and cancel never approves
+00:21 +58: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:21 +59: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:22 +60: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:23 +61: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:24 +62: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:25 +63: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:25 +64: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:25 +65: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +66: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +67: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +68: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +69: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +70: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +71: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:26 +72: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:27 +73: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect CENSOR
+00:27 +74: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect SG
+00:27 +75: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect TR
+00:27 +76: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect ADMIN
+00:28 +77: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: add
+00:28 +78: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +79: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +80: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +81: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +82: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +83: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +84: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +85: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:28 +86: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: FIX-06 shared minimum follows server updates and cannot be changed locally
+00:28 +87: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/group_settings_test.dart: FIX-06b disconnected protected group cannot change its cached common minimum
+00:29 +88: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: (setUpAll)
+00:29 +88: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=false
+00:29 +89: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=true
+00:30 +90: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=false
+00:30 +91: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=true
+00:30 +92: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=false
+00:30 +93: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=true
+00:30 +94: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=false
+00:30 +95: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=true
+00:30 +96: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=false
+00:30 +97: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=true
+00:30 +98: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=false
+00:30 +99: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=true
+00:30 +100: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=false
+00:30 +101: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=true
+00:30 +102: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-12 export/restore preserves ranked results and financial metadata
+00:30 +103: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-07 inconsistent tournament is kept as draft without invented result
+00:30 +104: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-05/06 classic scored remains closed, incomplete becomes draft
+00:30 +105: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: (tearDownAll)
+00:30 +105: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: (setUpAll)
+00:30 +105: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests replace mode restores all tables without foreign key violations
+00:31 +106: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests merge mode from another device remaps sessions and players without foreign key errors (B-02 & Maj. 4)
+00:31 +107: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests createBackupPayload exports all teams and full data
+00:31 +108: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: (tearDownAll)
+00:32 +108: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: (setUpAll)
+00:32 +108: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: optional fields use distinct defaults and compare trimmed case-insensitive names
+00:32 +109: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: v7 appearance migration preserves existing rows and supplies nullable defaults
+00:32 +110: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+00:32 +111: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_header_test.dart: only this session scorers are listed under their own team with goal counts
+00:33 +112: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_header_test.dart: only this session scorers are listed under their own team with goal counts
+00:33 +113: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_header_test.dart: only this session scorers are listed under their own team with goal counts
+00:33 +114: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_header_test.dart: only this session scorers are listed under their own team with goal counts
+00:34 +115: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:34 +116: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:34 +117: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:34 +118: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +119: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +120: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +121: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +122: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +123: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +124: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +125: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +126: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +127: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +128: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +129: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +130: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +131: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +132: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +133: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +134: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +135: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +136: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +137: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +138: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +139: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +140: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:35 +141: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +142: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +143: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +144: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +145: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +146: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +147: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +148: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers blocks when tournament has no result decided yet
+00:37 +149: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: (tearDownAll)
+00:37 +149: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Clean win for Team C gives 3 pts to Team C, 0 to Team A and B
+00:37 +150: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Tie between Team A and B (drawAB) with default 1 point
+00:37 +151: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Tie between Team A and B (drawAB) with configured 2 points
+00:37 +152: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Three-way tie (drawAll) awards configured points to all 3 teams
+00:37 +153: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams createDraftSession with tournament3 assigns A, B and C and initializes wins
+00:37 +154: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams updateTournamentWins updates wins counter and result
+00:37 +155: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams closeSession closes a tournament session with a decided result
+00:37 +156: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams closeSession recomputes and synchronizes result when wins changed
+00:37 +157: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns null when 0 wins are recorded for all 3 teams
+00:37 +158: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamA when A has strictly more wins
+00:37 +159: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamB when B has strictly more wins
+00:37 +160: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamC when C has strictly more wins
+00:37 +161: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAB when A and B tie for the lead
+00:37 +162: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawBC when B and C tie for the lead
+00:37 +163: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAC when A and C tie for the lead
+00:37 +164: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAll when all 3 teams tie with at least 1 win
+00:38 +165: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: (setUpAll)
+00:38 +165: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +166: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +167: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +168: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +169: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +170: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +171: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +172: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +173: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +174: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +175: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +176: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +177: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:39 +178: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +179: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +180: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +181: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +182: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +183: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +184: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +185: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:40 +186: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:41 +187: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:42 +188: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:42 +189: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:42 +190: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:42 +191: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:43 +192: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:43 +193: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +194: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +195: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +196: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +197: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +198: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +199: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +200: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +201: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +202: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:44 +203: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:44 +204: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:45 +205: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:45 +206: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:45 +207: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:46 +208: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:47 +209: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:47 +210: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:48 +211: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:48 +212: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:49 +213: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:49 +214: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:50 +215: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:50 +216: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:50 +217: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:52 +218: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:52 +219: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:53 +220: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:54 +221: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:55 +222: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:55 +223: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:55 +224: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:55 +225: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:55 +226: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:55 +227: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +228: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +229: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +230: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +231: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +232: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +233: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +234: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +235: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:56 +236: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:57 +237: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:57 +238: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:57 +239: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:57 +240: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-06 classic result keeps both scores and club colors
+00:57 +241: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-10 failure preserves score and indicates unavailable scorers
+00:57 +242: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays pending state card when MVP is null
+00:57 +243: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays pending state card when MVP is null
+00:57 +244: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-11/12 updates scorers and discards previous session
+00:57 +245: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-08 no closed or active session keeps empty state
+00:57 +246: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-09 refreshed source replaces last closed session
+00:58 +247: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+00:58 +248: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: Multi-tenant isolation and archived players in standings (Chantier 4) v_standings preserves archived players with their historical points and stats
+00:58 +249: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: Multi-tenant isolation and archived players in standings (Chantier 4) rankingRepo strictly isolates teams and returns empty when teamId is null
+00:58 +250: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: Multi-tenant isolation and archived players in standings (Chantier 4) statsRepo computes average goals strictly based on closed sessions and not drafts
+00:58 +251: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: (tearDownAll)
+00:59 +251: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator match score formula calculates correct score for win with goals and assists
+00:59 +252: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator match score formula calculates correct score for draw with yellow card
+00:59 +253: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator match score formula calculates correct score for loss with red card and yellow card
+00:59 +254: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator match score formula calculates score with custom draw points when specified
+00:59 +255: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules player who missed 0 matches is eligible
+00:59 +256: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules player who missed 1 match (N - 1) is eligible
+00:59 +257: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules player who missed 2 matches is NOT eligible
+00:59 +258: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules player who missed 3 matches in 4 sessions has missingMatches = 2
+00:59 +259: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules when totalSessions is 1, player with 1 match is eligible
+00:59 +260: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules when totalSessions is 1, player with 0 match is NOT eligible
+00:59 +261: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator eligibility rules when totalSessions is 0, no player is eligible
+00:59 +262: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator average score and rounding calculates average score over multiple matches with 2 decimal precision
+00:59 +263: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator average score and rounding handles division by zero gracefully
+00:59 +264: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpCalculator average score and rounding rounds correctly to 2 decimals
+00:59 +265: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpEntry deserialization and properties fromMap parses all fields correctly
+00:59 +266: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_calculator_test.dart: MvpEntry deserialization and properties fromMap handles null and missing optional fields with defaults
+00:59 +267: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: (setUpAll)
+00:59 +267: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: archived players are excluded from the points per match standings
+01:00 +268: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: a two-team draw is worth 1 point whatever the tournament draw setting
+01:00 +269: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: a three-team draw uses the session draw points
+01:00 +270: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: (tearDownAll)
+01:00 +270: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:00 +271: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:00 +272: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:00 +273: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:00 +274: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +275: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +276: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +277: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +278: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +279: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +280: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +281: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +282: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +283: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +284: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:01 +285: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:02 +286: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+01:03 +287: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+01:03 +288: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+01:03 +289: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+01:05 +290: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+01:05 +291: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+01:05 +292: /home/norris/my-projects/statoo-5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+01:06 +293: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+01:06 +294: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+01:06 +295: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+01:06 +296: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+01:06 +297: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+01:06 +298: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+01:09 +299: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: App smoke test when onboarding and team exist
+01:09 +300: All tests passed!

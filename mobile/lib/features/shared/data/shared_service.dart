@@ -505,6 +505,17 @@ class SharedService {
         'value': jsonEncode(data),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
       final settings = data['financial_settings'] as Map?;
+      final sportSettings = data['sport_settings'] as Map?;
+      if (sportSettings != null) {
+        final minimum = sportSettings['min_players_per_session'];
+        if (minimum is! int || minimum < 2 || minimum > 30) {
+          throw StateError('Minimum de joueurs du groupe invalide.');
+        }
+        await txn.insert('meta', {
+          'key': 'min_players_per_session_$groupId',
+          'value': '$minimum',
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
       if (settings != null) {
         await txn.insert('meta', {
           'key': 'finance_rate_$groupId',
@@ -516,18 +527,18 @@ class SharedService {
         }, conflictAlgorithm: ConflictAlgorithm.replace);
       }
       for (final member in data['members'] as List<dynamic>) {
-        final row = Map<String, dynamic>.from(member as Map);
-        row.removeWhere(
-          (key, _) => !{
-            'id',
-            'name',
-            'nickname',
-            'avatar_url',
-            'is_active',
-            'created_at',
-            'updated_at',
-          }.contains(key),
-        );
+        final row = Map<String, dynamic>.from(member as Map)
+          ..removeWhere(
+            (key, _) => !{
+              'id',
+              'name',
+              'nickname',
+              'avatar_url',
+              'is_active',
+              'created_at',
+              'updated_at',
+            }.contains(key),
+          );
         row['team_id'] = groupId;
         row.putIfAbsent('created_at', () => DateTime.now().toIso8601String());
         row.putIfAbsent('updated_at', () => row['created_at']);

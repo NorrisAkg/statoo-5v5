@@ -84,6 +84,10 @@ class FinancialSettings(BaseModel):
     late_penalty: StrictInt = Field(ge=0, le=10**12)
 
 
+class SportSettings(BaseModel):
+    min_players_per_session: StrictInt = Field(ge=2, le=30)
+
+
 class Opening(BaseModel):
     cash: StrictInt = Field(ge=0)
     start_date: str | None = None
@@ -307,6 +311,7 @@ def create_app(url: str | None = None):
         result = {k: state[k] for k in ("name", "roles", "members", "documents", "opening", "audit")}
         result['obligations'] = state.get('obligations', {})
         result['financial_settings'] = state.get('financial_settings', {'contribution': 100, 'late_penalty': 0})
+        result['sport_settings'] = state.get('sport_settings', {'min_players_per_session': 6})
         result["account"] = public_account(account)
         result["leaders"] = [public_account(a) for a in state["accounts"] if not a["shared"]]
         if not set(account["roles"]) & {"PDT", "VP"}:
@@ -407,6 +412,15 @@ def create_app(url: str | None = None):
         group.state = state
         return body.model_dump()
 
+    @app.put('/groups/{group_id}/sport-settings')
+    def sport_settings(group_id: str, body: SportSettings, auth=Depends(authenticate)):
+        _, group, state, actor = scoped(group_id, auth)
+        require(actor, {'ADMIN'})
+        state['sport_settings'] = body.model_dump()
+        audit(state, actor, 'sport_settings_updated')
+        group.state = state
+        return body.model_dump()
+
     @app.post("/groups/{group_id}/opening")
     def opening(group_id: str, body: Opening, auth=Depends(authenticate)):
         _, group, state, actor = scoped(group_id, auth)
@@ -466,7 +480,8 @@ def create_app(url: str | None = None):
             except ValueError as exc:
                 fail(422, str(exc))
         else:
-            validate_sport(body.payload, known, group.id)
+            validate_sport(body.payload, known, group.id,
+                           state.get('sport_settings', {}).get('min_players_per_session', 6))
         key = body.domain + ":" + body.occurrence_id
         document = state["documents"].get(key)
         candidate = {"id": body.operation_id, "actor": actor["id"], "payload": body.payload,
@@ -524,6 +539,9 @@ def create_app(url: str | None = None):
             if selected is None:
                 fail(422, "Version inconnue")
         if domain == 'sport':
+            if body.candidate_id != 'current':
+                validate_sport(selected['payload'], {m['id'] for m in state['members']}, group.id,
+                               state.get('sport_settings', {}).get('min_players_per_session', 6))
             validate_sport_acceptance(state, occurrence_id, selected['payload'])
         if domain == "finance":
             validate_financial_roster(state, occurrence_id, selected['payload'])
@@ -563,7 +581,7 @@ def create_app(url: str | None = None):
     return app
 
 
-def validate_sport(payload, known, group_id):
+def validate_sport(payload, known, group_id, minimum=6):
     session = payload.get("session", {})
     parts = payload.get("participations", [])
     if not isinstance(session, dict) or not isinstance(parts, list) or len(parts) > 1000 or any(not isinstance(p, dict) for p in parts):
@@ -579,6 +597,8 @@ def validate_sport(payload, known, group_id):
         if any(type(part.get(k, 0)) is not int or part.get(k, 0) < 0 for k in ("goals", "assists", "yellow_cards", "red_cards")):
             fail(422, "Statistiques invalides")
     if session["status"] == "CLOSED":
+        if len(parts) < minimum:
+            fail(422, f"Sélectionnez au minimum {minimum} joueurs pour clôturer la séance")
         tournament = session.get("session_type") == "TOURNAMENT_3"
         allowed = {"A", "B", "C", "DRAW_AB", "DRAW_BC", "DRAW_AC", "DRAW_ALL"} if tournament else {"A", "B", "DRAW"}
         if session.get("result") not in allowed:

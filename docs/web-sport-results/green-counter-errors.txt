@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+ok 1 - SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+  ---
+  duration_ms: 3561.368099
+  type: 'test'
+  ...
+# Subtest: SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+ok 2 - SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+  ---
+  duration_ms: 1746.878216
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6237.17487

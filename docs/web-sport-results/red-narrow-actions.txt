@@ -1,0 +1,35 @@
+TAP version 13
+# Subtest: SPORT-18 narrow action bars keep complete words and visible actions
+not ok 1 - SPORT-18 narrow action bars keep complete words and visible actions
+  ---
+  duration_ms: 1838.541397
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1118:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Le mot Enregistrer ne doit pas être cassé sur plusieurs lignes.
+
+    2 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/sport-flow.e2e.mjs:1129:14)
+    runNextTicks (node:internal/process/task_queues:65:5)
+    process.processImmediate (node:internal/timers:453:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3150.182075

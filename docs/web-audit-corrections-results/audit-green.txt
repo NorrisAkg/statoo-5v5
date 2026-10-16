@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: AUD-01 stale financial draft must not silently rebase on a newer server revision
+ok 1 - AUD-01 stale financial draft must not silently rebase on a newer server revision
+  ---
+  duration_ms: 8038.043296
+  type: 'test'
+  ...
+# Subtest: AUD-02 closing the opening-balance form preserves input or confirms abandonment
+ok 2 - AUD-02 closing the opening-balance form preserves input or confirms abandonment
+  ---
+  duration_ms: 4537.006588
+  type: 'test'
+  ...
+# Subtest: AUD-07 delayed optional catalogue must not block login and consultation
+ok 3 - AUD-07 delayed optional catalogue must not block login and consultation
+  ---
+  duration_ms: 3008.409876
+  type: 'test'
+  ...
+# Subtest: AUD-08 existing session remains editable without the team name catalogue
+ok 4 - AUD-08 existing session remains editable without the team name catalogue
+  ---
+  duration_ms: 3781.248102
+  type: 'test'
+  ...
+# Subtest: AUD-09 denied local storage produces an actionable message rather than a frozen shell
+ok 5 - AUD-09 denied local storage produces an actionable message rather than a frozen shell
+  ---
+  duration_ms: 6235.844236
+  type: 'test'
+  ...
+# Subtest: AUD-10 team-name text has at least 4.5:1 contrast in light theme
+ok 6 - AUD-10 team-name text has at least 4.5:1 contrast in light theme
+  ---
+  duration_ms: 3039.394578
+  type: 'test'
+  ...
+# Subtest: FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+ok 7 - FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+  ---
+  duration_ms: 11937.908427
+  type: 'test'
+  ...
+# Subtest: FIX-02 opening draft persists all fields across reload and is removed after accepted write
+ok 8 - FIX-02 opening draft persists all fields across reload and is removed after accepted write
+  ---
+  duration_ms: 6836.582739
+  type: 'test'
+  ...
+# Subtest: FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+ok 9 - FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+  ---
+  duration_ms: 4264.74609
+  type: 'test'
+  ...
+# Subtest: FIX-10 all team palette colors remain readable in both themes
+ok 10 - FIX-10 all team palette colors remain readable in both themes
+  ---
+  duration_ms: 4661.971939
+  type: 'test'
+  ...
+# Subtest: AUD-03 accepted administrative write remains a success if refresh fails
+ok 11 - AUD-03 accepted administrative write remains a success if refresh fails
+  ---
+  duration_ms: 177.335725
+  type: 'test'
+  ...
+# Subtest: AUD-04 out-of-order refresh does not roll back displayed data
+ok 12 - AUD-04 out-of-order refresh does not roll back displayed data
+  ---
+  duration_ms: 16.763596
+  type: 'test'
+  ...
+# Subtest: AUD-05 standings tie-break follows the mobile win priority
+ok 13 - AUD-05 standings tie-break follows the mobile win priority
+  ---
+  duration_ms: 9.88082
+  type: 'test'
+  ...
+# Subtest: AUD-06 web does not silently close a one-player match below mobile default minimum
+ok 14 - AUD-06 web does not silently close a one-player match below mobile default minimum
+  ---
+  duration_ms: 8.001573
+  type: 'test'
+  ...
+# Subtest: AUD-11 non-JSON proxy error is translated into a user-facing service message
+ok 15 - AUD-11 non-JSON proxy error is translated into a user-facing service message
+  ---
+  duration_ms: 24.711991
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 61469.127988

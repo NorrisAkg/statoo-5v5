@@ -1,0 +1,33 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__ test_candidate_is_checked_against_current_minimum_but_history_can_be_kept ___
+
+system = (<starlette.testclient.TestClient object at 0x77159852f710>, '/groups/%2302456886', {'ADMIN': {'Authorization': 'Beare...UBmlmq7k7XY_moiVw'}, 'PDT': {'Authorization': 'Bearer [synthetic-test-token]'}, ...}, '#02456886')
+
+    def test_candidate_is_checked_against_current_minimum_but_history_can_be_kept(system):
+        c, path, t, group = system
+        c.put(path + '/sport-settings', headers=t['ADMIN'], json={'min_players_per_session': 2})
+        published = event(group, 2)
+        assert c.post(path + '/sync', headers=t['SG'], json=published).status_code == 200
+        candidate = event(group, 2)
+        candidate['occurrence_id'] = published['occurrence_id']
+        assert c.post(path + '/sync', headers=t['SG'], json=candidate).json()['status'] == 'conflict'
+        c.put(path + '/sport-settings', headers=t['ADMIN'], json={'min_players_per_session': 6})
+        url = path + '/documents/sport/' + published['occurrence_id'] + '/resolve'
+        decision = {'revision': 1, 'candidate_id': candidate['operation_id'], 'reason': 'Reviewed'}
+>       assert c.post(url, headers=t['PDT'], json=decision).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post('/groups/%2302456886/documents/sport/e85a0353-bcd7-40f0-8769-67dc8717e8e5/resolve', headers={'Authorization': 'Bearer [synthetic-test-token]'}, json={'revision': 1, 'candidate_id': '3fc71b93-3c36-4035-b7fc-6b6134e49cec', 'reason': 'Reviewed'})
+E        +      where post = <starlette.testclient.TestClient object at 0x77159852f710>.post
+
+tests/test_sport_settings.py:88: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/norris/my-projects/statoo-5v5/backend/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_sport_settings.py::test_candidate_is_checked_against_current_minimum_but_history_can_be_kept
+1 failed, 13 deselected, 1 warning in 6.29s

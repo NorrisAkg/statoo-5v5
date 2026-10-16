@@ -31,6 +31,11 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
     final minPlayers = ref.watch(minPlayersPerSessionProvider);
+    ref.watch(sharedStatusProvider);
+    final group = ref.watch(activeTeamIdProvider);
+    final shared = ref.watch(sharedServiceProvider);
+    final sharedSportSettings = group != null &&
+        (group == shared.groupId || shared.protectedGroups.contains(group));
     final tournamentDrawPoints = ref.watch(tournamentDrawPointsProvider);
 
     final formatEstimate = minPlayers.isEven
@@ -75,7 +80,9 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Format estimé : $formatEstimate (défaut : 6 pour 3v3)',
+                            sharedSportSettings
+                                ? 'Règle commune du groupe : modification par l’Admin dans la PWA.'
+                                : 'Format estimé : $formatEstimate (défaut : 6 pour 3v3)',
                             style: TextStyle(
                               color: context.colors.foreground400,
                               fontSize: 12,
@@ -90,7 +97,7 @@ class SettingsScreen extends ConsumerWidget {
                         IconButton(
                           icon: const Icon(Remix.subtract_line, size: 18),
                           color: minPlayers > 2 ? context.colors.foreground200 : context.colors.foreground600,
-                          onPressed: minPlayers > 2
+                          onPressed: !sharedSportSettings && minPlayers > 2
                               ? () {
                                   unawaited(ref.read(minPlayersPerSessionProvider.notifier).setMinPlayers(minPlayers - 1));
                                 }
@@ -115,7 +122,7 @@ class SettingsScreen extends ConsumerWidget {
                         IconButton(
                           icon: const Icon(Remix.add_line, size: 18),
                           color: minPlayers < 30 ? context.colors.primary500 : context.colors.foreground600,
-                          onPressed: minPlayers < 30
+                          onPressed: !sharedSportSettings && minPlayers < 30
                               ? () {
                                   unawaited(ref.read(minPlayersPerSessionProvider.notifier).setMinPlayers(minPlayers + 1));
                                 }
@@ -716,8 +723,9 @@ class SettingsScreen extends ConsumerWidget {
           );
 
       await ref.read(sharedServiceProvider).load();
-      ref.invalidate(financialPointsProvider);
-      ref.invalidate(financialTotalsProvider);
+      ref
+        ..invalidate(financialPointsProvider)
+        ..invalidate(financialTotalsProvider);
 
       // Rechargement des notifiers avec persistance
       await ref.read(hasTeamProvider.notifier).reloadFromDb();

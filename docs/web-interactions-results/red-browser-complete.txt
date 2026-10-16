@@ -1,0 +1,243 @@
+TAP version 13
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 390px
+not ok 1 - STAB-01/02 filters, focus and text selection survive refresh at 390px
+  ---
+  duration_ms: 1436.373269
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:49:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    '' !== 'Atlas'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Atlas'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:60:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+not ok 2 - STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+  ---
+  duration_ms: 859.500225
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:80:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:86:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+not ok 3 - STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+  ---
+  duration_ms: 1117.649605
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:108:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:116:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 1440px
+not ok 4 - STAB-01/02 filters, focus and text selection survive refresh at 1440px
+  ---
+  duration_ms: 1098.328238
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:49:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    '' !== 'Atlas'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Atlas'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:60:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+not ok 5 - STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+  ---
+  duration_ms: 872.462246
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:80:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:86:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+not ok 6 - STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+  ---
+  duration_ms: 1682.432307
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:108:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:116:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-05 late background refresh does not rebuild behind a newly opened dialog
+not ok 7 - STAB-05 late background refresh does not rebuild behind a newly opened dialog
+  ---
+  duration_ms: 947.197398
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:128:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + null
+    - 'unchanged'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'unchanged'
+  actual: ~
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:142:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-01 an empty search result survives periodic refresh
+not ok 8 - STAB-01 an empty search result survives periodic refresh
+  ---
+  duration_ms: 1256.462201
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:151:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + ''
+    - 'Aucun résultat XYZ'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Aucun résultat XYZ'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:158:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-04 removing the last expense returns focus to adding an expense
+not ok 9 - STAB-04 removing the last expense returns focus to adding an expense
+  ---
+  duration_ms: 1212.897725
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:163:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:169:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: STAB-06 changing account resets in-memory session filters
+ok 10 - STAB-06 changing account resets in-memory session filters
+  ---
+  duration_ms: 872.72799
+  type: 'test'
+  ...
+# Subtest: STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+not ok 11 - STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+  ---
+  duration_ms: 890.173627
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:194:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    false !== true
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///home/norris/my-projects/statoo-5v5/web/tests/interactions.e2e.mjs:209:12)
+    runNextTicks (node:internal/process/task_queues:65:5)
+    process.processImmediate (node:internal/timers:453:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 1
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13269.577996

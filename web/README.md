@@ -2,6 +2,14 @@
 
 HTML/CSS, Poppins embarquée et modules JavaScript natifs. La PWA réutilise l'API FastAPI et les identifiants du mobile.
 
+Les actions réseau affichent un indicateur dans leur bouton et bloquent les
+activations répétées jusqu'au résultat. Les formulaires utilisent les schémas
+Zod de `validation.mjs`, avec messages français et aides de champ accessibles.
+Zod est livré localement dans `vendor/zod.mjs` et disponible hors connexion ;
+`npm run vendor:web` régénère cet asset après une mise à jour de la dépendance.
+Les règles serveur restent nécessaires. Scénarios et preuves dans
+[le journal TDD](../docs/tdd-web-loading-zod.md).
+
 L'en-tête et le favicon utilisent `web/icons/logo-transparent.png`, une version détourée de l'emblème du logo natif. Le nom reste affiché à côté dans l'en-tête. L'original natif est conservé. Ces ressources sont disponibles hors connexion. Sur grand écran, le contenu est limité à 1280 px, l'introduction reste alignée en haut et les accès Admin/collectif utilisent deux colonnes ; les petits écrans conservent un empilement vertical. Les trois équipes d'un tournoi sont en colonnes à partir de 1100 px.
 
 ```powershell
@@ -23,6 +31,35 @@ Depuis la racine du dépôt. Ouvrir `http://localhost:8080`.
 - Admin/TR/TGA : paramètres financiers des nouvelles échéances.
 
 L'API applique les mêmes contrôles que pour le mobile. Admin seul ne donne pas de droits sportifs ou de trésorerie. Les montants sont des entiers en F.
+
+### Préparer et saisir une séance
+
+Le parcours sportif suit quatre étapes : **Options → Présents → Équipes → Match**.
+Les étapes et les actions restent accessibles pendant le défilement.
+
+- **Options** : date, format match/tournoi, classement, effectifs inégaux et référence commune aux finances.
+- **Présents** : recherche par nom ou surnom, sans distinction de casse ou d’accents. Les actions collectives s’appliquent aux joueurs affichés ; les sélections masquées par la recherche sont conservées. Les archivés déjà liés à une séance restent consultables.
+- **Équipes** : effectifs et joueurs à placer, couleurs et répartition équilibrée en nombre. Une affectation manuelle reste possible.
+- **Match** : scores ou victoires avec +/− et saisie numérique ; bouton Statistiques sur chaque joueur pour ouvrir ses buts, passes et cartons. Une seule fiche détaillée est ouverte à la fois.
+
+Une séance existante s’ouvre directement sur Match. Les autres étapes restent
+accessibles pour modifier ses options ou sa composition. Une correction ou
+annulation publiée demande toujours un motif.
+
+La préparation locale conserve l’étape, les sélections, les équipes et les
+statistiques après fermeture ou rechargement pour le même compte. Retirer puis
+réintégrer un présent dans cette préparation retrouve ses statistiques ; seuls
+les présents sont transmis lors d’une publication. Un refus de stockage est
+signalé explicitement, sans annoncer la préparation comme conservée.
+
+Les compteurs ne publient rien automatiquement. **Enregistrer le brouillon**
+publie une version brouillon pour le groupe ; **Clôturer la séance** publie le
+résultat terminé. Ces actions passent par un récapitulatif et une confirmation.
+Les contrôles existants (minimum du groupe, composition, scores, passes,
+couleurs et versions concurrentes) restent appliqués.
+
+Scénarios et preuves : `docs/tdd-web-parcours-sportif.md` et
+`docs/web-sport-results/` depuis la racine du dépôt.
 
 À la création, le serveur attribue un identifiant aléatoire `#` suivi de huit chiffres. Les collisions déclenchent un nouveau tirage et la clé primaire garantit l'unicité. L'identifiant est affiché sur l'accueil et sert à rejoindre le groupe ; les identifiants historiques restent valides. La liste initiale des membres accepte les virgules et les retours à la ligne, supprime les espaces autour des noms et ignore les entrées vides. L'identifiant collectif est l'accès partagé de consultation des membres.
 
