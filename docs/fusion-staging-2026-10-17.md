@@ -25,3 +25,7 @@ Scenarios before conflict resolution:
 ## Safe local delivery
 
 A fresh fetch still shows origin/staging=e6cef61. The original dirty checkout will be saved with include-untracked stash (retained), fast-forwarded to the verified candidate, then excluded evidence restored byte-for-byte. No force push, hard reset or clean is used. No remote push is part of this operation.
+
+## Delivery completed
+
+Local staging was fast-forwarded to integration commit 8e57365 after merge commit be305e1. Both original commits remain ancestors. A retained include-untracked safety stash starts with b4f5620e9f29; the original verified backup remains in mobile/build/merge-safety-20261017. Post-delivery comparison confirmed all 86 integrated paths match the verified worktree, and all 64 excluded paths match the saved original bytes. Five tracked audit files remain intentionally modified outside application commits. Verified build artifacts were copied to the original local preview; browser SQLite data was not changed. No remote push was performed.
