@@ -133,6 +133,56 @@ void main() {
   }
 
   Finder amount() => find.byType(TextField).at(1);
+  testWidgets('REF-01 prefill the configured rate without persisting', (
+    tester,
+  ) async {
+    final repo = _Finance();
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '100');
+    expect(repo.saves, 0);
+    expect(
+      tester.widget<TextField>(find.byType(TextField).at(2)).controller!.text,
+      '',
+    );
+  });
+  testWidgets('REF-02 keep saved zero and partial contributions', (
+    tester,
+  ) async {
+    final repo = _Finance()..saves = 1;
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '');
+    await tester.pumpWidget(const SizedBox());
+    repo.point = FinancialPoint(
+      playedAt: _date,
+      rate: 100,
+      lines: const [FinancialLine(memberId: 'a', contribution: 35)],
+    );
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '35');
+  });
+  testWidgets('REF-03 readonly never invents payments', (tester) async {
+    final repo = _Finance();
+    repo.shared.protectedGroups.add('g');
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '');
+  });
+  testWidgets('REF-03 zero rate stays empty and existing partial stays intact', (tester) async {
+    final repo = _Finance();
+    repo.point = FinancialPoint(playedAt: _date, rate: 0, lines: repo.point.lines);
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '');
+    await tester.pumpWidget(const SizedBox());
+    repo.point = FinancialPoint(playedAt: _date, rate: 100, lines: const [FinancialLine(memberId: 'a', contribution: 35)]);
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '35');
+  });
+  testWidgets('REF-04 initial prefill asks before discard', (tester) async {
+    await open(tester, _Finance());
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(tester.widget<TextField>(amount()).controller!.text, '100');
+  });
   testWidgets('PF01/02 shared cards, button and visible amount labels', (
     tester,
   ) async {
@@ -228,6 +278,34 @@ void main() {
       expect(field.enabled, false);
     }
     expect(find.text('Autre encaissement / don'), findsNothing);
+  });
+  testWidgets('REF-11 cancelled point never prefills', (tester) async {
+    final repo = _Finance();
+    repo.point = FinancialPoint(playedAt: _date, rate: 100, lines: repo.point.lines, cancelled: true);
+    await open(tester, repo);
+    expect(tester.widget<TextField>(amount()).controller!.text, '');
+  });
+  testWidgets('REF-11 cancelling clears untouched prefills and can validate', (tester) async {
+    final repo = _Finance();
+    await open(tester, repo);
+    tester.widget<TextField>(amount()).controller!.selection = const TextSelection.collapsed(offset: 1);
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(amount()).controller!.text, '');
+    await tester.tap(find.text('Valider le point'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Confirmer'));
+    await tester.pumpAndSettle();
+    expect(repo.saves, 1);
+    expect(repo.point.cancelled, true);
+    expect(repo.point.received, 0);
+  });
+  testWidgets('REF-11 cancelling preserves manually edited contributions', (tester) async {
+    await open(tester, _Finance());
+    await tester.enterText(amount(), '35');
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(amount()).controller!.text, '35');
   });
   testWidgets('PF13/14 cancel confirmation and failed save preserve input', (
     tester,
@@ -358,7 +436,7 @@ void main() {
     }
   }
   testWidgets('UX02-01 clean point exits without confirmation', (tester) async {
-    await open(tester, _Finance());
+    await open(tester, _Finance()..saves = 1);
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
     expect(find.text('Ouvrir'), findsOneWidget);

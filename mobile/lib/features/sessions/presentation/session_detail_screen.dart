@@ -19,6 +19,7 @@ import '../domain/session_summary.dart';
 import '../domain/team_appearance.dart';
 import 'add_late_players_bottom_sheet.dart';
 import 'live_stats_panel.dart';
+import 'session_celebration.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
 
@@ -1309,8 +1310,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
     if (confirmed != true) return;
     String message;
+    var closed = false;
     try {
       final remaining = await controller.closeSession(session.id);
+      closed = remaining.isEmpty;
       message = remaining.isEmpty
           ? 'Séance clôturée avec succès !'
           : _closeBlockerMessage(remaining.first, session);
@@ -1320,6 +1323,10 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       message = 'Erreur lors de la clôture : $e';
     }
     if (!context.mounted) return;
+    if (closed) {
+      await showDialog<void>(context: context, builder: (_) => SessionCelebration(session: session));
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 

@@ -17,6 +17,7 @@ import '../../shared/application/shared_providers.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
+import '../application/home_preferences.dart';
 import '../application/settings_provider.dart';
 import '../data/backup_service.dart';
 import '../domain/backup_payload.dart';
@@ -187,6 +188,50 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           _buildSectionTitle(context, 'Joueur du mois'),
+          Consumer(
+            builder: (context, ref, _) {
+              final preference = ref.watch(showPlayerOfMonthProvider);
+              return AppCard(
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text(
+                        'Afficher le joueur du mois sur l’accueil',
+                      ),
+                      subtitle: const Text(
+                        'Préférence personnelle sur cet appareil. Les classements restent inchangés.',
+                      ),
+                      value: preference.value ?? true,
+                      onChanged: preference.isLoading
+                          ? null
+                          : (value) async {
+                              try {
+                                await ref
+                                    .read(showPlayerOfMonthProvider.notifier)
+                                    .setVisible(value);
+                              } on Object catch (e) {
+                                if (context.mounted)
+                                  ScaffoldMessenger.of(
+                                    context,
+                                  ).showSnackBar(SnackBar(content: Text('$e')));
+                              }
+                            },
+                    ),
+                    if (preference.hasError)
+                      TextButton(
+                        onPressed: () =>
+                            ref.invalidate(showPlayerOfMonthProvider),
+                        child: const Text(
+                          'Réessayer le chargement de la préférence',
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
           const MvpWeightsSection(),
           const SizedBox(height: 32),
           _buildSectionTitle(context, 'Apparence'),

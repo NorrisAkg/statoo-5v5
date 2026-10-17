@@ -122,35 +122,16 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Identifiant du groupe'), findsOneWidget);
         expect(find.text('Accès des membres'), findsNothing);
+        expect(find.text('Serveur'), findsNothing);
+        expect(find.text('Adresse du serveur'), findsNothing);
         expect(tester.takeException(), isNull);
         await tester.tap(find.text('Partager'));
         await tester.pumpAndSettle();
         expect(find.text('Identifiant du groupe'), findsNothing);
         expect(find.text('Accès des membres'), findsOneWidget);
-        final scrollable = find
-            .descendant(
-              of: find.byType(ListView).first,
-              matching: find.byType(Scrollable),
-            )
-            .first;
-        await tester.scrollUntilVisible(
-          find.text('Serveur'),
-          200,
-          scrollable: scrollable,
-        );
-        await tester.pumpAndSettle();
-        await tester.ensureVisible(find.text('Serveur'));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Serveur'));
-        await tester.pumpAndSettle();
-        expect(
-          find.byWidgetPredicate(
-            (widget) =>
-                widget is TextField &&
-                widget.controller?.text == 'https://statoo-api.onrender.com',
-          ),
-          findsOneWidget,
-        );
+        expect(find.text('Serveur'), findsNothing);
+        expect(find.text('Connexion à Statoo'), findsNothing);
+        expect(find.text('Adresse du serveur'), findsNothing);
         expect(tester.takeException(), isNull);
       },
     );

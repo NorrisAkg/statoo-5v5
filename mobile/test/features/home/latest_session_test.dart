@@ -9,6 +9,7 @@ import 'package:statoo/features/home/presentation/home_session_result.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 SessionSummaryItem summary(
   String id,
@@ -70,6 +71,15 @@ void main() {
     await tester.pumpAndSettle();
     return container;
   }
+
+  testWidgets('REF-05 hiding player of month removes the block', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({'show_player_of_month': false});
+    await mount(tester, () => []);
+    await tester.pumpAndSettle();
+    expect(find.text('Joueur du mois'), findsNothing);
+  });
 
   for (final filter in ['ranked', 'friendly', 'draft']) {
     testWidgets('ACC-01/02/03 latest closed session ignores $filter filter', (

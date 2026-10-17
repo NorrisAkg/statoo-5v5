@@ -1,0 +1,39 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: REF-01 prefill the configured rate without persisting
+00:01 +1: REF-02 keep saved zero and partial contributions
+00:01 +2: REF-03 readonly never invents payments
+00:01 +3: REF-03 zero rate stays empty and existing partial stays intact
+00:01 +4: REF-04 initial prefill asks before discard
+00:02 +5: PF01/02 shared cards, button and visible amount labels
+00:02 +6: PF06 search empty state and amount retained
+00:02 +7: PF08 explicit empty expenses
+00:02 +8: PF09 read only keeps values without mutation actions
+00:02 +9: PF05 keyboard resizes form and tab preserves input
+00:03 +10: PF08 add and remove expense changes saved totals
+00:03 +11: PF10 cancelled point disables member money fields
+00:03 +12: REF-11 cancelled point never prefills
+00:03 +13: REF-11 cancelling clears untouched prefills and can validate
+00:04 +14: REF-11 cancelling preserves manually edited contributions
+00:04 +15: PF13/14 cancel confirmation and failed save preserve input
+00:04 +16: PF11 changing rate keeps existing contribution
+00:04 +17: PF17 large text tabs and compact fixed footer
+00:05 +18: PF03/04 320.0 1.0 dark=false
+00:05 +19: PF03/04 320.0 1.0 dark=true
+00:05 +20: PF03/04 320.0 1.3 dark=false
+00:05 +21: PF03/04 320.0 1.3 dark=true
+00:05 +22: PF03/04 320.0 2.0 dark=false
+00:06 +23: PF03/04 320.0 2.0 dark=true
+00:06 +24: PF03/04 393.0 1.0 dark=false
+00:06 +25: PF03/04 393.0 1.0 dark=true
+00:06 +26: PF03/04 393.0 1.3 dark=false
+00:06 +27: PF03/04 393.0 1.3 dark=true
+00:06 +28: PF03/04 393.0 2.0 dark=false
+00:07 +29: PF03/04 393.0 2.0 dark=true
+00:07 +30: UX02-01 clean point exits without confirmation
+00:07 +31: UX02-02/04 dirty point stays with values on continue
+00:07 +32: UX02-03/05 system back asks before explicit discard
+00:07 +33: UX02-09 reverting values clears dirty state
+00:07 +34: UX02-14 success establishes a new clean baseline
+00:08 +35: (tearDownAll)
+00:08 +35: All tests passed!

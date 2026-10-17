@@ -1,0 +1,15 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: (setUpAll)
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:00 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:00 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:00 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:01 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:02 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: false)
+00:02 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:02 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: management shows only permitted actions (admin: false)
+00:02 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: management shows only permitted actions (admin: true)
+00:02 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: (tearDownAll)
+00:03 +11: All tests passed!

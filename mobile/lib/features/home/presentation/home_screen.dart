@@ -15,6 +15,7 @@ import '../../ranking/domain/standing_entry.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
+import '../../settings/application/home_preferences.dart';
 import 'home_session_result.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
@@ -99,7 +100,8 @@ class HomeScreen extends ConsumerWidget {
             icon: Remix.add_line,
             onPressed: () => context.push('/seances/nouvelle'),
           ),
-          _buildPlayerOfTheMonth(context, ref),
+          if (ref.watch(showPlayerOfMonthProvider).value ?? true)
+            _buildPlayerOfTheMonth(context, ref),
           const SizedBox(height: 32),
           _buildSectionHeader(context, 'Classement', '/classement'),
           const SizedBox(height: 16),

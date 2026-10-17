@@ -1,0 +1,121 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 108.0.0 (109.0.0 available)
+  analyzer 14.4.0 (14.5.0 available)
+  android_file_picker 2.0.0 (2.1.1 available)
+  archive 4.3.0 (4.5.2 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.6 (4.1.7 available)
+  build_runner 2.16.1 (2.17.1 available)
+  built_collection 5.1.1 (5.1.2 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.1.0 available)
+  code_builder 4.12.0 (4.13.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  cupertino_ui 1.1.1 (1.1.3 available)
+  dart_style 3.1.13 (3.1.14 available)
+  file_picker_darwin 2.1.2 (2.3.2 available)
+  file_picker_linux 2.0.1 (2.0.2 available)
+  file_picker_platform_interface 4.0.0 (4.2.0 available)
+  file_picker_web 4.0.0 (4.2.0 available)
+  go_router 18.0.1 (18.1.0 available)
+  google_fonts 8.2.1 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+23 (0.8.13+25 available)
+  image_picker_ios 0.8.13+8 (0.8.13+12 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.0 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.4.0 (1.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  share_plus 13.3.0 (13.3.1 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  source_gen 4.3.0 (4.3.1 available)
+  sqflite 2.4.4 (2.4.4+2 available)
+  sqflite_android 2.4.4 (2.4.4+1 available)
+  sqflite_common 2.5.13 (2.5.14 available)
+  sqflite_common_ffi 2.4.3 (2.4.4 available)
+  sqflite_darwin 2.4.4 (2.4.4+1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  synchronized 3.4.2 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  windows_file_picker 2.0.0 (2.0.1 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+52 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/home_preferences_test.dart: REF-05 visible by default, hide persists across containers
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: (setUpAll)
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:02 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:02 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:02 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:02 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:03 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:03 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:03 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:03 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:04 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:04 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-02 keep saved zero and partial contributions
+00:05 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-02 keep saved zero and partial contributions
+00:05 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-02 keep saved zero and partial contributions
+00:05 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores draft filter
+00:06 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-03 readonly never invents payments
+00:06 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-04 chooses greatest played date among closed sessions
+00:06 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-03 zero rate stays empty and existing partial stays intact
+00:06 +25: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-03 zero rate stays empty and existing partial stays intact
+00:07 +26: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-03 zero rate stays empty and existing partial stays intact
+00:07 +27: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: D01-02 restored DRAW_ALL without match scores shows three victories
+00:07 +28: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-04 initial prefill asks before discard
+00:07 +29: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-04 initial prefill asks before discard
+00:07 +30: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-04 initial prefill asks before discard
+00:07 +31: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-09 refreshed source replaces last closed session
+00:08 +32: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF01/02 shared cards, button and visible amount labels
+00:08 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+00:08 +34: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF06 search empty state and amount retained
+00:09 +35: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF08 explicit empty expenses
+00:09 +36: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF09 read only keeps values without mutation actions
+00:09 +37: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:10 +38: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF08 add and remove expense changes saved totals
+00:11 +39: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF10 cancelled point disables member money fields
+00:11 +40: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF13/14 cancel confirmation and failed save preserve input
+00:12 +41: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF11 changing rate keeps existing contribution
+00:13 +42: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +43: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:13 +44: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=true
+00:14 +45: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.3 dark=false
+00:14 +46: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.3 dark=true
+00:15 +47: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 2.0 dark=false
+00:15 +48: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 2.0 dark=true
+00:16 +49: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 1.0 dark=false
+00:16 +50: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 1.0 dark=true
+00:16 +51: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 1.3 dark=false
+00:17 +52: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 1.3 dark=true
+00:17 +53: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 2.0 dark=false
+00:18 +54: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 2.0 dark=true
+00:18 +55: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-01 clean point exits without confirmation
+00:18 +56: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:19 +57: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-03/05 system back asks before explicit discard
+00:19 +58: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-09 reverting values clears dirty state
+00:19 +59: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-14 success establishes a new clean baseline
+00:20 +60: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: (tearDownAll)
+00:20 +60: All tests passed!

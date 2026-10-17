@@ -98,3 +98,12 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 - 15 octobre 2026 : Point financier aligné sur AppCard/PrimaryButton, champs nommés et cartes de membres ; totaux défilants et onglets défilants à grand texte après défaut constaté sur téléphone.
 - 15 octobre 2026 : composition de séance avec retour à la ligne de l’ajout et en-têtes d’équipes flexibles ; arbitrage avec différences prioritaires, détails inchangés repliables et erreur de motif visible.
 - Pour leurs preuves et limites : `tdd-point-financier-design.md`, `tdd-reserves-ui-ux.md`. Pour le contrôle transversal : `verification-coherence-design-2026-10-15.md`.
+
+## Arbitrages du 17 octobre — réflexions restantes
+
+- Point financier : préparer les cotisations au tarif uniquement avant la première validation et avec permission de saisie. Consigne visible pour effacer les impayés. Le préremplissage ne vaut pas encaissement ; le formulaire demande confirmation avant abandon.
+- Accueil : visibilité du joueur du mois personnelle sur cet appareil, activée par défaut. Retirer le bloc avec son espacement supérieur, conserver les calculs et classements.
+- Clôture : dialogue défilant de félicitations seulement après succès. Nom réel du vainqueur, égalités adaptées ; confettis finis en 1,8 seconde, absents si réduction des animations. Bouton Continuer explicite.
+- Vérification : voir tdd-reflexions-2026-10-17.md ; tests de cadrage ne valent pas recette visuelle sur appareil physique.
+
+- 17 octobre 2026 : aucun réglage technique de serveur dans le parcours Groupe partagé (connexion et partage). Adresse fournie par configuration de build. Preuves : tdd-hidden-server-2026-10-17.md.

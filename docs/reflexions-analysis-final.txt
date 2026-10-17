@@ -1,0 +1,11 @@
+Analyzing 7 items...
+
+   info - Use 'late' for private members with a non-nullable type. Try making adding the modifier 'late' - lib\features\finance\presentation\financial_point_screen.dart:39:19 - use_late_for_private_fields_and_variables
+   info - Unnecessary duplication of receiver. Try using a cascade to avoid the duplication - lib\features\finance\presentation\financial_point_screen.dart:248:7 - cascade_invocations
+   info - Sort directive sections alphabetically. Try sorting the directives - lib\features\home\presentation\home_screen.dart:20:1 - directives_ordering
+   info - Sort directive sections alphabetically. Try sorting the directives - lib\features\home\presentation\home_screen.dart:23:1 - directives_ordering
+   info - 'bool' parameters should be named parameters. Try converting the parameter to a named parameter - lib\features\settings\application\home_preferences.dart:13:27 - avoid_positional_boolean_parameters
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\settings\presentation\settings_screen.dart:215:35 - curly_braces_in_flow_control_structures
+   info - Sort directive sections alphabetically. Try sorting the directives - test\features\home\latest_session_test.dart:12:1 - directives_ordering
+
+7 issues found. (ran in 8.4s)

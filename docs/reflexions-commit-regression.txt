@@ -1,0 +1,476 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/theme/contrast_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:00 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:00 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:01 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:01 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:01 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:01 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/core/widgets/app_form_dialog_test.dart: controllers remain alive through dialog dismissal (cancel: false)
+00:01 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:01 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:02 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+00:03 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +25: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +26: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +27: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +28: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +29: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +30: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +31: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:03 +32: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:03 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: REF-01 prefill the configured rate without persisting
+00:04 +34: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (true)
+00:04 +35: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:04 +36: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:04 +37: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:04 +38: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +39: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +40: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +41: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +42: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +43: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +44: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:05 +45: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+00:06 +46: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:06 +47: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:06 +48: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:06 +49: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+00:06 +50: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +51: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +52: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +53: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +54: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +55: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:06 +56: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +57: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +58: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +59: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +60: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +61: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+00:07 +62: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +63: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +64: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +65: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +66: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +67: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +68: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +69: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+00:07 +70: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF06 search empty state and amount retained
+00:07 +71: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF06 search empty state and amount retained
+00:07 +72: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF06 search empty state and amount retained
+00:08 +73: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF06 search empty state and amount retained
+00:08 +74: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +75: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +76: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +77: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +78: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +79: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +80: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +81: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +82: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +83: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +84: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +85: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:08 +86: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +87: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +88: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +89: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +90: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +91: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen renders first slide with Suivez vos matchs and Passer button
+00:09 +92: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:09 +93: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:09 +94: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:09 +95: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:09 +96: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF05 keyboard resizes form and tab preserves input
+00:09 +97: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/onboarding/onboarding_test.dart: OnboardingScreen swipes to slide 2 and slide 3 showing Commencer button
+00:09 +98: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +99: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +100: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +101: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +102: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +103: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +104: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +105: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +106: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +107: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +108: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +109: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:10 +110: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +111: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +112: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +113: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +114: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +115: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +116: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +117: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +118: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +119: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +120: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +121: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:11 +122: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:12 +123: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:12 +124: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:12 +125: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:12 +126: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:12 +127: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:12 +128: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:12 +129: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/players_screen_test.dart: PlayersScreen filters players by name and nickname
+00:13 +130: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +131: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +132: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +133: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +134: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +135: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+00:13 +136: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: (setUpAll)
+00:13 +136: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +137: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +138: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +139: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +140: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +141: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:13 +142: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF17 large text tabs and compact fixed footer
+00:14 +143: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect ADMIN
+00:14 +144: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +145: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +146: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +147: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +148: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +149: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +150: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +151: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +152: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +153: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +154: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +155: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +156: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +157: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +158: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +159: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +160: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=false
+00:14 +161: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +162: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +163: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +164: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +165: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +166: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+00:14 +167: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 320.0 1.0 dark=true
+00:15 +168: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +169: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +170: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +171: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +172: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +173: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +174: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +175: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:15 +176: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +177: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +178: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +179: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +180: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +181: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +182: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +183: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +184: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +185: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +186: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +187: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +188: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +189: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +190: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +191: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +192: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +193: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +194: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+00:16 +195: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +196: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +197: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +198: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +199: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +200: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +201: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +202: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:17 +203: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:18 +204: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+00:18 +205: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:18 +206: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:18 +207: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: PF03/04 393.0 2.0 dark=false
+00:18 +208: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_roster_editing_test.dart: Live Roster Editing Integration Tests (Chantier 3) switchPlayerTeam throws StateError if uneven teams diff exceeds 1 and allowUnevenTeams is false
+00:19 +209: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_roster_editing_test.dart: Live Roster Editing Integration Tests (Chantier 3) switchPlayerTeam throws StateError if uneven teams diff exceeds 1 and allowUnevenTeams is false
+00:19 +210: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_roster_editing_test.dart: Live Roster Editing Integration Tests (Chantier 3) switchPlayerTeam throws StateError if uneven teams diff exceeds 1 and allowUnevenTeams is false
+00:19 +211: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:19 +212: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:19 +213: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:19 +214: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-02/04 dirty point stays with values on continue
+00:20 +215: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-03/05 system back asks before explicit discard
+00:20 +216: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-03/05 system back asks before explicit discard
+00:20 +217: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/finance/financial_point_screen_test.dart: UX02-03/05 system back asks before explicit discard
+00:20 +218: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +219: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +220: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +221: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +222: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +223: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +224: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +225: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +226: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +227: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:20 +228: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:21 +229: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+00:21 +230: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/true
+00:22 +231: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.3/false
+00:22 +232: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.3/true
+00:22 +233: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/2.0/false
+00:22 +234: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:23 +235: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:23 +236: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:23 +237: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:23 +238: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:23 +239: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:24 +240: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+00:24 +241: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+00:24 +242: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:24 +243: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:24 +244: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:24 +245: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:25 +246: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +247: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +248: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +249: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +250: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +251: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +252: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +253: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +254: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +255: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +256: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +257: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +258: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +259: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +260: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +261: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+00:25 +262: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +263: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +264: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +265: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +266: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +267: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +268: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +269: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:25 +270: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:26 +271: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:26 +272: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+00:26 +273: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:26 +274: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:26 +275: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:26 +276: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +277: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +278: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +279: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +280: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +281: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:27 +282: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:28 +283: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:28 +284: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:28 +285: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:28 +286: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.0 dark=false
+00:28 +287: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.0 dark=false
+00:29 +288: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.0 dark=false
+00:29 +289: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.0 dark=false
+00:29 +290: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +291: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +292: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +293: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +294: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +295: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +296: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:30 +297: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +298: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +299: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +300: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +301: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +302: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:31 +303: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_permissions_test.dart: UX06-02 readonly active session stays labelled in progress without mutations
+00:31 +304: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_permissions_test.dart: UX06-02 readonly active session stays labelled in progress without mutations
+00:32 +305: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_permissions_test.dart: UX06-02 readonly active session stays labelled in progress without mutations
+00:32 +306: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_permissions_test.dart: UX06-02 readonly active session stays labelled in progress without mutations
+00:32 +307: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+00:32 +308: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +309: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +310: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +311: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +312: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +313: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +314: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +315: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +316: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +317: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +318: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +319: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +320: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:33 +321: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +322: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +323: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +324: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +325: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +326: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +327: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +328: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +329: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +330: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +331: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +332: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +333: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:34 +334: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +335: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +336: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +337: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +338: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +339: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +340: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +341: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +342: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +343: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +344: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:35 +345: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:36 +346: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +347: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +348: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +349: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +350: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:36 +351: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +352: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +353: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +354: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +355: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +356: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +357: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +358: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:37 +359: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +360: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +361: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +362: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +363: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +364: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:38 +365: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +366: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +367: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +368: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +369: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +370: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +371: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +372: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +373: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:39 +374: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.3 dark=false
+00:39 +375: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=1.3 dark=false
+00:40 +376: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=true
+00:40 +377: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.3 dark=true
+00:40 +378: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=1.3 dark=true
+00:40 +379: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=false
+00:40 +380: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=2.0 dark=false
+00:40 +381: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=2.0 dark=false
+00:40 +382: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=2.0 dark=false
+00:41 +383: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +384: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +385: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +386: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +387: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +388: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +389: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +390: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +391: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +392: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +393: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +394: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +395: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +396: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +397: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +398: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +399: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +400: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +401: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:41 +402: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:42 +403: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:42 +404: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:42 +405: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema
+00:42 +406: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/decision_details_test.dart: D02-04 compares with every candidate, not only the first
+00:43 +407: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: (setUpAll)
+00:43 +407: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:44 +408: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:44 +409: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:44 +410: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:44 +411: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +412: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +413: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +414: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +415: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +416: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +417: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +418: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +419: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +420: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +421: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +422: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-01/02 six identical members do not hide expense differences
+00:45 +423: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:45 +424: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:45 +425: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D03-01/02/03 reason error is visible and announced ()
+00:45 +426: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D03-01/02/03 reason error is visible and announced ()
+00:45 +427: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D03-01/02/03 reason error is visible and announced ()
+00:46 +428: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D03-01/02/03 reason error is visible and announced ()
+00:46 +429: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D03-01/02/03 reason error is visible and announced ()
+00:46 +430: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:46 +431: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:47 +432: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:47 +433: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart: CPT-06/07 individual creation requires member and responsibility
+00:48 +434: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_decisions_test.dart: D02-08/D03-05 compact dialog remains usable enlarged dark=false
+00:48 +435: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:48 +436: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +437: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +438: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +439: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +440: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +441: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +442: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:49 +443: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:50 +444: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:50 +445: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +446: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +447: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +448: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +449: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +450: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +451: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:51 +452: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:51 +453: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +454: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +455: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +456: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +457: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +458: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +459: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +460: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +461: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:52 +462: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:53 +463: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:53 +464: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:53 +465: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+00:53 +466: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:53 +467: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:54 +468: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+00:54 +469: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+00:55 +470: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/widget_test.dart: Redirects to /creer-equipe after onboarding when no team exists
+00:55 +471: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/widget_test.dart: App smoke test when onboarding and team exist
+00:56 +472: All tests passed!

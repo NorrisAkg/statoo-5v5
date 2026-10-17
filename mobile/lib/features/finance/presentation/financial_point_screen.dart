@@ -41,6 +41,8 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   String? _group;
   bool _loaded = false;
   bool _savedBefore = false;
+  bool _prefilled = false;
+  final _untouchedPrefills = <String>{};
   bool _saving = false;
   bool _cancelled = false;
   String? _baseline;
@@ -134,6 +136,26 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       _expenses.addAll(point.expenses);
       _donations.addAll(point.donations);
       _baseline = _fingerprint();
+      if (!_savedBefore &&
+          !point.cancelled &&
+          point.rate > 0 &&
+          ref.read(sharedServiceProvider).canWrite(group, 'finance')) {
+        for (final line in point.lines) {
+          if (line.contribution == 0) {
+            _contributions[line.memberId]!.text = '${point.rate}';
+            _untouchedPrefills.add(line.memberId);
+            var previousText = _contributions[line.memberId]!.text;
+            _contributions[line.memberId]!.addListener(() {
+              final text = _contributions[line.memberId]!.text;
+              if (text != previousText) {
+                _untouchedPrefills.remove(line.memberId);
+                previousText = text;
+              }
+            });
+            _prefilled = true;
+          }
+        }
+      }
       setState(() => _loaded = true);
     } on Object catch (error) {
       if (mounted) setState(() => _error = '$error');
@@ -584,7 +606,14 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
               ),
               activeTrackColor: context.colors.primary500,
               value: _cancelled,
-              onChanged: (value) => setState(() => _cancelled = value),
+              onChanged: (value) => setState(() {
+                if (value) {
+                  for (final id in _untouchedPrefills.toList()) {
+                    _contributions[id]!.clear();
+                  }
+                }
+                _cancelled = value;
+              }),
             ),
           ] else if (_cancelled)
             const Text('Séance annulée · les cotisations restent dues.'),
@@ -668,6 +697,10 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
             ),
             const SizedBox(height: 12),
             const Text('Saisissez les montants effectivement reçus.'),
+            if (_prefilled && !_savedBefore)
+              const Text(
+                'Cotisations préremplies au tarif. Effacez les montants des impayés avant de valider.',
+              ),
             const SizedBox(height: 12),
             if (list.isEmpty)
               const Padding(

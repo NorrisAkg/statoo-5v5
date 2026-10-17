@@ -38,11 +38,9 @@ class SharedGroupScreen extends ConsumerStatefulWidget {
 
 class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   bool _decisionOpen = false;
-  final _url = TextEditingController(
-    text: const String.fromEnvironment(
-      'STATOO_API',
-      defaultValue: 'https://statoo-api.onrender.com',
-    ),
+  static const _apiUrl = String.fromEnvironment(
+    'STATOO_API',
+    defaultValue: 'https://statoo-api.onrender.com',
   );
   final _group = TextEditingController();
   final _user = TextEditingController();
@@ -58,7 +56,6 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   @override
   void dispose() {
     for (final c in [
-      _url,
       _group,
       _user,
       _password,
@@ -102,7 +99,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   Future<void> _connect() async {
     final container = ProviderScope.containerOf(context, listen: false);
     final service = container.read(sharedServiceProvider);
-    final url = _url.text;
+    const url = _apiUrl;
     final username = _user.text.trim();
     final password = _password.text;
     final sharedUsername = _sharedUser.text.trim();
@@ -1190,43 +1187,6 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         ),
       ),
     ],
-    const SizedBox(height: 16),
-    AppCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ExpansionTile(
-        tilePadding: EdgeInsets.zero,
-        childrenPadding: const EdgeInsets.only(top: 12),
-        shape: const Border(),
-        collapsedShape: const Border(),
-        iconColor: context.colors.foreground400,
-        collapsedIconColor: context.colors.foreground400,
-        leading: Icon(
-          Remix.settings_3_line,
-          color: context.colors.foreground400,
-          size: 22,
-        ),
-        title: Text(
-          'Serveur',
-          style: TextStyle(
-            color: context.colors.foreground200,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        subtitle: Text(
-          'Connexion à Statoo',
-          style: TextStyle(color: context.colors.foreground400, fontSize: 12),
-        ),
-        children: [
-          _field(
-            _url,
-            'Adresse du serveur',
-            hint: 'https://…',
-            keyboardType: TextInputType.url,
-          ),
-        ],
-      ),
-    ),
     const SizedBox(height: 24),
     PrimaryButton(
       label: _busy
