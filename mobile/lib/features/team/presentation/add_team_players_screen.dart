@@ -1,10 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_step_title.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
@@ -16,7 +19,8 @@ class AddTeamPlayersScreen extends ConsumerStatefulWidget {
   final bool setupShared;
 
   @override
-  ConsumerState<AddTeamPlayersScreen> createState() => _AddTeamPlayersScreenState();
+  ConsumerState<AddTeamPlayersScreen> createState() =>
+      _AddTeamPlayersScreenState();
 }
 
 class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
@@ -39,12 +43,14 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
 
     setState(() => _isAdding = true);
     try {
-      await ref.read(playersListProvider.notifier).addPlayer(
-        name: _nameController.text.trim(),
-        nickname: _nicknameController.text.trim().isNotEmpty
-            ? _nicknameController.text.trim()
-            : null,
-      );
+      await ref
+          .read(playersListProvider.notifier)
+          .addPlayer(
+            name: _nameController.text.trim(),
+            nickname: _nicknameController.text.trim().isNotEmpty
+                ? _nicknameController.text.trim()
+                : null,
+          );
 
       _nameController.clear();
       _nicknameController.clear();
@@ -73,7 +79,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         ),
       ),
     );
-    context.go(widget.setupShared ? '/groupe-partage?creation=1&installation=1' : '/');
+    context.go(
+      widget.setupShared ? '/groupe-partage?creation=1&installation=1' : '/',
+    );
   }
 
   @override
@@ -81,6 +89,16 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
     final teamAsync = ref.watch(teamInfoProvider);
     final playersAsync = ref.watch(playersListProvider);
     final teamName = teamAsync.value?.name ?? 'Mon Équipe';
+    final scrollAction =
+        MediaQuery.viewInsetsOf(context).bottom > 0 ||
+        MediaQuery.textScalerOf(context).scale(16) > 20;
+
+    final stepTitle = buildAppStepTitle(
+      context,
+      'Étape 2 sur 2 · Effectif',
+      hasLeading: Navigator.of(context).canPop(),
+      actionLabel: 'Passer',
+    );
 
     return Scaffold(
       backgroundColor: context.colors.background950,
@@ -88,7 +106,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         backgroundColor: Colors.transparent,
         foregroundColor: context.colors.foreground50,
         iconTheme: IconThemeData(color: context.colors.foreground50),
-        systemOverlayStyle: AppTheme.pageOverlayStyle(Theme.of(context).brightness),
+        systemOverlayStyle: AppTheme.pageOverlayStyle(
+          Theme.of(context).brightness,
+        ),
         elevation: 0,
         leading: Navigator.of(context).canPop()
             ? IconButton(
@@ -97,24 +117,8 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
               )
             : null,
         centerTitle: true,
-        title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: context.colors.primary500.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(9999),
-            border: Border.all(
-              color: context.colors.primary500.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Text(
-            'Étape 2 sur 2 · Effectif',
-            style: TextStyle(
-              color: context.colors.primary400,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        title: stepTitle,
+        toolbarHeight: stepTitle.preferredSize.height,
         actions: [
           TextButton(
             onPressed: _finish,
@@ -134,30 +138,44 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Team Chip Badge
                     Center(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: context.colors.background900,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: context.colors.background700),
+                          border: Border.all(
+                            color: context.colors.background700,
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Remix.shield_star_line, size: 18, color: context.colors.primary400),
+                            Icon(
+                              Remix.shield_star_line,
+                              size: 18,
+                              color: context.colors.primary400,
+                            ),
                             const SizedBox(width: 8),
-                            Text(
-                              teamName,
-                              style: TextStyle(
-                                color: context.colors.foreground100,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                            Flexible(
+                              child: Text(
+                                teamName,
+                                style: TextStyle(
+                                  color: context.colors.foreground100,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
@@ -219,10 +237,15 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                               focusNode: _nameFocusNode,
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.next,
-                              style: TextStyle(color: context.colors.foreground50),
+                              style: TextStyle(
+                                color: context.colors.foreground50,
+                              ),
                               decoration: InputDecoration(
-                                hintText: 'Nom ou prénom (ex: Lucas, Karim...) *',
-                                hintStyle: TextStyle(color: context.colors.foreground600),
+                                hintText:
+                                    'Nom ou prénom (ex: Lucas, Karim...) *',
+                                hintStyle: TextStyle(
+                                  color: context.colors.foreground600,
+                                ),
                                 prefixIcon: Icon(
                                   Remix.user_3_line,
                                   color: context.colors.primary400,
@@ -230,18 +253,28 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                 ),
                                 filled: true,
                                 fillColor: context.colors.background800,
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 14,
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.background700),
+                                  borderSide: BorderSide(
+                                    color: context.colors.background700,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.background700),
+                                  borderSide: BorderSide(
+                                    color: context.colors.background700,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.primary500, width: 2),
+                                  borderSide: BorderSide(
+                                    color: context.colors.primary500,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                               validator: (value) {
@@ -261,10 +294,14 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                   unawaited(_addPlayer());
                                 }
                               },
-                              style: TextStyle(color: context.colors.foreground50),
+                              style: TextStyle(
+                                color: context.colors.foreground50,
+                              ),
                               decoration: InputDecoration(
                                 hintText: 'Surnom (facultatif, ex: Lulu)',
-                                hintStyle: TextStyle(color: context.colors.foreground600),
+                                hintStyle: TextStyle(
+                                  color: context.colors.foreground600,
+                                ),
                                 prefixIcon: Icon(
                                   Remix.at_line,
                                   color: context.colors.foreground500,
@@ -272,18 +309,28 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                 ),
                                 filled: true,
                                 fillColor: context.colors.background800,
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 14,
+                                ),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.background700),
+                                  borderSide: BorderSide(
+                                    color: context.colors.background700,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.background700),
+                                  borderSide: BorderSide(
+                                    color: context.colors.background700,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: context.colors.primary500, width: 2),
+                                  borderSide: BorderSide(
+                                    color: context.colors.primary500,
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -296,12 +343,16 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                     icon: const Icon(Remix.add_line, size: 18),
                                     label: const Text('Ajouter ce joueur'),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: context.colors.primary500,
-                                      foregroundColor: context.colors.background950,
+                                      backgroundColor:
+                                          context.colors.primary500,
+                                      foregroundColor:
+                                          context.colors.background950,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 14,
+                                      ),
                                       elevation: 0,
                                     ),
                                   ),
@@ -317,7 +368,8 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                       context: context,
                                       isScrollControlled: true,
                                       backgroundColor: Colors.transparent,
-                                      builder: (context) => const NewPlayerBottomSheet(),
+                                      builder: (context) =>
+                                          const NewPlayerBottomSheet(),
                                     ).then((_) {
                                       ref.invalidate(playersListProvider);
                                     }),
@@ -368,7 +420,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                   ),
                                 ),
                                 Text(
-                                  count >= 10 ? 'Effectif complet (10+)' : 'Objectif : 10 joueurs',
+                                  count >= 10
+                                      ? 'Effectif complet (10+)'
+                                      : 'Objectif : 10 joueurs',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
@@ -401,7 +455,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                 decoration: BoxDecoration(
                                   color: context.colors.background900,
                                   borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: context.colors.background700),
+                                  border: Border.all(
+                                    color: context.colors.background700,
+                                  ),
                                 ),
                                 child: Column(
                                   children: [
@@ -426,7 +482,8 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: players.length,
-                                separatorBuilder: (_, _) => const SizedBox(height: 8),
+                                separatorBuilder: (_, _) =>
+                                    const SizedBox(height: 8),
                                 itemBuilder: (context, index) {
                                   final player = players[index];
                                   final initial = player.name.isNotEmpty
@@ -441,7 +498,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                     decoration: BoxDecoration(
                                       color: context.colors.background900,
                                       borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(color: context.colors.background700),
+                                      border: Border.all(
+                                        color: context.colors.background700,
+                                      ),
                                     ),
                                     child: Row(
                                       children: [
@@ -453,7 +512,8 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                         const SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 player.name,
@@ -467,7 +527,9 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                                 Text(
                                                   '« ${player.nickname} »',
                                                   style: TextStyle(
-                                                    color: context.colors.foreground500,
+                                                    color: context
+                                                        .colors
+                                                        .foreground500,
                                                     fontSize: 12,
                                                   ),
                                                 ),
@@ -483,7 +545,10 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                           onPressed: () {
                                             unawaited(
                                               ref
-                                                  .read(playersListProvider.notifier)
+                                                  .read(
+                                                    playersListProvider
+                                                        .notifier,
+                                                  )
                                                   .removePlayer(player.id),
                                             );
                                           },
@@ -497,35 +562,47 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                         );
                       },
                       loading: () => Center(
-                        child: CircularProgressIndicator(color: context.colors.primary500),
+                        child: CircularProgressIndicator(
+                          color: context.colors.primary500,
+                        ),
                       ),
                       error: (_, _) => const SizedBox.shrink(),
                     ),
                     const SizedBox(height: 24),
+                    if (scrollAction)
+                      _buildFinishButton(context, inContent: true),
                   ],
                 ),
               ),
             ),
 
             // Bottom CTA
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              decoration: BoxDecoration(
-                color: context.colors.background950,
-                border: Border(top: BorderSide(color: context.colors.background800)),
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: PrimaryButton(
-                  label: widget.setupShared ? 'Continuer vers l’accès Admin' : "Terminer et aller à l'Accueil",
-                  icon: Remix.arrow_right_line,
-                  onPressed: _finish,
-                ),
-              ),
-            ),
+            if (!scrollAction) _buildFinishButton(context),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildFinishButton(BuildContext context, {bool inContent = false}) =>
+      Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: inContent ? 0 : 24,
+          vertical: 16,
+        ),
+        decoration: BoxDecoration(
+          color: context.colors.background950,
+          border: Border(top: BorderSide(color: context.colors.background800)),
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: PrimaryButton(
+            label: widget.setupShared
+                ? 'Continuer vers l’accès Admin'
+                : "Terminer et aller à l'Accueil",
+            icon: Remix.arrow_right_line,
+            onPressed: _finish,
+          ),
+        ),
+      );
 }

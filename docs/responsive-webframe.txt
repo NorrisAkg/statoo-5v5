@@ -1,0 +1,290 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 108.0.0 (109.0.0 available)
+  analyzer 14.4.0 (14.5.0 available)
+  android_file_picker 2.0.0 (2.1.1 available)
+  archive 4.3.0 (4.5.2 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.6 (4.1.7 available)
+  build_runner 2.16.1 (2.17.1 available)
+  built_collection 5.1.1 (5.1.2 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.1.0 available)
+  code_builder 4.12.0 (4.13.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  cupertino_ui 1.1.1 (1.1.3 available)
+  dart_style 3.1.13 (3.1.14 available)
+  file_picker_darwin 2.1.2 (2.3.2 available)
+  file_picker_linux 2.0.1 (2.0.2 available)
+  file_picker_platform_interface 4.0.0 (4.2.0 available)
+  file_picker_web 4.0.0 (4.2.0 available)
+  go_router 18.0.1 (18.1.0 available)
+  google_fonts 8.2.1 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+23 (0.8.13+25 available)
+  image_picker_ios 0.8.13+8 (0.8.13+12 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.0 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.4.0 (1.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  share_plus 13.3.0 (13.3.1 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.28 (2.5.0 available)
+  source_gen 4.3.0 (4.3.1 available)
+  sqflite 2.4.4 (2.4.4+2 available)
+  sqflite_android 2.4.4 (2.4.4+1 available)
+  sqflite_common 2.5.13 (2.5.14 available)
+  sqflite_common_ffi 2.4.3 (2.4.4 available)
+  sqflite_darwin 2.4.4 (2.4.4+1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  synchronized 3.4.2 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  windows_file_picker 2.0.0 (2.0.1 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+53 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: RSP button width=320.0 scale=1.0 dark=false keyboard=0.0
+00:00 +1: RSP create width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +2: RSP create width=320.0 scale=1.0 dark=false keyboard=300.0
+00:01 +3: RSP home width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +4: RSP home-rich width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +5: RSP active width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +6: RSP players width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +7: RSP entry width=320.0 scale=1.0 dark=false keyboard=0.0
+00:01 +8: RSP members width=320.0 scale=1.0 dark=false keyboard=0.0
+00:02 +9: RSP members width=320.0 scale=1.0 dark=false keyboard=300.0
+00:02 +10: RSP sessions width=320.0 scale=1.0 dark=false keyboard=0.0
+00:02 +11: RSP ranking width=320.0 scale=1.0 dark=false keyboard=0.0
+00:02 +12: RSP stats width=320.0 scale=1.0 dark=false keyboard=0.0
+00:02 +13: RSP stats-rich width=320.0 scale=1.0 dark=false keyboard=0.0
+00:02 +14: RSP settings width=320.0 scale=1.0 dark=false keyboard=0.0
+00:03 +15: RSP shared width=320.0 scale=1.0 dark=false keyboard=0.0
+00:03 +16: RSP shared width=320.0 scale=1.0 dark=false keyboard=300.0
+00:03 +17: RSP new-session width=320.0 scale=1.0 dark=false keyboard=0.0
+00:03 +18: RSP new-session width=320.0 scale=1.0 dark=false keyboard=300.0
+00:03 +19: RSP button width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +20: RSP create width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +21: RSP create width=320.0 scale=1.0 dark=true keyboard=300.0
+00:03 +22: RSP home width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +23: RSP home-rich width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +24: RSP active width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +25: RSP players width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +26: RSP entry width=320.0 scale=1.0 dark=true keyboard=0.0
+00:03 +27: RSP members width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +28: RSP members width=320.0 scale=1.0 dark=true keyboard=300.0
+00:04 +29: RSP sessions width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +30: RSP ranking width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +31: RSP stats width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +32: RSP stats-rich width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +33: RSP settings width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +34: RSP shared width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +35: RSP shared width=320.0 scale=1.0 dark=true keyboard=300.0
+00:04 +36: RSP new-session width=320.0 scale=1.0 dark=true keyboard=0.0
+00:04 +37: RSP new-session width=320.0 scale=1.0 dark=true keyboard=300.0
+00:04 +38: RSP button width=320.0 scale=1.3 dark=false keyboard=0.0
+00:04 +39: RSP create width=320.0 scale=1.3 dark=false keyboard=0.0
+00:04 +40: RSP create width=320.0 scale=1.3 dark=false keyboard=300.0
+00:04 +41: RSP home width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +42: RSP home-rich width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +43: RSP active width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +44: RSP players width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +45: RSP entry width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +46: RSP members width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +47: RSP members width=320.0 scale=1.3 dark=false keyboard=300.0
+00:05 +48: RSP sessions width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +49: RSP ranking width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +50: RSP stats width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +51: RSP stats-rich width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +52: RSP settings width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +53: RSP shared width=320.0 scale=1.3 dark=false keyboard=0.0
+00:05 +54: RSP shared width=320.0 scale=1.3 dark=false keyboard=300.0
+00:06 +55: RSP new-session width=320.0 scale=1.3 dark=false keyboard=0.0
+00:06 +56: RSP new-session width=320.0 scale=1.3 dark=false keyboard=300.0
+00:06 +57: RSP button width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +58: RSP create width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +59: RSP create width=320.0 scale=1.3 dark=true keyboard=300.0
+00:06 +60: RSP home width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +61: RSP home-rich width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +62: RSP active width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +63: RSP players width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +64: RSP entry width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +65: RSP members width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +66: RSP members width=320.0 scale=1.3 dark=true keyboard=300.0
+00:06 +67: RSP sessions width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +68: RSP ranking width=320.0 scale=1.3 dark=true keyboard=0.0
+00:06 +69: RSP stats width=320.0 scale=1.3 dark=true keyboard=0.0
+00:07 +70: RSP stats-rich width=320.0 scale=1.3 dark=true keyboard=0.0
+00:07 +71: RSP settings width=320.0 scale=1.3 dark=true keyboard=0.0
+00:07 +72: RSP shared width=320.0 scale=1.3 dark=true keyboard=0.0
+00:07 +73: RSP shared width=320.0 scale=1.3 dark=true keyboard=300.0
+00:07 +74: RSP new-session width=320.0 scale=1.3 dark=true keyboard=0.0
+00:07 +75: RSP new-session width=320.0 scale=1.3 dark=true keyboard=300.0
+00:07 +76: RSP button width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +77: RSP create width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +78: RSP create width=320.0 scale=2.0 dark=false keyboard=300.0
+00:07 +79: RSP home width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +80: RSP home-rich width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +81: RSP active width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +82: RSP players width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +83: RSP entry width=320.0 scale=2.0 dark=false keyboard=0.0
+00:07 +84: RSP members width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +85: RSP members width=320.0 scale=2.0 dark=false keyboard=300.0
+00:08 +86: RSP sessions width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +87: RSP ranking width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +88: RSP stats width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +89: RSP stats-rich width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +90: RSP settings width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +91: RSP shared width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +92: RSP shared width=320.0 scale=2.0 dark=false keyboard=300.0
+00:08 +93: RSP new-session width=320.0 scale=2.0 dark=false keyboard=0.0
+00:08 +94: RSP new-session width=320.0 scale=2.0 dark=false keyboard=300.0
+00:08 +95: RSP button width=320.0 scale=2.0 dark=true keyboard=0.0
+00:08 +96: RSP create width=320.0 scale=2.0 dark=true keyboard=0.0
+00:08 +97: RSP create width=320.0 scale=2.0 dark=true keyboard=300.0
+00:08 +98: RSP home width=320.0 scale=2.0 dark=true keyboard=0.0
+00:08 +99: RSP home-rich width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +100: RSP active width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +101: RSP players width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +102: RSP entry width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +103: RSP members width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +104: RSP members width=320.0 scale=2.0 dark=true keyboard=300.0
+00:09 +105: RSP sessions width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +106: RSP ranking width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +107: RSP stats width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +108: RSP stats-rich width=320.0 scale=2.0 dark=true keyboard=0.0
+00:09 +109: RSP settings width=320.0 scale=2.0 dark=true keyboard=0.0
+00:10 +110: RSP shared width=320.0 scale=2.0 dark=true keyboard=0.0
+00:10 +111: RSP shared width=320.0 scale=2.0 dark=true keyboard=300.0
+00:10 +112: RSP new-session width=320.0 scale=2.0 dark=true keyboard=0.0
+00:10 +113: RSP new-session width=320.0 scale=2.0 dark=true keyboard=300.0
+00:10 +114: RSP button width=393.0 scale=1.0 dark=false keyboard=0.0
+00:10 +115: RSP create width=393.0 scale=1.0 dark=false keyboard=0.0
+00:10 +116: RSP create width=393.0 scale=1.0 dark=false keyboard=300.0
+00:10 +117: RSP home width=393.0 scale=1.0 dark=false keyboard=0.0
+00:10 +118: RSP home-rich width=393.0 scale=1.0 dark=false keyboard=0.0
+00:10 +119: RSP active width=393.0 scale=1.0 dark=false keyboard=0.0
+00:10 +120: RSP players width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +121: RSP entry width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +122: RSP members width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +123: RSP members width=393.0 scale=1.0 dark=false keyboard=300.0
+00:11 +124: RSP sessions width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +125: RSP ranking width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +126: RSP stats width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +127: RSP stats-rich width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +128: RSP settings width=393.0 scale=1.0 dark=false keyboard=0.0
+00:11 +129: RSP shared width=393.0 scale=1.0 dark=false keyboard=0.0
+00:12 +130: RSP shared width=393.0 scale=1.0 dark=false keyboard=300.0
+00:12 +131: RSP new-session width=393.0 scale=1.0 dark=false keyboard=0.0
+00:12 +132: RSP new-session width=393.0 scale=1.0 dark=false keyboard=300.0
+00:12 +133: RSP button width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +134: RSP create width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +135: RSP create width=393.0 scale=1.0 dark=true keyboard=300.0
+00:12 +136: RSP home width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +137: RSP home-rich width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +138: RSP active width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +139: RSP players width=393.0 scale=1.0 dark=true keyboard=0.0
+00:12 +140: RSP entry width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +141: RSP members width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +142: RSP members width=393.0 scale=1.0 dark=true keyboard=300.0
+00:13 +143: RSP sessions width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +144: RSP ranking width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +145: RSP stats width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +146: RSP stats-rich width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +147: RSP settings width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +148: RSP shared width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +149: RSP shared width=393.0 scale=1.0 dark=true keyboard=300.0
+00:13 +150: RSP new-session width=393.0 scale=1.0 dark=true keyboard=0.0
+00:13 +151: RSP new-session width=393.0 scale=1.0 dark=true keyboard=300.0
+00:13 +152: RSP button width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +153: RSP create width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +154: RSP create width=393.0 scale=1.3 dark=false keyboard=300.0
+00:14 +155: RSP home width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +156: RSP home-rich width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +157: RSP active width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +158: RSP players width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +159: RSP entry width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +160: RSP members width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +161: RSP members width=393.0 scale=1.3 dark=false keyboard=300.0
+00:14 +162: RSP sessions width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +163: RSP ranking width=393.0 scale=1.3 dark=false keyboard=0.0
+00:14 +164: RSP stats width=393.0 scale=1.3 dark=false keyboard=0.0
+00:15 +165: RSP stats-rich width=393.0 scale=1.3 dark=false keyboard=0.0
+00:15 +166: RSP settings width=393.0 scale=1.3 dark=false keyboard=0.0
+00:15 +167: RSP shared width=393.0 scale=1.3 dark=false keyboard=0.0
+00:15 +168: RSP shared width=393.0 scale=1.3 dark=false keyboard=300.0
+00:15 +169: RSP new-session width=393.0 scale=1.3 dark=false keyboard=0.0
+00:15 +170: RSP new-session width=393.0 scale=1.3 dark=false keyboard=300.0
+00:15 +171: RSP button width=393.0 scale=1.3 dark=true keyboard=0.0
+00:15 +172: RSP create width=393.0 scale=1.3 dark=true keyboard=0.0
+00:15 +173: RSP create width=393.0 scale=1.3 dark=true keyboard=300.0
+00:15 +174: RSP home width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +175: RSP home-rich width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +176: RSP active width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +177: RSP players width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +178: RSP entry width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +179: RSP members width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +180: RSP members width=393.0 scale=1.3 dark=true keyboard=300.0
+00:16 +181: RSP sessions width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +182: RSP ranking width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +183: RSP stats width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +184: RSP stats-rich width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +185: RSP settings width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +186: RSP shared width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +187: RSP shared width=393.0 scale=1.3 dark=true keyboard=300.0
+00:16 +188: RSP new-session width=393.0 scale=1.3 dark=true keyboard=0.0
+00:16 +189: RSP new-session width=393.0 scale=1.3 dark=true keyboard=300.0
+00:16 +190: RSP button width=393.0 scale=2.0 dark=false keyboard=0.0
+00:16 +191: RSP create width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +192: RSP create width=393.0 scale=2.0 dark=false keyboard=300.0
+00:17 +193: RSP home width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +194: RSP home-rich width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +195: RSP active width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +196: RSP players width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +197: RSP entry width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +198: RSP members width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +199: RSP members width=393.0 scale=2.0 dark=false keyboard=300.0
+00:17 +200: RSP sessions width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +201: RSP ranking width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +202: RSP stats width=393.0 scale=2.0 dark=false keyboard=0.0
+00:17 +203: RSP stats-rich width=393.0 scale=2.0 dark=false keyboard=0.0
+00:18 +204: RSP settings width=393.0 scale=2.0 dark=false keyboard=0.0
+00:18 +205: RSP shared width=393.0 scale=2.0 dark=false keyboard=0.0
+00:18 +206: RSP shared width=393.0 scale=2.0 dark=false keyboard=300.0
+00:18 +207: RSP new-session width=393.0 scale=2.0 dark=false keyboard=0.0
+00:18 +208: RSP new-session width=393.0 scale=2.0 dark=false keyboard=300.0
+00:18 +209: RSP button width=393.0 scale=2.0 dark=true keyboard=0.0
+00:18 +210: RSP create width=393.0 scale=2.0 dark=true keyboard=0.0
+00:18 +211: RSP create width=393.0 scale=2.0 dark=true keyboard=300.0
+00:18 +212: RSP home width=393.0 scale=2.0 dark=true keyboard=0.0
+00:18 +213: RSP home-rich width=393.0 scale=2.0 dark=true keyboard=0.0
+00:18 +214: RSP active width=393.0 scale=2.0 dark=true keyboard=0.0
+00:18 +215: RSP players width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +216: RSP entry width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +217: RSP members width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +218: RSP members width=393.0 scale=2.0 dark=true keyboard=300.0
+00:19 +219: RSP sessions width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +220: RSP ranking width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +221: RSP stats width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +222: RSP stats-rich width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +223: RSP settings width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +224: RSP shared width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +225: RSP shared width=393.0 scale=2.0 dark=true keyboard=300.0
+00:19 +226: RSP new-session width=393.0 scale=2.0 dark=true keyboard=0.0
+00:19 +227: RSP new-session width=393.0 scale=2.0 dark=true keyboard=300.0
+00:19 +228: (tearDownAll)
+00:19 +228: All tests passed!

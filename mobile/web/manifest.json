@@ -1,1 +1,27 @@
-{"name":"Statoo","short_name":"Statoo","start_url":".","display":"standalone","background_color":"#0b0f14","theme_color":"#15803d","description":"Le foot entre amis, les comptes au clair.","orientation":"portrait-primary","lang":"fr"}
+{
+  "name": "Statoo",
+  "short_name": "Statoo",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#15803d",
+  "description": "Le foot entre amis, les comptes au clair.",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

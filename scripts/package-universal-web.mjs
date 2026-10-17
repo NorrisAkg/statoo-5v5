@@ -48,7 +48,7 @@ export function packageUniversal({
 const ROOT=self.registration.scope;
 const FILES=${JSON.stringify(files)};
 const ALLOWED=new Set(FILES.map(f=>new URL(f,ROOT).href));
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([...ALLOWED]))));
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([...ALLOWED].map(url=>new Request(url,{cache:'reload'}))))));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k.startsWith('statoo-universal:')&&k!==CACHE)await caches.delete(k);await self.clients.claim();})()));
 self.addEventListener('message',e=>{if(e.data?.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||r.headers.has('Authorization'))return;const u=new URL(r.url);if(r.mode==='navigate'&&u.href===ROOT){e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',ROOT).href)));return;}if(!ALLOWED.has(u.href))return;e.respondWith(caches.open(CACHE).then(async c=>(await c.match(r))||fetch(r)));});

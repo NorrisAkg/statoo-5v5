@@ -1,0 +1,309 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 108.0.0 (109.0.0 available)
+  analyzer 14.4.0 (14.5.0 available)
+  android_file_picker 2.0.0 (2.1.1 available)
+  archive 4.3.0 (4.5.2 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.6 (4.1.7 available)
+  build_runner 2.16.1 (2.17.1 available)
+  built_collection 5.1.1 (5.1.2 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.1.0 available)
+  code_builder 4.12.0 (4.13.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  cupertino_ui 1.1.1 (1.1.3 available)
+  dart_style 3.1.13 (3.1.14 available)
+  file_picker_darwin 2.1.2 (2.3.2 available)
+  file_picker_linux 2.0.1 (2.0.2 available)
+  file_picker_platform_interface 4.0.0 (4.2.0 available)
+  file_picker_web 4.0.0 (4.2.0 available)
+  go_router 18.0.1 (18.1.0 available)
+  google_fonts 8.2.1 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+23 (0.8.13+25 available)
+  image_picker_ios 0.8.13+8 (0.8.13+12 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.0 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.4.0 (1.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  share_plus 13.3.0 (13.3.1 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.28 (2.5.0 available)
+  source_gen 4.3.0 (4.3.1 available)
+  sqflite 2.4.4 (2.4.4+2 available)
+  sqflite_android 2.4.4 (2.4.4+1 available)
+  sqflite_common 2.5.13 (2.5.14 available)
+  sqflite_common_ffi 2.4.3 (2.4.4 available)
+  sqflite_darwin 2.4.4 (2.4.4+1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  synchronized 3.4.2 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  windows_file_picker 2.0.0 (2.0.1 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+53 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: RSP button width=320.0 scale=2.0 dark=false
+00:00 +1: RSP create width=320.0 scale=2.0 dark=false
+00:00 +2: RSP home width=320.0 scale=2.0 dark=false
+00:01 +3: RSP active width=320.0 scale=2.0 dark=false
+00:01 +4: RSP players width=320.0 scale=2.0 dark=false
+══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 44 pixels on the bottom.
+
+The relevant error-causing widget was:
+  AppBar
+  AppBar:file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/lib/features/players/presentation/players_screen.dart:62:15
+
+The overflowing RenderFlex has an orientation of Axis.vertical.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
+black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the
+RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be
+seen. If the content is legitimately bigger than the available space, consider clipping it with a
+ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex,
+like a ListView.
+The specific RenderFlex in question is: RenderFlex#14530 relayoutBoundary=up9 OVERFLOWING:
+  creator: Column ← MediaQuery ← Padding ← SafeArea ← Align ← Semantics ← DefaultTextStyle ←
+    AnimatedDefaultTextStyle ← _InkFeatures-[GlobalKey#ade41 ink renderer] ←
+    NotificationListener<LayoutChangedNotification> ← PhysicalModel ← AnimatedPhysicalModel ← ⋯
+  parentData: offset=Offset(0.0, 0.0) (can use size)
+  constraints: BoxConstraints(0.0<=w<=320.0, 0.0<=h<=76.0)
+  size: Size(320.0, 76.0)
+  direction: vertical
+  mainAxisAlignment: spaceBetween
+  mainAxisSize: max
+  crossAxisAlignment: center
+  verticalDirection: down
+  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 44 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP players width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 44 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP players width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +4 -1: RSP players width=320.0 scale=2.0 dark=false [E]
+  Test failed. See exception logs above.
+  The test description was: RSP players width=320.0 scale=2.0 dark=false
+
+00:01 +4 -1: RSP entry width=320.0 scale=2.0 dark=false
+00:01 +5 -1: RSP members width=320.0 scale=2.0 dark=false
+00:01 +6 -1: RSP sessions width=320.0 scale=2.0 dark=false
+══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 40 pixels on the bottom.
+
+The relevant error-causing widget was:
+  AppBar
+  AppBar:file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/lib/features/sessions/presentation/sessions_screen.dart:38:15
+
+The overflowing RenderFlex has an orientation of Axis.vertical.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
+black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the
+RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be
+seen. If the content is legitimately bigger than the available space, consider clipping it with a
+ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex,
+like a ListView.
+The specific RenderFlex in question is: RenderFlex#366c3 relayoutBoundary=up9 OVERFLOWING:
+  creator: Column ← MediaQuery ← Padding ← SafeArea ← Align ← Semantics ← DefaultTextStyle ←
+    AnimatedDefaultTextStyle ← _InkFeatures-[GlobalKey#8c576 ink renderer] ←
+    NotificationListener<LayoutChangedNotification> ← PhysicalModel ← AnimatedPhysicalModel ← ⋯
+  parentData: offset=Offset(0.0, 0.0) (can use size)
+  constraints: BoxConstraints(0.0<=w<=320.0, 0.0<=h<=80.0)
+  size: Size(320.0, 80.0)
+  direction: vertical
+  mainAxisAlignment: spaceBetween
+  mainAxisSize: max
+  crossAxisAlignment: center
+  verticalDirection: down
+  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 40 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP sessions width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 40 pixels on the bottom.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP sessions width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +6 -2: RSP sessions width=320.0 scale=2.0 dark=false [E]
+  Test failed. See exception logs above.
+  The test description was: RSP sessions width=320.0 scale=2.0 dark=false
+
+00:01 +6 -2: RSP ranking width=320.0 scale=2.0 dark=false
+00:01 +7 -2: RSP stats width=320.0 scale=2.0 dark=false
+══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 15 pixels on the right.
+
+The relevant error-causing widget was:
+  Row
+  Row:file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/lib/features/stats/presentation/stats_screen.dart:63:12
+
+The overflowing RenderFlex has an orientation of Axis.horizontal.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
+black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the
+RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be
+seen. If the content is legitimately bigger than the available space, consider clipping it with a
+ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex,
+like a ListView.
+The specific RenderFlex in question is: RenderFlex#bc6c3 relayoutBoundary=up5 OVERFLOWING:
+  creator: Row ← RepaintBoundary ← IndexedSemantics ← _SelectionKeepAlive ←
+    NotificationListener<KeepAliveNotification> ← KeepAlive ← AutomaticKeepAlive ← KeyedSubtree ←
+    SliverList ← SliverPadding ← Viewport ← IgnorePointer-[GlobalKey#04e87] ← ⋯
+  parentData: <none> (can use size)
+  constraints: BoxConstraints(w=288.0, 0.0<=h<=Infinity)
+  size: Size(288.0, 34.0)
+  direction: horizontal
+  mainAxisAlignment: start
+  mainAxisSize: max
+  crossAxisAlignment: center
+  textDirection: ltr
+  verticalDirection: down
+  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 15 pixels on the right.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP stats width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<A RenderFlex overflowed by 15 pixels on the right.>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart:74:2)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/design/small_screen_responsive_test.dart line 74
+The test description was:
+  RSP stats width=320.0 scale=2.0 dark=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +7 -3: RSP stats width=320.0 scale=2.0 dark=false [E]
+  Test failed. See exception logs above.
+  The test description was: RSP stats width=320.0 scale=2.0 dark=false
+
+00:01 +7 -3: RSP settings width=320.0 scale=2.0 dark=false
+00:02 +8 -3: RSP shared width=320.0 scale=2.0 dark=false
+00:02 +9 -3: RSP new-session width=320.0 scale=2.0 dark=false
+00:02 +10 -3: (tearDownAll)
+00:02 +10 -3: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=2.0 dark=false
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=2.0 dark=false
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=2.0 dark=false

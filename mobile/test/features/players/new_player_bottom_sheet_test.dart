@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:statoo/features/shared/application/shared_providers.dart';
-import '../../support/local_shared_service.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statoo/core/theme/app_theme.dart';
@@ -11,7 +9,10 @@ import 'package:statoo/features/players/data/players_repository.dart';
 import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/players/domain/player_detail_data.dart';
 import 'package:statoo/features/players/presentation/new_player_bottom_sheet.dart';
+import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
+
+import '../../support/local_shared_service.dart';
 
 class _MockPlayersRepository implements PlayersRepository {
   final List<Player> _players = [];
@@ -22,15 +23,22 @@ class _MockPlayersRepository implements PlayersRepository {
 
   @override
   Future<Player?> getPlayer(String id, {required String teamId}) async =>
-      _players.cast<Player?>().firstWhere((p) => p?.id == id, orElse: () => null);
+      _players.cast<Player?>().firstWhere(
+        (p) => p?.id == id,
+        orElse: () => null,
+      );
 
   @override
-  Future<PlayerDetailStats> getPlayerStats(String id, {required String teamId}) async =>
-      const PlayerDetailStats.empty();
+  Future<PlayerDetailStats> getPlayerStats(
+    String id, {
+    required String teamId,
+  }) async => const PlayerDetailStats.empty();
 
   @override
-  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(String id, {required String teamId}) async =>
-      const [];
+  Future<List<PlayerMatchHistoryItem>> getPlayerMatchHistory(
+    String id, {
+    required String teamId,
+  }) async => const [];
 
   @override
   Future<Player> createPlayer({
@@ -69,7 +77,8 @@ class _MockPlayersRepository implements PlayersRepository {
   }) async {}
 
   @override
-  Future<bool> canDeletePlayer(String id, {required String teamId}) async => true;
+  Future<bool> canDeletePlayer(String id, {required String teamId}) async =>
+      true;
 
   @override
   Future<Set<String>> getDeletablePlayerIds({required String teamId}) async =>
@@ -102,80 +111,187 @@ void main() {
   });
 
   group('NewPlayerBottomSheet', () {
-    testWidgets('refocuses name field after creating player with createAnother button', (tester) async {
-      final repo = _MockPlayersRepository();
+    for (final width in [320.0, 393.0]) {
+      for (final scale in [1.0, 1.3, 2.0]) {
+        for (final dark in [false, true]) {
+          testWidgets(
+            'keyboard actions reachable $width text $scale dark $dark',
+            (tester) async {
+              tester.view.physicalSize = Size(width, 844);
+              tester.view.devicePixelRatio = 1;
+              tester.view.viewInsets = const FakeViewPadding(bottom: 350);
+              addTearDown(tester.view.reset);
+              await tester.pumpWidget(
+                ProviderScope(
+                  overrides: [
+                    sharedServiceProvider.overrideWithValue(
+                      LocalTestSharedService(),
+                    ),
+                  ],
+                  child: MaterialApp(
+                    theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
+                    builder: (context, child) => MediaQuery(
+                      data: MediaQuery.of(context)
+                          .copyWith(textScaler: TextScaler.linear(scale)),
+                      child: child!,
+                    ),
+                    home: const Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: NewPlayerBottomSheet(),
+                    ),
+                  ),
+                ),
+              );
+              await tester.pumpAndSettle();
+              await tester.enterText(
+                find.byType(TextField).first,
+                'Jean-Pierre Karim très long',
+              );
+              await tester.pumpAndSettle();
+              await tester.ensureVisible(find.text('Créer'));
+              await tester.pumpAndSettle();
+              expect(find.text('Créer').hitTestable(), findsOneWidget);
+              expect(tester.takeException(), isNull);
+            },
+          );
+        }
+      }
+    }
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
-            playersRepositoryProvider.overrideWithValue(repo),
-            activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
-          ],
-          child: MaterialApp(
-            theme: AppTheme.darkTheme,
-            home: const Scaffold(
-              body: NewPlayerBottomSheet(),
+    testWidgets(
+      'keyboard keeps creation controls visible and can be dismissed without losing input',
+      (tester) async {
+        tester.view.physicalSize = const Size(390, 844);
+        tester.view.devicePixelRatio = 1;
+        tester.view.viewInsets = const FakeViewPadding(bottom: 350);
+        addTearDown(tester.view.reset);
+        final repo = _MockPlayersRepository();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
+              playersRepositoryProvider.overrideWithValue(repo),
+              activeTeamIdProvider.overrideWith(
+                () => ActiveTeamIdNotifier(initialValue: 'team_1'),
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: NewPlayerBottomSheet(),
+              ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).first, 'Karim');
+        await tester.pumpAndSettle();
+        expect(
+          tester.getBottomRight(find.text('Créer')).dy,
+          lessThanOrEqualTo(494),
+        );
+        expect(find.text('Créer').hitTestable(), findsOneWidget);
+        await tester.tap(find.byTooltip('Masquer le clavier'));
+        await tester.pumpAndSettle();
+        expect(
+          tester
+              .widget<TextField>(find.byType(TextField).first)
+              .controller!
+              .text,
+          'Karim',
+        );
+        expect(
+          tester
+              .widget<EditableText>(find.byType(EditableText).first)
+              .focusNode
+              .hasFocus,
+          isFalse,
+        );
+        expect(await repo.getPlayers(), isEmpty);
+      },
+    );
 
-      final nameEditable = tester.widget<EditableText>(
-        find.descendant(
-          of: find.byType(TextField).first,
-          matching: find.byType(EditableText),
-        ),
-      );
-      // Autofocus is active on name field
-      expect(nameEditable.focusNode.hasFocus, isTrue);
+    testWidgets(
+      'refocuses name field after creating player with createAnother button',
+      (tester) async {
+        final repo = _MockPlayersRepository();
 
-      // Enter player name and nickname
-      await tester.enterText(find.byType(TextField).first, 'Antoine');
-      await tester.enterText(find.byType(TextField).at(1), 'Anto');
-      await tester.pumpAndSettle();
-
-      // Tap create another button (+)
-      await tester.tap(find.byIcon(Remix.add_line));
-      await tester.pumpAndSettle();
-
-      // Verify player added
-      final players = await repo.getPlayers();
-      expect(players.length, 1);
-      expect(players.first.name, 'Antoine');
-
-      // Verify name field is cleared and focus is returned
-      expect(nameEditable.focusNode.hasFocus, isTrue);
-    });
-
-    testWidgets('shows inline error message when attempting to add duplicate player name', (tester) async {
-      final repo = _MockPlayersRepository();
-      await repo.createPlayer(name: 'Lucas', teamId: 'team_1');
-
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            playersRepositoryProvider.overrideWithValue(repo),
-            activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_1')),
-          ],
-          child: MaterialApp(
-            theme: AppTheme.darkTheme,
-            home: const Scaffold(
-              body: NewPlayerBottomSheet(),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
+              playersRepositoryProvider.overrideWithValue(repo),
+              activeTeamIdProvider.overrideWith(
+                () => ActiveTeamIdNotifier(initialValue: 'team_1'),
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const Scaffold(body: NewPlayerBottomSheet()),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField).first, 'lucas');
-      await tester.pumpAndSettle();
+        final nameEditable = tester.widget<EditableText>(
+          find.descendant(
+            of: find.byType(TextField).first,
+            matching: find.byType(EditableText),
+          ),
+        );
+        // Autofocus is active on name field
+        expect(nameEditable.focusNode.hasFocus, isTrue);
 
-      await tester.tap(find.text('Créer'));
-      await tester.pumpAndSettle();
+        // Enter player name and nickname
+        await tester.enterText(find.byType(TextField).first, 'Antoine');
+        await tester.enterText(find.byType(TextField).at(1), 'Anto');
+        await tester.pumpAndSettle();
 
-      expect(find.textContaining('existe déjà'), findsOneWidget);
-    });
+        // Tap create another button (+)
+        await tester.tap(find.byIcon(Remix.add_line));
+        await tester.pumpAndSettle();
+
+        // Verify player added
+        final players = await repo.getPlayers();
+        expect(players.length, 1);
+        expect(players.first.name, 'Antoine');
+
+        // Verify name field is cleared and focus is returned
+        expect(nameEditable.focusNode.hasFocus, isTrue);
+      },
+    );
+
+    testWidgets(
+      'shows inline error message when attempting to add duplicate player name',
+      (tester) async {
+        final repo = _MockPlayersRepository();
+        await repo.createPlayer(name: 'Lucas', teamId: 'team_1');
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              playersRepositoryProvider.overrideWithValue(repo),
+              activeTeamIdProvider.overrideWith(
+                () => ActiveTeamIdNotifier(initialValue: 'team_1'),
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const Scaffold(body: NewPlayerBottomSheet()),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.enterText(find.byType(TextField).first, 'lucas');
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Créer'));
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining('existe déjà'), findsOneWidget);
+      },
+    );
   });
 }

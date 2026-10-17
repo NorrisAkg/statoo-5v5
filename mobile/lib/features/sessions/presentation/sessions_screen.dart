@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_bar_subtitle.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/status_badge.dart';
+import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
 import '../application/sessions_provider.dart';
 import '../domain/session.dart';
 import '../domain/session_summary.dart';
-import '../../shared/application/shared_providers.dart';
 
 class SessionsScreen extends ConsumerWidget {
   const SessionsScreen({super.key});
@@ -32,7 +34,8 @@ class SessionsScreen extends ConsumerWidget {
       _ => '$totalCount au total',
     };
 
-    final subtitleText = '$filterText${activeTeam != null ? ' · ${activeTeam.name}' : ''}';
+    final subtitleText =
+        '$filterText${activeTeam != null ? ' · ${activeTeam.name}' : ''}';
 
     return Scaffold(
       appBar: AppBar(
@@ -44,17 +47,7 @@ class SessionsScreen extends ConsumerWidget {
             onPressed: () => showTeamSwitcher(context),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(24),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              subtitleText,
-              style: TextStyle(color: context.colors.onHeader, fontSize: 14),
-            ),
-          ),
-        ),
+        bottom: buildAppBarSubtitle(context, subtitleText),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,34 +75,67 @@ class SessionsScreen extends ConsumerWidget {
               error: (err, _) => Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text('Erreur: $err', style: TextStyle(color: context.colors.danger)),
+                  child: Text(
+                    'Erreur: $err',
+                    style: TextStyle(color: context.colors.danger),
+                  ),
                 ),
               ),
             ),
           ),
         ],
       ),
-      floatingActionButton: ref.watch(canWriteProvider('sport')) ? FloatingActionButton(
-        onPressed: () => context.push('/seances/nouvelle'),
-        backgroundColor: context.colors.primary500,
-        foregroundColor: context.colors.background950,
-        child: const Icon(Remix.add_line),
-      ) : null,
+      floatingActionButton: ref.watch(canWriteProvider('sport'))
+          ? FloatingActionButton(
+              onPressed: () => context.push('/seances/nouvelle'),
+              backgroundColor: context.colors.primary500,
+              foregroundColor: context.colors.background950,
+              child: const Icon(Remix.add_line),
+            )
+          : null,
     );
   }
 
-  Widget _buildFilters(BuildContext context, WidgetRef ref, String activeFilter) {
+  Widget _buildFilters(
+    BuildContext context,
+    WidgetRef ref,
+    String activeFilter,
+  ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          _buildFilterChip(context, ref, label: 'Toutes', filterKey: 'all', isSelected: activeFilter == 'all'),
+          _buildFilterChip(
+            context,
+            ref,
+            label: 'Toutes',
+            filterKey: 'all',
+            isSelected: activeFilter == 'all',
+          ),
           const SizedBox(width: 8),
-          _buildFilterChip(context, ref, label: 'Classées', filterKey: 'ranked', isSelected: activeFilter == 'ranked'),
+          _buildFilterChip(
+            context,
+            ref,
+            label: 'Classées',
+            filterKey: 'ranked',
+            isSelected: activeFilter == 'ranked',
+          ),
           const SizedBox(width: 8),
-          _buildFilterChip(context, ref, label: 'Amicales', filterKey: 'friendly', isSelected: activeFilter == 'friendly'),
+          _buildFilterChip(
+            context,
+            ref,
+            label: 'Amicales',
+            filterKey: 'friendly',
+            isSelected: activeFilter == 'friendly',
+          ),
           const SizedBox(width: 8),
-          _buildFilterChip(context, ref, label: 'Brouillons', filterKey: 'draft', isSelected: activeFilter == 'draft'),
+          _buildFilterChip(
+            context,
+            ref,
+            label: 'Brouillons',
+            filterKey: 'draft',
+            isSelected: activeFilter == 'draft',
+          ),
         ],
       ),
     );
@@ -131,7 +157,9 @@ class SessionsScreen extends ConsumerWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? context.colors.primary500.withValues(alpha: 0.15) : context.colors.background800,
+          color: isSelected
+              ? context.colors.primary500.withValues(alpha: 0.15)
+              : context.colors.background800,
           borderRadius: BorderRadius.circular(9999),
           border: Border.all(
             color: isSelected ? context.colors.primary500 : Colors.transparent,
@@ -141,7 +169,9 @@ class SessionsScreen extends ConsumerWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? context.colors.primary500 : context.colors.foreground300,
+            color: isSelected
+                ? context.colors.primary500
+                : context.colors.foreground300,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             fontSize: 13,
           ),
@@ -157,7 +187,7 @@ class SessionsScreen extends ConsumerWidget {
     bool hasAnySessions,
   ) {
     if (!hasAnySessions) {
-      return Center(
+      return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: AppCard(
@@ -175,22 +205,25 @@ class SessionsScreen extends ConsumerWidget {
                   Text(
                     'Aucune séance pour le moment',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Créez votre première séance pour enregistrer les scores et statistiques de vos matchs.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: context.colors.foreground400, fontSize: 13),
+                    style: TextStyle(
+                      color: context.colors.foreground400,
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                    if (ref.watch(canWriteProvider('sport'))) PrimaryButton(
-                    label: 'Nouvelle séance',
-                    icon: Remix.add_line,
-                    onPressed: () => context.push('/seances/nouvelle'),
-                  ),
+                  if (ref.watch(canWriteProvider('sport')))
+                    PrimaryButton(
+                      label: 'Nouvelle séance',
+                      icon: Remix.add_line,
+                      onPressed: () => context.push('/seances/nouvelle'),
+                    ),
                 ],
               ),
             ),
@@ -206,7 +239,7 @@ class SessionsScreen extends ConsumerWidget {
       _ => 'Aucune séance trouvée.',
     };
 
-    return Center(
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: AppCard(
@@ -224,15 +257,17 @@ class SessionsScreen extends ConsumerWidget {
                 Text(
                   message,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Essayez un autre filtre pour afficher vos séances.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: context.colors.foreground400, fontSize: 13),
+                  style: TextStyle(
+                    color: context.colors.foreground400,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 24),
                 OutlinedButton.icon(
@@ -240,12 +275,21 @@ class SessionsScreen extends ConsumerWidget {
                   label: const Text('Voir toutes les séances'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: context.colors.primary400,
-                    side: BorderSide(color: context.colors.primary500.withValues(alpha: 0.5)),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    side: BorderSide(
+                      color: context.colors.primary500.withValues(alpha: 0.5),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   onPressed: () {
-                    ref.read(sessionsFilterProvider.notifier).selectFilter('all');
+                    ref
+                        .read(sessionsFilterProvider.notifier)
+                        .selectFilter('all');
                   },
                 ),
               ],
@@ -256,7 +300,10 @@ class SessionsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSessionsList(BuildContext context, List<SessionSummaryItem> sessions) {
+  Widget _buildSessionsList(
+    BuildContext context,
+    List<SessionSummaryItem> sessions,
+  ) {
     final grouped = <String, List<SessionSummaryItem>>{};
     for (final item in sessions) {
       final key = item.monthYearGroup;
@@ -308,7 +355,9 @@ class SessionsScreen extends ConsumerWidget {
             color: context.colors.background900,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isDraft ? context.colors.primary500.withValues(alpha: 0.4) : context.colors.background700,
+              color: isDraft
+                  ? context.colors.primary500.withValues(alpha: 0.4)
+                  : context.colors.background700,
             ),
           ),
           child: Column(
@@ -318,15 +367,23 @@ class SessionsScreen extends ConsumerWidget {
                 children: [
                   Text(
                     item.formattedDateTime,
-                    style: TextStyle(color: context.colors.foreground400, fontSize: 13),
+                    style: TextStyle(
+                      color: context.colors.foreground400,
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   if (item.isInProgress)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         color: context.colors.warning.withValues(alpha: 0.15),
-                        border: Border.all(color: context.colors.warning.withValues(alpha: 0.5)),
+                        border: Border.all(
+                          color: context.colors.warning.withValues(alpha: 0.5),
+                        ),
                         borderRadius: BorderRadius.circular(9999),
                       ),
                       child: Text(
@@ -340,7 +397,10 @@ class SessionsScreen extends ConsumerWidget {
                     )
                   else if (item.isWaitingDraft)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: context.colors.foreground600),
                         borderRadius: BorderRadius.circular(9999),
@@ -359,7 +419,10 @@ class SessionsScreen extends ConsumerWidget {
                   if (!item.isRanked) ...[
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: context.colors.foreground600),
                         borderRadius: BorderRadius.circular(9999),
@@ -378,7 +441,11 @@ class SessionsScreen extends ConsumerWidget {
                   if (item.hasGoalWarning)
                     Row(
                       children: [
-                        Icon(Remix.error_warning_line, color: context.colors.warning, size: 14),
+                        Icon(
+                          Remix.error_warning_line,
+                          color: context.colors.warning,
+                          size: 14,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           'Buts',
@@ -396,24 +463,51 @@ class SessionsScreen extends ConsumerWidget {
               if (session.sessionType == SessionType.tournament3)
                 Row(
                   children: [
-                    _buildTournamentPill(context, 'A', session.winsA, context.colors.accent500),
+                    _buildTournamentPill(
+                      context,
+                      'A',
+                      session.winsA,
+                      context.colors.accent500,
+                    ),
                     const SizedBox(width: 8),
-                    _buildTournamentPill(context, 'B', session.winsB, context.colors.secondary500),
+                    _buildTournamentPill(
+                      context,
+                      'B',
+                      session.winsB,
+                      context.colors.secondary500,
+                    ),
                     const SizedBox(width: 8),
-                    _buildTournamentPill(context, 'C', session.winsC, context.colors.primary500),
+                    _buildTournamentPill(
+                      context,
+                      'C',
+                      session.winsC,
+                      context.colors.primary500,
+                    ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: context.colors.background800,
                         borderRadius: BorderRadius.circular(9999),
                       ),
-                      child: const Text('Tournoi', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        'Tournoi',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '${item.playerCount} joueur${item.playerCount > 1 ? 's' : ''}',
-                      style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                      style: TextStyle(
+                        color: context.colors.foreground400,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 )
@@ -424,7 +518,10 @@ class SessionsScreen extends ConsumerWidget {
                     const SizedBox(width: 12),
                     Text(
                       '${session.scoreA ?? 0}',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -439,13 +536,19 @@ class SessionsScreen extends ConsumerWidget {
                     ),
                     Text(
                       '${session.scoreB ?? 0}',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     _buildTeamDot(context, context.colors.secondary500, 'B'),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: context.colors.background800,
                         borderRadius: BorderRadius.circular(9999),
@@ -453,16 +556,22 @@ class SessionsScreen extends ConsumerWidget {
                       child: Text(
                         item.playerCount > 0
                             ? (item.playerCount.isEven
-                                ? '${item.playerCount ~/ 2}v${item.playerCount ~/ 2}'
-                                : '${(item.playerCount + 1) ~/ 2}v${item.playerCount ~/ 2}')
+                                  ? '${item.playerCount ~/ 2}v${item.playerCount ~/ 2}'
+                                  : '${(item.playerCount + 1) ~/ 2}v${item.playerCount ~/ 2}')
                             : '5v5',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '${item.playerCount} joueur${item.playerCount > 1 ? 's' : ''}',
-                      style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                      style: TextStyle(
+                        color: context.colors.foreground400,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -490,7 +599,12 @@ class SessionsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTournamentPill(BuildContext context, String team, int wins, Color color) {
+  Widget _buildTournamentPill(
+    BuildContext context,
+    String team,
+    int wins,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
@@ -508,13 +622,21 @@ class SessionsScreen extends ConsumerWidget {
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             child: Text(
               team,
-              style: TextStyle(color: context.colors.foreground50, fontSize: 10, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: context.colors.foreground50,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 6),
           Text(
             '$wins V',
-            style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: color,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

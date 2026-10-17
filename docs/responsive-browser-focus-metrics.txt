@@ -1,0 +1,19 @@
+TAP version 13
+# {"width":393,"scale":2,"colorScheme":"light","createRect":{"x":45,"y":605,"width":303,"height":54}}
+# {"scrollY":0,"menuAfter":{"x":99.8203125,"y":8,"width":193.359375,"height":64,"top":8,"right":293.1796875,"bottom":72,"left":99.8203125},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":2,"colorScheme":"light","menu":{"x":99.8203125,"y":8,"width":193.359375,"height":64},"badge":{"x":75.62993621826172,"y":105.5,"width":241.73438262939453,"height":33},"errors":[]}
+# Subtest: RSP09/11 actual Flutter web frame separates PWA controls from app header
+ok 1 - RSP09/11 actual Flutter web frame separates PWA controls from app header
+  ---
+  duration_ms: 4645.3317
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5108.4559

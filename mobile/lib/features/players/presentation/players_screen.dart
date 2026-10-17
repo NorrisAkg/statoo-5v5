@@ -1,10 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
+import '../../../core/widgets/app_bar_subtitle.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
@@ -55,7 +58,8 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
     final activeTeam = ref.watch(activeTeamProvider).value;
     final standingsAsync = ref.watch(standingsProvider);
     final standingsMap = {
-      for (final s in standingsAsync.value ?? const <StandingEntry>[]) s.playerId: s,
+      for (final s in standingsAsync.value ?? const <StandingEntry>[])
+        s.playerId: s,
     };
 
     return Scaffold(
@@ -68,21 +72,12 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
             onPressed: () => showTeamSwitcher(context),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(20),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: playersAsync.when(
-              data: (players) => Text(
-                '${players.where((p) => p.isActive).length} actifs${activeTeam != null ? ' · ${activeTeam.name}' : ''}',
-                style: TextStyle(color: context.colors.onHeader, fontSize: 14),
-              ),
-              loading: () => const SizedBox(),
-              error: (_, _) => const SizedBox(),
-            ),
-          ),
-        ),
+        bottom: playersAsync.hasValue
+            ? buildAppBarSubtitle(
+                context,
+                '${playersAsync.value!.where((p) => p.isActive).length} actifs${activeTeam != null ? ' · ${activeTeam.name}' : ''}',
+              )
+            : null,
       ),
       body: playersAsync.when(
         data: (players) {
@@ -90,15 +85,21 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
           bool matchesQuery(Player p) {
             if (query.isEmpty) return true;
             final nameMatch = p.name.toLowerCase().contains(query);
-            final nickMatch = p.nickname?.toLowerCase().contains(query) ?? false;
+            final nickMatch =
+                p.nickname?.toLowerCase().contains(query) ?? false;
             return nameMatch || nickMatch;
           }
 
-          final activePlayers = players.where((p) => p.isActive && matchesQuery(p)).toList()
-            ..sort(comparePlayersAlphabetically);
-          final archivedPlayers = players.where((p) => !p.isActive && matchesQuery(p)).toList()
-            ..sort(comparePlayersAlphabetically);
-          final hasNoResults = query.isNotEmpty && activePlayers.isEmpty && archivedPlayers.isEmpty;
+          final activePlayers =
+              players.where((p) => p.isActive && matchesQuery(p)).toList()
+                ..sort(comparePlayersAlphabetically);
+          final archivedPlayers =
+              players.where((p) => !p.isActive && matchesQuery(p)).toList()
+                ..sort(comparePlayersAlphabetically);
+          final hasNoResults =
+              query.isNotEmpty &&
+              activePlayers.isEmpty &&
+              archivedPlayers.isEmpty;
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -112,11 +113,18 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Remix.user_search_line, size: 48, color: context.colors.foreground600),
+                        Icon(
+                          Remix.user_search_line,
+                          size: 48,
+                          color: context.colors.foreground600,
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'Aucun joueur trouvé pour "$_searchQuery"',
-                          style: TextStyle(color: context.colors.foreground400, fontSize: 15),
+                          style: TextStyle(
+                            color: context.colors.foreground400,
+                            fontSize: 15,
+                          ),
                         ),
                       ],
                     ),
@@ -125,14 +133,21 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
               else ...[
                 Text(
                   'ACTIFS (${activePlayers.length})',
-                  style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: context.colors.foreground400,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 if (activePlayers.isEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32),
                     child: Center(
-                      child: Text('Aucun joueur actif', style: TextStyle(color: context.colors.foreground500)),
+                      child: Text(
+                        'Aucun joueur actif',
+                        style: TextStyle(color: context.colors.foreground500),
+                      ),
                     ),
                   )
                 else
@@ -146,27 +161,41 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                   ),
                 const SizedBox(height: 16),
                 if (archivedPlayers.isNotEmpty)
-                  _buildArchivedSection(context, archivedPlayers, deletableIds, standingsMap),
+                  _buildArchivedSection(
+                    context,
+                    archivedPlayers,
+                    deletableIds,
+                    standingsMap,
+                  ),
               ],
             ],
           );
         },
-        loading: () => Center(child: CircularProgressIndicator(color: context.colors.primary500)),
-        error: (err, _) => Center(child: Text('Erreur: $err', style: TextStyle(color: context.colors.danger))),
+        loading: () => Center(
+          child: CircularProgressIndicator(color: context.colors.primary500),
+        ),
+        error: (err, _) => Center(
+          child: Text(
+            'Erreur: $err',
+            style: TextStyle(color: context.colors.danger),
+          ),
+        ),
       ),
-      floatingActionButton: writable ? FloatingActionButton(
-        onPressed: () async {
-          await showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (context) => const NewPlayerBottomSheet(),
-          );
-        },
-        backgroundColor: context.colors.primary500,
-        foregroundColor: context.colors.background950,
-        child: const Icon(Remix.add_line),
-      ) : null,
+      floatingActionButton: writable
+          ? FloatingActionButton(
+              onPressed: () async {
+                await showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => const NewPlayerBottomSheet(),
+                );
+              },
+              backgroundColor: context.colors.primary500,
+              foregroundColor: context.colors.background950,
+              child: const Icon(Remix.add_line),
+            )
+          : null,
     );
   }
 
@@ -177,16 +206,27 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       decoration: InputDecoration(
         hintText: 'Rechercher un joueur…',
         hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 15),
-        prefixIcon: Icon(Remix.search_line, color: context.colors.foreground500, size: 20),
+        prefixIcon: Icon(
+          Remix.search_line,
+          color: context.colors.foreground500,
+          size: 20,
+        ),
         suffixIcon: _searchQuery.isNotEmpty
             ? IconButton(
-                icon: Icon(Remix.close_circle_fill, color: context.colors.foreground500, size: 18),
+                icon: Icon(
+                  Remix.close_circle_fill,
+                  color: context.colors.foreground500,
+                  size: 18,
+                ),
                 onPressed: _searchController.clear,
               )
             : null,
         filled: true,
         fillColor: context.colors.background900,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: context.colors.background700),
@@ -218,7 +258,9 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       padding: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: () => unawaited(context.push('/joueurs/${player.id}')),
-        onLongPress: writable ? () => unawaited(_showPlayerOptions(player, canDelete)) : null,
+        onLongPress: writable
+            ? () => unawaited(_showPlayerOptions(player, canDelete))
+            : null,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),
@@ -235,15 +277,31 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(player.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(
+                      player.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
                     if (player.nickname != null && player.nickname!.isNotEmpty)
-                      Text(player.nickname!, style: TextStyle(color: context.colors.foreground500, fontSize: 14)),
+                      Text(
+                        player.nickname!,
+                        style: TextStyle(
+                          color: context.colors.foreground500,
+                          fontSize: 14,
+                        ),
+                      ),
                   ],
                 ),
               ),
               if (canDelete) ...[
                 IconButton(
-                  icon: Icon(Remix.delete_bin_line, size: 20, color: context.colors.danger),
+                  icon: Icon(
+                    Remix.delete_bin_line,
+                    size: 20,
+                    color: context.colors.danger,
+                  ),
                   tooltip: 'Supprimer ce joueur',
                   onPressed: () => unawaited(_confirmDeletePlayer(player)),
                 ),
@@ -252,10 +310,16 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                   standing != null && standing.matchesPlayed > 0
                       ? 'J ${standing.matchesPlayed} · ${standing.points} pts'
                       : '-',
-                  style: TextStyle(color: context.colors.foreground400, fontSize: 14),
+                  style: TextStyle(
+                    color: context.colors.foreground400,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(width: 8),
-                Icon(Remix.arrow_right_s_line, color: context.colors.foreground500),
+                Icon(
+                  Remix.arrow_right_s_line,
+                  color: context.colors.foreground500,
+                ),
               ],
             ],
           ),
@@ -263,7 +327,9 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       ),
     );
 
-    final renderedCard = player.isActive ? cardContent : Opacity(opacity: 0.65, child: cardContent);
+    final renderedCard = player.isActive
+        ? cardContent
+        : Opacity(opacity: 0.65, child: cardContent);
 
     if (canDelete) {
       return Dismissible(
@@ -284,7 +350,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
               SizedBox(width: 8),
               Text(
                 'Supprimer',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -308,11 +377,19 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       children: [
         Row(
           children: [
-            Icon(Remix.archive_drawer_line, color: context.colors.foreground500, size: 16),
+            Icon(
+              Remix.archive_drawer_line,
+              color: context.colors.foreground500,
+              size: 16,
+            ),
             const SizedBox(width: 8),
             Text(
               'ARCHIVÉS (${archivedPlayers.length})',
-              style: TextStyle(color: context.colors.foreground400, fontSize: 12, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: context.colors.foreground400,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -343,7 +420,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(false),
-              child: Text('Annuler', style: TextStyle(color: context.colors.foreground400)),
+              child: Text(
+                'Annuler',
+                style: TextStyle(color: context.colors.foreground400),
+              ),
             ),
             ElevatedButton(
               onPressed: () => Navigator.of(ctx).pop(true),
@@ -359,17 +439,23 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
     );
 
     if (confirmed == true) {
-      final success = await ref.read(playersListProvider.notifier).removePlayer(player.id);
+      final success = await ref
+          .read(playersListProvider.notifier)
+          .removePlayer(player.id);
       if (mounted) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Le joueur "${player.name}" a été supprimé.')),
+            SnackBar(
+              content: Text('Le joueur "${player.name}" a été supprimé.'),
+            ),
           );
           return true;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Impossible de supprimer ce joueur : il a déjà participé à une séance.'),
+              content: Text(
+                'Impossible de supprimer ce joueur : il a déjà participé à une séance.',
+              ),
             ),
           );
         }
@@ -378,10 +464,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
     return false;
   }
 
-  Future<void> _showPlayerOptions(
-    Player player,
-    bool canDelete,
-  ) async {
+  Future<void> _showPlayerOptions(Player player, bool canDelete) async {
     await showModalBottomSheet<void>(
       context: context,
       backgroundColor: context.colors.background900,
@@ -397,7 +480,10 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                 padding: const EdgeInsets.all(16),
                 child: Text(
                   player.name,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               ListTile(
@@ -405,17 +491,22 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                 title: const Text('Modifier le joueur'),
                 onTap: () {
                   Navigator.of(ctx).pop();
-                  unawaited(showModalBottomSheet<bool>(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (_) => EditPlayerBottomSheet(player: player),
-                  ));
+                  unawaited(
+                    showModalBottomSheet<bool>(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) => EditPlayerBottomSheet(player: player),
+                    ),
+                  );
                 },
               ),
               if (canDelete)
                 ListTile(
-                  leading: Icon(Remix.delete_bin_line, color: context.colors.danger),
+                  leading: Icon(
+                    Remix.delete_bin_line,
+                    color: context.colors.danger,
+                  ),
                   title: Text(
                     'Supprimer définitivement',
                     style: TextStyle(color: context.colors.danger),
@@ -428,9 +519,15 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
               else
                 ListTile(
                   leading: Icon(
-                    player.isActive ? Remix.archive_drawer_line : Remix.check_line,
+                    player.isActive
+                        ? Remix.archive_drawer_line
+                        : Remix.check_line,
                   ),
-                  title: Text(player.isActive ? 'Archiver le joueur' : 'Activer le joueur'),
+                  title: Text(
+                    player.isActive
+                        ? 'Archiver le joueur'
+                        : 'Activer le joueur',
+                  ),
                   onTap: () async {
                     Navigator.of(ctx).pop();
                     if (player.isActive) {
@@ -441,12 +538,19 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                           title: Text('Archiver ${player.name} ?'),
                           content: Text(
                             "Le joueur n'apparaîtra plus dans la sélection des séances. Son historique et ses statistiques restent intégralement conservés.",
-                            style: TextStyle(color: context.colors.foreground300),
+                            style: TextStyle(
+                              color: context.colors.foreground300,
+                            ),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(dCtx).pop(false),
-                              child: Text('Annuler', style: TextStyle(color: context.colors.foreground400)),
+                              child: Text(
+                                'Annuler',
+                                style: TextStyle(
+                                  color: context.colors.foreground400,
+                                ),
+                              ),
                             ),
                             ElevatedButton(
                               onPressed: () => Navigator.of(dCtx).pop(true),
@@ -461,16 +565,20 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
                       );
                       if (confirmed != true || !mounted) return;
                     }
-                    await ref.read(playersListProvider.notifier).togglePlayerActive(
-                      id: player.id,
-                      isActive: !player.isActive,
-                    );
+                    await ref
+                        .read(playersListProvider.notifier)
+                        .togglePlayerActive(
+                          id: player.id,
+                          isActive: !player.isActive,
+                        );
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(player.isActive
-                              ? 'Le joueur "${player.name}" a été archivé.'
-                              : 'Le joueur "${player.name}" a été réactivé.'),
+                          content: Text(
+                            player.isActive
+                                ? 'Le joueur "${player.name}" a été archivé.'
+                                : 'Le joueur "${player.name}" a été réactivé.',
+                          ),
                         ),
                       );
                     }

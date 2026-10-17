@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/responsive_grid.dart';
 import '../application/stats_providers.dart';
 import '../domain/group_totals.dart';
 
@@ -14,10 +16,7 @@ class StatsScreen extends ConsumerWidget {
     final totalsAsync = ref.watch(groupTotalsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Statistiques'),
-        centerTitle: false,
-      ),
+      appBar: AppBar(title: const Text('Statistiques'), centerTitle: false),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(groupTotalsProvider);
@@ -43,15 +42,27 @@ class StatsScreen extends ConsumerWidget {
       children: [
         _buildHeroOverview(context, totals),
         const SizedBox(height: 24),
-        _buildSectionTitle(context, 'ATTAQUE & EFFICACITÉ', Remix.football_line),
+        _buildSectionTitle(
+          context,
+          'ATTAQUE & EFFICACITÉ',
+          Remix.football_line,
+        ),
         const SizedBox(height: 12),
         _buildOffenseGrid(context, totals),
         const SizedBox(height: 24),
-        _buildSectionTitle(context, 'DISCIPLINE & ARBITRAGE', Remix.shield_line),
+        _buildSectionTitle(
+          context,
+          'DISCIPLINE & ARBITRAGE',
+          Remix.shield_line,
+        ),
         const SizedBox(height: 12),
         _buildDisciplineRow(context, totals),
         const SizedBox(height: 24),
-        _buildSectionTitle(context, 'INTÉGRITÉ DES DONNÉES', Remix.shield_check_line),
+        _buildSectionTitle(
+          context,
+          'INTÉGRITÉ DES DONNÉES',
+          Remix.shield_check_line,
+        ),
         const SizedBox(height: 12),
         _buildConsistencyCard(context, totals),
         const SizedBox(height: 24),
@@ -64,13 +75,15 @@ class StatsScreen extends ConsumerWidget {
       children: [
         Icon(icon, size: 16, color: context.colors.primary400),
         const SizedBox(width: 8),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.8,
-            color: context.colors.foreground400,
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.8,
+              color: context.colors.foreground400,
+            ),
           ),
         ),
       ],
@@ -78,26 +91,22 @@ class StatsScreen extends ConsumerWidget {
   }
 
   Widget _buildHeroOverview(BuildContext context, GroupTotals totals) {
-    return Row(
+    return ResponsiveGrid(
       children: [
-        Expanded(
-          child: _KpiCard(
-            title: 'Séances jouées',
-            value: '${totals.totalSessions}',
-            subtitle: '${totals.rankedSessions} classées${totals.friendlySessions > 0 ? " · ${totals.friendlySessions} amicales" : ""}',
-            icon: Remix.calendar_event_line,
-            iconColor: context.colors.primary500,
-          ),
+        _KpiCard(
+          title: 'Séances jouées',
+          value: '${totals.totalSessions}',
+          subtitle:
+              '${totals.rankedSessions} classées${totals.friendlySessions > 0 ? " · ${totals.friendlySessions} amicales" : ""}',
+          icon: Remix.calendar_event_line,
+          iconColor: context.colors.primary500,
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _KpiCard(
-            title: 'Joueurs actifs',
-            value: '${totals.activePlayers}',
-            subtitle: 'Sur ${totals.totalPlayers} inscrits au total',
-            icon: Remix.team_line,
-            iconColor: context.colors.accent400,
-          ),
+        _KpiCard(
+          title: 'Joueurs actifs',
+          value: '${totals.activePlayers}',
+          subtitle: 'Sur ${totals.totalPlayers} inscrits au total',
+          icon: Remix.team_line,
+          iconColor: context.colors.accent400,
         ),
       ],
     );
@@ -106,26 +115,21 @@ class StatsScreen extends ConsumerWidget {
   Widget _buildOffenseGrid(BuildContext context, GroupTotals totals) {
     return Column(
       children: [
-        Row(
+        ResponsiveGrid(
           children: [
-            Expanded(
-              child: _KpiCard(
-                title: 'Buts totaux',
-                value: '${totals.totalGoals}',
-                subtitle: 'Score global des séances',
-                icon: Remix.football_line,
-                iconColor: context.colors.primary400,
-              ),
+            _KpiCard(
+              title: 'Buts totaux',
+              value: '${totals.totalGoals}',
+              subtitle: 'Score global des séances',
+              icon: Remix.football_line,
+              iconColor: context.colors.primary400,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _KpiCard(
-                title: 'Moyenne / séance',
-                value: totals.avgGoalsPerSession.toStringAsFixed(1),
-                subtitle: 'Buts par rencontre',
-                icon: Remix.speed_line,
-                iconColor: context.colors.primary500,
-              ),
+            _KpiCard(
+              title: 'Moyenne / séance',
+              value: totals.avgGoalsPerSession.toStringAsFixed(1),
+              subtitle: 'Buts par rencontre',
+              icon: Remix.speed_line,
+              iconColor: context.colors.primary500,
             ),
           ],
         ),
@@ -143,26 +147,21 @@ class StatsScreen extends ConsumerWidget {
   }
 
   Widget _buildDisciplineRow(BuildContext context, GroupTotals totals) {
-    return Row(
+    return ResponsiveGrid(
       children: [
-        Expanded(
-          child: _KpiCard(
-            title: 'Cartons jaunes',
-            value: '${totals.totalYellowCards}',
-            subtitle: 'Avertissements',
-            icon: Remix.file_warning_line,
-            iconColor: context.colors.card,
-          ),
+        _KpiCard(
+          title: 'Cartons jaunes',
+          value: '${totals.totalYellowCards}',
+          subtitle: 'Avertissements',
+          icon: Remix.file_warning_line,
+          iconColor: context.colors.card,
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _KpiCard(
-            title: 'Cartons rouges',
-            value: '${totals.totalRedCards}',
-            subtitle: 'Expulsions',
-            icon: Remix.alarm_warning_line,
-            iconColor: context.colors.danger,
-          ),
+        _KpiCard(
+          title: 'Cartons rouges',
+          value: '${totals.totalRedCards}',
+          subtitle: 'Expulsions',
+          icon: Remix.alarm_warning_line,
+          iconColor: context.colors.danger,
         ),
       ],
     );
@@ -177,7 +176,9 @@ class StatsScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           color: context.colors.warning.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: context.colors.warning.withValues(alpha: 0.35)),
+          border: Border.all(
+            color: context.colors.warning.withValues(alpha: 0.35),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +193,11 @@ class StatsScreen extends ConsumerWidget {
                     color: context.colors.warning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Remix.error_warning_fill, color: context.colors.warning, size: 20),
+                  child: Icon(
+                    Remix.error_warning_fill,
+                    color: context.colors.warning,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -239,7 +244,9 @@ class StatsScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: context.colors.primary500.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colors.primary500.withValues(alpha: 0.25)),
+        border: Border.all(
+          color: context.colors.primary500.withValues(alpha: 0.25),
+        ),
       ),
       child: Row(
         children: [
@@ -251,7 +258,11 @@ class StatsScreen extends ConsumerWidget {
               color: context.colors.primary500.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
-            child: Icon(Remix.checkbox_circle_fill, color: context.colors.primary400, size: 20),
+            child: Icon(
+              Remix.checkbox_circle_fill,
+              color: context.colors.primary400,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -283,14 +294,22 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildErrorState(BuildContext context, String error, VoidCallback onRetry) {
+  Widget _buildErrorState(
+    BuildContext context,
+    String error,
+    VoidCallback onRetry,
+  ) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Remix.error_warning_line, size: 48, color: context.colors.danger),
+            Icon(
+              Remix.error_warning_line,
+              size: 48,
+              color: context.colors.danger,
+            ),
             const SizedBox(height: 12),
             Text(
               'Erreur lors du chargement',
@@ -304,7 +323,10 @@ class StatsScreen extends ConsumerWidget {
             Text(
               error,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: context.colors.foreground500),
+              style: TextStyle(
+                fontSize: 12,
+                color: context.colors.foreground500,
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -435,8 +457,6 @@ class _KpiCard extends StatelessWidget {
                     fontSize: 11,
                     color: context.colors.foreground500,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

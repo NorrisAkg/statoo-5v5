@@ -79,6 +79,8 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 
 - 17 octobre 2026, ordre corrigé : splash → présentation au premier lancement → bienvenue (Créer/Rejoindre). Passer ou Commencer mémorise la présentation terminée sur cet appareil/navigateur ; créer mène ensuite au groupe/effectif, à l’accès Admin, puis à Désigner les responsables. Attribution facultative à cette étape, réservée à l’Admin et retrouvable dans Comptes et rôles. Rejoindre mène directement à la connexion. Conserver les préparations locales en cas de réseau absent. Bouton vers l’accès Admin extensible et indicateurs d’effectif avec retour à la ligne à grand texte. Preuves et limites : `tdd-group-entry-2026-10-17.md`.
 
+- 17 octobre 2026, enveloppe PWA uniquement : menu navigateur « Application » compact, centré en haut pour laisser Retour/Passer accessibles ; installation native quand proposée, aide Safari/menu sinon. Notification « Mise à jour » et confirmation avant rechargement, mention des saisies non validées. Surfaces et police Poppins du thème, dialogues défilants ; aucune modification des écrans Flutter. Vérifications et limites : `tdd-pwa-shell-2026-10-17.md`.
+
 - 17 octobre 2026, intégration du prototype validé : saisie Flutter du détail actif par événement (but puis passe facultative, cartons), journal local durable, correction de but et annulation atomiques. Tournoi par compteurs de victoires indépendants. Onglet actif : icône Remix check_line + « Actif », contour/couleur d'équipe. Boutons de saisie et choix en dialogue à 48 dp minimum. Résumé existant conservé avec écussons/dégradé, buteurs sans titre ni texte vide et ballon xN. Contrôles de rôle et clôture conservés. Preuves et limites : `tdd-live-integration.md`.
 
 - 17 octobre 2026, précision prototype : aucun texte de remplacement pour les équipes sans but ; cadre des buteurs masqué si toute la séance est sans but. Résumé du match avec dégradé des couleurs A/B à 18 % autour de la surface centrale, suivant SessionHeader, en clair et sombre.
@@ -109,3 +111,12 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 - Vérification : voir tdd-reflexions-2026-10-17.md ; tests de cadrage ne valent pas recette visuelle sur appareil physique.
 
 - 17 octobre 2026 : aucun réglage technique de serveur dans le parcours Groupe partagé (connexion et partage). Adresse fournie par configuration de build. Preuves : tdd-hidden-server-2026-10-17.md.
+
+- 17 octobre 2026, saisie web iOS : taille HTML de 16 px pour les éditeurs sémantiques transparents Flutter, limitée à WebKit iOS via une requête de capacité. Aucun changement de taille du texte dessiné par Flutter, aucun retrait des sémantiques ni blocage du zoom volontaire. Scénarios et limites : `tdd-ios-input-focus-2026-10-17.md`.
+
+- 17 octobre 2026, ajout joueur : pendant le clavier, avatar compact de 48 px, espacements resserrés et aide secondaire masquée ; commande « Masquer le clavier » sans perte de saisie. Photo toujours accessible et retour à la présentation complète sans clavier. Ajout en série et règles de validation inchangés. Preuves et limites : `tdd-player-keyboard-2026-10-17.md`.
+
+
+- 17 octobre 2026, adaptation petits écrans : utiliser les contraintes disponibles et le facteur de texte pour les colonnes de l'accueil/statistiques ; conserver les hauteurs naturelles des boutons et les libellés complets. Sous-titres d'en-tête mesurés avec la police du thème, lignes secondaires repliables. Navigation principale défilante si les cinq libellés ne tiennent pas sans réduction. Dans l'effectif, validation placée dans le contenu avec clavier/grand texte. Sur le web, zone supérieure réservée au menu PWA, sans changement des métriques clavier. Scénarios et preuves : `tdd-responsive-small-screens-2026-10-17.md`.
+
+- Précisions responsive du même lot : badges d'étape à hauteur mesurée, libellé Nom court placé au-dessus du champ avec aide défilante, menu Application à largeur intrinsèque bornée par la fenêtre et fond du bandeau cohérent avec le thème. Vérification navigateur : 18 configurations du vrai build ; recette iPhone physique distincte.

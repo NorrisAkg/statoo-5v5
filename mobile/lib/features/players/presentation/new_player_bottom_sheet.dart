@@ -119,6 +119,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     final writable = ref.watch(canWriteProvider('members'));
     final isFormValid =
         writable && !_submitting && _nameController.text.trim().isNotEmpty;
@@ -134,7 +135,8 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
         left: 24,
         right: 24,
         top: 12,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        bottom:
+            MediaQuery.of(context).viewInsets.bottom + (keyboardOpen ? 12 : 24),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -155,18 +157,31 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            Text(
-              'Nouveau joueur',
-              style: Theme.of(context).textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.bold),
+            SizedBox(height: keyboardOpen ? 8 : 24),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Nouveau joueur',
+                    style: Theme.of(context).textTheme.headlineSmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                if (keyboardOpen)
+                  IconButton(
+                    tooltip: 'Masquer le clavier',
+                    onPressed: () =>
+                        FocusManager.instance.primaryFocus?.unfocus(),
+                    icon: const Icon(Remix.keyboard_line),
+                  ),
+              ],
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: keyboardOpen ? 8 : 24),
             Center(
               child: GestureDetector(
                 onTap: _pickImage,
                 child: CircleAvatar(
-                  radius: 48,
+                  radius: keyboardOpen ? 24 : 48,
                   backgroundColor: context.colors.background800,
                   backgroundImage: _imageBytes != null
                       ? MemoryImage(_imageBytes!)
@@ -194,7 +209,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: keyboardOpen ? 8 : 24),
             Text(
               'Nom *',
               style: TextStyle(
@@ -290,15 +305,17 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              "Sans photo, l'avatar affiche les initiales sur une couleur dérivée du nom.",
-              style: TextStyle(
-                color: context.colors.foreground500,
-                fontSize: 14,
+            if (!keyboardOpen) ...[
+              const SizedBox(height: 16),
+              Text(
+                "Sans photo, l'avatar affiche les initiales sur une couleur dérivée du nom.",
+                style: TextStyle(
+                  color: context.colors.foreground500,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
+            ],
+            SizedBox(height: keyboardOpen ? 8 : 32),
             Row(
               children: [
                 Expanded(

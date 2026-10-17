@@ -7,6 +7,7 @@ import 'core/data/app_database.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
+import 'core/widgets/browser_app_frame.dart';
 import 'features/finance/application/finance_providers.dart';
 import 'features/onboarding/application/onboarding_provider.dart';
 import 'features/players/application/players_provider.dart';
@@ -70,6 +71,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: router,
+      builder: (context, child) => BrowserAppFrame(child: child!),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

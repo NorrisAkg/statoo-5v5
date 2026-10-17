@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/app_step_title.dart';
+import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../sessions/application/sessions_provider.dart';
@@ -60,7 +63,11 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       await ref.read(teamInfoProvider.notifier).saveTeam(team);
 
       if (mounted) {
-        context.go(widget.setupShared ? '/ajouter-joueurs-initiaux?partage=1' : '/ajouter-joueurs-initiaux');
+        context.go(
+          widget.setupShared
+              ? '/ajouter-joueurs-initiaux?partage=1'
+              : '/ajouter-joueurs-initiaux',
+        );
       }
     } finally {
       if (mounted) {
@@ -76,9 +83,18 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       final payload = await ref.read(backupServiceProvider).pickBackupFile();
       if (payload == null || !mounted) return;
       final teams = await ref.read(allTeamsProvider.future);
-      if (!mounted || !await confirmReplacement(context, payload, teams) || !mounted) return;
-      final result = await ref.read(backupServiceProvider).restoreBackup(payload, merge: false,
-          expectedGroups: {for (final team in teams) team.id: team.name});
+      if (!mounted ||
+          !await confirmReplacement(context, payload, teams) ||
+          !mounted) {
+        return;
+      }
+      final result = await ref
+          .read(backupServiceProvider)
+          .restoreBackup(
+            payload,
+            merge: false,
+            expectedGroups: {for (final team in teams) team.id: team.name},
+          );
 
       await ref.read(hasTeamProvider.notifier).reloadFromDb();
       await ref.read(activeTeamIdProvider.notifier).reloadFromDb();
@@ -127,13 +143,21 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
   Widget build(BuildContext context) {
     final hasTeam = ref.watch(hasTeamProvider);
 
+    final stepTitle = buildAppStepTitle(
+      context,
+      hasTeam ? 'Nouveau groupe' : 'Étape 1 sur 2 · Votre équipe',
+      hasLeading: Navigator.of(context).canPop(),
+    );
+
     return Scaffold(
       backgroundColor: context.colors.background950,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: context.colors.foreground50,
         iconTheme: IconThemeData(color: context.colors.foreground50),
-        systemOverlayStyle: AppTheme.pageOverlayStyle(Theme.of(context).brightness),
+        systemOverlayStyle: AppTheme.pageOverlayStyle(
+          Theme.of(context).brightness,
+        ),
         elevation: 0,
         leading: Navigator.of(context).canPop()
             ? IconButton(
@@ -142,24 +166,8 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
               )
             : null,
         centerTitle: true,
-        title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: context.colors.primary500.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(9999),
-            border: Border.all(
-              color: context.colors.primary500.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Text(
-            hasTeam ? 'Nouveau groupe' : 'Étape 1 sur 2 · Votre équipe',
-            style: TextStyle(
-              color: context.colors.primary400,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        title: stepTitle,
+        toolbarHeight: stepTitle.preferredSize.height,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -239,18 +247,28 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                     ),
                     filled: true,
                     fillColor: context.colors.background900,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.background700),
+                      borderSide: BorderSide(
+                        color: context.colors.background700,
+                      ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.background700),
+                      borderSide: BorderSide(
+                        color: context.colors.background700,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.primary500, width: 2),
+                      borderSide: BorderSide(
+                        color: context.colors.primary500,
+                        width: 2,
+                      ),
                     ),
                   ),
                   validator: (value) {
@@ -262,15 +280,23 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                TextFormField(
-                  controller: _shortNameController,
-                  maxLength: 30,
-                  decoration: const InputDecoration(
-                    labelText: 'Nom court (facultatif)',
-                    hintText: 'Ex. : LI',
-                    helperText: 'Initiales ou surnom ; sinon, le nom complet sera utilisé.',
-                    helperMaxLines: 3,
+                Text(
+                  'Nom court (facultatif)',
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Semantics(
+                  label: 'Nom court (facultatif)',
+                  child: TextFormField(
+                    controller: _shortNameController,
+                    maxLength: 30,
+                    decoration: const InputDecoration(hintText: 'Ex. : LI'),
                   ),
+                ),
+                Text(
+                  'Initiales ou surnom ; sinon, le nom complet sera utilisé.',
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 24),
 
@@ -299,7 +325,9 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? context.colors.primary500.withValues(alpha: 0.18)
+                                  ? context.colors.primary500.withValues(
+                                      alpha: 0.18,
+                                    )
                                   : context.colors.background900,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
@@ -354,70 +382,60 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                     ),
                     filled: true,
                     fillColor: context.colors.background900,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.background700),
+                      borderSide: BorderSide(
+                        color: context.colors.background700,
+                      ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.background700),
+                      borderSide: BorderSide(
+                        color: context.colors.background700,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: context.colors.primary500, width: 2),
+                      borderSide: BorderSide(
+                        color: context.colors.primary500,
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 40),
 
                 // Submit Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: context.colors.primary500,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9999),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: _isLoading
-                        ? SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.5,
-                              color: context.colors.background950,
-                            ),
-                          )
-                        : const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Continuer vers l'effectif",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Icon(Remix.arrow_right_line, size: 20),
-                            ],
-                          ),
-                  ),
+                PrimaryButton(
+                  label: _isLoading
+                      ? 'Enregistrement…'
+                      : "Continuer vers l'effectif",
+                  icon: Remix.arrow_right_line,
+                  onPressed: _isLoading ? null : _submit,
                 ),
                 const SizedBox(height: 16),
-                TextButton.icon(onPressed: () => context.push('/groupe-partage'), icon: const Icon(Remix.group_line), label: const Text('Rejoindre un groupe partagé')),
+                TextButton.icon(
+                  onPressed: () => context.push('/groupe-partage'),
+                  icon: const Icon(Remix.group_line),
+                  label: const Text('Rejoindre un groupe partagé'),
+                ),
                 Center(
                   child: TextButton.icon(
-                    icon: Icon(Remix.download_cloud_2_line, size: 18, color: context.colors.foreground400),
+                    icon: Icon(
+                      Remix.download_cloud_2_line,
+                      size: 18,
+                      color: context.colors.foreground400,
+                    ),
                     label: Text(
                       "J'ai déjà une sauvegarde Statoo",
-                      style: TextStyle(color: context.colors.foreground300, fontSize: 13),
+                      style: TextStyle(
+                        color: context.colors.foreground300,
+                        fontSize: 13,
+                      ),
                     ),
                     onPressed: _isLoading ? null : _restoreFromBackup,
                   ),

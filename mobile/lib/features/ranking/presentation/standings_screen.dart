@@ -112,14 +112,17 @@ class _ViewModeSwitcher extends ConsumerWidget {
                   : context.colors.foreground400,
             ),
             const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                color: isSelected
-                    ? context.colors.background950
-                    : context.colors.foreground400,
+            Flexible(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: isSelected
+                      ? context.colors.background950
+                      : context.colors.foreground400,
+                ),
               ),
             ),
           ],

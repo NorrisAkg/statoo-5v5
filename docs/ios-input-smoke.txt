@@ -1,0 +1,7 @@
+{
+  font: '16px',
+  value: 'Équipe QA iPhone',
+  semantic: 'text-field',
+  width: 390,
+  scale: 1
+}

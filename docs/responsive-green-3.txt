@@ -1,0 +1,248 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 108.0.0 (109.0.0 available)
+  analyzer 14.4.0 (14.5.0 available)
+  android_file_picker 2.0.0 (2.1.1 available)
+  archive 4.3.0 (4.5.2 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.6 (4.1.7 available)
+  build_runner 2.16.1 (2.17.1 available)
+  built_collection 5.1.1 (5.1.2 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.1.0 available)
+  code_builder 4.12.0 (4.13.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  cupertino_ui 1.1.1 (1.1.3 available)
+  dart_style 3.1.13 (3.1.14 available)
+  file_picker_darwin 2.1.2 (2.3.2 available)
+  file_picker_linux 2.0.1 (2.0.2 available)
+  file_picker_platform_interface 4.0.0 (4.2.0 available)
+  file_picker_web 4.0.0 (4.2.0 available)
+  go_router 18.0.1 (18.1.0 available)
+  google_fonts 8.2.1 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+23 (0.8.13+25 available)
+  image_picker_ios 0.8.13+8 (0.8.13+12 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.0 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.4.0 (1.7.0 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  share_plus 13.3.0 (13.3.1 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.28 (2.5.0 available)
+  source_gen 4.3.0 (4.3.1 available)
+  sqflite 2.4.4 (2.4.4+2 available)
+  sqflite_android 2.4.4 (2.4.4+1 available)
+  sqflite_common 2.5.13 (2.5.14 available)
+  sqflite_common_ffi 2.4.3 (2.4.4 available)
+  sqflite_darwin 2.4.4 (2.4.4+1 available)
+  sqlite3 3.5.2 (3.7.1 available)
+  synchronized 3.4.2 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  windows_file_picker 2.0.0 (2.0.1 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+53 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: (setUpAll)
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=1.0 dark=false
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=320.0 scale=1.0
+00:01 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=1.0 dark=false
+00:01 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=320.0 scale=1.3
+00:01 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=1.0 dark=false
+00:01 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=1.0 dark=false
+00:02 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=393.0 scale=1.0
+00:02 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.0 dark=false
+00:02 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.0 dark=false
+00:02 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=393.0 scale=2.0
+00:02 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=1.0 dark=false
+00:02 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=1.0 dark=false
+00:02 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=1.0 dark=false
+00:02 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false
+00:03 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=1.0 dark=false
+00:03 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=1.0 dark=false
+00:03 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.0 dark=false
+00:03 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=1.0 dark=false
+00:03 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=1.0 dark=false
+00:04 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=1.0 dark=false
+00:04 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=1.0 dark=false
+00:04 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=1.0 dark=true
+00:04 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=1.0 dark=true
+00:04 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=1.0 dark=true
+00:05 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.0 dark=true
+00:05 +25: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=1.0 dark=true
+00:05 +26: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=1.0 dark=true
+00:05 +27: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=1.0 dark=true
+00:05 +28: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=true
+00:06 +29: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=1.0 dark=true
+00:06 +30: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=1.0 dark=true
+00:06 +31: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.0 dark=true
+00:06 +32: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=1.0 dark=true
+00:06 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=1.0 dark=true
+00:07 +34: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=1.0 dark=true
+00:07 +35: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=1.0 dark=true
+00:07 +36: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=1.3 dark=false
+00:07 +37: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=1.3 dark=false
+00:07 +38: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=1.3 dark=false
+00:08 +39: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.3 dark=false
+00:08 +40: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=1.3 dark=false
+00:08 +41: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=1.3 dark=false
+00:09 +42: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=1.3 dark=false
+00:09 +43: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.3 dark=false
+00:09 +44: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=1.3 dark=false
+00:09 +45: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=1.3 dark=false
+00:09 +46: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.3 dark=false
+00:10 +47: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=1.3 dark=false
+00:10 +48: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=1.3 dark=false
+00:10 +49: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=1.3 dark=false
+00:10 +50: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=1.3 dark=false
+00:10 +51: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=1.3 dark=true
+00:10 +52: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=1.3 dark=true
+00:11 +53: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=1.3 dark=true
+00:11 +54: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.3 dark=true
+00:11 +55: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=1.3 dark=true
+00:12 +56: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=1.3 dark=true
+00:12 +57: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=1.3 dark=true
+00:12 +58: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.3 dark=true
+00:12 +59: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=1.3 dark=true
+00:12 +60: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=1.3 dark=true
+00:12 +61: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.3 dark=true
+00:12 +62: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=1.3 dark=true
+00:12 +63: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=1.3 dark=true
+00:13 +64: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=1.3 dark=true
+00:13 +65: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=1.3 dark=true
+00:13 +66: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=2.0 dark=false
+00:13 +67: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=2.0 dark=false
+00:13 +68: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=2.0 dark=false
+00:14 +69: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=2.0 dark=false
+00:14 +70: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=2.0 dark=false
+00:14 +71: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=2.0 dark=false
+00:14 +72: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=2.0 dark=false
+00:15 +73: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=2.0 dark=false
+00:15 +74: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=2.0 dark=false
+00:15 +75: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=2.0 dark=false
+00:15 +76: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=2.0 dark=false
+00:15 +77: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=2.0 dark=false
+00:15 +78: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=2.0 dark=false
+00:16 +79: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=2.0 dark=false
+00:16 +80: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=2.0 dark=false
+00:16 +81: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=320.0 scale=2.0 dark=true
+00:16 +82: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=2.0 dark=true
+00:16 +83: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=320.0 scale=2.0 dark=true
+00:16 +84: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=2.0 dark=true
+00:17 +85: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=320.0 scale=2.0 dark=true
+00:17 +86: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=2.0 dark=true
+00:17 +87: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=2.0 dark=true
+00:17 +88: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=2.0 dark=true
+00:18 +89: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=320.0 scale=2.0 dark=true
+00:18 +90: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=2.0 dark=true
+00:18 +91: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=2.0 dark=true
+00:18 +92: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=320.0 scale=2.0 dark=true
+00:18 +93: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=320.0 scale=2.0 dark=true
+00:18 +94: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=2.0 dark=true
+00:19 +95: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=320.0 scale=2.0 dark=true
+00:19 +96: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=1.0 dark=false
+00:19 +97: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=1.0 dark=false
+00:19 +98: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=1.0 dark=false
+00:19 +99: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=1.0 dark=false
+00:19 +100: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=1.0 dark=false
+00:19 +101: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=1.0 dark=false
+00:20 +102: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=1.0 dark=false
+00:20 +103: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=1.0 dark=false
+00:20 +104: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=1.0 dark=false
+00:20 +105: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=1.0 dark=false
+00:20 +106: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=1.0 dark=false
+00:20 +107: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=1.0 dark=false
+00:20 +108: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=1.0 dark=false
+00:21 +109: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=1.0 dark=false
+00:21 +110: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=1.0 dark=false
+00:21 +111: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=1.0 dark=true
+00:21 +112: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=1.0 dark=true
+00:21 +113: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=1.0 dark=true
+00:21 +114: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=1.0 dark=true
+00:22 +115: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=1.0 dark=true
+00:22 +116: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=1.0 dark=true
+00:22 +117: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=1.0 dark=true
+00:22 +118: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=1.0 dark=true
+00:22 +119: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=1.0 dark=true
+00:22 +120: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=1.0 dark=true
+00:22 +121: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=1.0 dark=true
+00:22 +122: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=1.0 dark=true
+00:22 +123: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=1.0 dark=true
+00:23 +124: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=1.0 dark=true
+00:23 +125: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=1.0 dark=true
+00:23 +126: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=1.3 dark=false
+00:23 +127: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=1.3 dark=false
+00:23 +128: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=1.3 dark=false
+00:23 +129: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=1.3 dark=false
+00:24 +130: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=1.3 dark=false
+00:24 +131: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=1.3 dark=false
+00:24 +132: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=1.3 dark=false
+00:24 +133: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=1.3 dark=false
+00:24 +134: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=1.3 dark=false
+00:24 +135: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=1.3 dark=false
+00:24 +136: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=1.3 dark=false
+00:25 +137: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=1.3 dark=false
+00:25 +138: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=1.3 dark=false
+00:25 +139: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=1.3 dark=false
+00:25 +140: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=1.3 dark=false
+00:25 +141: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=1.3 dark=true
+00:25 +142: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=1.3 dark=true
+00:25 +143: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=1.3 dark=true
+00:26 +144: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=1.3 dark=true
+00:26 +145: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=1.3 dark=true
+00:26 +146: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=1.3 dark=true
+00:26 +147: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=1.3 dark=true
+00:26 +148: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=1.3 dark=true
+00:27 +149: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=1.3 dark=true
+00:27 +150: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=1.3 dark=true
+00:27 +151: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=1.3 dark=true
+00:27 +152: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=1.3 dark=true
+00:27 +153: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=1.3 dark=true
+00:27 +154: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=1.3 dark=true
+00:27 +155: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=1.3 dark=true
+00:27 +156: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=2.0 dark=false
+00:28 +157: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=2.0 dark=false
+00:28 +158: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=2.0 dark=false
+00:28 +159: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=2.0 dark=false
+00:28 +160: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=2.0 dark=false
+00:28 +161: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=2.0 dark=false
+00:29 +162: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=2.0 dark=false
+00:29 +163: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=2.0 dark=false
+00:29 +164: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=2.0 dark=false
+00:29 +165: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=2.0 dark=false
+00:29 +166: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=2.0 dark=false
+00:29 +167: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=2.0 dark=false
+00:29 +168: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=2.0 dark=false
+00:30 +169: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=2.0 dark=false
+00:30 +170: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=2.0 dark=false
+00:30 +171: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP button width=393.0 scale=2.0 dark=true
+00:30 +172: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=393.0 scale=2.0 dark=true
+00:31 +173: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home width=393.0 scale=2.0 dark=true
+00:31 +174: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=393.0 scale=2.0 dark=true
+00:31 +175: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP active width=393.0 scale=2.0 dark=true
+00:31 +176: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=393.0 scale=2.0 dark=true
+00:31 +177: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=393.0 scale=2.0 dark=true
+00:31 +178: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=2.0 dark=true
+00:31 +179: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=2.0 dark=true
+00:32 +180: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=393.0 scale=2.0 dark=true
+00:32 +181: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=2.0 dark=true
+00:32 +182: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats-rich width=393.0 scale=2.0 dark=true
+00:32 +183: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP settings width=393.0 scale=2.0 dark=true
+00:32 +184: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=393.0 scale=2.0 dark=true
+00:33 +185: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: RSP new-session width=393.0 scale=2.0 dark=true
+00:33 +186: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/design/small_screen_responsive_test.dart: (tearDownAll)
+00:33 +186: All tests passed!

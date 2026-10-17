@@ -1,0 +1,31 @@
+TAP version 13
+# Subtest: RSP09/11 actual Flutter web frame separates PWA controls from app header
+not ok 1 - RSP09/11 actual Flutter web frame separates PWA controls from app header
+  ---
+  duration_ms: 3440.4588
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\responsive-flutter.e2e.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: 'PWA label should fit one line when viewport allows'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/web/tests/responsive-flutter.e2e.mjs:37:9)
+    runNextTicks (node:internal/process/task_queues:64:5)
+    process.processImmediate (node:internal/timers:452:9)
+    process.callbackTrampoline (node:internal/async_hooks:130:17)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3906.2628

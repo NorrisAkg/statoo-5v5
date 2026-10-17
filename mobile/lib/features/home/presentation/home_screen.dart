@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../../core/widgets/responsive_grid.dart';
 import '../../../core/widgets/soccer_shoe_icon.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
@@ -16,11 +17,11 @@ import '../../sessions/application/sessions_provider.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_summary.dart';
 import '../../settings/application/home_preferences.dart';
-import 'home_session_result.dart';
+import '../../shared/application/shared_providers.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
-import '../../shared/application/shared_providers.dart';
+import 'home_session_result.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -54,8 +55,7 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 180),
+                Flexible(
                   child: Tooltip(
                     message: activeTeam?.name ?? 'Mon groupe',
                     child: Text(
@@ -95,11 +95,12 @@ class HomeScreen extends ConsumerWidget {
             sessionsAsync.value,
           ),
           const SizedBox(height: 16),
-            if (ref.watch(canWriteProvider('sport'))) PrimaryButton(
-            label: 'Nouvelle séance',
-            icon: Remix.add_line,
-            onPressed: () => context.push('/seances/nouvelle'),
-          ),
+          if (ref.watch(canWriteProvider('sport')))
+            PrimaryButton(
+              label: 'Nouvelle séance',
+              icon: Remix.add_line,
+              onPressed: () => context.push('/seances/nouvelle'),
+            ),
           if (ref.watch(showPlayerOfMonthProvider).value ?? true)
             _buildPlayerOfTheMonth(context, ref),
           const SizedBox(height: 32),
@@ -109,8 +110,16 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 32),
           _buildTiles(context, ref),
           const SizedBox(height: 16),
-          OutlinedButton.icon(onPressed: () => context.push('/finances'), icon: const Icon(Remix.wallet_line), label: const Text('Finances du groupe')),
-          TextButton.icon(onPressed: () => context.push('/groupe-partage'), icon: const Icon(Remix.cloud_line), label: const Text('Groupe partagé et synchronisation')),
+          OutlinedButton.icon(
+            onPressed: () => context.push('/finances'),
+            icon: const Icon(Remix.wallet_line),
+            label: const Text('Finances du groupe'),
+          ),
+          TextButton.icon(
+            onPressed: () => context.push('/groupe-partage'),
+            icon: const Icon(Remix.cloud_line),
+            label: const Text('Groupe partagé et synchronisation'),
+          ),
           const SizedBox(height: 32),
           _buildFooter(context),
         ],
@@ -133,7 +142,10 @@ class HomeScreen extends ConsumerWidget {
       return AppCard(
         child: Column(
           children: [
-            Row(
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Container(
                   width: 10,
@@ -152,7 +164,6 @@ class HomeScreen extends ConsumerWidget {
                     fontSize: 14,
                   ),
                 ),
-                const Spacer(),
                 Text(
                   playedAtStr,
                   style: TextStyle(
@@ -369,7 +380,10 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Icon(
                         Remix.trophy_fill,
@@ -387,19 +401,16 @@ class HomeScreen extends ConsumerWidget {
                           fontSize: 14,
                         ),
                       ),
-                      const Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: context.colors.gold
-                              .withValues(alpha: 0.15),
+                          color: context.colors.gold.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: context.colors.gold
-                                .withValues(alpha: 0.4),
+                            color: context.colors.gold.withValues(alpha: 0.4),
                           ),
                         ),
                         child: Text(
@@ -428,16 +439,15 @@ class HomeScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            Wrap(
+                              spacing: 4,
+                              runSpacing: 4,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    mvp.name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
+                                Text(
+                                  mvp.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
                                 ),
                                 if (mvp.nickname != null &&
@@ -559,8 +569,11 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildSectionHeader(BuildContext context, String title, String route) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      spacing: 12,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(title, style: Theme.of(context).textTheme.titleMedium),
         GestureDetector(
@@ -663,16 +676,15 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
                     children: [
-                      Flexible(
-                        child: Text(
-                          entry.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                      Text(
+                        entry.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
                       if (entry.nickname != null &&
@@ -775,8 +787,10 @@ class HomeScreen extends ConsumerWidget {
 
     final groupTotalsAsync = ref.watch(groupTotalsProvider);
     final statsWidget = groupTotalsAsync.maybeWhen(
-      data: (totals) => Row(
-        mainAxisSize: MainAxisSize.min,
+      data: (totals) => Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Icon(Remix.football_line, size: 16, color: context.colors.primary400),
           const SizedBox(width: 4),
@@ -799,36 +813,30 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
 
-    return Row(
+    return ResponsiveGrid(
+      maxColumns: 3,
+      minItemWidth: 100,
       children: [
-        Expanded(
-          child: _buildTile(
-            context,
-            Remix.user_line,
-            'Joueurs',
-            value: playersCount,
-            onTap: () => context.go('/joueurs'),
-          ),
+        _buildTile(
+          context,
+          Remix.user_line,
+          'Joueurs',
+          value: playersCount,
+          onTap: () => context.go('/joueurs'),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildTile(
-            context,
-            Remix.calendar_event_line,
-            'Séances',
-            value: sessionsCount,
-            onTap: () => context.go('/seances'),
-          ),
+        _buildTile(
+          context,
+          Remix.calendar_event_line,
+          'Séances',
+          value: sessionsCount,
+          onTap: () => context.go('/seances'),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildTile(
-            context,
-            Remix.pie_chart_line,
-            'Stats',
-            customValue: statsWidget,
-            onTap: () => context.go('/stats'),
-          ),
+        _buildTile(
+          context,
+          Remix.pie_chart_line,
+          'Stats',
+          customValue: statsWidget,
+          onTap: () => context.go('/stats'),
         ),
       ],
     );
@@ -863,21 +871,13 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 2),
               if (customValue != null)
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: customValue,
-                )
+                customValue
               else if (value != null && value.isNotEmpty)
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
             ],
@@ -888,8 +888,11 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildFooter(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
       children: [
         Icon(
           Remix.cloud_windy_line,

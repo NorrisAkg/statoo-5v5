@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: IOS-01/02/03 semantic fields have safe font sizes before focus without changing other fields
+ok 1 - IOS-01/02/03 semantic fields have safe font sizes before focus without changing other fields
+  ---
+  duration_ms: 698.1881
+  type: 'test'
+  ...
+# Subtest: IOS-04/05 accessibility, browser zoom and early stylesheet are retained
+ok 2 - IOS-04/05 accessibility, browser zoom and early stylesheet are retained
+  ---
+  duration_ms: 0.8514
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1159.6045

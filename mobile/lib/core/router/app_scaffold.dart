@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../theme/app_colors.dart';
+import '../widgets/adaptive_bottom_navigation.dart';
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({
-    required this.navigationShell,
-    super.key,
-  });
+  const AppScaffold({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
@@ -27,14 +26,12 @@ class AppScaffold extends StatelessWidget {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        child: BottomNavigationBar(
+        child: AdaptiveBottomNavigation(
           currentIndex: navigationShell.currentIndex,
           onTap: (index) => _onTap(context, index),
           backgroundColor: context.colors.background900,
           selectedItemColor: context.colors.primary500,
           unselectedItemColor: context.colors.foreground500,
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 12,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Remix.home_5_line),

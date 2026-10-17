@@ -1,0 +1,336 @@
+TAP version 13
+# Subtest: IOS-01/02/03 semantic fields have safe font sizes before focus without changing other fields
+not ok 1 - IOS-01/02/03 semantic fields have safe font sizes before focus without changing other fields
+  ---
+  duration_ms: 944.4819
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\ios-input-focus.e2e.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'semantic font must prevent iOS focus auto-zoom'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/web/tests/ios-input-focus.e2e.mjs:15:94)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: IOS-04/05 accessibility, browser zoom and early stylesheet are retained
+not ok 2 - IOS-04/05 accessibility, browser zoom and early stylesheet are retained
+  ---
+  duration_ms: 0.8941
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\ios-input-focus.e2e.mjs:25:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /@supports\s*\(-webkit-touch-callout:\s*none\)/. Input:
+
+    '/* Independent browser controls; Flutter keeps ownership of all product screens. */\n' +
+      '@font-face {\n' +
+      '  font-family: StatooPwa;\n' +
+      '  src: url("assets/assets/google_fonts/Poppins-Regular.ttf") format("truetype");\n' +
+      '  font-style: normal;\n' +
+      '  font-weight: 400;\n' +
+      '  font-display: swap;\n' +
+      '}\n' +
+      '#statoo-pwa,\n' +
+      '#statoo-pwa-dialog {\n' +
+      '  --pwa-bg: #fff;\n' +
+      '  --pwa-soft: #f1f5f9;\n' +
+      '  --pwa-text: #0f172a;\n' +
+      '  --pwa-muted: #475569;\n' +
+      '  --pwa-line: #e2e8f0;\n' +
+      '  --pwa-primary: #15803d;\n' +
+      '  box-sizing: border-box;\n' +
+      '  color: var(--pwa-text);\n' +
+      '  font-family: StatooPwa, Poppins, system-ui, sans-serif;\n' +
+      '  font-size: 1rem;\n' +
+      '  line-height: 1.5;\n' +
+      '}\n' +
+      '@media (prefers-color-scheme: dark) {\n' +
+      '  #statoo-pwa,\n' +
+      '  #statoo-pwa-dialog {\n' +
+      '    --pwa-bg: #141a22;\n' +
+      '    --pwa-soft: #1a222c;\n' +
+      '    --pwa-text: #f8fafc;\n' +
+      '    --pwa-muted: #94a3b8;\n' +
+      '    --pwa-line: #1f2733;\n' +
+      '    --pwa-primary: #22c55e;\n' +
+      '  }\n' +
+      '}\n' +
+      '#statoo-pwa {\n' +
+      '  position: fixed;\n' +
+      '  z-index: 2147483000;\n' +
+      '  top: max(8px, env(safe-area-inset-top));\n' +
+      '  left: 50%;\n' +
+      '  transform: translateX(-50%);\n' +
+      '  max-width: calc(100vw - 16px);\n' +
+      '}\n' +
+      '#statoo-pwa summary {\n' +
+      '  box-sizing: border-box;\n' +
+      '  min-height: 48px;\n' +
+      '  display: flex;\n' +
+      '  align-items: center;\n' +
+      '  justify-content: center;\n' +
+      '  cursor: pointer;\n' +
+      '  list-style: none;\n' +
+      '  background: var(--pwa-bg);\n' +
+      '  border: 1px solid var(--pwa-primary);\n' +
+      '  border-radius: 24px;\n' +
+      '  padding: 10px 16px;\n' +
+      '  font-size: 0.875rem;\n' +
+      '  font-weight: 600;\n' +
+      '  overflow-wrap: anywhere;\n' +
+      '  box-shadow: 0 2px 12px #0002;\n' +
+      '}\n' +
+      '#statoo-pwa summary::-webkit-details-marker {\n' +
+      '  display: none;\n' +
+      '}\n' +
+      '#statoo-pwa-panel {\n' +
+      '  width: 320px;\n' +
+      '  max-width: calc(100vw - 16px);\n' +
+      '  box-sizing: border-box;\n' +
+      '  max-height: calc(100dvh - 100px - env(safe-area-inset-top));\n' +
+      '  overflow: auto;\n' +
+      '  padding: 16px;\n' +
+      '  margin-top: 8px;\n' +
+      '  border: 1px solid var(--pwa-line);\n' +
+      '  border-radius: 20px;\n' +
+      '  background: var(--pwa-bg);\n' +
+      '  box-shadow: 0 8px 32px #0003;\n' +
+      '}\n' +
+      '#statoo-pwa button,\n' +
+      '#statoo-pwa-dialog button {\n' +
+      '  font: inherit;\n' +
+      '  box-sizing: border-box;\n' +
+      '  cursor: pointer;\n' +
+      '  min-width: 48px;\n' +
+      '  min-height: 48px;\n' +
+      '  padding: 12px 16px;\n' +
+      '  border-radius: 24px;\n' +
+      '  background: var(--pwa-soft);\n' +
+      '  color: var(--pwa-text);\n' +
+      '  border: 1px solid var(--pwa-line);\n' +
+      '  overflow-wrap: anywhere;\n' +
+      '}\n' +
+      '#statoo-pwa button {\n' +
+      '  width: 100%;\n' +
+      '  margin-bottom: 8px;\n' +
+      '}\n' +
+      '#statoo-pwa-update {\n' +
+      '  border-color: var(--pwa-primary) !important;\n' +
+      '}\n' +
+      '#statoo-pwa button:disabled {\n' +
+      '  cursor: wait;\n' +
+      '  opacity: 0.7;\n' +
+      '}\n' +
+      '#statoo-pwa-status {\n' +
+      '  font-size: 0.875rem;\n' +
+      '  color: var(--pwa-muted);\n' +
+      '  margin: 8px 0 0;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog {\n' +
+      '  border: 1px solid var(--pwa-line);\n' +
+      '  border-radius: 20px;\n' +
+      '  background: var(--pwa-bg);\n' +
+      '  width: calc(100% - 32px);\n' +
+      '  max-width: 520px;\n' +
+      '  max-height: 85dvh;\n' +
+      '  padding: 24px;\n' +
+      '  overflow: auto;\n' +
+      '  overflow-wrap: anywhere;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog::backdrop {\n' +
+      '  background: #0009;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog h2 {\n' +
+      '  font-size: 1.25rem;\n' +
+      '  margin: 0 0 16px;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog p {\n' +
+      '  margin: 0 0 24px;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog > div {\n' +
+      '  display: flex;\n' +
+      '  gap: 8px;\n' +
+      '  flex-wrap: wrap;\n' +
+      '}\n' +
+      '#statoo-pwa-dialog button {\n' +
+      '  flex: 1 1 160px;\n' +
+      '}\n' +
+      '#statoo-pwa :focus-visible,\n' +
+      '#statoo-pwa-dialog :focus-visible {\n' +
+      '  outline: 2px solid var(--pwa-primary);\n' +
+      '  outline-offset: 3px;\n' +
+      '}\n' +
+      '#statoo-pwa [hidden] {\n' +
+      '  display: none !important;\n' +
+      '}\n'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    /* Independent browser controls; Flutter keeps ownership of all product screens. */
+    @font-face {
+      font-family: StatooPwa;
+      src: url("assets/assets/google_fonts/Poppins-Regular.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    #statoo-pwa,
+    #statoo-pwa-dialog {
+      --pwa-bg: #fff;
+      --pwa-soft: #f1f5f9;
+      --pwa-text: #0f172a;
+      --pwa-muted: #475569;
+      --pwa-line: #e2e8f0;
+      --pwa-primary: #15803d;
+      box-sizing: border-box;
+      color: var(--pwa-text);
+      font-family: StatooPwa, Poppins, system-ui, sans-serif;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    @media (prefers-color-scheme: dark) {
+      #statoo-pwa,
+      #statoo-pwa-dialog {
+        --pwa-bg: #141a22;
+        --pwa-soft: #1a222c;
+        --pwa-text: #f8fafc;
+        --pwa-muted: #94a3b8;
+        --pwa-line: #1f2733;
+        --pwa-primary: #22c55e;
+      }
+    }
+    #statoo-pwa {
+      position: fixed;
+      z-index: 2147483000;
+      top: max(8px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: calc(100vw - 16px);
+    }
+    #statoo-pwa summary {
+      box-sizing: border-box;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      list-style: none;
+      background: var(--pwa-bg);
+      border: 1px solid var(--pwa-primary);
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+      box-shadow: 0 2px 12px #0002;
+    }
+    #statoo-pwa summary::-webkit-details-marker {
+      display: none;
+    }
+    #statoo-pwa-panel {
+      width: 320px;
+      max-width: calc(100vw - 16px);
+      box-sizing: border-box;
+      max-height: calc(100dvh - 100px - env(safe-area-inset-top));
+      overflow: auto;
+      padding: 16px;
+      margin-top: 8px;
+      border: 1px solid var(--pwa-line);
+      border-radius: 20px;
+      background: var(--pwa-bg);
+      box-shadow: 0 8px 32px #0003;
+    }
+    #statoo-pwa button,
+    #statoo-pwa-dialog button {
+      font: inherit;
+      box-sizing: border-box;
+      cursor: pointer;
+      min-width: 48px;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 24px;
+      background: var(--pwa-soft);
+      color: var(--pwa-text);
+      border: 1px solid var(--pwa-line);
+      overflow-wrap: anywhere;
+    }
+    #statoo-pwa button {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    #statoo-pwa-update {
+      border-color: var(--pwa-primary) !important;
+    }
+    #statoo-pwa button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+    }
+    #statoo-pwa-status {
+      font-size: 0.875rem;
+      color: var(--pwa-muted);
+      margin: 8px 0 0;
+    }
+    #statoo-pwa-dialog {
+      border: 1px solid var(--pwa-line);
+      border-radius: 20px;
+      background: var(--pwa-bg);
+      width: calc(100% - 32px);
+      max-width: 520px;
+      max-height: 85dvh;
+      padding: 24px;
+      overflow: auto;
+      overflow-wrap: anywhere;
+    }
+    #statoo-pwa-dialog::backdrop {
+      background: #0009;
+    }
+    #statoo-pwa-dialog h2 {
+      font-size: 1.25rem;
+      margin: 0 0 16px;
+    }
+    #statoo-pwa-dialog p {
+      margin: 0 0 24px;
+    }
+    #statoo-pwa-dialog > div {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    #statoo-pwa-dialog button {
+      flex: 1 1 160px;
+    }
+    #statoo-pwa :focus-visible,
+    #statoo-pwa-dialog :focus-visible {
+      outline: 2px solid var(--pwa-primary);
+      outline-offset: 3px;
+    }
+    #statoo-pwa [hidden] {
+      display: none !important;
+    }
+
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/web/tests/ios-input-focus.e2e.mjs:29:9)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1593.257
