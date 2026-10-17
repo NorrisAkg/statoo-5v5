@@ -46,7 +46,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
     if (mounted) {
       if (toTeamCreation) {
-        context.go('/creer-equipe');
+        context.go(GoRouterState.of(context).uri.queryParameters['partage'] == '1' ? '/creer-equipe?partage=1' : '/creer-equipe');
       } else {
         context.go('/');
       }

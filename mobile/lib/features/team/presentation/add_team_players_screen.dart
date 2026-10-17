@@ -6,12 +6,14 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
 import '../application/team_provider.dart';
 
 class AddTeamPlayersScreen extends ConsumerStatefulWidget {
-  const AddTeamPlayersScreen({super.key});
+  const AddTeamPlayersScreen({this.setupShared = false, super.key});
+  final bool setupShared;
 
   @override
   ConsumerState<AddTeamPlayersScreen> createState() => _AddTeamPlayersScreenState();
@@ -71,7 +73,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         ),
       ),
     );
-    context.go('/');
+    context.go(widget.setupShared ? '/groupe-partage?creation=1&installation=1' : '/');
   }
 
   @override
@@ -351,8 +353,10 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              spacing: 16,
+                              runSpacing: 8,
                               children: [
                                 Text(
                                   'EFFECTIF ACTUEL ($count)',
@@ -512,31 +516,10 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
               ),
               child: SizedBox(
                 width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
+                child: PrimaryButton(
+                  label: widget.setupShared ? 'Continuer vers l’accès Admin' : "Terminer et aller à l'Accueil",
+                  icon: Remix.arrow_right_line,
                   onPressed: _finish,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: context.colors.primary500,
-                    foregroundColor: context.colors.background950,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(9999),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Terminer et aller à l'Accueil",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(Remix.arrow_right_line, size: 20),
-                    ],
-                  ),
                 ),
               ),
             ),

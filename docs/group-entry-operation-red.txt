@@ -1,0 +1,14 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/registration_operation_test.dart
+00:00 +0: ENT07/11 operation persists for retries without mixing local groups
+00:00 +0 -1: ENT07/11 operation persists for retries without mixing local groups [E]
+  Expected: match '^[a-f0-9]{32}$'
+    Actual: 'new-operation'
+
+  package:matcher                                             expect
+  package:flutter_test/src/widget_tester.dart 473:18          expect
+  test\features\shared\registration_operation_test.dart 12:5  main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/registration_operation_test.dart: ENT07/11 operation persists for retries without mixing local groups

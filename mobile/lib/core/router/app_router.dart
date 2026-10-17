@@ -7,6 +7,7 @@ import '../../features/finance/presentation/financial_point_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/application/onboarding_provider.dart';
 import '../../features/onboarding/presentation/onboarding_screen.dart';
+import '../../features/onboarding/presentation/group_entry_screen.dart';
 import '../../features/onboarding/presentation/splash_screen.dart';
 import '../../features/players/presentation/player_detail_screen.dart';
 import '../../features/players/presentation/players_screen.dart';
@@ -40,6 +41,7 @@ RouterNotifier routerNotifier(Ref ref) => RouterNotifier(ref);
 
 @riverpod
 GoRouter appRouter(Ref ref) {
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   final notifier = ref.watch(routerProvider);
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
@@ -47,7 +49,7 @@ GoRouter appRouter(Ref ref) {
     refreshListenable: notifier,
     redirect: (context, state) {
       final loc = state.matchedLocation;
-      if (loc == '/splash' || loc == '/groupe-partage') {
+      if (loc == '/splash' || loc == '/groupe-partage' || loc == '/bienvenue') {
         return null;
       }
 
@@ -59,14 +61,14 @@ GoRouter appRouter(Ref ref) {
       final isAddingPlayers = loc == '/ajouter-joueurs-initiaux';
 
       if (!seenOnboarding) {
-        return isOnboarding ? null : '/onboarding';
+        return isOnboarding ? null : '/bienvenue';
       }
 
       if (!teamCreated) {
         if (isCreatingTeam || isAddingPlayers) {
           return null;
         }
-        return '/creer-equipe';
+        return '/bienvenue';
       }
 
       if (isOnboarding) {
@@ -76,8 +78,9 @@ GoRouter appRouter(Ref ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/bienvenue', parentNavigatorKey: _rootNavigatorKey, builder: (context, state) => const GroupEntryScreen()),
       GoRoute(path: '/finances', parentNavigatorKey: _rootNavigatorKey, builder: (context, state) => const FinancesScreen()),
-      GoRoute(path: '/groupe-partage', parentNavigatorKey: _rootNavigatorKey, builder: (context, state) => const SharedGroupScreen()),
+      GoRoute(path: '/groupe-partage', parentNavigatorKey: _rootNavigatorKey, builder: (context, state) => SharedGroupScreen(initialCreate: state.uri.queryParameters['creation'] == '1', setup: state.uri.queryParameters['installation'] == '1')),
       GoRoute(path: '/seances/:id/finances', parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => FinancialPointScreen(sessionId: state.pathParameters['id']!)),
       StatefulShellRoute.indexedStack(
@@ -140,12 +143,12 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: '/creer-equipe',
-        builder: (context, state) => const CreateTeamScreen(),
+        builder: (context, state) => CreateTeamScreen(setupShared: state.uri.queryParameters['partage'] == '1'),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: '/ajouter-joueurs-initiaux',
-        builder: (context, state) => const AddTeamPlayersScreen(),
+        builder: (context, state) => AddTeamPlayersScreen(setupShared: state.uri.queryParameters['partage'] == '1'),
       ),
       GoRoute(
         parentNavigatorKey: _rootNavigatorKey,

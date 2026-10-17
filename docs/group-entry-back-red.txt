@@ -1,0 +1,31 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart
+00:00 +0: ENT03 direct join can return to entry after reload
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _WidgetPredicateWidgetFinder:<Found 0 widgets with widget matching predicate: []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart:140:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart line 140
+The test description was:
+  ENT03 direct join can return to entry after reload
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: ENT03 direct join can return to entry after reload [E]
+  Test failed. See exception logs above.
+  The test description was: ENT03 direct join can return to entry after reload
+
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT03 direct join can return to entry after reload

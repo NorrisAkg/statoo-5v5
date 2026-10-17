@@ -3,6 +3,12 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 const api = process.env.STATOO_PARITY_API || "http://127.0.0.1:18088";
 const base = process.env.STATOO_PARITY_URL || "http://127.0.0.1:18087/";
+async function enter(locator, value) {
+  await locator.click();
+  await locator.press('ControlOrMeta+A');
+  await locator.pressSequentially(value, {delay: 10});
+  await locator.page().keyboard.press('Tab');
+}
 const password = "QA-Password-2026";
 async function request(
   path,
@@ -93,10 +99,12 @@ test(
       },
       sport.token,
     );
+    console.log("Browser regression: launching Chrome");
     const browser = await chromium.launch({
       channel: "chrome",
       headless: true,
     });
+    console.log("Browser regression: Chrome ready");
     try {
       const page = await browser.newPage({
         viewport: { width: 1100, height: 1200 },
@@ -104,33 +112,13 @@ test(
       const errors = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.goto(base);
-      await page
-        .getByRole("button", { name: "Passer", exact: true })
-        .waitFor({ timeout: 30000 });
-      await page.getByRole("button", { name: "Passer", exact: true }).click();
-      await page
-        .getByRole("button", {
-          name: "Rejoindre un groupe partagé",
-          exact: true,
-        })
-        .click();
-      await page.getByRole("textbox").nth(0).fill(admin.group_id);
-      await page.getByRole("textbox").nth(1).fill("SG");
-      await page.getByRole("textbox").nth(2).fill(password);
-      await page
-        .getByRole("button", {
-          name: "Serveur Connexion à Statoo",
-          exact: true,
-        })
-        .click();
-      await page.getByRole("textbox").nth(3).fill(api);
+      await page.getByRole("button", {name: "Rejoindre un groupe", exact: true}).click();
+      await enter(page.getByRole("textbox").nth(0), admin.group_id);
+      await enter(page.getByRole("textbox").nth(1), "SG");
+      await enter(page.getByRole("textbox").nth(2), password);
       await page
         .getByRole("button", { name: "Se connecter", exact: true })
         .click();
-      await page
-        .getByRole("button", { name: "Synchroniser maintenant", exact: true })
-        .waitFor({ timeout: 20000 });
-      await page.goto(base);
       await page
         .getByRole("button", {
           name: "Reprendre le match en direct",

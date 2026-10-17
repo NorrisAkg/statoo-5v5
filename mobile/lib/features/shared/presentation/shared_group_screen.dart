@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/data/app_database.dart';
 import '../../../core/theme/app_colors.dart';
@@ -12,10 +13,13 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../finance/application/finance_providers.dart';
+import '../../onboarding/application/onboarding_provider.dart';
 import '../../players/application/players_provider.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../team/application/team_provider.dart';
 import '../application/shared_providers.dart';
+import '../data/registration_operation.dart';
+import '../domain/registration_members.dart';
 import 'decision_details.dart';
 
 const roleLabels = <String, String>{
@@ -31,7 +35,9 @@ const roleLabels = <String, String>{
 };
 
 class SharedGroupScreen extends ConsumerStatefulWidget {
-  const SharedGroupScreen({super.key});
+  const SharedGroupScreen({this.initialCreate = false, this.setup = false, super.key});
+  final bool initialCreate;
+  final bool setup;
   @override
   ConsumerState<SharedGroupScreen> createState() => _SharedGroupScreenState();
 }
@@ -48,10 +54,22 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   final _sharedUser = TextEditingController(text: 'membres');
   final _sharedPassword = TextEditingController();
   bool _create = false;
+  bool _connectionFailed = false;
   bool _busy = false;
   bool _failed = false;
   final Set<TextEditingController> _shownPasswords = {};
   String? _message;
+
+  @override
+  void initState() {
+    super.initState();
+    _create = widget.initialCreate;
+  }
+
+  Future<void> _finishSetup() async {
+    await ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
+    if (mounted) context.go('/');
+  }
 
   @override
   void dispose() {
@@ -97,6 +115,16 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   }
 
   Future<void> _connect() async {
+    try {
+      await _connectOnce();
+      _connectionFailed = false;
+    } on Object {
+      _connectionFailed = true;
+      rethrow;
+    }
+  }
+
+  Future<void> _connectOnce() async {
     final container = ProviderScope.containerOf(context, listen: false);
     final service = container.read(sharedServiceProvider);
     const url = _apiUrl;
@@ -122,6 +150,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       );
       final shortNames = await db.query('meta', where: 'key = ?', whereArgs: ['team_short_name_$group']);
       registration = {
+        'operation_id': await registrationOperationId(db, group),
         'group_id': group,
         'name': info['name'],
         'short_name': shortNames.isEmpty ? '' : shortNames.single['value'],
@@ -129,7 +158,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         'password': password,
         'shared_username': sharedUsername,
         'shared_password': sharedPassword,
-        'members': members,
+        'members': registrationMembers(group, members),
       };
     }
     await service.connect(
@@ -146,9 +175,26 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     container
       ..invalidate(teamInfoProvider)
       ..invalidate(allTeamsProvider);
+    if (widget.setup && !_create && mounted) await _finishSetup();
   }
 
   Future<void> _addAccount() async {
+    if (_busy || _decisionOpen) return;
+    _decisionOpen = true;
+    try {
+      await ref.read(playersListProvider.future);
+      if (mounted) await _showAddAccount();
+    } on Object catch (error) {
+      if (mounted) setState(() {
+        _failed = true;
+        _message = 'Impossible de charger ou créer le compte : $error';
+      });
+    } finally {
+      _decisionOpen = false;
+    }
+  }
+
+  Future<void> _showAddAccount() async {
     final name = TextEditingController();
     final password = TextEditingController();
     String? member;
@@ -942,7 +988,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        TextField(
+        Semantics(label: label, child: TextField(
           controller: controller,
           enabled: !_busy,
           obscureText: password && !_shownPasswords.contains(controller),
@@ -974,7 +1020,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
                   )
                 : null,
           ),
-        ),
+        )),
       ],
     ),
   );
@@ -1082,7 +1128,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          SizedBox(
+          if (!widget.setup) SizedBox(
             width: double.infinity,
             child: SegmentedButton<bool>(
               showSelectedIcon: false,
@@ -1123,14 +1169,14 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       ),
     ),
     const SizedBox(height: 24),
-    _heading(_create ? 'Votre accès gestionnaire' : 'Votre accès au groupe'),
+    _heading(_create ? 'Créer votre accès Admin' : 'Votre accès au groupe'),
     AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             _create
-                ? 'Partagez votre groupe local et créez votre compte Admin.'
+                ? 'Créez votre compte Admin. Ensuite, désignez les responsables et attribuez leurs rôles.'
                 : 'Utilisez les identifiants reçus du gestionnaire.',
             style: TextStyle(
               color: context.colors.foreground400,
@@ -1197,10 +1243,39 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       icon: Remix.arrow_right_s_line,
       onPressed: _busy ? null : () => unawaited(_perform(_connect)),
     ),
+    if (widget.setup && _create) ...[
+      const SizedBox(height: 12),
+      const Text('Sans connexion, votre groupe reste sur cet appareil. Vous pourrez le partager plus tard.'),
+      TextButton(onPressed: _busy ? null : _finishSetup, child: const Text('Continuer sur cet appareil')),
+    ],
   ];
+
+  List<Widget> _responsibilitySetup() {
+    final service = ref.watch(sharedServiceProvider);
+    final accounts = (service.snapshot?['accounts'] as List? ?? []).whereType<Map<String, dynamic>>();
+    return [
+      _heading('Désigner les responsables'),
+      const Text('Votre accès Admin est prêt. Choisissez les membres qui géreront le groupe et attribuez leurs rôles. Vous pourrez les modifier dans Comptes et rôles.'),
+      const SizedBox(height: 16),
+      AppCard(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        for (final account in accounts.where((a) => a['shared'] != true))
+          _action(title: account['username'] as String,
+            subtitle: (account['roles'] as List).map((r) => roleLabels[r] ?? r).join(' · '),
+            icon: Remix.user_line, onTap: _busy ? null : () => unawaited(_changeRoles(account))),
+        _action(title: 'Ajouter un gestionnaire', subtitle: 'Choisir un membre et ses responsabilités', icon: Remix.add_line,
+          onTap: _busy ? null : () => unawaited(_addAccount())),
+      ])),
+      const SizedBox(height: 16),
+      const Text('Les simples membres utilisent l’accès collectif en lecture seule.'),
+      const SizedBox(height: 24),
+      PrimaryButton(label: 'Terminer et ouvrir le groupe', onPressed: _busy ? null : _finishSetup),
+      TextButton(onPressed: _busy ? null : _finishSetup, child: const Text('Plus tard')),
+    ];
+  }
 
   List<Widget> _management() {
     final service = ref.watch(sharedServiceProvider);
+    if (widget.setup && service.roles.contains('ADMIN')) return _responsibilitySetup();
     final documents =
         (service.snapshot?['documents'] as Map<String, dynamic>? ?? {}).values
             .cast<Map<String, dynamic>>()
@@ -1451,17 +1526,24 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         backgroundColor: context.colors.background950,
         appBar: AppBar(
           title: const Text('Groupe partagé'),
-          leading: Navigator.of(context).canPop()
+          leading: Navigator.of(context).canPop() || widget.setup
               ? IconButton(
+                  tooltip: 'Retour',
                   icon: const Icon(Remix.arrow_left_s_line),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    } else {
+                      context.go('/bienvenue');
+                    }
+                  },
                 )
               : null,
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: [
-            ...service.connected ? _management() : _connection(),
+            ...service.connected && !_connectionFailed ? _management() : _connection(),
             if (_busy) ...[
               const SizedBox(height: 16),
               const LinearProgressIndicator(),

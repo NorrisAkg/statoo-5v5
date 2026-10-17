@@ -1,0 +1,36 @@
+TAP version 13
+# Statoo · Application
+# Groupe partagé
+# Désigner les responsables
+# Votre accès Admin est prêt. Choisissez les membres qui géreront le groupe et attribuez leurs rôles. Vous pourrez les modifier dans Comptes et rôles.
+# Ajouter un gestionnaire Choisir un membre et ses responsabilités
+# Les simples membres utilisent l’accès collectif en lecture seule.
+# Terminer et ouvrir le groupe
+# Plus tard
+# ClientException: Failed to fetch, uri=http://127.0.0.1:19102/groups/%2327189131
+# Subtest: ENT02/05/06 create group, assign responsibility, join as member
+not ok 1 - ENT02/05/06 create group, assign responsibility, join as member
+  ---
+  duration_ms: 27462.6273
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\group-entry.e2e.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.waitFor: Timeout 20000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('button', { name: 'Créer le groupe partagé', exact: true }) to be visible[22m
+
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\ky-solutions\projects\persos\statoo 5v5\web\tests\group-entry.e2e.mjs:49:81)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 27971.3512

@@ -40,7 +40,8 @@ Les trois points ci-dessous sont implémentés sur `codex/remaining-reflections-
 
 - [ ] Une séance distante est-elle différente d'une séance locale ?
 - [ ] Où en est la version web ? Est-elle bien alignée sur le mobile et est-elle mobile first ?
-- [ ] Quelles sont les étapes du onboarding maintenant qu'on a introduit les rôles ?
+- [x] Quelles sont les étapes du onboarding maintenant qu'on a introduit les rôles ?
+  - Entrée Créer/Rejoindre ; création : présentation, groupe, effectif, accès Admin, désignation des responsables (passable). Connexion directe pour rejoindre. Attribution ultérieure dans Comptes et rôles. [Scénarios et preuves](docs/tdd-group-entry-2026-10-17.md).
 
 ### Prochaines pistes
 

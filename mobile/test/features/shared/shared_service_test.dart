@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
+import 'package:statoo/features/shared/domain/registration_members.dart';
 
 void main() {
   late Database db;
@@ -43,6 +44,17 @@ void main() {
     shared.identity = null;
     shared.protectedGroups.add('g');
     await expectLater(shared.requireWrite('g', 'sport'), throwsStateError);
+  });
+  test('ENT11 copied roster imports without changing local members', () async {
+    await db.insert('teams', {'id':'local','name':'Local','format':'5v5','created_at':'2026-10-17'});
+    await db.insert('players', {'id':'alice','team_id':'local','name':'Alice','created_at':'2026-10-17','updated_at':'2026-10-17','is_active':1});
+    final original = await db.query('players');
+    final copied = registrationMembers('local', original);
+    await shared.importSnapshot({'name':'Shared','members':copied,'documents':<String,dynamic>{}});
+    expect(await db.query('players',where:'team_id = ?',whereArgs:['local']), original);
+    expect((await db.query('players',where:'team_id = ?',whereArgs:['g'])).single['name'], 'Alice');
+    await expectLater(shared.importSnapshot({'name':'Shared','members':original,'documents':<String,dynamic>{}}), throwsStateError);
+    expect(await db.query('players',where:'team_id = ?',whereArgs:['local']), original);
   });
   test(
     'pending versions coalesce; attempted transmission is immutable for retry',

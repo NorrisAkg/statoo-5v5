@@ -77,6 +77,8 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 
 ## Évolutions enregistrées
 
+- 17 octobre 2026, entrée et rôles : sans groupe, proposer Créer un groupe et Rejoindre un groupe dès le démarrage ; créer mène à la présentation, au groupe/effectif, à l’accès Admin, puis à Désigner les responsables. Attribution facultative à cette étape, réservée à l’Admin et retrouvable dans Comptes et rôles. Rejoindre mène directement à la connexion. Conserver les préparations locales en cas de réseau absent. Bouton vers l’accès Admin extensible et indicateurs d’effectif avec retour à la ligne à grand texte. Preuves et limites : `tdd-group-entry-2026-10-17.md`.
+
 - 17 octobre 2026, intégration du prototype validé : saisie Flutter du détail actif par événement (but puis passe facultative, cartons), journal local durable, correction de but et annulation atomiques. Tournoi par compteurs de victoires indépendants. Onglet actif : icône Remix check_line + « Actif », contour/couleur d'équipe. Boutons de saisie et choix en dialogue à 48 dp minimum. Résumé existant conservé avec écussons/dégradé, buteurs sans titre ni texte vide et ballon xN. Contrôles de rôle et clôture conservés. Preuves et limites : `tdd-live-integration.md`.
 
 - 17 octobre 2026, précision prototype : aucun texte de remplacement pour les équipes sans but ; cadre des buteurs masqué si toute la séance est sans but. Résumé du match avec dégradé des couleurs A/B à 18 % autour de la surface centrale, suivant SessionHeader, en clair et sombre.

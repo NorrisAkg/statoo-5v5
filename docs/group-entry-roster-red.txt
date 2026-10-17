@@ -1,0 +1,25 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/registration_members_test.dart
+00:00 +0: ENT11 copy roster IDs remain stable, separate and preserve source
+00:00 +0 -1: ENT11 copy roster IDs remain stable, separate and preserve source [E]
+  Expected: not 'alice'
+    Actual: 'alice'
+
+  package:matcher                                          expect
+  package:flutter_test/src/widget_tester.dart 473:18       expect
+  test\features\shared\registration_members_test.dart 8:5  main.<fn>
+
+00:00 +0 -1: ENT11 malformed member cannot produce a silent shared collision
+00:00 +0 -2: ENT11 malformed member cannot produce a silent shared collision [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => List<Map<String, dynamic>>>
+     Which: returned [{'name': 'Invalid'}]
+
+  package:matcher                                           expect
+  package:flutter_test/src/widget_tester.dart 473:18        expect
+  test\features\shared\registration_members_test.dart 18:5  main.<fn>
+
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/registration_members_test.dart: ENT11 copy roster IDs remain stable, separate and preserve source
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/registration_members_test.dart: ENT11 malformed member cannot produce a silent shared collision

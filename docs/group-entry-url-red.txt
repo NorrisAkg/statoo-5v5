@@ -1,0 +1,58 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart
+00:00 +0: ENT01/03 entry and direct join seen=false
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: '1'
+  Actual: <null>
+   Which: not an <Instance of 'String'>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart:48:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart line 48
+The test description was:
+  ENT01/03 entry and direct join seen=false
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: ENT01/03 entry and direct join seen=false [E]
+  Test failed. See exception logs above.
+  The test description was: ENT01/03 entry and direct join seen=false
+
+00:01 +0 -1: ENT01/03 entry and direct join seen=true
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: '1'
+  Actual: <null>
+   Which: not an <Instance of 'String'>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart:48:7)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/shared/group_entry_test.dart line 48
+The test description was:
+  ENT01/03 entry and direct join seen=true
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -2: ENT01/03 entry and direct join seen=true [E]
+  Test failed. See exception logs above.
+  The test description was: ENT01/03 entry and direct join seen=true
+
+00:01 +0 -2: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT01/03 entry and direct join seen=false
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT01/03 entry and direct join seen=true

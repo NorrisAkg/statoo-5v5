@@ -1,0 +1,26 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart
+00:00 +0: ENT10 shared password has a distinct accessible label
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+A SemanticsHandle was active at the end of the test.
+All SemanticsHandle instances must be disposed by calling dispose() on the SemanticsHandle.
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester._verifySemanticsHandlesWereDisposed (package:flutter_test/src/widget_tester.dart:1074:7)
+#1      WidgetTester._endOfTestVerifications (package:flutter_test/src/widget_tester.dart:1063:5)
+#2      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1969:22)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  ENT10 shared password has a distinct accessible label
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: ENT10 shared password has a distinct accessible label [E]
+  Test failed. See exception logs above.
+  The test description was: ENT10 shared password has a distinct accessible label
+
+00:01 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT10 shared password has a distinct accessible label

@@ -1,0 +1,35 @@
+TAP version 13
+# Browser regression: launching Chrome
+# Browser regression: Chrome ready
+# Application
+# Retour
+# Détail séance
+# Clôturer la séance
+# Football · 1v1 · Classée Atlas 0 - 0 En cours Union ven. 16 oct. 2026 · 10h00
+# Ajouter un joueur
+# Atlas Actif
+# Union
+# Ajouter un but
+# Carton jaune
+# Carton rouge
+# Annuler la dernière action
+# Ajouter un but pour Alice
+# Ajouter des joueurs (retardataires)
+# Point financier
+# Clôturer la séance
+# Supprimer ce match
+# Subtest: PAR14/18/21 browser joins a real shared group and resumes its active session
+ok 1 - PAR14/18/21 browser joins a real shared group and resumes its active session
+  ---
+  duration_ms: 7316.1583
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7772.6005

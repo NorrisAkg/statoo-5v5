@@ -3,15 +3,23 @@ import assert from "node:assert/strict";
 import { mkdirSync, readFileSync } from "node:fs";
 import { chromium } from "playwright";
 const base = process.env.STATOO_PARITY_URL || "http://127.0.0.1:18087/";
+async function enter(locator, value) {
+  await locator.click();
+  await locator.press('ControlOrMeta+A');
+  await locator.pressSequentially(value, {delay: 10});
+  await locator.page().keyboard.press('Tab');
+}
 
 test(
   "PAR02/06/08/09/16/17 local group, explicit start, persistence and backup on web",
   { timeout: 120000 },
   async () => {
+    console.log("Browser regression: launching Chrome");
     const browser = await chromium.launch({
       channel: "chrome",
       headless: true,
     });
+    console.log("Browser regression: Chrome ready");
     try {
       const context = await browser.newContext({
         viewport: { width: 393, height: 852 },
@@ -20,20 +28,20 @@ test(
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       await page.goto(base);
+      await page.getByRole("button", {name: "Créer un groupe", exact: true}).click();
       await page
         .getByRole("button", { name: "Passer", exact: true })
         .waitFor({ timeout: 45000 });
       await page.getByRole("button", { name: "Passer", exact: true }).click();
       await page.getByText("Créez votre équipe", { exact: true }).waitFor();
-      await page
+      await enter(page
         .getByRole("textbox", {
           name: "ex: FC Urban, Les Galactiques...",
           exact: true,
-        })
-        .fill("Statoo QA Parité");
+        }), "Statoo QA Parité");
       const shortName = page.getByRole("textbox", { name: /Nom court/ });
       await shortName.click();
-      await shortName.fill("SQ");
+      await enter(shortName, "SQ");
       await shortName.press("Tab");
       await page
         .getByRole("button", { name: "Continuer vers l'effectif", exact: true })
@@ -46,22 +54,22 @@ test(
         "Émile",
         "Fatou",
       ]) {
-        await page
+        await enter(page
           .getByRole("textbox", {
             name: "Nom ou prénom (ex: Lucas, Karim...) *",
             exact: true,
-          })
-          .fill(name);
+          }), name);
         await page
           .getByRole("button", { name: "Ajouter ce joueur", exact: true })
           .click();
       }
       await page
         .getByRole("button", {
-          name: "Terminer et aller à l'Accueil",
+          name: "Continuer vers l’accès Admin",
           exact: true,
         })
         .click();
+      await page.getByRole("button", {name: "Continuer sur cet appareil", exact: true}).click();
       await page
         .getByRole("button", { name: "Nouvelle séance", exact: true })
         .click();
@@ -151,6 +159,7 @@ test(
       });
       const restoredPage = await restored.newPage();
       await restoredPage.goto(base);
+      await restoredPage.getByRole("button", {name: "Créer un groupe", exact: true}).click();
       await restoredPage
         .getByRole("button", { name: "Passer", exact: true })
         .waitFor({ timeout: 30000 });

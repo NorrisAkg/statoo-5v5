@@ -5,7 +5,7 @@ import 'package:statoo/features/team/application/team_provider.dart';
 import 'package:statoo/main.dart';
 
 void main() {
-  testWidgets('Redirects to /creer-equipe after onboarding when no team exists', (tester) async {
+  testWidgets('Shows group entry after onboarding when no team exists', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -21,7 +21,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Créez votre équipe'), findsOneWidget);
+    expect(find.text('Créer un groupe'), findsOneWidget);
+    expect(find.text('Rejoindre un groupe'), findsOneWidget);
   });
 
   testWidgets('App smoke test when onboarding and team exist', (tester) async {

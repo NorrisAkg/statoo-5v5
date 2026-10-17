@@ -1,0 +1,14 @@
+Analyzing 6 items...
+
+   info - Sort directive sections alphabetically. Try sorting the directives - lib\core\router\app_router.dart:10:1 - directives_ordering
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\shared\domain\registration_members.dart:11:5 - curly_braces_in_flow_control_structures
+   info - Sort directive sections alphabetically. Try sorting the directives - lib\features\shared\presentation\shared_group_screen.dart:8:1 - directives_ordering
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\shared\presentation\shared_group_screen.dart:188:20 - curly_braces_in_flow_control_structures
+   info - Sort directive sections alphabetically. Try sorting the directives - test\features\shared\group_entry_test.dart:8:1 - directives_ordering
+   info - Sort directive sections alphabetically. Try sorting the directives - test\features\shared\group_entry_test.dart:14:1 - directives_ordering
+   info - Sort directive sections alphabetically. Try sorting the directives - test\features\shared\group_entry_test.dart:15:1 - directives_ordering
+   info - Sort directive sections alphabetically. Try sorting the directives - test\features\shared\group_entry_test.dart:16:1 - directives_ordering
+   info - Use an 'if' element to conditionally add elements. Try using an 'if' element rather than a conditional expression - test\features\shared\group_entry_test.dart:154:23 - prefer_if_elements_to_conditional_expressions
+   info - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation - test\features\shared\group_entry_test.dart:296:39 - prefer_const_constructors
+
+10 issues found. (ran in 18.8s)

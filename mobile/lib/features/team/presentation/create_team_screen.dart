@@ -15,7 +15,8 @@ import '../application/team_provider.dart';
 import '../domain/team_info.dart';
 
 class CreateTeamScreen extends ConsumerStatefulWidget {
-  const CreateTeamScreen({super.key});
+  const CreateTeamScreen({this.setupShared = false, super.key});
+  final bool setupShared;
 
   @override
   ConsumerState<CreateTeamScreen> createState() => _CreateTeamScreenState();
@@ -59,7 +60,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       await ref.read(teamInfoProvider.notifier).saveTeam(team);
 
       if (mounted) {
-        context.go('/ajouter-joueurs-initiaux');
+        context.go(widget.setupShared ? '/ajouter-joueurs-initiaux?partage=1' : '/ajouter-joueurs-initiaux');
       }
     } finally {
       if (mounted) {
