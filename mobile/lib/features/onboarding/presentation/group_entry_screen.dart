@@ -6,7 +6,6 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/primary_button.dart';
-import '../application/onboarding_provider.dart';
 
 class GroupEntryScreen extends ConsumerWidget {
   const GroupEntryScreen({super.key});
@@ -49,9 +48,7 @@ class GroupEntryScreen extends ConsumerWidget {
                       label: 'Créer un groupe',
                       icon: Remix.add_line,
                       onPressed: () => context.push(
-                        ref.read(hasSeenOnboardingProvider)
-                            ? '/creer-equipe?partage=1'
-                            : '/onboarding?partage=1',
+                        '/creer-equipe?partage=1',
                       ),
                     ),
                   ],

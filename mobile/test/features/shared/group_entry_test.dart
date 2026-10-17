@@ -4,18 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statoo/core/data/app_database.dart';
-import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/core/router/app_router.dart';
+import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/onboarding/application/onboarding_provider.dart';
+import 'package:statoo/features/players/application/players_provider.dart';
+import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/shared/presentation/shared_group_screen.dart';
-import 'package:statoo/features/team/presentation/create_team_screen.dart';
-import 'package:statoo/features/team/presentation/add_team_players_screen.dart';
-import 'package:statoo/features/team/domain/team_info.dart';
-import 'package:statoo/features/players/application/players_provider.dart';
-import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
+import 'package:statoo/features/team/domain/team_info.dart';
+import 'package:statoo/features/team/presentation/add_team_players_screen.dart';
+import 'package:statoo/features/team/presentation/create_team_screen.dart';
 import 'package:statoo/main.dart';
 
 class _SetupPlayers extends PlayersNotifier {
@@ -67,9 +67,58 @@ void main() {
     return ProviderScope.containerOf(tester.element(find.byType(MyApp)));
   }
 
+  for (final finish in [false, true]) {
+    testWidgets('ORD01/02 onboarding then welcome finish=$finish', (
+      tester,
+    ) async {
+      final c = await mount(tester, seen: false);
+      expect(find.text('Suivez vos matchs 5v5'), findsOneWidget);
+      expect(find.text('Créer un groupe'), findsNothing);
+      if (finish) {
+        for (var i = 0; i < 2; i++) {
+          await tester.tap(find.text('Suivant'));
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 500));
+        }
+      }
+      await tester.tap(find.text(finish ? 'Commencer' : 'Passer'));
+      await tester.pumpAndSettle();
+      expect(find.text('Créer un groupe'), findsOneWidget);
+      expect(find.text('Rejoindre un groupe'), findsOneWidget);
+      expect(
+        (await SharedPreferences.getInstance()).getBool('hasSeenOnboarding'),
+        isTrue,
+      );
+      c.read(appRouterProvider).go('/splash');
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 1200));
+      await tester.pumpAndSettle();
+      expect(find.text('Créer un groupe'), findsOneWidget);
+      expect(find.text('Suivez vos matchs 5v5'), findsNothing);
+    });
+  }
+  for (final path in [
+    '/bienvenue',
+    '/groupe-partage?installation=1',
+    '/creer-equipe?partage=1',
+  ]) {
+    testWidgets('ORD03 first visit guards $path', (tester) async {
+      final c = await mount(tester, seen: false);
+      c.read(appRouterProvider).go(path);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Suivez vos matchs 5v5'), findsOneWidget);
+      expect(c.read(hasSeenOnboardingProvider), isFalse);
+    });
+  }
   for (final seen in [false, true]) {
     testWidgets('ENT01/03 entry and direct join seen=$seen', (tester) async {
       final c = await mount(tester, seen: seen);
+      if (!seen) {
+        expect(find.text('Suivez vos matchs 5v5'), findsOneWidget);
+        await tester.tap(find.text('Passer'));
+        await tester.pumpAndSettle();
+      }
       expect(find.text('Créer un groupe'), findsOneWidget);
       expect(find.text('Rejoindre un groupe'), findsOneWidget);
       await tester.tap(find.text('Rejoindre un groupe'));
@@ -94,12 +143,12 @@ void main() {
       tester,
     ) async {
       await mount(tester, seen: seen);
-      await tester.tap(find.text('Créer un groupe'));
-      await tester.pump(const Duration(milliseconds: 500));
       if (!seen) {
         await tester.tap(find.text('Passer'));
         await tester.pumpAndSettle();
       }
+      await tester.tap(find.text('Créer un groupe'));
+      await tester.pumpAndSettle();
       expect(find.text('Créez votre équipe'), findsOneWidget);
       expect(
         tester
@@ -133,7 +182,9 @@ void main() {
     expect(find.text('Continuer sur cet appareil'), findsOneWidget);
     expect(find.text('Serveur'), findsNothing);
   });
-  testWidgets('ENT03 direct join can return to entry after reload', (tester) async {
+  testWidgets('ENT03 direct join can return to entry after reload', (
+    tester,
+  ) async {
     final c = await mount(tester);
     c.read(appRouterProvider).go('/groupe-partage?installation=1');
     await tester.pumpAndSettle();
@@ -151,7 +202,7 @@ void main() {
           'group_id': 'g',
           'account': {
             'id': 'me',
-            'roles': [admin ? 'ADMIN' : 'MEMBER'],
+            'roles': [if (admin) 'ADMIN' else 'MEMBER'],
           },
         }
         ..snapshot = {
@@ -293,7 +344,7 @@ void main() {
           theme: AppTheme.lightTheme,
           builder: (context, child) => MediaQuery(
             data: MediaQuery.of(context)
-                .copyWith(textScaler: TextScaler.linear(2)),
+                .copyWith(textScaler: const TextScaler.linear(2)),
             child: child!,
           ),
           home: const AddTeamPlayersScreen(setupShared: true),

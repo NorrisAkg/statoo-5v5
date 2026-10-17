@@ -42,14 +42,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
-  Future<void> _completeOnboarding({bool toTeamCreation = true}) async {
+  Future<void> _completeOnboarding() async {
     await ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
     if (mounted) {
-      if (toTeamCreation) {
-        context.go(GoRouterState.of(context).uri.queryParameters['partage'] == '1' ? '/creer-equipe?partage=1' : '/creer-equipe');
-      } else {
-        context.go('/');
-      }
+      context.go('/bienvenue');
     }
   }
 

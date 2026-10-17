@@ -6,8 +6,8 @@ import '../../features/finance/presentation/finances_screen.dart';
 import '../../features/finance/presentation/financial_point_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/application/onboarding_provider.dart';
-import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/onboarding/presentation/group_entry_screen.dart';
+import '../../features/onboarding/presentation/onboarding_screen.dart';
 import '../../features/onboarding/presentation/splash_screen.dart';
 import '../../features/players/presentation/player_detail_screen.dart';
 import '../../features/players/presentation/players_screen.dart';
@@ -49,7 +49,7 @@ GoRouter appRouter(Ref ref) {
     refreshListenable: notifier,
     redirect: (context, state) {
       final loc = state.matchedLocation;
-      if (loc == '/splash' || loc == '/groupe-partage' || loc == '/bienvenue') {
+      if (loc == '/splash') {
         return null;
       }
 
@@ -61,7 +61,11 @@ GoRouter appRouter(Ref ref) {
       final isAddingPlayers = loc == '/ajouter-joueurs-initiaux';
 
       if (!seenOnboarding) {
-        return isOnboarding ? null : '/bienvenue';
+        return isOnboarding ? null : '/onboarding';
+      }
+
+      if (loc == '/groupe-partage' || loc == '/bienvenue') {
+        return null;
       }
 
       if (!teamCreated) {

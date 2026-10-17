@@ -64,10 +64,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     final hasSeenOnboarding = ref.read(hasSeenOnboardingProvider);
     final hasTeam = ref.read(hasTeamProvider);
 
-    if (!hasTeam) {
-      context.go('/bienvenue');
-    } else if (!hasSeenOnboarding) {
+    if (!hasSeenOnboarding) {
       context.go('/onboarding');
+    } else if (!hasTeam) {
+      context.go('/bienvenue');
     } else {
       context.go('/');
     }
