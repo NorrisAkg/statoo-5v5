@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
-const base = "http://127.0.0.1:18085";
+const base = process.env.STATOO_TEST_URL || "http://127.0.0.1:18085";
 test("CFG-01 configured API receives login and registration without server fields", async () => {
   const browser = await chromium.launch({ channel: "chrome", headless: true });
   try {
@@ -21,6 +21,9 @@ test("CFG-01 configured API receives login and registration without server field
           json: { detail: "Identifiants de test" },
         });
       });
+      await page.addInitScript(() =>
+        localStorage.setItem("statoo-onboarding-complete", "1"),
+      );
       await page.goto(base + "/portal/");
       if (registration)
         await page

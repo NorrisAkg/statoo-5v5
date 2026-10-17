@@ -60,6 +60,8 @@ Features : home, onboarding, team, players, sessions, ranking, stats, settings.
 
 ## UI
 
+- Lire obligatoirement `docs/design-system.md` avant toute création ou modification UI, puis comparer au moins deux écrans existants du même parcours. Cette mémoire persistante complète les captures avec les évolutions actuelles (Poppins, clair/sombre, texte agrandi). Consigner le cadrage vérifié et les limites ; ne pas valider visuellement sur le seul code.
+
 - Avant toute création ou refonte d’écran, examiner les écrans existants et le thème actuel. Respecter Poppins, les tailles et graisses, les couleurs via context.colors, les cartes, champs, boutons et espacements existants. Vérifier les états clair/sombre et les vues selon les rôles. Consacrer une attention particulière à la cohérence visuelle ; les consignes historiques ne remplacent pas le design réellement utilisé.
 
 

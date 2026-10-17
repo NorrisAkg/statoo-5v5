@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
-
+import '../../shared/application/shared_providers.dart';
 import '../application/sessions_provider.dart';
 import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
@@ -20,7 +21,6 @@ import 'add_late_players_bottom_sheet.dart';
 import 'live_stats_panel.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
-import '../../shared/application/shared_providers.dart';
 
 class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
@@ -43,9 +43,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       await operation();
       return true;
     } on Object catch (error) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      if (mounted) { ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(error is StateError ? error.message : 'Modification impossible : $error'),
-      ));
+      )); }
       return false;
     }
   }
@@ -196,8 +196,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ),
         ],
         const SizedBox(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 12,
+          runSpacing: 8,
           children: [
             Text('Composition & Équipes', style: Theme.of(context).textTheme.titleMedium),
             if (isDraft && _writable)
@@ -525,9 +528,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             children: [
               Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
               const SizedBox(width: 8),
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const Spacer(),
-              Text('${players.length} joueurs', style: TextStyle(color: context.colors.foreground400, fontSize: 13)),
+              Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+              const SizedBox(width: 8),
+              Flexible(child: Text('${players.length} joueurs', style: TextStyle(color: context.colors.foreground400, fontSize: 13))),
             ],
           ),
           const SizedBox(height: 12),

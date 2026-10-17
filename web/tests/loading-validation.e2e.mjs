@@ -133,6 +133,9 @@ async function boot({
     },
     { base, logged, account, pending },
   );
+  await page.addInitScript(() =>
+    localStorage.setItem("statoo-onboarding-complete", "1"),
+  );
   await page.goto(base + "/portal/");
   await page
     .getByRole("heading", {

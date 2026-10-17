@@ -55,13 +55,16 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 180),
-                  child: Text(
-                    activeTeam?.name ?? 'Mon groupe',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  child: Tooltip(
+                    message: activeTeam?.name ?? 'Mon groupe',
+                    child: Text(
+                      activeTeam?.displayName ?? 'Mon groupe',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(width: 4),

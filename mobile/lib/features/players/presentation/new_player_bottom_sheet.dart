@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +25,8 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _nameFocusNode = FocusNode();
-  File? _imageFile;
+  XFile? _imageFile;
+  Uint8List? _imageBytes;
   final ImagePicker _picker = ImagePicker();
   String? _nameError;
   bool _submitting = false;
@@ -34,8 +36,11 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
     if (!ref.read(canWriteProvider('members'))) return;
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      final bytes = await image.readAsBytes();
+      if (!mounted) return;
       setState(() {
-        _imageFile = File(image.path);
+        _imageFile = image;
+        _imageBytes = bytes;
       });
     }
   }
@@ -45,6 +50,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
     _nicknameController.clear();
     setState(() {
       _imageFile = null;
+      _imageBytes = null;
       _nameError = null;
     });
     _nameFocusNode.requestFocus();
@@ -61,10 +67,11 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
           .read(playersListProvider.notifier)
           .isNameTaken(name);
       if (!mounted) return;
-      if (group != ref.read(activeTeamIdProvider))
+      if (group != ref.read(activeTeamIdProvider)) {
         throw StateError(
           'Le groupe actif a changé. Rouvrez le formulaire dans le bon groupe.',
         );
+      }
       if (taken) {
         setState(
           () => _nameError =
@@ -80,7 +87,9 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             nickname: _nicknameController.text.trim().isNotEmpty
                 ? _nicknameController.text.trim()
                 : null,
-            avatarUrl: _imageFile?.path,
+            avatarUrl: kIsWeb && _imageBytes != null
+                ? 'data:${_imageFile?.mimeType ?? "image/jpeg"};base64,${base64Encode(_imageBytes!)}'
+                : _imageFile?.path,
           );
 
       if (mounted) {
@@ -159,8 +168,8 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 child: CircleAvatar(
                   radius: 48,
                   backgroundColor: context.colors.background800,
-                  backgroundImage: _imageFile != null
-                      ? FileImage(_imageFile!)
+                  backgroundImage: _imageBytes != null
+                      ? MemoryImage(_imageBytes!)
                       : null,
                   child: _imageFile == null
                       ? Column(

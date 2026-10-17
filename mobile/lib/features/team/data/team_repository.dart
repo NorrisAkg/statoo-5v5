@@ -27,7 +27,7 @@ class SqliteTeamRepository implements TeamRepository {
   Future<List<TeamInfo>> getAllTeams() async {
     final db = await _appDatabase.database;
     final results = await db.query('teams', orderBy: 'created_at ASC');
-    return results.map(TeamInfo.fromMap).toList();
+    return await Future.wait(results.map((row) => _readTeam(db, row)));
   }
 
   @override
@@ -35,7 +35,12 @@ class SqliteTeamRepository implements TeamRepository {
     final db = await _appDatabase.database;
     final results = await db.query('teams', where: 'id = ?', whereArgs: [id], limit: 1);
     if (results.isEmpty) return null;
-    return TeamInfo.fromMap(results.first);
+    return await _readTeam(db, results.first);
+  }
+
+  Future<TeamInfo> _readTeam(DatabaseExecutor db, Map<String, Object?> row) async {
+    final values = await db.query('meta', where: 'key = ?', whereArgs: ['team_short_name_${row['id']}']);
+    return TeamInfo.fromMap({...row, 'short_name': values.isEmpty ? '' : values.single['value']});
   }
 
   @override
@@ -96,12 +101,18 @@ class SqliteTeamRepository implements TeamRepository {
 
   @override
   Future<void> saveTeamInfo(TeamInfo team) async {
+    if (team.shortName.trim().length > 30) throw ArgumentError('Nom court : 30 caractères maximum.');
     final db = await _appDatabase.database;
-    await db.insert(
-      'teams',
-      team.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final row = team.toMap()..remove('short_name');
+    await db.transaction((txn) async {
+      final existing = await txn.query('teams', columns: ['id'], where: 'id = ?', whereArgs: [team.id]);
+      if (existing.isEmpty) {
+        await txn.insert('teams', row);
+      } else {
+        await txn.update('teams', row, where: 'id = ?', whereArgs: [team.id]);
+      }
+      await txn.insert('meta', {'key':'team_short_name_${team.id}', 'value':team.shortName.trim()}, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
 
     // Mettre cette équipe comme active si aucune n'est active
     final currentActiveId = await getActiveTeamId();
@@ -126,9 +137,10 @@ class SqliteTeamRepository implements TeamRepository {
     // Per-group settings live in `meta` and are not covered by the FK cascade.
     await db.delete(
       'meta',
-      where: 'key IN (?, ?, ?, ?)',
+      where: 'key IN (?, ?, ?, ?, ?)',
       whereArgs: [
         'active_session_id_$id',
+        'team_short_name_$id',
         'mvp_weights_$id',
         'min_players_per_session_$id',
         'tournament_draw_points_$id',

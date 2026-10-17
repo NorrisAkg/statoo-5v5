@@ -82,6 +82,7 @@ const fieldPaths = {
   "Nouveau mot de passe collectif": "password",
   "Mot de passe collectif": "shared_password",
   "Nom du groupe": "name",
+  "Nom court (facultatif)": "short_name",
   "Nom du membre": "name",
   "Minimum de joueurs par séance": "min_players_per_session",
   "Cotisation par défaut": "contribution",
@@ -148,6 +149,23 @@ function field(parent, label, value = "", options = {}) {
       option.value = key;
       input.append(option);
     }
+  if (!options.select)
+    input.placeholder =
+      options.placeholder ||
+      {
+        "Nom du groupe": "Ex. : Football Club des Amis",
+        "Nom court (facultatif)": "Ex. : FCA",
+        "Membres du groupe": "Ex. : Alice, Karim, Moussa",
+        "Identifiant du groupe": "Ex. : #12345678",
+        "Identifiant Admin": "Ex. : karim.admin",
+        "Identifiant de connexion": "Ex. : membres",
+        "Identifiant collectif": "Ex. : membres",
+      }[label] ||
+      (options.type === "password"
+        ? "Au moins 8 caractères"
+        : options.type === "number"
+          ? "Ex. : 0"
+          : "Saisir : " + label.toLocaleLowerCase("fr"));
   input.value = value ?? "";
   input.setAttribute("aria-label", label);
   if (options.path || fieldPaths[label])
@@ -167,7 +185,29 @@ function field(parent, label, value = "", options = {}) {
     input.addEventListener(options.select ? "change" : "input", () =>
       options.change(input.value),
     );
-  wrapper.append(input);
+  if (options.type === "password") {
+    const control = el("span", "", "password-control");
+    const toggle = button(
+      "",
+      () => {
+        const visible = input.type === "password";
+        input.type = visible ? "text" : "password";
+        toggle.setAttribute(
+          "aria-label",
+          (visible ? "Masquer " : "Afficher ") + label,
+        );
+        toggle.setAttribute("aria-pressed", String(visible));
+        input.focus({ preventScroll: true });
+      },
+      "password-toggle icon-button",
+    );
+    toggle.setAttribute("aria-label", "Afficher " + label);
+    toggle.setAttribute("aria-pressed", "false");
+    toggle.innerHTML =
+      '<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24"><path d="M12 5c5 0 9 7 9 7s-4 7-9 7-9-7-9-7 4-7 9-7Z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path class="eye-slash" d="m3 3 18 18" stroke="currentColor" stroke-width="2"/></svg>';
+    control.append(input, toggle);
+    wrapper.append(control);
+  } else wrapper.append(input);
   parent.append(wrapper);
   return input;
 }
@@ -532,6 +572,96 @@ function summaryValues(value) {
   }
   return out;
 }
+const splash = el("div");
+splash.id = "splash";
+splash.setAttribute("role", "status");
+splash.setAttribute("aria-label", "Ouverture de Statoo");
+splash.innerHTML =
+  '<img src="icons/logo-transparent.png" width="104" height="104" alt=""/><strong>STATOO</strong><span>STATS &amp; MATCHS 5V5</span><span class="splash-progress" aria-hidden="true"></span>';
+document.body.append(splash);
+let onboardingStep = null;
+const splashReady = new Promise((resolve) => setTimeout(resolve, 900));
+const onboardingPages = [
+  [
+    "Suivez vos matchs 5v5",
+    "Enregistrez facilement vos séances, scores et statistiques individuelles au bord du terrain.",
+  ],
+  [
+    "Tirage rapide & équilibré",
+    "Générez vos compositions d'équipes aléatoires et ajustez les joueurs en temps réel.",
+  ],
+  [
+    "Classement & Statistiques",
+    "Découvrez qui domine au classement des points, aux victoires et au tableau des buteurs.",
+  ],
+];
+function footballArt(step) {
+  const holder = el("div", "", "football-art");
+  holder.setAttribute("aria-hidden", "true");
+  const scenes = [
+    '<rect x="48" y="44" width="264" height="184" rx="24" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M180 44v184M48 136h264" stroke="currentColor" opacity=".3"/><circle cx="180" cy="136" r="38" fill="none" stroke="currentColor" opacity=".4"/><rect x="103" y="20" width="154" height="64" rx="18" fill="var(--soft)" stroke="currentColor"/><text x="180" y="63" text-anchor="middle" fill="var(--text)" font-size="30" font-family="Poppins">3 : 2</text><circle cx="109" cy="164" r="17" fill="currentColor"/><circle cx="247" cy="113" r="17" fill="var(--text)"/>',
+    '<path d="M64 76c100 0 120 124 232 124m-24-23 24 23-26 22M64 200c100 0 120-124 232-124m-24-23 24 23-26 22" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><g fill="var(--surface)" stroke="currentColor" stroke-width="2"><circle cx="79" cy="76" r="26"/><circle cx="79" cy="200" r="26"/><circle cx="282" cy="76" r="26"/><circle cx="282" cy="200" r="26"/></g><g fill="var(--text)" font-size="19" text-anchor="middle" font-family="Poppins"><text x="79" y="83">A</text><text x="79" y="207">B</text><text x="282" y="83">B</text><text x="282" y="207">A</text></g>',
+    '<path d="M48 236v-90h84v90m0 0V105h96v131m0 0v-64h84v64" fill="var(--surface)" stroke="currentColor" stroke-width="2"/><path d="M154 27h52v25c0 30-52 30-52 0Zm0 9h-18v12c0 13 18 16 18 16m52-28h18v12c0 13-18 16-18 16m-26 11v22m-19 0h38" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><g fill="var(--text)" text-anchor="middle" font-size="26" font-family="Poppins"><text x="90" y="194">2</text><text x="180" y="157">1</text><text x="270" y="213">3</text></g>',
+  ];
+  holder.innerHTML =
+    '<svg viewBox="0 0 360 270" focusable="false"><circle cx="180" cy="135" r="125" fill="currentColor" opacity=".07"/>' +
+    scenes[step] +
+    '<g fill="currentColor"><circle cx="28" cy="72" r="4"/><circle cx="328" cy="122" r="5"/><path d="m309 29 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z"/></g></svg>';
+  return holder;
+}
+function completeOnboarding() {
+  try {
+    localStorage.setItem("statoo-onboarding-complete", "1");
+  } catch {}
+  onboardingStep = null;
+  render();
+  $("content").focus();
+}
+function onboarding() {
+  const page = el("section", "", "onboarding card");
+  page.setAttribute("aria-label", "Découvrir Statoo");
+  const top = el("div", "", "onboarding-top");
+  top.append(
+    el("p", "LE FOOT, ENSEMBLE.", "eyebrow"),
+    button("Passer", completeOnboarding, "text-button"),
+  );
+  const heading = el("h1", onboardingPages[onboardingStep][0]);
+  heading.tabIndex = -1;
+  const controls = el("div", "", "onboarding-controls");
+  if (onboardingStep > 0)
+    controls.append(
+      button("Précédent", () => {
+        onboardingStep--;
+        render();
+        $("content").querySelector("h1").focus();
+      }),
+    );
+  controls.append(
+    button(
+      onboardingStep === 2 ? "Commencer" : "Suivant",
+      () => {
+        if (onboardingStep === 2) completeOnboarding();
+        else {
+          onboardingStep++;
+          render();
+          $("content").querySelector("h1").focus();
+        }
+      },
+      "primary",
+    ),
+  );
+  const progress = el("p", `Étape ${onboardingStep + 1} sur 3`, "muted");
+  progress.setAttribute("role", "status");
+  page.append(
+    top,
+    footballArt(onboardingStep),
+    progress,
+    heading,
+    el("p", onboardingPages[onboardingStep][1], "lead"),
+    controls,
+  );
+  return page;
+}
 function auth() {
   const preparation = new RegistrationDraft(client.storage);
   let draft = null,
@@ -577,7 +707,7 @@ function auth() {
         required: true,
         maxLength: 100,
       });
-  let name, roster, sharedUser, sharedPassword;
+  let name, shortName, roster, sharedUser, sharedPassword;
   if (registration) {
     const details = el("fieldset", "", "registration-section group-details");
     details.append(el("legend", "Le groupe"));
@@ -586,11 +716,25 @@ function auth() {
       required: true,
       maxLength: 100,
     });
+    shortName = field(
+      details,
+      "Nom court (facultatif)",
+      draft?.short_name || "",
+      { maxLength: 30 },
+    );
+    const shortHelp = el(
+      "small",
+      "Initiales ou surnom du groupe, utilisés dans l’application. Sans nom court, le nom complet sera affiché.",
+      "muted",
+    );
+    shortHelp.id = "short-name-help";
+    shortName.setAttribute("aria-describedby", shortHelp.id);
+    shortName.parentElement.append(shortHelp);
     roster = field(details, "Membres du groupe", draft?.roster || "", {
       textarea: true,
       required: true,
     });
-    name.disabled = roster.disabled = !!draft?.pending;
+    name.disabled = shortName.disabled = roster.disabled = !!draft?.pending;
     details.append(
       el(
         "p",
@@ -693,7 +837,11 @@ function auth() {
     );
     const save = () => {
       try {
-        draft = preparation.save({ name: name.value, roster: roster.value });
+        draft = preparation.save({
+          name: name.value,
+          short_name: shortName.value,
+          roster: roster.value,
+        });
         errors.textContent = "";
         status.textContent = savedMessage();
       } catch (error) {
@@ -702,6 +850,7 @@ function auth() {
     };
     if (!draft?.pending) {
       name.addEventListener("input", save);
+      shortName.addEventListener("input", save);
       roster.addEventListener("input", save);
       if (!offline) form.append(button("Enregistrer sur cet appareil", save));
     }
@@ -735,7 +884,11 @@ function auth() {
       let attemptedConnection = false;
       try {
         if (registration && !navigator.onLine) {
-          draft = preparation.save({ name: name.value, roster: roster.value });
+          draft = preparation.save({
+            name: name.value,
+            short_name: shortName.value,
+            roster: roster.value,
+          });
           status.textContent =
             "Enregistré sur cet appareil — en attente de connexion.";
           return;
@@ -755,10 +908,12 @@ function auth() {
           if (!draft?.pending)
             draft = preparation.save({
               name: name.value,
+              short_name: shortName.value,
               roster: roster.value,
             });
           registrationBody = validate(registrationSchema, {
             name: draft.name,
+            short_name: draft.short_name || "",
             operation_id: draft.operation_id,
             username: user.value.trim(),
             password: pass.value,
@@ -768,7 +923,7 @@ function auth() {
           });
           pending = preparation.prepare(configuredApi);
           draft = pending;
-          name.disabled = roster.disabled = true;
+          name.disabled = shortName.disabled = roster.disabled = true;
         }
         if (!registration)
           validate(credentialsSchema, {
@@ -803,7 +958,8 @@ function auth() {
         if (attemptedConnection && sharedPassword) sharedPassword.value = "";
       }
     });
-    if (registration && draft?.pending) name.disabled = roster.disabled = true;
+    if (registration && draft?.pending)
+      name.disabled = shortName.disabled = roster.disabled = true;
   });
   if (!registration && draft)
     c.append(
@@ -844,6 +1000,10 @@ function renderContent() {
   }
   const root = $("content");
   root.replaceChildren();
+  if (onboardingStep !== null && !client.connection) {
+    root.append(onboarding());
+    return;
+  }
   if (client.storageWarning)
     root.append(el("p", client.storageWarning, "notice error"));
   if (!client.connection || !client.snapshot) {
@@ -856,7 +1016,8 @@ function renderContent() {
     identity = el("div");
   identity.append(
     el("p", "VOTRE GROUPE", "eyebrow"),
-    el("h1", data.name),
+    el("h1", data.short_name?.trim() || data.name),
+    ...(data.short_name?.trim() ? [el("p", data.name, "muted")] : []),
     el("p", "Identifiant du groupe : " + client.connection.group, "muted"),
     el(
       "p",
@@ -2755,6 +2916,18 @@ fetch("./team-names.json")
   })
   .catch(() => {});
 client.restore();
+try {
+  if (
+    !client.connection &&
+    !localStorage.getItem("statoo-onboarding-complete") &&
+    !localStorage.getItem("statoo-registration-draft")
+  )
+    onboardingStep = 0;
+} catch {
+  onboardingStep = 0;
+}
+await splashReady;
+$("splash")?.remove();
 render();
 if (configurationError) message(configurationError.message, true);
 if (client.connection)

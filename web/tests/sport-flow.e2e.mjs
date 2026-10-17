@@ -259,6 +259,9 @@ async function boot(options = {}) {
       ),
     { base, account: data.account },
   );
+  await page.addInitScript(() =>
+    localStorage.setItem("statoo-onboarding-complete", "1"),
+  );
   await page.goto(base + "/portal/");
   await page.getByRole("heading", { name: data.name, exact: true }).waitFor();
   await page.waitForLoadState("networkidle");

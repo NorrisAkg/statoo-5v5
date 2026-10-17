@@ -168,6 +168,11 @@ void main() {
   });
 
   group('TeamInfo domain model', () {
+    test('PAR23 short name round trips without replacing the full name', () {
+      final team = TeamInfo.fromMap({'id':'g','name':'Les Invincibles','short_name':' LI '});
+      expect(team.toMap()['short_name'],'LI');
+      expect(team.name,'Les Invincibles');
+    });
     test('serializes and deserializes correctly', () {
       final now = DateTime.now();
       final team = TeamInfo(
@@ -229,6 +234,7 @@ void main() {
 
       expect(find.text('Créez votre équipe'), findsOneWidget);
       expect(find.text("Nom de l'équipe ou du groupe *"), findsOneWidget);
+      expect(find.text('Nom court (facultatif)'), findsOneWidget);
       expect(find.text('Format de jeu habituel'), findsOneWidget);
       expect(find.text("Continuer vers l'effectif"), findsOneWidget);
 
@@ -240,6 +246,7 @@ void main() {
 
       // Enter name and select 6v6 format
       await tester.enterText(find.byType(TextFormField).first, 'Les Invincibles');
+      await tester.enterText(find.widgetWithText(TextFormField, 'Ex. : LI'), ' LI ');
       await tester.tap(find.text('6v6'));
       await tester.pumpAndSettle();
 
@@ -249,6 +256,7 @@ void main() {
       final saved = await teamRepo.getTeamInfo();
       expect(saved?.name, 'Les Invincibles');
       expect(saved?.format, '6v6');
+      expect(saved?.toMap()['short_name'], 'LI');
     });
   });
 

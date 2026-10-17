@@ -24,6 +24,7 @@ class CreateTeamScreen extends ConsumerStatefulWidget {
 class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _shortNameController = TextEditingController();
   final _locationController = TextEditingController();
   String _selectedFormat = '5v5';
   bool _isLoading = false;
@@ -33,6 +34,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _shortNameController.dispose();
     _locationController.dispose();
     super.dispose();
   }
@@ -46,6 +48,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
       final team = TeamInfo(
         id: 'team_${DateTime.now().millisecondsSinceEpoch}',
         name: _nameController.text.trim(),
+        shortName: _shortNameController.text.trim(),
         format: _selectedFormat,
         location: _locationController.text.trim().isNotEmpty
             ? _locationController.text.trim()
@@ -255,6 +258,18 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(height: 24),
+
+                TextFormField(
+                  controller: _shortNameController,
+                  maxLength: 30,
+                  decoration: const InputDecoration(
+                    labelText: 'Nom court (facultatif)',
+                    hintText: 'Ex. : LI',
+                    helperText: 'Initiales ou surnom ; sinon, le nom complet sera utilisé.',
+                    helperMaxLines: 3,
+                  ),
                 ),
                 const SizedBox(height: 24),
 

@@ -114,6 +114,12 @@ export const credentialsSchema = z.object({
 export const registrationSchema = z
   .object({
     name: text("Nom du groupe"),
+    short_name: z
+      .string()
+      .trim()
+      .max(30, { error: "Nom court : 30 caractères maximum." })
+      .optional()
+      .default(""),
     username: text("Identifiant Admin"),
     password,
     shared_username: text("Identifiant collectif"),
@@ -125,6 +131,12 @@ export const registrationSchema = z
   .passthrough();
 export const preparationSchema = z.object({
   name: text("Nom du groupe"),
+  short_name: z
+    .string()
+    .trim()
+    .max(30, { error: "Nom court : 30 caractères maximum." })
+    .optional()
+    .default(""),
   roster: z.string({ error: "Liste des membres requise." }),
 });
 export const preparedNamesSchema = z

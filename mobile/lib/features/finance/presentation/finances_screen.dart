@@ -70,6 +70,7 @@ class FinancesScreen extends ConsumerStatefulWidget {
 }
 
 class _FinancesScreenState extends ConsumerState<FinancesScreen> {
+  bool get _largeText => MediaQuery.textScalerOf(context).scale(14) > 20;
   final _search = TextEditingController();
   String _query = '';
 
@@ -572,21 +573,15 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
       child: Padding(
         key: ValueKey('member-${player.id}'),
         padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 4,
-              child: Column(
+        child: _largeText
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     player.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: context.colors.foreground50,
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -597,8 +592,7 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
                       color: position.penaltyDebt > 0
                           ? context.colors.danger
                           : context.colors.foreground400,
-                      fontSize: 11,
-                      height: 1.4,
+                      fontSize: 12,
                     ),
                   ),
                   if (!player.isActive)
@@ -606,25 +600,74 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
                       'Membre archivé',
                       style: TextStyle(
                         color: context.colors.foreground500,
-                        fontSize: 10,
+                        fontSize: 12,
                       ),
                     ),
+                  const SizedBox(height: 12),
+                  _detailRow(context, 'Payé', position.paid),
+                  _detailRow(context, 'Attendu', position.expected),
+                  _detailRow(
+                    context,
+                    'Écart',
+                    position.difference,
+                    signed: true,
+                    color: differenceColor,
+                  ),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          player.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: context.colors.foreground50,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          status,
+                          style: TextStyle(
+                            color: position.penaltyDebt > 0
+                                ? context.colors.danger
+                                : context.colors.foreground400,
+                            fontSize: 11,
+                            height: 1.4,
+                          ),
+                        ),
+                        if (!player.isActive)
+                          Text(
+                            'Membre archivé',
+                            style: TextStyle(
+                              color: context.colors.foreground500,
+                              fontSize: 10,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _amountCell(position.paid, 'Payé'),
+                  const SizedBox(width: 6),
+                  _amountCell(position.expected, 'Attendu'),
+                  const SizedBox(width: 6),
+                  _amountCell(
+                    position.difference,
+                    'Écart',
+                    signed: true,
+                    color: differenceColor,
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(width: 8),
-            _amountCell(position.paid, 'Payé'),
-            const SizedBox(width: 6),
-            _amountCell(position.expected, 'Attendu'),
-            const SizedBox(width: 6),
-            _amountCell(
-              position.difference,
-              'Écart',
-              signed: true,
-              color: differenceColor,
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -660,12 +703,14 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
                       size: 22,
                     ),
                     const SizedBox(width: 12),
-                    Text(
-                      'Caisse du groupe',
-                      style: TextStyle(
-                        color: context.colors.foreground200,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Text(
+                        'Caisse du groupe',
+                        style: TextStyle(
+                          color: context.colors.foreground200,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -806,26 +851,13 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: Text(
-                        'Membre',
-                        style: TextStyle(
-                          color: context.colors.foreground400,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    for (final title in ['Payé', 'Attendu', 'Écart']) ...[
+                if (!_largeText) ...[
+                  Row(
+                    children: [
                       Expanded(
-                        flex: 2,
+                        flex: 4,
                         child: Text(
-                          title,
-                          textAlign: TextAlign.right,
+                          'Membre',
                           style: TextStyle(
                             color: context.colors.foreground400,
                             fontSize: 11,
@@ -833,12 +865,27 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
                           ),
                         ),
                       ),
-                      if (title != 'Écart') const SizedBox(width: 6),
+                      const SizedBox(width: 8),
+                      for (final title in ['Payé', 'Attendu', 'Écart']) ...[
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            title,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: context.colors.foreground400,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        if (title != 'Écart') const SizedBox(width: 6),
+                      ],
                     ],
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Divider(color: context.colors.background700, height: 1),
+                  ),
+                  const SizedBox(height: 8),
+                  Divider(color: context.colors.background700, height: 1),
+                ],
                 if (members.isEmpty)
                   Padding(
                     padding: const EdgeInsets.all(20),

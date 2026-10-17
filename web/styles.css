@@ -158,6 +158,9 @@ button[aria-busy="true"] > .button-spinner {
   min-width: 44px;
 }
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -914,5 +917,136 @@ footer {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+html {
+  scroll-padding-top: 110px;
+}
+.password-control {
+  display: flex;
+  position: relative;
+  align-items: center;
+  min-width: 0;
+}
+.password-control input {
+  width: 100%;
+  padding-right: 60px;
+}
+.password-toggle {
+  position: absolute;
+  right: 4px;
+  width: 48px;
+  min-height: 48px;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+}
+.password-toggle .eye-slash {
+  display: none;
+}
+.password-toggle[aria-pressed="true"] .eye-slash {
+  display: block;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(
+    circle at 50% 40%,
+    color-mix(in srgb, var(--primary) 13%, var(--bg)),
+    var(--bg) 65%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+}
+#splash strong {
+  font-size: 32px;
+  letter-spacing: 6px;
+}
+#splash > span:not(.splash-progress) {
+  color: var(--green);
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+.splash-progress {
+  width: 48px;
+  height: 3px;
+  border-radius: 4px;
+  background: var(--primary);
+  margin-top: 35px;
+}
+.onboarding {
+  max-width: 620px;
+  margin: 24px auto;
+  padding: clamp(16px, 4vw, 32px);
+}
+.onboarding-top,
+.onboarding-controls {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.onboarding-controls {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+.onboarding-controls .primary {
+  flex: 1;
+  border-radius: 999px;
+}
+.onboarding h1 {
+  font-size: clamp(26px, 5vw, 36px);
+  line-height: 1.2;
+  margin-top: 12px;
+}
+.football-art {
+  color: var(--green);
+  max-width: 360px;
+  margin: auto;
+}
+.football-art svg {
+  display: block;
+  width: 100%;
+  max-height: 270px;
+}
+.onboarding .lead {
+  font-size: 1.05em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #splash img {
+    animation: splash-in 0.6s ease-out both;
+  }
+  @keyframes splash-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+@supports (padding: env(safe-area-inset-top)) {
+  .topbar {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+  .onboarding {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
 }

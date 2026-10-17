@@ -4,10 +4,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
+import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
 import '../../sessions/application/sessions_provider.dart';
@@ -42,6 +46,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   String? _baseline;
   bool _allowExit = false;
   bool _exitDialog = false;
+  bool get _largeText => MediaQuery.textScalerOf(context).scale(14) > 20;
 
   String _fingerprint() => jsonEncode({
     'point': _current().toJson(),
@@ -255,7 +260,14 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
     child: Row(
       children: [
         Expanded(child: Text(label)),
-        Text('$value F', style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(
+            '${_money(value)} F',
+            textAlign: TextAlign.right,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
       ],
     ),
   );
@@ -385,10 +397,12 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
           if (!didPop) unawaited(_confirmExit());
         },
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: const Text('Point financier'),
             bottom: TabBar(
+              isScrollable: _largeText,
+              tabAlignment: _largeText ? TabAlignment.start : TabAlignment.fill,
               labelColor: context.colors.onHeader,
               unselectedLabelColor: context.colors.onHeader,
               tabs: const [
@@ -403,47 +417,6 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
               ? const Center(child: CircularProgressIndicator())
               : Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Cotisation : ${_point!.rate} F · ${_point!.playedAt.day}/${_point!.playedAt.month}/${_point!.playedAt.year}',
-                            ),
-                          ),
-                          if (canWrite)
-                            TextButton(
-                              onPressed: () async {
-                                final value = await _askRate();
-                                if (value != null && mounted) {
-                                  setState(
-                                    () => _point = FinancialPoint(
-                                      playedAt: _point!.playedAt,
-                                      rate: value,
-                                      lines: _point!.lines,
-                                    ),
-                                  );
-                                }
-                              },
-                              child: const Text('Modifier'),
-                            ),
-                        ],
-                      ),
-                    ),
-                    if (canWrite)
-                      SwitchListTile(
-                        title: const Text('Séance annulée'),
-                        subtitle: const Text(
-                          'Cotisations dues, aucun mouvement de caisse',
-                        ),
-                        value: _cancelled,
-                        onChanged: (value) =>
-                            setState(() => _cancelled = value),
-                      ),
                     Expanded(
                       child: TabBarView(
                         children: [
@@ -452,41 +425,178 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
                         ],
                       ),
                     ),
-                    SafeArea(
-                      maintainBottomViewPadding: true,
-                      top: false,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            _total('Total encaissé', _current().received),
-                            _total('Total dépensé', _current().spent),
-                            if (canWrite)
-                              SizedBox(
-                                width: double.infinity,
-                                child: FilledButton(
-                                  onPressed: _saving
-                                      ? null
-                                      : () => unawaited(_save()),
-                                  child: Text(
-                                    _saving
+                    if (MediaQuery.viewInsetsOf(context).bottom == 0)
+                      SafeArea(
+                        maintainBottomViewPadding: true,
+                        top: false,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            children: [
+                              if (!_largeText)
+                                Wrap(
+                                  spacing: 24,
+                                  runSpacing: 8,
+                                  children: [
+                                    _summary(
+                                      'Total encaissé',
+                                      _current().received,
+                                      context.colors.primary500,
+                                    ),
+                                    _summary(
+                                      'Total dépensé',
+                                      _current().spent,
+                                      context.colors.foreground50,
+                                    ),
+                                  ],
+                                ),
+                              if (!_largeText) const SizedBox(height: 12),
+                              if (canWrite)
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: PrimaryButton(
+                                    onPressed: _saving
+                                        ? null
+                                        : () => unawaited(_save()),
+                                    icon: Remix.checkbox_circle_line,
+                                    label: _saving
                                         ? 'Enregistrement…'
                                         : 'Valider le point',
                                   ),
                                 ),
-                              ),
-                            if (!canWrite)
-                              const Text('Consultation uniquement'),
-                          ],
+                              if (!canWrite)
+                                const Text('Consultation uniquement'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
         ),
       ),
     );
   }
+
+  String _money(int value) =>
+      NumberFormat.decimalPattern('fr_FR').format(value);
+
+  Widget _summary(String label, int value, Color color) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        label,
+        style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+      ),
+      Text(
+        '${_money(value)} F',
+        style: TextStyle(
+          color: color,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ],
+  );
+
+  InputDecoration _fieldDecoration({
+    String? hint,
+    String? suffix,
+    Widget? icon,
+  }) => InputDecoration(
+    hintText: hint,
+    suffixText: suffix,
+    prefixIcon: icon,
+    filled: true,
+    fillColor: context.colors.background800,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: context.colors.background700),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: context.colors.background700),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: context.colors.primary500, width: 2),
+    ),
+  );
+
+  Widget _overview(bool canWrite) => Padding(
+    padding: const EdgeInsets.only(bottom: 24),
+    child: AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            DateFormat(
+              "EEE d MMM yyyy · HH'h'mm",
+              'fr_FR',
+            ).format(_point!.playedAt),
+            style: TextStyle(color: context.colors.foreground400, fontSize: 13),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 16,
+            runSpacing: 8,
+            children: [
+              Text(
+                'Cotisation : ${_money(_point!.rate)} F',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (canWrite)
+                TextButton.icon(
+                  icon: const Icon(Remix.edit_line, size: 18),
+                  label: const Text('Modifier'),
+                  onPressed: () async {
+                    final value = await _askRate();
+                    if (value != null && mounted) {
+                      setState(
+                        () => _point = FinancialPoint(
+                          playedAt: _point!.playedAt,
+                          rate: value,
+                          lines: _point!.lines,
+                        ),
+                      );
+                    }
+                  },
+                ),
+            ],
+          ),
+          if (canWrite) ...[
+            Divider(color: context.colors.background700, height: 24),
+            SwitchListTile.adaptive(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Séance annulée'),
+              subtitle: Text(
+                'Cotisations dues, aucun mouvement de caisse',
+                style: TextStyle(
+                  color: context.colors.foreground400,
+                  fontSize: 12,
+                ),
+              ),
+              activeTrackColor: context.colors.primary500,
+              value: _cancelled,
+              onChanged: (value) => setState(() => _cancelled = value),
+            ),
+          ] else if (_cancelled)
+            const Text('Séance annulée · les cotisations restent dues.'),
+          if (_largeText) ...[
+            Divider(color: context.colors.background700, height: 24),
+            _total('Total encaissé', _current().received),
+            _total('Total dépensé', _current().spent),
+          ],
+        ],
+      ),
+    ),
+  );
 
   Future<int?> _askRate() async {
     final c = TextEditingController(text: '${_point!.rate}');
@@ -545,24 +655,25 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            _overview(
+              ref.read(sharedServiceProvider).canWrite(_group, 'finance'),
+            ),
             TextField(
               controller: _search,
               onChanged: (_) => setState(() {}),
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Remix.search_line),
-                hintText: 'Rechercher un membre',
+              decoration: _fieldDecoration(
+                hint: 'Rechercher un membre',
+                icon: const Icon(Remix.search_line),
               ),
             ),
             const SizedBox(height: 12),
             const Text('Saisissez les montants effectivement reçus.'),
             const SizedBox(height: 12),
-            const Row(
-              children: [
-                Expanded(flex: 3, child: Text('Membre')),
-                Expanded(flex: 2, child: Text('Cotisation')),
-                Expanded(flex: 2, child: Text('Pénalité')),
-              ],
-            ),
+            if (list.isEmpty)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Text('Aucun membre trouvé'),
+              ),
             for (var i = 0; i < list.length; i++) ...[
               if (i == 0 ||
                   presentIds.contains(list[i].id) !=
@@ -577,75 +688,25 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: InkWell(
-                        onTap: writable
-                            ? () => unawaited(_assess(list[i]))
-                            : null,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(list[i].name),
-                            if ((_due[list[i].id] ?? 0) > 0)
-                              Text(
-                                'Due : ${_due[list[i].id]} F',
-                                style: TextStyle(
-                                  color: context.colors.warning,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            if (writable)
-                              const Text(
-                                'Retard / sanction',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: _moneyField(
-                        _contributions[list[i].id]!,
-                        writable,
-                        'Cotisation de ${list[i].name}',
-                        _point!.rate,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      flex: 2,
-                      child: _moneyField(
-                        _penalties[list[i].id]!,
-                        writable,
-                        'Pénalité payée par ${list[i].name}',
-                        ref
-                                .watch(financialDefaultsProvider)
-                                .value
-                                ?.latePenalty ??
-                            0,
-                      ),
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _memberCard(list[i], writable),
               ),
             ],
             for (final movement in _donations)
-              ListTile(
-                title: Text(movement.label),
-                subtitle: Text('${movement.amount} F'),
-                trailing: writable
-                    ? IconButton(
-                        tooltip: 'Retirer la recette',
-                        icon: const Icon(Remix.close_line),
-                        onPressed: () =>
-                            setState(() => _donations.remove(movement)),
-                      )
-                    : null,
+              AppCard(
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(movement.label),
+                  subtitle: Text('${_money(movement.amount)} F'),
+                  trailing: writable
+                      ? IconButton(
+                          tooltip: 'Retirer la recette',
+                          icon: const Icon(Remix.close_line),
+                          onPressed: () =>
+                              setState(() => _donations.remove(movement)),
+                        )
+                      : null,
+                ),
               ),
             if (writable)
               TextButton.icon(
@@ -659,47 +720,170 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
     );
   }
 
+  Widget _memberCard(Player player, bool writable) => AppCard(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InitialAvatar(
+              initial: player.name.isEmpty ? '?' : player.name.substring(0, 1),
+              baseColor: InitialAvatar.colorForName(player.name),
+              size: 40,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                player.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final fields = [
+              _moneyField(
+                _contributions[player.id]!,
+                writable,
+                'Cotisation de ${player.name}',
+                _point!.rate,
+                'Cotisation reçue',
+              ),
+              _moneyField(
+                _penalties[player.id]!,
+                writable,
+                'Pénalité payée par ${player.name}',
+                ref.watch(financialDefaultsProvider).value?.latePenalty ?? 0,
+                'Pénalité reçue',
+              ),
+            ];
+            if (constraints.maxWidth < 300 ||
+                MediaQuery.textScalerOf(context).scale(14) > 20) {
+              return Column(
+                children: [
+                  fields.first,
+                  const SizedBox(height: 16),
+                  fields.last,
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: fields.first),
+                const SizedBox(width: 12),
+                Expanded(child: fields.last),
+              ],
+            );
+          },
+        ),
+        if ((_due[player.id] ?? 0) > 0)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(
+              'Pénalité due : ${_money(_due[player.id]!)} F',
+              style: TextStyle(color: context.colors.warning, fontSize: 13),
+            ),
+          ),
+        if (writable)
+          TextButton.icon(
+            onPressed: () => unawaited(_assess(player)),
+            icon: const Icon(Remix.time_line, size: 18),
+            label: const Text('Retard / sanction'),
+          ),
+      ],
+    ),
+  );
+
   Widget _moneyField(
     TextEditingController controller,
     bool writable,
     String label,
     int defaultAmount,
-  ) => Semantics(
-    label: label,
-    child: TextField(
-      controller: controller,
-      enabled: writable,
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        LengthLimitingTextInputFormatter(12),
-      ],
-      decoration: InputDecoration(
-        hintText: '$defaultAmount',
-        border: const OutlineInputBorder(),
+    String visibleLabel,
+  ) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        visibleLabel,
+        style: TextStyle(color: context.colors.foreground400, fontSize: 13),
       ),
-      onChanged: (_) => setState(() {}),
-    ),
+      const SizedBox(height: 8),
+      Semantics(
+        label: label,
+        child: TextField(
+          controller: controller,
+          enabled: writable,
+          keyboardType: TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(12),
+          ],
+          decoration: _fieldDecoration(hint: '$defaultAmount', suffix: 'F'),
+          onChanged: (_) => setState(() {}),
+        ),
+      ),
+    ],
   );
 
   Widget _expenseList(bool writable) => ListView(
     padding: const EdgeInsets.all(16),
     children: [
+      _overview(ref.read(sharedServiceProvider).canWrite(_group, 'finance')),
       const Text('Les dépenses sont prises dans la caisse.'),
-      for (final movement in _expenses)
-        Card(
-          child: ListTile(
-            title: Text(movement.label),
-            subtitle: Text('${movement.amount} F'),
-            trailing: writable
-                ? IconButton(
-                    tooltip: 'Retirer la dépense',
-                    icon: const Icon(Remix.close_line),
-                    onPressed: () => setState(() => _expenses.remove(movement)),
-                  )
-                : null,
+      const SizedBox(height: 16),
+      if (_expenses.isEmpty)
+        AppCard(
+          child: Column(
+            children: [
+              Icon(
+                Remix.wallet_3_line,
+                size: 32,
+                color: context.colors.foreground400,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Aucune dépense',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Les sorties de caisse de cette séance apparaîtront ici.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: context.colors.foreground400,
+                  fontSize: 13,
+                ),
+              ),
+            ],
           ),
         ),
+      for (final movement in _expenses)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: AppCard(
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(movement.label),
+              subtitle: Text('${_money(movement.amount)} F'),
+              trailing: writable
+                  ? IconButton(
+                      tooltip: 'Retirer la dépense',
+                      icon: const Icon(Remix.close_line),
+                      onPressed: () =>
+                          setState(() => _expenses.remove(movement)),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+      const SizedBox(height: 16),
       if (writable)
         OutlinedButton.icon(
           onPressed: () => unawaited(_addMovement(false)),

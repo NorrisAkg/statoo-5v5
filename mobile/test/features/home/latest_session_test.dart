@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/home/presentation/home_screen.dart';
+import 'package:statoo/features/home/presentation/home_session_result.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
@@ -137,6 +138,40 @@ void main() {
     );
     expect(find.text('match Sporting'), findsNothing);
   });
+
+  testWidgets(
+    'D01-02 restored DRAW_ALL without match scores shows three victories',
+    (tester) async {
+      final restored = SessionSummaryItem(
+        playerCount: 6,
+        session: Session(
+          id: 'restored',
+          playedAt: DateTime(2026, 10, 15),
+          status: SessionStatus.closed,
+          sessionType: SessionType.tournament3,
+          result: MatchResult.drawAll,
+          winsA: 2,
+          winsB: 2,
+          winsC: 2,
+          teamNames: const {
+            'A': 'Lions QA',
+            'B': 'Aigles QA',
+            'C': 'Tigres QA',
+          },
+        ),
+      );
+      await mount(tester, () => [restored]);
+      expect(find.text('2 V'), findsNWidgets(3));
+      expect(find.text('Tigres QA'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(HomeSessionResult),
+          matching: find.text('0'),
+        ),
+        findsNothing,
+      );
+    },
+  );
 
   testWidgets('ACC-07 active session keeps priority', (tester) async {
     await mount(

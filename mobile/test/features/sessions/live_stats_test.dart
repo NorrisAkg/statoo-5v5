@@ -203,7 +203,7 @@ void main() {
     expect((await session())['score_a'], 0);
   });
   test(
-    'INT-08/14 controller denies member and SG queues aggregate payload',
+    'MERGE-02/03 controller denies member and all sport roles queue live stats',
     () async {
       final service = SharedService(AppDatabase.forTesting(db))
         ..identity = {
@@ -235,25 +235,27 @@ void main() {
         throwsStateError,
       );
       expect((await session())['score_a'], 0);
-      service.identity!['account'] = {
-        'id': 'account',
-        'roles': ['SG'],
-        'shared': false,
-      };
-      await controller.recordLive('s', {
-        'type': 'goal',
-        'team': 'A',
-        'player': 'p',
-        'assist': 'q',
-      });
-      expect((await session())['score_a'], 1);
+      for (final role in ['ADMIN', 'PDT', 'VP', 'SG', 'SGA']) {
+        service.identity!['account'] = {
+          'id': 'account',
+          'roles': [role],
+          'shared': false,
+        };
+        await controller.recordLive('s', {
+          'type': 'goal',
+          'team': 'A',
+          'player': 'p',
+          'assist': 'q',
+        });
+      }
+      expect((await session())['score_a'], 5);
       final queued = await db.query(
         'meta',
         where: 'substr(key,1,7) = ?',
         whereArgs: ['outbox_'],
       );
       expect(queued, hasLength(1));
-      expect(queued.single['value'], contains('"assists":1'));
+      expect(queued.single['value'], contains('"assists":5'));
     },
   );
 }

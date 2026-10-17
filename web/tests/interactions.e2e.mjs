@@ -117,6 +117,9 @@ async function boot(width, shared = false) {
     },
     { base, account: snapshot.account },
   );
+  await page.addInitScript(() =>
+    localStorage.setItem("statoo-onboarding-complete", "1"),
+  );
   await page.goto(base + "/portal/");
   await page
     .getByRole("heading", { name: snapshot.name, exact: true })

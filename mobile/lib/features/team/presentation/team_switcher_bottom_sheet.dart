@@ -248,7 +248,7 @@ class _TeamTile extends ConsumerWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          team.name,
+                          team.displayName,
                           style: TextStyle(
                             color: context.colors.foreground50,
                             fontWeight: FontWeight.bold,

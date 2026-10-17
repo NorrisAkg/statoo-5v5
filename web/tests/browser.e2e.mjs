@@ -73,9 +73,12 @@ test("WEB-15/18/19 Admin adds a member, renews access and configures future cont
     await x.page
       .getByRole("button", { name: "Enregistrer", exact: true })
       .click();
-    await x.page
+    await Promise.all([
+      x.page.waitForResponse(r => r.url().endsWith("/shared-access") && r.request().method() === "PUT"),
+      x.page
       .getByRole("button", { name: "Confirmer l’envoi", exact: true })
-      .click();
+      .click(),
+    ]);
     await x.page
       .getByText("Modification enregistrée.", { exact: true })
       .waitFor();
@@ -235,6 +238,9 @@ async function boot(r, options = {}) {
       request.failure()?.errorText,
     ),
   );
+  await page.addInitScript(() =>
+    localStorage.setItem("statoo-onboarding-complete", "1"),
+  );
   await page.goto(base + "/portal/");
   try {
     await page
@@ -356,7 +362,9 @@ test("WEB-15/16 Admin manages members and cannot create plain individual member"
       .click();
     await x.page.getByLabel("Membre du compte").selectOption("a");
     await x.page.getByLabel("Identifiant personnel").fill("alice");
-    await x.page.getByLabel("Mot de passe personnel").fill("password-2026");
+    await x.page
+      .getByLabel("Mot de passe personnel", { exact: true })
+      .fill("password-2026");
     assert.equal(
       await x.page
         .getByRole("button", { name: "Créer le compte", exact: true })
@@ -483,6 +491,9 @@ test("WEB-02/17/20/21/09/22 real API journey from group creation to sport and fi
   p.on("dialog", (d) => d.accept());
   try {
     let group;
+    await p.addInitScript(() =>
+      localStorage.setItem("statoo-onboarding-complete", "1"),
+    );
     await p.goto(base + "/portal/");
     await p
       .getByRole("button", { name: "Créer un groupe", exact: true })

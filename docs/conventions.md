@@ -16,6 +16,8 @@ Sources : `analysis_options.yaml`, `lib/features/players/application/players_pro
 
 ## Interface et analyse
 
+**Lecture obligatoire avant chaque écran, refonte, dialogue ou feuille modale : [mémoire du design](design-system.md).** Cette mémoire décrit les références visuelles, composants, couleurs, typographie et vérifications de cadrage. Le rappel persistant se trouve dans `AGENTS.md` et s’applique aux prochaines sessions.
+
 Couleurs généralement via context.colors/ThemeExtension ; composants partagés dans lib/core/widgets. Poppins embarquée, thèmes clair/sombre, Remix Icon, interface française et intl. Les libellés restent dans les widgets, sans catalogue ARB trouvé. Les consignes historiques Inter/couleurs uniquement dans le thème ne décrivent pas intégralement le code : les avatars ont une palette locale.
 
 Very Good Analysis est le jeu de règles actif, adapté notamment pour les imports et la documentation publique. Générés/build/projets natifs sont exclus de l'analyse. Les anciens chiffres d'analyse ne sont pas une mesure actuelle. Commentaires français/anglais ; commits récents majoritairement Conventional Commits avec scope.

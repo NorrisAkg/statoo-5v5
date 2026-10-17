@@ -60,6 +60,28 @@ void main() {
         )).single['goals'],
         3,
       );
+      // PAR21: a session started on the other platform stays active here.
+      fixture['active_session_id'] = 'pwa-s';
+      final documents = fixture['documents'] as Map<String, dynamic>;
+      for (final raw in documents.values) {
+        final document = raw as Map<String, dynamic>;
+        if (document['domain'] == 'sport') {
+          (document['payload']['session'] as Map)['status'] = 'DRAFT';
+        }
+      }
+      await service.importSnapshot(fixture);
+      expect(await repo.getActiveSessionId(teamId: 'g'), 'pwa-s');
+      await service.queueSport('g', 'pwa-s');
+      final pending = await db.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_']);
+      final queued = jsonDecode(pending.single['value']! as String) as Map;
+      expect(queued['payload']['is_active'], isTrue);
+      expect((queued['payload']['session'] as Map).containsKey('is_active'), isFalse);
+      fixture['active_session_id'] = null;
+      await service.importSnapshot(fixture);
+      expect(await repo.getActiveSessionId(teamId: 'g'), 'pwa-s', reason: 'A pending local sport mutation must not be overwritten');
+      await db.delete('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_']);
+      await service.importSnapshot(fixture);
+      expect(await repo.getActiveSessionId(teamId: 'g'), isNull);
     },
   );
 }

@@ -73,8 +73,16 @@ void main() {
     GoogleFonts.config.allowRuntimeFetching = false;
     await initializeDateFormatting('fr_FR');
   });
-  Future<void> open(WidgetTester tester, _Shared service, String action) async {
-    tester.view.physicalSize = const Size(600, 1500);
+  Future<void> open(
+    WidgetTester tester,
+    _Shared service,
+    String action, {
+    Size size = const Size(600, 1500),
+    double scale = 1,
+    bool dark = false,
+    double keyboard = 0,
+  }) async {
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -82,16 +90,205 @@ void main() {
       ProviderScope(
         overrides: [sharedServiceProvider.overrideWithValue(service)],
         child: MaterialApp(
-          theme: AppTheme.lightTheme,
+          theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              textScaler: TextScaler.linear(scale),
+              viewInsets: EdgeInsets.only(bottom: keyboard),
+            ),
+            child: child!,
+          ),
           home: const SharedGroupScreen(),
         ),
       ),
     );
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text(action));
+    await tester.scrollUntilVisible(
+      find.text(action),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text(action));
     await tester.pumpAndSettle();
   }
+
+  _Shared conflict({bool identical = false}) {
+    final current = _point('Terrain', 30);
+    final candidate = _point(
+      identical ? 'Terrain' : 'Eau',
+      identical ? 30 : 80,
+    );
+    for (final point in [current, candidate]) {
+      point['lines'] = [
+        for (var i = 0; i < 6; i++)
+          {
+            'member_id': '$i',
+            'contribution': 100,
+            'penalty_paid': 0,
+            'penalty_due': 0,
+            'reason': 'Identique',
+          },
+      ];
+    }
+    return _Shared()
+      ..snapshot!['documents'] = {
+        'finance:ref': {
+          'domain': 'finance',
+          'occurrence_id': 'ref',
+          'revision': 2,
+          'owner': 'tr',
+          'payload': current,
+          'candidates': [
+            {'id': 'candidate', 'actor': 'sg', 'payload': candidate},
+          ],
+        },
+      };
+  }
+
+  testWidgets(
+    'D02-01/02 six identical members do not hide expense differences',
+    (tester) async {
+      await open(
+        tester,
+        conflict(),
+        'Conflit financier',
+        size: const Size(393, 852),
+      );
+      expect(find.textContaining('Terrain').hitTestable(), findsOneWidget);
+      expect(find.textContaining('Eau').hitTestable(), findsOneWidget);
+      expect(find.textContaining('Détails inchangés'), findsNWidgets(2));
+      expect(find.textContaining('Identique'), findsNothing);
+      await tester.tap(find.textContaining('Détails inchangés').first);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Identique'), findsWidgets);
+      expect(find.textContaining('Soutien'), findsWidgets);
+    },
+  );
+
+  for (final spaces in ['', '   ']) {
+    testWidgets(
+      'D03-01/02/03 reason error is visible and announced ($spaces)',
+      (tester) async {
+        final service = conflict();
+        final semantics = tester.ensureSemantics();
+        try {
+          await open(
+            tester,
+            service,
+            'Conflit financier',
+            size: const Size(393, 852),
+          );
+          if (spaces.isNotEmpty) {
+            await tester.ensureVisible(find.byType(TextField));
+            await tester.enterText(find.byType(TextField), spaces);
+          }
+          await tester.tap(find.text('Retenir cette version'));
+          await tester.pumpAndSettle();
+          expect(
+            find.text('Indiquez le motif de décision.').hitTestable(),
+            findsOneWidget,
+          );
+          expect(
+            find.byWidgetPredicate(
+              (w) => w is Semantics && w.properties.liveRegion == true,
+            ),
+            findsWidgets,
+          );
+          expect(service.calls, isEmpty);
+        } finally {
+          semantics.dispose();
+        }
+      },
+    );
+  }
+
+  testWidgets('D02-04 identical versions explicitly say no difference', (
+    tester,
+  ) async {
+    await open(tester, conflict(identical: true), 'Conflit financier');
+    expect(
+      find.text('Aucune différence avec les autres versions.'),
+      findsNWidgets(2),
+    );
+  });
+
+  for (final dark in [false, true]) {
+    testWidgets(
+      'D02-08/D03-05 compact dialog remains usable enlarged dark=$dark',
+      (tester) async {
+        final service = conflict();
+        await open(
+          tester,
+          service,
+          'Conflit financier',
+          size: const Size(320, 852),
+          scale: 2,
+          dark: dark,
+        );
+        expect(tester.takeException(), isNull);
+        await tester.tap(find.text('Retenir cette version'));
+        await tester.pumpAndSettle();
+        expect(
+          find.text('Indiquez le motif de décision.').hitTestable(),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets(
+    'D02-05/06 D03-04 selected candidate survives details and invalid reason',
+    (tester) async {
+      final service = conflict();
+      await open(tester, service, 'Conflit financier');
+      await tester.tap(find.text('Version concurrente'));
+      await tester.tap(find.textContaining('Détails inchangés').first);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.textContaining('Détails inchangés').first,
+      );
+      await tester.tap(find.textContaining('Détails inchangés').first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Retenir cette version'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byType(TextField));
+      await tester.enterText(find.byType(TextField), '  Vérifié  ');
+      await tester.tap(find.text('Retenir cette version'));
+      await tester.pumpAndSettle();
+      expect(service.calls.single.body, {
+        'revision': 2,
+        'candidate_id': 'candidate',
+        'reason': 'Vérifié',
+      });
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('D03-05 keyboard leaves reason and error visible', (
+    tester,
+  ) async {
+    final service = conflict();
+    await open(
+      tester,
+      service,
+      'Conflit financier',
+      size: const Size(393, 852),
+      keyboard: 300,
+    );
+    await tester.tap(find.text('Retenir cette version'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextField).hitTestable(), findsOneWidget);
+    expect(
+      find.text('Indiquez le motif de décision.').hitTestable(),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Annuler'));
+    await tester.pumpAndSettle();
+    expect(service.calls, isEmpty);
+  });
 
   testWidgets('UX05-01/02/04 review shows balances and cancel never approves', (
     tester,
@@ -169,6 +366,8 @@ void main() {
       expect(service.calls, isEmpty);
       expect(find.textContaining('Terrain'), findsWidgets);
       expect(find.textContaining('Eau'), findsWidgets);
+      await tester.tap(find.textContaining('Détails inchangés').first);
+      await tester.pumpAndSettle();
       expect(find.textContaining('Soutien'), findsWidgets);
       expect(find.textContaining('Retard'), findsWidgets);
       expect(find.textContaining('Trésorier'), findsWidgets);
@@ -230,9 +429,11 @@ void main() {
         },
       };
       await open(tester, service, 'Conflit sportif');
-      expect(find.textContaining('Lions'), findsWidgets);
       expect(find.textContaining('Victoires A : 3'), findsWidgets);
       expect(find.textContaining('Victoires A : 4'), findsWidgets);
+      await tester.tap(find.textContaining('Détails inchangés').first);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Lions'), findsWidgets);
     },
   );
 }

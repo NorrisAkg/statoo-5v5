@@ -1,0 +1,208 @@
+TAP version 13
+# Subtest: WEB-03 collective identity cannot expose manager actions even with elevated role labels
+ok 1 - WEB-03 collective identity cannot expose manager actions even with elevated role labels
+  ---
+  duration_ms: 2111.2235
+  type: 'test'
+  ...
+# Subtest: WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+ok 2 - WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+  ---
+  duration_ms: 3473.314
+  type: 'test'
+  ...
+# Subtest: WEB-12/14 sport cancellation requires a reason and sends current revision
+ok 3 - WEB-12/14 sport cancellation requires a reason and sends current revision
+  ---
+  duration_ms: 2365.4592
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix MEMBER
+ok 4 - WEB-03/04 action matrix MEMBER
+  ---
+  duration_ms: 1650.8301
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix CENSOR
+ok 5 - WEB-03/04 action matrix CENSOR
+  ---
+  duration_ms: 1791.6106
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix ADMIN
+ok 6 - WEB-03/04 action matrix ADMIN
+  ---
+  duration_ms: 1658.4128
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SG
+ok 7 - WEB-03/04 action matrix SG
+  ---
+  duration_ms: 1697.0486
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SGA
+ok 8 - WEB-03/04 action matrix SGA
+  ---
+  duration_ms: 1620.4245
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TR
+ok 9 - WEB-03/04 action matrix TR
+  ---
+  duration_ms: 1769.6797
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TGA
+ok 10 - WEB-03/04 action matrix TGA
+  ---
+  duration_ms: 1868.0089
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix PDT
+ok 11 - WEB-03/04 action matrix PDT
+  ---
+  duration_ms: 1714.6408
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix VP
+ok 12 - WEB-03/04 action matrix VP
+  ---
+  duration_ms: 1853.4499
+  type: 'test'
+  ...
+# Subtest: WEB-07/08/09 sport form creates balanced tournament with three club names
+ok 13 - WEB-07/08/09 sport form creates balanced tournament with three club names
+  ---
+  duration_ms: 2431.8324
+  type: 'test'
+  ...
+# Subtest: WEB-22 finance includes every member, separates donations and expenses
+ok 14 - WEB-22 finance includes every member, separates donations and expenses
+  ---
+  duration_ms: 2340.0416
+  type: 'test'
+  ...
+# Subtest: WEB-15/16 Admin manages members and cannot create plain individual member
+ok 15 - WEB-15/16 Admin manages members and cannot create plain individual member
+  ---
+  duration_ms: 2335.984
+  type: 'test'
+  ...
+# Subtest: WEB-21 proposal approval submits exactly the displayed balances
+ok 16 - WEB-21 proposal approval submits exactly the displayed balances
+  ---
+  duration_ms: 2316.8621
+  type: 'test'
+  ...
+# Subtest: WEB-27 drafts survive reload; WEB-34 content is rendered as text
+ok 17 - WEB-27 drafts survive reload; WEB-34 content is rendered as text
+  ---
+  duration_ms: 3149.7088
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 320
+ok 18 - WEB-35 page fits viewport 320
+  ---
+  duration_ms: 1887.9655
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 360
+ok 19 - WEB-35 page fits viewport 360
+  ---
+  duration_ms: 1869.9423
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 390
+ok 20 - WEB-35 page fits viewport 390
+  ---
+  duration_ms: 2051.5796
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 768
+ok 21 - WEB-35 page fits viewport 768
+  ---
+  duration_ms: 1861.522
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 1440
+ok 22 - WEB-35 page fits viewport 1440
+  ---
+  duration_ms: 1972.9529
+  type: 'test'
+  ...
+# Subtest: WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+ok 23 - WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+  ---
+  duration_ms: 8656.2763
+  type: 'test'
+  ...
+# Subtest: WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+ok 24 - WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+  ---
+  duration_ms: 3474.6063
+  type: 'test'
+  ...
+# Subtest: PWA-03/04 offline reload retains shell and own snapshot
+ok 25 - PWA-03/04 offline reload retains shell and own snapshot
+  ---
+  duration_ms: 3582.715
+  type: 'test'
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme dark
+ok 26 - WEB-35 populated tournament and narrow form, theme dark
+  ---
+  duration_ms: 1931.289
+  type: 'test'
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme light
+ok 27 - WEB-35 populated tournament and narrow form, theme light
+  ---
+  duration_ms: 2045.5149
+  type: 'test'
+  ...
+# Subtest: CFG-01 configured API receives login and registration without server fields
+ok 28 - CFG-01 configured API receives login and registration without server fields
+  ---
+  duration_ms: 3869.4236
+  type: 'test'
+  ...
+# Subtest: GRP-06/07/08/09 creation separates members and explains collective access
+ok 29 - GRP-06/07/08/09 creation separates members and explains collective access
+  ---
+  duration_ms: 2230.8068
+  type: 'test'
+  ...
+# Subtest: ACC09/10 short name is submitted and locked for uncertain publication
+ok 30 - ACC09/10 short name is submitted and locked for uncertain publication
+  ---
+  duration_ms: 3653.6377
+  type: 'test'
+  ...
+# Subtest: ACC03 skipping onboarding still works with unavailable storage
+ok 31 - ACC03 skipping onboarding still works with unavailable storage
+  ---
+  duration_ms: 2124.4848
+  type: 'test'
+  ...
+# Subtest: ACC03/04/05/06/11 returning visit and responsive forms
+ok 32 - ACC03/04/05/06/11 returning visit and responsive forms
+  ---
+  duration_ms: 2456.6064
+  type: 'test'
+  ...
+# Subtest: ACC01/02/04/05/06 onboarding, fields and sticky navigation
+ok 33 - ACC01/02/04/05/06 onboarding, fields and sticky navigation
+  ---
+  duration_ms: 5533.7662
+  type: 'test'
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 87405.1226

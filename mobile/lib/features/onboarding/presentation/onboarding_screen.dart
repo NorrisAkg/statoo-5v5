@@ -24,18 +24,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   static const List<_OnboardingPageData> _pages = [
     _OnboardingPageData(
       title: 'Suivez vos matchs 5v5',
-      subtitle:
-          'Enregistrez facilement vos séances, scores et statistiques individuelles au bord du terrain.',
+      subtitle: 'Enregistrez facilement vos séances, scores et statistiques individuelles au bord du terrain.',
     ),
     _OnboardingPageData(
       title: 'Tirage rapide & équilibré',
-      subtitle:
-          "Générez vos compositions d'équipes aléatoires et ajustez les joueurs en temps réel.",
+      subtitle: "Générez vos compositions d'équipes aléatoires et ajustez les joueurs en temps réel.",
     ),
     _OnboardingPageData(
       title: 'Classement & Statistiques',
-      subtitle:
-          'Découvrez qui domine au classement des points, aux victoires et au tableau des buteurs.',
+      subtitle: 'Découvrez qui domine au classement des points, aux victoires et au tableau des buteurs.',
     ),
   ];
 
@@ -156,43 +153,62 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           flex: 60,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: switch (index) {
-              0 => const _ScoreboardIllustration(),
-              1 => const _ShuffleIllustration(),
-              _ => const _LeaderboardIllustration(),
-            },
+            child: MediaQuery.textScalerOf(context).scale(14) > 20
+                ? Center(
+                    child: Icon(
+                      switch (index) {
+                        0 => Remix.football_line,
+                        1 => Remix.shuffle_line,
+                        _ => Remix.trophy_line,
+                      },
+                      size: 96,
+                      color: context.colors.primary500,
+                    ),
+                  )
+                : switch (index) {
+                    0 => const _ScoreboardIllustration(),
+                    1 => const _ShuffleIllustration(),
+                    _ => const _LeaderboardIllustration(),
+                  },
           ),
         ),
 
         // Text (40%)
         Expanded(
           flex: 40,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.title,
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.w900,
-                    color: context.colors.foreground50,
-                    height: 1.2,
-                    letterSpacing: -0.4,
+          child: LayoutBuilder(
+            builder: (context, constraints) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w900,
+                          color: context.colors.foreground50,
+                          height: 1.2,
+                          letterSpacing: -0.4,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        data.subtitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: context.colors.foreground400,
+                          height: 1.55,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  data.subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: context.colors.foreground400,
-                    height: 1.55,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -412,8 +428,7 @@ class _SparklesPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     for (final p in particles) {
       final t = (progress * p.speed + p.phase) % 1.0;
-      final opacity =
-          (math.sin(t * math.pi * 2) * 0.35 + 0.4).clamp(0.0, 0.75);
+      final opacity = (math.sin(t * math.pi * 2) * 0.35 + 0.4).clamp(0.0, 0.75);
       final paint = Paint()
         ..color = color.withValues(alpha: opacity)
         ..style = PaintingStyle.fill;
@@ -485,8 +500,7 @@ class _ScoreboardIllustrationState extends State<_ScoreboardIllustration>
         child: AnimatedBuilder(
           animation: _ctrl,
           builder: (context, _) {
-            final glow =
-                0.4 + 0.6 * math.sin(_ctrl.value * math.pi * 2).abs();
+            final glow = 0.4 + 0.6 * math.sin(_ctrl.value * math.pi * 2).abs();
             return Stack(
               fit: StackFit.expand,
               children: [
@@ -527,8 +541,7 @@ class _ScoreboardIllustrationState extends State<_ScoreboardIllustration>
                       color: c.background800,
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                        color: c.primary500
-                            .withValues(alpha: 0.3 + 0.5 * glow),
+                        color: c.primary500.withValues(alpha: 0.3 + 0.5 * glow),
                         width: 1.5,
                       ),
                       boxShadow: [
@@ -561,7 +574,10 @@ class _ScoreboardIllustrationState extends State<_ScoreboardIllustration>
                             Expanded(
                               child: Column(
                                 children: [
-                                  _AvatarCircle(label: 'A', color: c.primary500),
+                                  _AvatarCircle(
+                                    label: 'A',
+                                    color: c.primary500,
+                                  ),
                                   const SizedBox(height: 5),
                                   Text(
                                     'Équipe A',
@@ -699,12 +715,14 @@ class _ShuffleIllustrationState extends State<_ShuffleIllustration>
       vsync: this,
       duration: const Duration(seconds: 3),
     )..repeat();
-    _spin = Tween<double>(begin: 0, end: 2 * math.pi).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.linear),
-    );
-    _pulse = Tween<double>(begin: 0.85, end: 1.1).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    _spin = Tween<double>(
+      begin: 0,
+      end: 2 * math.pi,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.linear));
+    _pulse = Tween<double>(
+      begin: 0.85,
+      end: 1.1,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -742,13 +760,11 @@ class _ShuffleIllustrationState extends State<_ShuffleIllustration>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: _teamA.asMap().entries.map((e) {
-                          final t =
-                              (_ctrl.value + e.key * 0.18) % 1.0;
+                          final t = (_ctrl.value + e.key * 0.18) % 1.0;
                           final glow =
                               0.2 + 0.7 * math.sin(t * math.pi * 2).abs();
                           return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 2.5),
+                            padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: _PlayerAvatar(
                               label: e.value,
                               color: c.primary500,
@@ -775,8 +791,9 @@ class _ShuffleIllustrationState extends State<_ShuffleIllustration>
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: c.primary500
-                                    .withValues(alpha: 0.35 * _pulse.value),
+                                color: c.primary500.withValues(
+                                  alpha: 0.35 * _pulse.value,
+                                ),
                                 blurRadius: 18,
                                 spreadRadius: 2,
                               ),
@@ -799,13 +816,11 @@ class _ShuffleIllustrationState extends State<_ShuffleIllustration>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: _teamB.asMap().entries.map((e) {
-                          final t =
-                              (_ctrl.value + e.key * 0.18 + 0.5) % 1.0;
+                          final t = (_ctrl.value + e.key * 0.18 + 0.5) % 1.0;
                           final glow =
                               0.2 + 0.7 * math.sin(t * math.pi * 2).abs();
                           return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 2.5),
+                            padding: const EdgeInsets.symmetric(vertical: 2.5),
                             child: _PlayerAvatar(
                               label: e.value,
                               color: c.secondary500,
@@ -862,9 +877,10 @@ class _LeaderboardIllustrationState extends State<_LeaderboardIllustration>
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     )..repeat(reverse: true);
-    _glow = Tween<double>(begin: 0.2, end: 1).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    _glow = Tween<double>(
+      begin: 0.2,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override

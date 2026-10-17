@@ -25,6 +25,18 @@ class _AccountPlayers extends PlayersNotifier {
 
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
+  testWidgets('PAR18 every connection input keeps an explanatory placeholder', (tester) async {
+    final service = SharedService(AppDatabase.instance);
+    await tester.pumpWidget(ProviderScope(
+      overrides: [sharedServiceProvider.overrideWithValue(service)],
+      child: MaterialApp(theme: AppTheme.lightTheme, home: const SharedGroupScreen()),
+    ));
+    await tester.pumpAndSettle();
+    for (final field in tester.widgetList<TextField>(find.byType(TextField))) {
+      expect(field.decoration?.hintText?.trim(), isNot(isIn([null, ''])));
+    }
+    service.dispose();
+  });
   testWidgets(
     'CPT-06/07 individual creation requires member and responsibility',
     (tester) async {

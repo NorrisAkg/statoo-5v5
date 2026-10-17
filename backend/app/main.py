@@ -39,6 +39,12 @@ class Registration(Credentials):
     operation_id: str | None = Field(default=None, min_length=1, max_length=100)
     group_id: str | None = Field(default=None, max_length=100)
     name: str = Field(min_length=1, max_length=100)
+    short_name: str = Field(default="", max_length=30)
+
+    @field_validator('short_name', mode='before')
+    @classmethod
+    def clean_short_name(cls, value):
+        return value.strip() if isinstance(value, str) else value
     shared_username: str = Field(min_length=1, max_length=100)
     shared_password: str = Field(min_length=8, max_length=200)
     members: list[dict] = Field(default_factory=list, max_length=1000)
@@ -231,7 +237,11 @@ def create_app(url: str | None = None):
 
     @app.post("/groups", status_code=201)
     def register(body: Registration, session: Session = Depends(db)):
-        canonical = json.dumps(body.model_dump(exclude={'operation_id', 'group_id'}), sort_keys=True, ensure_ascii=False)
+        canonical_body = body.model_dump(exclude={'operation_id', 'group_id'})
+        # Preserve fingerprints of attempts started before short names existed.
+        if not canonical_body['short_name']:
+            canonical_body.pop('short_name')
+        canonical = json.dumps(canonical_body, sort_keys=True, ensure_ascii=False)
 
         def replay():
             previous = session.get(RegistrationOperation, body.operation_id) if body.operation_id else None
@@ -259,7 +269,7 @@ def create_app(url: str | None = None):
                  "roles": ["ADMIN", "MEMBER"], "member_id": None, "shared": False}
         shared = {"id": str(uuid.uuid4()), "username": body.shared_username.strip(),
                   "password": password_hash(body.shared_password), "roles": ["MEMBER"], "member_id": None, "shared": True}
-        state = {"name": body.name, "roles": ROLES, "accounts": [admin, shared],
+        state = {"name": body.name, "short_name": body.short_name, "roles": ROLES, "accounts": [admin, shared],
                     "members": body.members, "documents": {}, "operations": {}, "audit": [], "opening": None,
                     "opening_proposal": None, "obligations": {}}
         for _ in range(20):
@@ -310,6 +320,9 @@ def create_app(url: str | None = None):
         _, group, state, account = scoped(group_id, auth)
         result = {k: state[k] for k in ("name", "roles", "members", "documents", "opening", "audit")}
         result['obligations'] = state.get('obligations', {})
+        result['short_name'] = state.get('short_name', '')
+        if 'active_session_id' in state:
+            result['active_session_id'] = state['active_session_id']
         result['financial_settings'] = state.get('financial_settings', {'contribution': 100, 'late_penalty': 0})
         result['sport_settings'] = state.get('sport_settings', {'min_players_per_session': 6})
         result["account"] = public_account(account)
@@ -496,6 +509,7 @@ def create_app(url: str | None = None):
         else:
             if body.domain == 'sport':
                 validate_sport_acceptance(state, body.occurrence_id, body.payload)
+                apply_sport_lifecycle(state, body.payload)
             if document and not body.reason.strip():
                 fail(422, "Motif de correction requis")
             if document:
@@ -543,6 +557,7 @@ def create_app(url: str | None = None):
                 validate_sport(selected['payload'], {m['id'] for m in state['members']}, group.id,
                                state.get('sport_settings', {}).get('min_players_per_session', 6))
             validate_sport_acceptance(state, occurrence_id, selected['payload'])
+            apply_sport_lifecycle(state, selected['payload'])
         if domain == "finance":
             validate_financial_roster(state, occurrence_id, selected['payload'])
             points = [d["payload"] for k, d in state["documents"].items() if d["domain"] == "finance" and k != domain + ":" + occurrence_id]
@@ -581,6 +596,25 @@ def create_app(url: str | None = None):
     return app
 
 
+def apply_sport_lifecycle(state, payload):
+    session = payload['session']
+    identifier = session['id']
+    active = state.get('active_session_id')
+    if session['status'] != 'DRAFT':
+        if active == identifier:
+            state['active_session_id'] = None
+        return
+    if 'is_active' not in payload:
+        return  # Legacy clients keep their existing lifecycle semantics.
+    if payload['is_active']:
+        if active and active != identifier:
+            fail(409, {'code': 'active_session_conflict', 'active_session_id': active,
+                       'message': 'Une séance est déjà en cours. Votre séance reste en brouillon ; clôturez la séance en cours avant de la démarrer.'})
+        state['active_session_id'] = identifier
+    elif active == identifier:
+        state['active_session_id'] = None
+
+
 def validate_sport(payload, known, group_id, minimum=6):
     session = payload.get("session", {})
     parts = payload.get("participations", [])
@@ -588,6 +622,8 @@ def validate_sport(payload, known, group_id, minimum=6):
         fail(422, "Séance ou participants invalides")
     if not session.get("id") or session.get("team_id") != group_id or session.get("status") not in {"DRAFT", "CLOSED", "CANCELLED"}:
         fail(422, "Séance invalide")
+    if 'is_active' in payload and type(payload['is_active']) is not bool:
+        fail(422, 'État de séance actif invalide')
     ids = [p.get("player_id") for p in parts]
     if len(ids) != len(set(ids)) or not set(ids).issubset(known):
         fail(422, "Participants inconnus ou en double")
@@ -596,6 +632,15 @@ def validate_sport(payload, known, group_id, minimum=6):
             fail(422, "Participation invalide")
         if any(type(part.get(k, 0)) is not int or part.get(k, 0) < 0 for k in ("goals", "assists", "yellow_cards", "red_cards")):
             fail(422, "Statistiques invalides")
+    if payload.get('is_active') and session['status'] == 'DRAFT':
+        if len(parts) < minimum:
+            fail(422, f'Sélectionnez au minimum {minimum} joueurs pour débuter la séance')
+        teams = ['A', 'B', 'C'] if session.get('session_type') == 'TOURNAMENT_3' else ['A', 'B']
+        if any(p['team'] not in teams for p in parts):
+            fail(422, 'Tous les présents doivent être affectés à une équipe valide')
+        counts = [sum(p['team'] == team for p in parts) for team in teams]
+        if not session.get('allow_uneven_teams') and max(counts) - min(counts) > 1:
+            fail(422, 'Équipes déséquilibrées')
     if session["status"] == "CLOSED":
         if len(parts) < minimum:
             fail(422, f"Sélectionnez au minimum {minimum} joueurs pour clôturer la séance")

@@ -123,9 +123,11 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         where: 'team_id = ?',
         whereArgs: [group],
       );
+      final shortNames = await db.query('meta', where: 'key = ?', whereArgs: ['team_short_name_$group']);
       registration = {
         'group_id': group,
         'name': info['name'],
+        'short_name': shortNames.isEmpty ? '' : shortNames.single['value'],
         'username': username,
         'password': password,
         'shared_username': sharedUsername,
@@ -441,59 +443,98 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           title: const Text('Choisir la version à retenir'),
           content: SizedBox(
             width: 400,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Les versions écartées restent conservées et ne sont pas additionnées.',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  controller: reason,
+                  decoration: InputDecoration(
+                    labelText: 'Motif de décision',
+                    error: reasonError == null ? null : const SizedBox.shrink(),
                   ),
-                  RadioGroup<String>(
-                    groupValue: candidateId,
-                    onChanged: (value) => update(() => candidateId = value!),
+                ),
+                if (reasonError != null)
+                  Semantics(
+                    liveRegion: true,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(
+                        reasonError!,
+                        style: TextStyle(
+                          color: Theme.of(ctx).colorScheme.error,
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                Flexible(
+                  child: SingleChildScrollView(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        for (final version in versions)
-                          RadioListTile<String>(
-                            value: version['id'] as String,
-                            title: Text(
-                              version['id'] == 'current'
-                                  ? 'Version actuellement publiée'
-                                  : 'Version concurrente',
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Auteur : ${accounts['${version['actor']}'] ?? version['actor'] ?? 'Non renseigné'}',
-                                ),
-                                Text('Saisie : ${decisionDate(version['at'])}'),
-                                if (version['reason'] != null)
-                                  Text('Motif : ${version['reason']}'),
-                                DecisionDetails(
-                                  rows: rows[versions.indexOf(version)],
-                                  others: [
-                                    for (var i = 0; i < versions.length; i++)
-                                      if (i != versions.indexOf(version))
-                                        rows[i],
+                        const Text(
+                          'Les versions écartées restent conservées et ne sont pas additionnées.',
+                        ),
+                        RadioGroup<String>(
+                          groupValue: candidateId,
+                          onChanged: (value) =>
+                              update(() => candidateId = value!),
+                          child: Column(
+                            children: [
+                              for (final version in versions)
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    RadioListTile<String>(
+                                      contentPadding: EdgeInsets.zero,
+                                      value: version['id'] as String,
+                                      title: Text(
+                                        version['id'] == 'current'
+                                            ? 'Version actuellement publiée'
+                                            : 'Version concurrente',
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Auteur : ${accounts['${version['actor']}'] ?? version['actor'] ?? 'Non renseigné'}',
+                                          ),
+                                          Text(
+                                            'Saisie : ${decisionDate(version['at'])}',
+                                          ),
+                                          if (version['reason'] != null)
+                                            Text(
+                                              'Motif : ${version['reason']}',
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                    DecisionDetails(
+                                      rows: rows[versions.indexOf(version)],
+                                      others: [
+                                        for (
+                                          var i = 0;
+                                          i < versions.length;
+                                          i++
+                                        )
+                                          if (i != versions.indexOf(version))
+                                            rows[i],
+                                      ],
+                                    ),
+                                    const Divider(height: 20),
                                   ],
                                 ),
-                              ],
-                            ),
+                            ],
                           ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: reason,
-                    decoration: InputDecoration(
-                      labelText: 'Motif de décision',
-                      errorText: reasonError,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           actions: [
@@ -912,7 +953,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           keyboardType: keyboardType,
           style: TextStyle(color: context.colors.foreground50, fontSize: 14),
           decoration: InputDecoration(
-            hintText: hint,
+            hintText: hint ?? (password ? 'Au moins 8 caractères' : 'Ex. : membres'),
             prefixIcon: icon == null
                 ? null
                 : Icon(icon, color: context.colors.foreground400, size: 20),
@@ -1215,6 +1256,10 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         .where((d) => d['owner'] == service.accountId || arbiter)
         .toList();
     return [
+      if (service.syncWarning != null) ...[
+        AppCard(child: Text(service.syncWarning!, style: TextStyle(color: context.colors.warning))),
+        const SizedBox(height: 16),
+      ],
       AppCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

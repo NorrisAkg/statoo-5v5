@@ -61,6 +61,9 @@ test("DESK-06 tournament uses three columns on desktop and stacked teams on mobi
           ),
         { base, account },
       );
+      await p.addInitScript(() =>
+        localStorage.setItem("statoo-onboarding-complete", "1"),
+      );
       await p.goto(base + "/portal/");
       await p
         .getByRole("heading", { name: "Tournoi desktop", exact: true })
@@ -95,6 +98,9 @@ test("DESK-01/02/03/04/07 responsive branded registration in both themes", async
             colorScheme: theme,
           }),
           p = await context.newPage();
+        await p.addInitScript(() =>
+          localStorage.setItem("statoo-onboarding-complete", "1"),
+        );
         await p.goto(base + "/portal/");
         await p
           .getByRole("button", { name: "Créer un groupe", exact: true })

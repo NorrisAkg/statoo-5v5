@@ -3,27 +3,53 @@ import assert from "node:assert/strict";
 import { chromium } from "playwright";
 const base = process.env.STATOO_TEST_URL || "http://127.0.0.1:18085";
 test("OFF-09 abandoning a preparation requires confirmation", async () => {
-  const browser=await chromium.launch({channel:'chrome',headless:true});
+  const browser = await chromium.launch({ channel: "chrome", headless: true });
   try {
-    const page=await browser.newPage();
-    await page.goto(base+'/portal/');
-    await page.getByRole('button',{name:'Créer un groupe',exact:true}).click();
-    await page.getByLabel('Nom du groupe',{exact:true}).fill('À conserver');
-    await page.getByLabel('Membres du groupe',{exact:true}).fill('Alice');
-    page.once('dialog',d=>d.dismiss());
-    await page.getByRole('button',{name:'Abandonner la préparation',exact:true}).click();
-    assert.notEqual(await page.evaluate(()=>localStorage.getItem('statoo-registration-draft')),null);
-    page.once('dialog',d=>d.accept());
-    await page.getByRole('button',{name:'Abandonner la préparation',exact:true}).click();
-    assert.equal(await page.evaluate(()=>localStorage.getItem('statoo-registration-draft')),null);
-    await page.getByRole('button',{name:'Se connecter',exact:true}).waitFor();
-  }finally{await browser.close();}
+    const page = await browser.newPage();
+    await page.addInitScript(() =>
+      localStorage.setItem("statoo-onboarding-complete", "1"),
+    );
+    await page.goto(base + "/portal/");
+    await page
+      .getByRole("button", { name: "Créer un groupe", exact: true })
+      .click();
+    await page.getByLabel("Nom du groupe", { exact: true }).fill("À conserver");
+    await page.getByLabel("Membres du groupe", { exact: true }).fill("Alice");
+    page.once("dialog", (d) => d.dismiss());
+    await page
+      .getByRole("button", { name: "Abandonner la préparation", exact: true })
+      .click();
+    assert.notEqual(
+      await page.evaluate(() =>
+        localStorage.getItem("statoo-registration-draft"),
+      ),
+      null,
+    );
+    page.once("dialog", (d) => d.accept());
+    await page
+      .getByRole("button", { name: "Abandonner la préparation", exact: true })
+      .click();
+    assert.equal(
+      await page.evaluate(() =>
+        localStorage.getItem("statoo-registration-draft"),
+      ),
+      null,
+    );
+    await page
+      .getByRole("button", { name: "Se connecter", exact: true })
+      .waitFor();
+  } finally {
+    await browser.close();
+  }
 });
 test("OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry", async () => {
   const browser = await chromium.launch({ channel: "chrome", headless: true });
   try {
     const context = await browser.newContext(),
       p = await context.newPage();
+    await p.addInitScript(() =>
+      localStorage.setItem("statoo-onboarding-complete", "1"),
+    );
     await p.goto(base + "/portal/");
     await p.evaluate(async () => {
       await navigator.serviceWorker.ready;
@@ -100,7 +126,12 @@ test("OFF-01/02/03/04/05 offline preparation, reload, lost response and safe pub
         document.querySelector('form [role="alert"]')?.textContent.length > 0,
     );
     assert.equal(count, 1);
-    await p.getByText('Publication à vérifier. Ressaisissez les mêmes accès pour reprendre sans créer de doublon.',{exact:true}).waitFor({timeout:2000});
+    await p
+      .getByText(
+        "Publication à vérifier. Ressaisissez les mêmes accès pour reprendre sans créer de doublon.",
+        { exact: true },
+      )
+      .waitFor({ timeout: 2000 });
     const persisted = await p.evaluate(() =>
       JSON.stringify({ ...localStorage }),
     );

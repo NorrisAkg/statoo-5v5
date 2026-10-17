@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
 import '../../../core/data/occurrence_registry.dart';
+import '../../../core/data/shared_http.dart';
 
 class SharedService {
   SharedService(this.database, {FlutterSecureStorage? storage})
@@ -16,6 +16,7 @@ class SharedService {
   final FlutterSecureStorage storage;
   Map<String, dynamic>? identity;
   Map<String, dynamic>? snapshot;
+  String? syncWarning;
   String? baseUrl;
   String? token;
   String? get accountId => (identity?['account'] as Map?)?['id'] as String?;
@@ -76,6 +77,7 @@ class SharedService {
         snapshot =
             jsonDecode(rows.single['value']! as String) as Map<String, dynamic>;
       }
+      await _refreshSyncWarning(db);
       startAutomaticSync();
     }
   }
@@ -85,26 +87,12 @@ class SharedService {
     String path, [
     Object? body,
   ]) async {
-    final client = HttpClient()
-      ..connectionTimeout = const Duration(seconds: 20);
-    try {
-      final req = await client.openUrl(
-        method,
-        Uri.parse('$baseUrl${path.replaceAll('#', '%23')}'),
-      );
-      if (token != null) req.headers.set('Authorization', 'Bearer $token');
-      req.headers.contentType = ContentType.json;
-      if (body != null) req.write(jsonEncode(body));
-      final response = await req.close().timeout(const Duration(seconds: 90));
-      final content = await utf8.decoder.bind(response).join();
-      if (response.statusCode >= 400) {
-        final decoded = jsonDecode(content) as Map<String, dynamic>;
-        throw HttpException('${response.statusCode}: ${decoded['detail']}');
-      }
-      return jsonDecode(content) as Map<String, dynamic>;
-    } finally {
-      client.close(force: true);
-    }
+    return await sendSharedRequest(
+      method,
+      Uri.parse('$baseUrl${path.replaceAll('#', '%23')}'),
+      token,
+      body,
+    );
   }
 
   Future<void> connect(
@@ -310,6 +298,8 @@ class SharedService {
     );
     final row = Map<String, dynamic>.from(sessionRows.single);
     if (cancelled) row['status'] = 'CANCELLED';
+    final active = await db.query('meta', where: 'key = ?', whereArgs: ['active_session_id_$group']);
+    final isActive = !cancelled && row['status'] == 'DRAFT' && active.isNotEmpty && active.single['value'] == sessionId;
     await db.transaction(
       (txn) => enqueue(
         txn,
@@ -318,6 +308,7 @@ class SharedService {
         sessionId,
         {
           'session': row,
+          'is_active': isActive,
           'participations': cancelled ? <Map<String, dynamic>>[] : parts,
         },
         reason: cancelled
@@ -451,7 +442,19 @@ class SharedService {
           ..remove('status')
           ..remove('actor')
           ..remove('attempted');
-        final result = await request('POST', '/groups/$groupId/sync', wire);
+        Map<String, dynamic> result;
+        try {
+          result = await request('POST', '/groups/$groupId/sync', wire);
+        } on SharedApiException catch (error) {
+          if (error.statusCode != 409 || error.code != 'active_session_conflict' ||
+              event['domain'] != 'sport' || (event['payload'] as Map)['is_active'] != true) {
+            rethrow;
+          }
+          event['status'] = 'blocked';
+          event['error'] = error.message;
+          await db.update('meta', {'value': jsonEncode(event)}, where: 'key = ?', whereArgs: [row['key']]);
+          continue;
+        }
         event['status'] = result['status'];
         await db.update(
           'meta',
@@ -475,6 +478,7 @@ class SharedService {
           }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
       }
+      await _refreshSyncWarning(db);
       snapshot = await request('GET', '/groups/$groupId');
       identity!['account'] = snapshot!['account'];
       await storage.write(
@@ -491,6 +495,19 @@ class SharedService {
     }
   }
 
+  Future<void> _refreshSyncWarning(DatabaseExecutor db) async {
+    final rows = await db.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_'], orderBy: 'rowid DESC');
+    final latest = <String, Map<String, dynamic>>{};
+    for (final row in rows) {
+      final event = jsonDecode(row['value']! as String) as Map<String, dynamic>;
+      if (event['group_id'] == groupId && event['actor'] == accountId) {
+        latest.putIfAbsent('${event['domain']}:${event['local_session_id']}', () => event);
+      }
+    }
+    final blocked = latest.values.where((event) => event['status'] == 'blocked');
+    syncWarning = blocked.isEmpty ? null : '${blocked.first['error']}';
+  }
+
   Future<void> importSnapshot(Map<String, dynamic> data) async {
     final db = await database.database;
     await db.transaction((txn) async {
@@ -500,6 +517,9 @@ class SharedService {
         'format': '5v5',
         'created_at': DateTime.now().toIso8601String(),
       }, conflictAlgorithm: ConflictAlgorithm.ignore);
+      if (data['short_name'] is String) {
+        await txn.insert('meta', {'key':'team_short_name_$groupId', 'value':data['short_name']}, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
       await txn.insert('meta', {
         'key': 'shared_snapshot_$groupId',
         'value': jsonEncode(data),
@@ -716,6 +736,23 @@ class SharedService {
             'key': 'shared_${field}_${domain}_$id',
             'value': '${document[field]}',
           }, conflictAlgorithm: ConflictAlgorithm.replace);
+        }
+      }
+      if (data.containsKey('active_session_id')) {
+        final events = await txn.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_']);
+        final hasPendingSport = events.any((row) {
+          final event = jsonDecode(row['value']! as String) as Map;
+          return event['group_id'] == groupId && event['domain'] == 'sport' && event['status'] == 'pending';
+        });
+        if (!hasPendingSport) {
+          final active = data['active_session_id'] as String?;
+          final key = 'active_session_id_$groupId';
+          if (active == null) {
+            await txn.delete('meta', where: 'key = ?', whereArgs: [key]);
+          } else {
+            final rows = await txn.query('sessions', where: 'id = ? AND team_id = ? AND status = ?', whereArgs: [active, groupId, 'DRAFT']);
+            if (rows.isNotEmpty) await txn.insert('meta', {'key': key, 'value': active}, conflictAlgorithm: ConflictAlgorithm.replace);
+          }
         }
       }
     });

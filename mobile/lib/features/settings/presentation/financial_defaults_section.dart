@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -142,32 +143,32 @@ class FinancialDefaultsSection extends ConsumerWidget {
     ),
     subtitle: Padding(
       padding: const EdgeInsets.only(top: 2),
-      child: Text(
-        subtitle,
-        style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            subtitle,
+            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${NumberFormat.decimalPattern('fr_FR').format(amount)} F',
+            style: TextStyle(
+              color: context.colors.foreground200,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
+          ),
+        ],
       ),
     ),
-    trailing: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '$amount F',
-          style: TextStyle(
-            color: context.colors.foreground200,
-            fontWeight: FontWeight.w600,
-            fontSize: 15,
-          ),
-        ),
-        if (onTap != null) ...[
-          const SizedBox(width: 8),
-          Icon(
+    trailing: onTap == null
+        ? null
+        : Icon(
             Remix.arrow_right_s_line,
             color: context.colors.foreground500,
             size: 18,
           ),
-        ],
-      ],
-    ),
     onTap: onTap,
   );
 

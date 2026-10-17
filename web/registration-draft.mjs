@@ -41,22 +41,32 @@ export class RegistrationDraft {
     }
     return value;
   }
-  save({ name, roster }) {
+  save({ name, roster, short_name = "" }) {
     const old = this.load();
     if (old?.pending)
       throw Error(
         "Publication à vérifier : reprenez la tentative avec les mêmes accès avant de modifier le groupe.",
       );
-    ({ name, roster } = validate(preparationSchema, { name, roster }));
+    ({ name, roster, short_name } = validate(preparationSchema, {
+      name,
+      roster,
+      short_name,
+    }));
     const names = validate(preparedNamesSchema, parseMemberNames(roster));
     if (!name.trim()) throw Error("Renseignez le nom du groupe.");
     if (!names.length) throw Error("Ajoutez au moins un membre.");
     if (name.trim().length > 100 || names.length > 1000)
       throw Error("Nom trop long ou plus de 1 000 membres.");
-    if (old?.name === name.trim() && old.roster === roster) return old;
+    if (
+      old?.name === name.trim() &&
+      old.roster === roster &&
+      (old.short_name || "") === short_name
+    )
+      return old;
     return this.write({
       version: 1,
       name: name.trim(),
+      short_name,
       roster,
       members: names.map((name) => ({
         id: crypto.randomUUID(),

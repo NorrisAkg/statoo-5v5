@@ -7,9 +7,15 @@ Un espace libre pour noter mes idées, mes questions et mes envies.
 ## Notes du 15 octobre 2026
 
 ### Ce que j’ai en tête
-- Après la clôture, des confetis plus un message de félicitations à l'équipe gagnante de la séance, ou un message adapté au nul (Ex: Ouooh, c'était serré aujourd'hui. Bravo à tous.
-- Pour la cotisation, pré-remplir tous les champs cotisation de la séance par le montant paramétré; cela évitera au TG ou TGA de taper dans le champ devant les noms qui ont payé le montant exact de la séance
-- Permettre de paramétrer l'affichage de la section "Joueur du mois sur l'accueil" et adapter l'affichage du reste des blocs sur l'accueil en fonction de ça.
+
+#### En attente
+
+- [ ] Après la clôture, des confetis plus un message de félicitations à l'équipe gagnante de la séance, ou un message adapté au nul (Ex: Ouooh, c'était serré aujourd'hui. Bravo à tous.
+  - Cadrage proposé : célébration brève uniquement après clôture réussie, nom réel du vainqueur ; message adapté au nul et aux égalités en tournoi ; animation désactivée si réduction des animations demandée. Ne pas relancer à chaque consultation.
+- [ ] Pour la cotisation, pré-remplir tous les champs cotisation de la séance par le montant paramétré; cela évitera au TG ou TGA de taper dans le champ devant les noms qui ont payé le montant exact de la séance
+  - Choix utilisateur confirmé : préremplir tous les montants de cotisation au tarif paramétré, puis effacer ceux des impayés. Préserver les montants déjà enregistrés et les paiements partiels à la réouverture. Écrire les scénarios avant implémentation ; aucune mise en œuvre encore dans ce lot de préparation de fusion.
+- [ ] Permettre de paramétrer l'affichage de la section "Joueur du mois sur l'accueil" et adapter l'affichage du reste des blocs sur l'accueil en fonction de ça.
+  - Cadrage proposé : préférence d'affichage personnelle, activée par défaut ; masquer le bloc et son espacement sans changer les calculs ni les classements.
 
 #### Traités
 

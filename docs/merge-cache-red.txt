@@ -1,0 +1,259 @@
+TAP version 13
+# Subtest: PWA-01/02 installable shell exists at root and under /portal/
+ok 1 - PWA-01/02 installable shell exists at root and under /portal/
+  ---
+  duration_ms: 38.1068
+  type: 'test'
+  ...
+# Subtest: PWA-04/05 worker caches shell but never API or auth responses
+ok 2 - PWA-04/05 worker caches shell but never API or auth responses
+  ---
+  duration_ms: 65.6055
+  type: 'test'
+  ...
+# Subtest: PWA-06 activation removes only older Statoo caches in the same scope
+not ok 3 - PWA-06 activation removes only older Statoo caches in the same scope
+  ---
+  duration_ms: 4.1109
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\.codex\\worktrees\\merge-staging-20261017\\statoo 5v5\\web\\tests\\pwa.test.mjs:92:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+
+      [
+        'statoo-shell:/portal/:old',
+        'statoo-shell:/portal/:2026-10-15-7',
+        'statoo-shell:/portal/:2026-10-15-8',
+        'statoo-shell:/portal/:2026-10-15-9',
+        'statoo-shell:/portal/:2026-10-16-sport-1',
+        'statoo-shell:/portal/:2026-10-16-loading-zod-1',
+    +   'statoo-shell:/portal/:2026-10-16-welcome-1',
+        'statoo-shell:/portal/:2026-10-16-admin-sport-1',
+    +   'statoo-shell:/portal/:2026-10-17-merged-1'
+    -   'statoo-shell:/portal/:2026-10-16-presidency-sport-1',
+    -   'statoo-shell:/portal/:2026-10-16-welcome-1'
+      ]
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'statoo-shell:/portal/:old'
+    1: 'statoo-shell:/portal/:2026-10-15-7'
+    2: 'statoo-shell:/portal/:2026-10-15-8'
+    3: 'statoo-shell:/portal/:2026-10-15-9'
+    4: 'statoo-shell:/portal/:2026-10-16-sport-1'
+    5: 'statoo-shell:/portal/:2026-10-16-loading-zod-1'
+    6: 'statoo-shell:/portal/:2026-10-16-admin-sport-1'
+    7: 'statoo-shell:/portal/:2026-10-16-presidency-sport-1'
+    8: 'statoo-shell:/portal/:2026-10-16-welcome-1'
+  actual:
+    0: 'statoo-shell:/portal/:old'
+    1: 'statoo-shell:/portal/:2026-10-15-7'
+    2: 'statoo-shell:/portal/:2026-10-15-8'
+    3: 'statoo-shell:/portal/:2026-10-15-9'
+    4: 'statoo-shell:/portal/:2026-10-16-sport-1'
+    5: 'statoo-shell:/portal/:2026-10-16-loading-zod-1'
+    6: 'statoo-shell:/portal/:2026-10-16-welcome-1'
+    7: 'statoo-shell:/portal/:2026-10-16-admin-sport-1'
+    8: 'statoo-shell:/portal/:2026-10-17-merged-1'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/.codex/worktrees/merge-staging-20261017/statoo%205v5/web/tests/pwa.test.mjs:144:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: MERGE-05 ships a fresh cache for combined workflows
+not ok 4 - MERGE-05 ships a fresh cache for combined workflows
+  ---
+  duration_ms: 0.9121
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\.codex\\worktrees\\merge-staging-20261017\\statoo 5v5\\web\\tests\\pwa.test.mjs:158:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /2026-10-17-merged-1/. Input:
+
+    'const SCOPE = new URL(self.registration.scope);\n' +
+      'const PREFIX = "statoo-shell:" + SCOPE.pathname + ":";\n' +
+      'const CACHE = PREFIX + "2026-10-16-presidency-sport-1";\n' +
+      'const SHELL = [\n' +
+      '  "./",\n' +
+      '  "index.html",\n' +
+      '  "app.mjs",\n' +
+      '  "interaction.mjs",\n' +
+      '  "button-state.mjs",\n' +
+      '  "validation.mjs",\n' +
+      '  "vendor/zod.mjs",\n' +
+      '  "config.mjs",\n' +
+      '  "registration-draft.mjs",\n' +
+      '  "config.json",\n' +
+      '  "client.mjs",\n' +
+      '  "domain.mjs",\n' +
+      '  "summary.mjs",\n' +
+      '  "pwa.mjs",\n' +
+      '  "styles.css",\n' +
+      '  "manifest.webmanifest",\n' +
+      '  "team-names.json",\n' +
+      '  "icons/icon-192.png",\n' +
+      '  "icons/logo.jpg",\n' +
+      '  "icons/logo-transparent.png",\n' +
+      '  "icons/favicon.png",\n' +
+      '  "icons/icon-1024.png",\n' +
+      '  "icons/apple-touch-icon.png",\n' +
+      '  "fonts/Poppins-Regular.ttf",\n' +
+      '  "fonts/Poppins-SemiBold.ttf",\n' +
+      '];\n' +
+      'const ALLOWED = new Set(SHELL.map((path) => new URL(path, SCOPE).href));\n' +
+      'self.addEventListener("install", (event) =>\n' +
+      '  event.waitUntil(\n' +
+      '    caches.open(CACHE).then((cache) => cache.addAll([...ALLOWED])),\n' +
+      '  ),\n' +
+      ');\n' +
+      'self.addEventListener("activate", (event) =>\n' +
+      '  event.waitUntil(\n' +
+      '    (async () => {\n' +
+      '      for (const key of await caches.keys())\n' +
+      '        if (key.startsWith(PREFIX) && key !== CACHE) await caches.delete(key);\n' +
+      '      await self.clients.claim();\n' +
+      '    })(),\n' +
+      '  ),\n' +
+      ');\n' +
+      'self.addEventListener("message", (event) => {\n' +
+      '  if (event.data?.type === "SKIP_WAITING") self.skipWaiting();\n' +
+      '});\n' +
+      'self.addEventListener("fetch", (event) => {\n' +
+      '  const request = event.request,\n' +
+      '    url = new URL(request.url);\n' +
+      '  if (\n' +
+      '    request.method !== "GET" ||\n' +
+      '    request.headers.has("Authorization") ||\n' +
+      '    url.origin !== SCOPE.origin ||\n' +
+      '    !ALLOWED.has(url.href)\n' +
+      '  )\n' +
+      '    return;\n' +
+      '  event.respondWith(\n' +
+      '    (async () => {\n' +
+      '      const cache = await caches.open(CACHE);\n' +
+      '      if (request.mode === "navigate") {\n' +
+      '        try {\n' +
+      '          return await fetch(request);\n' +
+      '        } catch {\n' +
+      '          return (\n' +
+      '            (await cache.match(new URL("index.html", SCOPE).href)) ||\n' +
+      '            Response.error()\n' +
+      '          );\n' +
+      '        }\n' +
+      '      }\n' +
+      '      // Public, same-origin allowlisted assets can vary by Origin on the API host.\n' +
+      "      // Module/font requests include Origin whereas addAll's requests may not.\n" +
+      '      return (\n' +
+      '        (await cache.match(request, { ignoreVary: true })) || fetch(request)\n' +
+      '      );\n' +
+      '    })(),\n' +
+      '  );\n' +
+      '});\n'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    const SCOPE = new URL(self.registration.scope);
+    const PREFIX = "statoo-shell:" + SCOPE.pathname + ":";
+    const CACHE = PREFIX + "2026-10-16-presidency-sport-1";
+    const SHELL = [
+      "./",
+      "index.html",
+      "app.mjs",
+      "interaction.mjs",
+      "button-state.mjs",
+      "validation.mjs",
+      "vendor/zod.mjs",
+      "config.mjs",
+      "registration-draft.mjs",
+      "config.json",
+      "client.mjs",
+      "domain.mjs",
+      "summary.mjs",
+      "pwa.mjs",
+      "styles.css",
+      "manifest.webmanifest",
+      "team-names.json",
+      "icons/icon-192.png",
+      "icons/logo.jpg",
+      "icons/logo-transparent.png",
+      "icons/favicon.png",
+      "icons/icon-1024.png",
+      "icons/apple-touch-icon.png",
+      "fonts/Poppins-Regular.ttf",
+      "fonts/Poppins-SemiBold.ttf",
+    ];
+    const ALLOWED = new Set(SHELL.map((path) => new URL(path, SCOPE).href));
+    self.addEventListener("install", (event) =>
+      event.waitUntil(
+        caches.open(CACHE).then((cache) => cache.addAll([...ALLOWED])),
+      ),
+    );
+    self.addEventListener("activate", (event) =>
+      event.waitUntil(
+        (async () => {
+          for (const key of await caches.keys())
+            if (key.startsWith(PREFIX) && key !== CACHE) await caches.delete(key);
+          await self.clients.claim();
+        })(),
+      ),
+    );
+    self.addEventListener("message", (event) => {
+      if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
+    });
+    self.addEventListener("fetch", (event) => {
+      const request = event.request,
+        url = new URL(request.url);
+      if (
+        request.method !== "GET" ||
+        request.headers.has("Authorization") ||
+        url.origin !== SCOPE.origin ||
+        !ALLOWED.has(url.href)
+      )
+        return;
+      event.respondWith(
+        (async () => {
+          const cache = await caches.open(CACHE);
+          if (request.mode === "navigate") {
+            try {
+              return await fetch(request);
+            } catch {
+              return (
+                (await cache.match(new URL("index.html", SCOPE).href)) ||
+                Response.error()
+              );
+            }
+          }
+          // Public, same-origin allowlisted assets can vary by Origin on the API host.
+          // Module/font requests include Origin whereas addAll's requests may not.
+          return (
+            (await cache.match(request, { ignoreVary: true })) || fetch(request)
+          );
+        })(),
+      );
+    });
+
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/.codex/worktrees/merge-staging-20261017/statoo%205v5/web/tests/pwa.test.mjs:158:76)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 2
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 233.4318

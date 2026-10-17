@@ -851,7 +851,7 @@ class SettingsScreen extends ConsumerWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            activeTeam?.name ?? 'Aucun groupe sélectionné',
+                            activeTeam?.displayName ?? 'Aucun groupe sélectionné',
                             style: TextStyle(
                               color: context.colors.foreground50,
                               fontWeight: FontWeight.bold,

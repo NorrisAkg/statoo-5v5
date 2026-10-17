@@ -115,24 +115,44 @@ class DecisionDetails extends StatelessWidget {
   final Map<String, String> rows;
   final List<Map<String, String>> others;
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      for (final key in <String>{
-        ...rows.keys,
-        for (final other in others) ...other.keys,
-      })
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Text(
-            '${others.any((other) => other[key] != rows[key]) ? 'Différence · ' : ''}$key : ${rows[key] ?? 'Absent de cette version'}',
-            style: TextStyle(
-              fontWeight: others.any((other) => other[key] != rows[key])
-                  ? FontWeight.w600
-                  : FontWeight.normal,
-            ),
-          ),
+  Widget build(BuildContext context) {
+    final keys = <String>{
+      ...rows.keys,
+      for (final other in others) ...other.keys,
+    };
+    final changed = keys
+        .where((key) => others.any((other) => other[key] != rows[key]))
+        .toList();
+    final unchanged = keys.where((key) => !changed.contains(key)).toList();
+    Widget line(String key, {required bool difference}) => Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Text(
+        '${difference ? 'Différence · ' : ''}$key : ${rows[key] ?? 'Absent de cette version'}',
+        style: TextStyle(
+          fontWeight: difference ? FontWeight.w600 : FontWeight.normal,
         ),
-    ],
-  );
+      ),
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (changed.isEmpty)
+          const Text('Aucune différence avec les autres versions.'),
+        for (final key in changed) line(key, difference: true),
+        if (unchanged.isNotEmpty)
+          ExpansionTile(
+            tilePadding: EdgeInsets.zero,
+            childrenPadding: const EdgeInsets.only(bottom: 12),
+            title: Text('Détails inchangés (${unchanged.length})'),
+            children: [
+              for (final key in unchanged)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: line(key, difference: false),
+                ),
+            ],
+          ),
+      ],
+    );
+  }
 }

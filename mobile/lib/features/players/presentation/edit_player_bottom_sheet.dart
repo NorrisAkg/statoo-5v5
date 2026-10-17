@@ -135,9 +135,11 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Modifier le joueur',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    Expanded(
+                      child: Text(
+                        'Modifier le joueur',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
                     ),
                     IconButton(
                       icon: const Icon(Remix.close_line),

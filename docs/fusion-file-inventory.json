@@ -1,0 +1,752 @@
+[
+  {
+    "path": "backend/tests/test_session_lifecycle.py",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "backend/tests/test_short_name.py",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/design/layout_audit_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/finance/financial_point_screen_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/home/latest_session_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/sessions/session_detail_responsive_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/shared/decision_details_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/shared/lifecycle_sync_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/shared/pwa_wire_import_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/shared/shared_decisions_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/shared/shared_group_screen_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/team/short_name_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/test/features/team/team_test.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/browser.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/config.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/desktop.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/interactions.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/loading-validation.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/offline-registration.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/parity-contract.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/parity-shared.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/pwa.test.mjs",
+    "status": "integrated",
+    "conflicts": true
+  },
+  {
+    "path": "web/tests/registration.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/serve-parity.py",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/sport-flow.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/universal-packaging.test.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/vercel.test.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/welcome.e2e.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/tests/welcome.test.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": ".env",
+    "status": "preserved-only",
+    "reason": "private configuration retained in backup"
+  },
+  {
+    "path": ".env.example",
+    "status": "preserved-only",
+    "reason": "private configuration retained in backup"
+  },
+  {
+    "path": ".env.local",
+    "status": "preserved-only",
+    "reason": "private configuration retained in backup"
+  },
+  {
+    "path": ".gitignore",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "AGENTS.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "CLAUDE.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "GEMINI.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "backend/app/main.py",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/conventions.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/.gitignore",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/actions.jsonl",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/cadrage-final-phone.py",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/check-screen-font.py",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/financial-font-check.py",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/focus-financial-field.py",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/rapport.md",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/essais-appareil-2026-10-14/seed-reserves-conflict.py",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-build.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-captures/before-start-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-captures/final-debug.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-captures/live-goal-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-captures/live-restored-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/live-flutter-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parite-web-mobile.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/parity-active-import-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-active-import-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-analysis-final.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-analysis.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-backend-final.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-backend-regression.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-browser-final.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-browser-local.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-browser-shared.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-browser-smoke.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-build-final.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-build.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-captures/active-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-captures/before-start-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-captures/restored-393.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-flutter-final.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-flutter-regression.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-format.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-lifecycle-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-lifecycle-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-lifecycle-review-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-lifecycle-review-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-placeholders-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-placeholders-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-race-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-review-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-short-name-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-short-name-merge-green.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-short-name-merge-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-short-name-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-static-server.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-vercel-red.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/parity-web-regression.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/plan-fusion-staging-2026-10-17.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-cadrage-transversal.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-majeurs-journal.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-majeurs-ui-ux-couverture.csv",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/tdd-point-financier-design.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-reserves-ui-ux.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-vercel.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/tdd-web-accueil-2026-10-16.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/verification-coherence-design-2026-10-15.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "docs/web-audit-corrections-results/browser-results.json",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-admin-regression.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-browser-regression.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-browser-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-build-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-captures/onboarding-1.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-captures/onboarding-2.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-captures/onboarding-3-dark-200.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-captures/registration-dark.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-captures/registration-light.png",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-format-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-targeted-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "docs/welcome-unit-results.txt",
+    "status": "preserved-only",
+    "reason": "audit evidence retained in original and verified backup"
+  },
+  {
+    "path": "mobile/analysis_options.yaml",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/core/data/shared_http.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/core/data/shared_http_browser.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/core/data/shared_http_error.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/core/data/shared_http_native.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/finance/presentation/finances_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/finance/presentation/financial_point_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/home/presentation/home_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/onboarding/presentation/onboarding_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/players/presentation/edit_player_bottom_sheet.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/players/presentation/new_player_bottom_sheet.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/sessions/presentation/session_detail_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/settings/data/backup_service.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/settings/presentation/financial_defaults_section.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/settings/presentation/settings_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/shared/data/shared_service.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/shared/presentation/decision_details.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/shared/presentation/shared_group_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/team/data/team_repository.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/team/domain/team_info.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/team/presentation/create_team_screen.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/features/team/presentation/team_switcher_bottom_sheet.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/lib/main_web.dart",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/pubspec.lock",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/pubspec.yaml",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/app-shell.js",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/flutter_bootstrap.js",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/index.html",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/manifest.json",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/sqflite_sw.js",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "mobile/web/sqlite3.wasm",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "package.json",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "reflexions.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "scripts/build-universal-web.sh",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "scripts/package-universal-web.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "vercel.json",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/README.md",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/app.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/registration-draft.mjs",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/styles.css",
+    "status": "integrated",
+    "conflicts": false
+  },
+  {
+    "path": "web/sw.js",
+    "status": "integrated",
+    "conflicts": true
+  },
+  {
+    "path": "web/validation.mjs",
+    "status": "integrated",
+    "conflicts": false
+  }
+]

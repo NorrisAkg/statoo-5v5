@@ -1,6 +1,6 @@
 const SCOPE = new URL(self.registration.scope);
 const PREFIX = "statoo-shell:" + SCOPE.pathname + ":";
-const CACHE = PREFIX + "2026-10-16-presidency-sport-1";
+const CACHE = PREFIX + "2026-10-17-merged-1";
 const SHELL = [
   "./",
   "index.html",

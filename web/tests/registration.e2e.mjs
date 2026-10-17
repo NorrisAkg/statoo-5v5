@@ -11,7 +11,10 @@ test("GRP-06/07/08/09 creation separates members and explains collective access"
       sent.push(r.request().postDataJSON());
       return r.fulfill({ status: 422, json: { detail: "Envoi de test" } });
     });
-    await page.goto("http://127.0.0.1:18085/portal/");
+    await page.addInitScript(() =>
+      localStorage.setItem("statoo-onboarding-complete", "1"),
+    );
+    await page.goto((process.env.STATOO_TEST_URL || "http://127.0.0.1:18085") + "/portal/");
     await page
       .getByRole("button", { name: "Créer un groupe", exact: true })
       .click();

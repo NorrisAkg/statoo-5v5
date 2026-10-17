@@ -1,5 +1,11 @@
 # Statoo Web — PWA et gestion par rôle
 
+Depuis le lot de parité du 16 octobre 2026, la cible web commune se trouve dans `mobile/lib/main_web.dart` : les mêmes écrans et processus Flutter servent le navigateur et le mobile, avec SQLite persistant dans le navigateur. Le build Vercel préparé utilise `bash scripts/build-universal-web.sh` et publie `web/universal-dist/`. Le portail HTML décrit ci-dessous reste disponible sous `/portal/` pour conserver l'accès aux préparations historiques ; leurs données ne sont pas migrées automatiquement. Aucun déploiement n'est déclenché par cette documentation.
+
+Contrat et recette : `docs/parite-web-mobile.md`. Pour une compilation locale sous Windows : depuis `mobile`, exécuter `flutter pub get`, `dart run sqflite_common_ffi_web:setup`, puis `flutter build web --release --target lib/main_web.dart --no-web-resources-cdn --dart-define=STATOO_API=https://statoo-api.onrender.com`. À la racine, `npm run build:web` prépare l'ancien portail et `node scripts/package-universal-web.mjs` assemble les deux dans `web/universal-dist/`. Servir ce dossier à la racine d'une origine HTTP locale/HTTPS pour tester le stockage et le service worker.
+
+Tests navigateur communs : servir `web/universal-dist/` sur `127.0.0.1:18087`, lancer `backend/.venv/Scripts/python.exe web/tests/serve-parity.py` (API en mémoire sur 18088), puis `npm run test:web:parity`. Ces tests ne contactent aucune base de production.
+
 HTML/CSS, Poppins embarquée et modules JavaScript natifs. La PWA réutilise l'API FastAPI et les identifiants du mobile.
 
 Les actions réseau affichent un indicateur dans leur bouton et bloquent les
@@ -100,6 +106,21 @@ Le contrat de synchronisation conserve le format SQLite du mobile : noms/couleur
 
 L'alignement porte sur les workflows gérés par l'API. Les réglages propres au téléphone, sauvegardes SQLite et statistiques avancées MVP du mobile ne sont pas transférés par cette API et ne sont pas ajoutés à cette PWA.
 # Adresse du serveur
+
+## Déploiement sur Vercel
+
+Importer la racine du monorepo (Root Directory : `.`), sur une branche contenant
+le portail actuel, le `package.json`, le verrou et `vercel.json` racine.
+La configuration versionnée impose Other, `npm ci`, `npm run build:web` et
+la sortie `web/dist`. Node.js 22 est compatible avec le script de build.
+Ne pas sélectionner Nuxt ou utiliser `nuxt generate` : ce portail est statique.
+Un log contenant encore `generate` / `nuxt` indique une autre révision ou racine.
+
+Définir `STATOO_PUBLIC_API_URL` avec l'origine HTTPS du backend dans les variables
+Vercel avant le build, puis autoriser l'origine du site dans `CORS_ORIGINS` côté
+backend. Vercel sert ici uniquement la PWA ; l'API FastAPI doit être hébergée
+séparément. Sans cette variable, les appels API viseraient le site statique.
+Après modification, lancer un nouveau déploiement de la branche à jour.
 
 Les formulaires ne demandent aucune adresse technique. Dans le `.env` à la racine :
 

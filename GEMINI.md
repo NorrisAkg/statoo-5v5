@@ -12,7 +12,7 @@
 - Routing : `go_router` avec `StatefulShellRoute.indexedStack`.
 - Modèles : `freezed` + `json_serializable`.
 - Base de données : `sqflite`
-- UI : Widgets Flutter natifs, design system unifié (fonds sombres, etc.). Police `Inter`. Icônes `remixicon` / `flutter_remix`.
+- UI : Lire obligatoirement `docs/design-system.md` avant chaque écran ou refonte, puis examiner deux références du parcours. Poppins embarquée, thèmes clair/sombre, composants partagés, icônes `remixicon`. L’ancienne référence Inter est obsolète. Vérifier cadrage, texte agrandi, clavier et permissions ; distinguer preuves visuelles, tests et déductions du code.
 - Formattage dates : `intl`, locale `fr_FR`.
 
 ## 3. Architecture
