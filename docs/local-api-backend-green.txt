@@ -1,0 +1,96 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\ky-solutions\projects\persos\statoo 5v5\backend
+configfile: pytest.ini
+plugins: anyio-4.15.1
+collecting ... collected 76 items
+
+tests/test_api.py::test_shared_members_are_read_only_and_isolated PASSED [  1%]
+tests/test_api.py::test_individual_account_requires_responsibility[roles0] PASSED [  2%]
+tests/test_api.py::test_individual_account_requires_responsibility[roles1] PASSED [  3%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[ADMIN] PASSED [  5%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[PDT] PASSED [  6%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[VP] PASSED [  7%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[TR] PASSED [  9%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[TGA] PASSED [ 10%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[SG] PASSED [ 11%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[SGA] PASSED [ 13%]
+tests/test_api.py::test_responsible_individual_account_keeps_member_role[CENSOR] PASSED [ 14%]
+tests/test_api.py::test_invalid_responsibility_remains_rejected[roles0] PASSED [ 15%]
+tests/test_api.py::test_invalid_responsibility_remains_rejected[roles1] PASSED [ 17%]
+tests/test_api.py::test_collective_cannot_create_individual_accounts PASSED [ 18%]
+tests/test_api.py::test_former_responsible_keeps_read_only_account_after_transfer PASSED [ 19%]
+tests/test_api.py::test_single_roles_and_explicit_atomic_transfer PASSED [ 21%]
+tests/test_api.py::test_idempotent_sync_and_payload_reuse_rejected PASSED [ 22%]
+tests/test_api.py::test_conflict_preserves_versions_and_president_decides_once PASSED [ 23%]
+tests/test_api.py::test_finance_and_sport_have_independent_owners PASSED [ 25%]
+tests/test_api.py::test_cancelled_period_debt_without_cash PASSED        [ 26%]
+tests/test_api.py::test_cash_and_penalties_do_not_consume_contribution_advance PASSED [ 27%]
+tests/test_api.py::test_opening_requires_approval_and_is_not_a_receipt PASSED [ 28%]
+tests/test_api.py::test_rotation_revokes_existing_shared_sessions PASSED [ 30%]
+tests/test_api.py::test_unknown_member_and_negative_amount_rejected PASSED [ 31%]
+tests/test_api.py::test_sport_creates_dues_for_absent_members_without_double_counting PASSED [ 32%]
+tests/test_api.py::test_finance_cannot_omit_members_or_collect_after_sport_cancelled PASSED [ 34%]
+tests/test_api.py::test_arbitration_cannot_cancel_a_period_with_receipts PASSED [ 35%]
+tests/test_api.py::test_group_financial_defaults_permissions_and_frozen_previous_dues PASSED [ 36%]
+tests/test_api.py::test_admin_manages_own_sessions_with_existing_sport_validation PASSED [ 38%]
+tests/test_api.py::test_admin_sport_keeps_ownership_and_can_receive_transfer PASSED [ 39%]
+tests/test_api.py::test_sport_owner_can_transfer_to_admin PASSED         [ 40%]
+tests/test_api.py::test_presidency_manages_sessions_without_secretary_role[president] PASSED [ 42%]
+tests/test_api.py::test_presidency_manages_sessions_without_secretary_role[vice] PASSED [ 43%]
+tests/test_deployment_readiness.py::test_deployment_contract_and_local_portal_cors PASSED [ 44%]
+tests/test_deployment_readiness.py::test_render_staging_allows_local_portal_without_dashboard_change[true-staging-True] PASSED [ 46%]
+tests/test_deployment_readiness.py::test_render_staging_allows_local_portal_without_dashboard_change[true-main-False] PASSED [ 47%]
+tests/test_deployment_readiness.py::test_render_staging_allows_local_portal_without_dashboard_change[-staging-False] PASSED [ 48%]
+tests/test_group_registration.py::test_generated_id_and_collision_preserve_first_group PASSED [ 50%]
+tests/test_group_registration.py::test_repeated_collisions_fail_without_overwriting PASSED [ 51%]
+tests/test_opening_review.py::test_UX05_16_approval_without_review_precondition_is_rejected PASSED [ 52%]
+tests/test_opening_review.py::test_UX05_06_07_stale_review_cannot_approve_replaced_proposal[change0] PASSED [ 53%]
+tests/test_opening_review.py::test_UX05_06_07_stale_review_cannot_approve_replaced_proposal[change1] PASSED [ 55%]
+tests/test_opening_review.py::test_UX05_06_07_stale_review_cannot_approve_replaced_proposal[change2] PASSED [ 56%]
+tests/test_opening_review.py::test_UX05_05_08_11_exact_review_approved_once[president] PASSED [ 57%]
+tests/test_opening_review.py::test_UX05_05_08_11_exact_review_approved_once[vice] PASSED [ 59%]
+tests/test_opening_review.py::test_UX05_10_other_roles_cannot_approve_even_with_correct_review[members] PASSED [ 60%]
+tests/test_opening_review.py::test_UX05_10_other_roles_cannot_approve_even_with_correct_review[admin] PASSED [ 61%]
+tests/test_opening_review.py::test_UX05_10_other_roles_cannot_approve_even_with_correct_review[finance] PASSED [ 63%]
+tests/test_opening_review.py::test_UX05_10_other_roles_cannot_approve_even_with_correct_review[sport] PASSED [ 64%]
+tests/test_portal_config.py::test_public_portal_configuration PASSED     [ 65%]
+tests/test_portal_config.py::test_empty_portal_configuration PASSED      [ 67%]
+tests/test_registration_retry.py::test_registration_retry_returns_same_group_and_rejects_changed_request PASSED [ 68%]
+tests/test_session_lifecycle.py::test_active_session_is_unique_shared_and_released PASSED [ 69%]
+tests/test_session_lifecycle.py::test_invalid_start_and_conflicting_candidate_do_not_change_active_session PASSED [ 71%]
+tests/test_session_lifecycle.py::test_legacy_group_does_not_explicitly_clear_existing_device_active_session PASSED [ 72%]
+tests/test_session_lock.py::test_session_dependency_can_exit_on_a_different_worker PASSED [ 73%]
+tests/test_short_name.py::test_short_name_round_trip[None-] PASSED       [ 75%]
+tests/test_short_name.py::test_short_name_round_trip[-] PASSED           [ 76%]
+tests/test_short_name.py::test_short_name_round_trip[   -] PASSED        [ 77%]
+tests/test_short_name.py::test_short_name_round_trip[ \xc9FC -\xc9FC] PASSED [ 78%]
+tests/test_short_name.py::test_short_name_round_trip[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA] PASSED [ 80%]
+tests/test_short_name.py::test_short_name_rejected_when_too_long_and_retry_cannot_change_it PASSED [ 81%]
+tests/test_sport_settings.py::test_default_is_public_and_only_admin_can_change_it PASSED [ 82%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[1] PASSED [ 84%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[31] PASSED [ 85%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[True] PASSED [ 86%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[2.5] PASSED [ 88%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[6] PASSED [ 89%]
+tests/test_sport_settings.py::test_invalid_minimum_is_rejected[None] PASSED [ 90%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[CLASSIC_2-2] PASSED [ 92%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[CLASSIC_2-6] PASSED [ 93%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[CLASSIC_2-30] PASSED [ 94%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[TOURNAMENT_3-2] PASSED [ 96%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[TOURNAMENT_3-6] PASSED [ 97%]
+tests/test_sport_settings.py::test_minimum_is_enforced_by_server_for_closure_only[TOURNAMENT_3-30] PASSED [ 98%]
+tests/test_sport_settings.py::test_candidate_is_checked_against_current_minimum_but_history_can_be_kept PASSED [100%]
+
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv\Lib\site-packages\_pytest\cacheprovider.py:469
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.pytest_cache\v\cache\nodeids: [WinError 5] Acc�s refus�: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\backend\\.pytest_cache\\v\\cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 76 passed, 2 warnings in 178.69s (0:02:58) ==================

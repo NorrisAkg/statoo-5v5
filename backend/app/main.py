@@ -176,7 +176,8 @@ def create_app(url: str | None = None):
         app.mount("/portal", StaticFiles(directory=portal, html=True), name="portal")
     origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", "").split(",") if origin.strip()]
     if os.getenv("RENDER") == "true" and os.getenv("RENDER_GIT_BRANCH") == "staging":
-        origins.extend(["http://127.0.0.1:18085", "http://localhost:18085"])
+        origins.extend(["http://127.0.0.1:18085", "http://localhost:18085",
+                        "http://127.0.0.1:19095", "http://localhost:19095"])
     app.add_middleware(CORSMiddleware, allow_origins=origins,
                        allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type"])
     # Also serialize SQLite development transactions. PostgreSQL uses row locks across workers.

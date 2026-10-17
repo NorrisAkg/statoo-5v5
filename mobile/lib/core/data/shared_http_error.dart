@@ -1,3 +1,10 @@
+class SharedNetworkException implements Exception {
+  const SharedNetworkException();
+  @override
+  String toString() =>
+      'Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil.';
+}
+
 class SharedApiException implements Exception {
   const SharedApiException(this.statusCode, this.detail);
   final int statusCode;

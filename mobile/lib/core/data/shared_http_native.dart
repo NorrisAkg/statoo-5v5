@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -22,6 +23,10 @@ Future<Map<String, dynamic>> sendSharedRequest(
       throw SharedApiException(response.statusCode, decoded['detail']);
     }
     return decoded;
+  } on IOException {
+    throw const SharedNetworkException();
+  } on TimeoutException {
+    throw const SharedNetworkException();
   } finally {
     client.close(force: true);
   }

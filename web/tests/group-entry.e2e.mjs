@@ -45,7 +45,7 @@ test('ENT02/05/06 create group, assign responsibility, join as member', {timeout
     const response = await registered;
     assert.ok(response.ok(), await response.text());
     const identity = await response.json();
-    await page.getByText(/Failed to fetch/).waitFor();
+    await page.getByText(/Impossible de joindre Statoo/).waitFor();
     await page.getByRole('button', {name:'Créer le groupe partagé',exact:true}).waitFor();
     const replayed = page.waitForResponse(r => r.request().method() === 'POST' && new URL(r.url()).pathname === '/groups');
     await page.getByRole('button', {name:'Créer le groupe partagé',exact:true}).click();

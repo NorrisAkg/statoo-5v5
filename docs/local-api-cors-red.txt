@@ -1,0 +1,31 @@
+.F..                                                                     [100%]
+================================== FAILURES ===================================
+_ test_render_staging_allows_local_portal_without_dashboard_change[true-staging-True] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F4717F2650>
+render = 'true', branch = 'staging', allowed = True
+
+    @pytest.mark.parametrize('render,branch,allowed', [('true','staging',True),('true','main',False),('','staging',False)])
+    def test_render_staging_allows_local_portal_without_dashboard_change(monkeypatch, render, branch, allowed):
+        monkeypatch.setenv('RENDER', render)
+        monkeypatch.setenv('RENDER_GIT_BRANCH', branch)
+        monkeypatch.setenv('CORS_ORIGINS', 'https://existing.example')
+        with TestClient(create_app('sqlite:///:memory:')) as client:
+            for origin in ['http://127.0.0.1:18085','http://localhost:18085','http://127.0.0.1:19095','http://localhost:19095','https://existing.example','https://unrelated.example','http://127.0.0.1:19096','http://127.0.0.1.evil.example:19095']:
+                response=client.options('/groups',headers={'Origin':origin,'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'content-type,authorization'})
+                expected=origin=='https://existing.example' or (allowed and origin in ['http://127.0.0.1:18085','http://localhost:18085','http://127.0.0.1:19095','http://localhost:19095'])
+>               assert response.status_code==(200 if expected else 400),origin
+E               AssertionError: http://127.0.0.1:19095
+E               assert 400 == 200
+E                +  where 400 = <Response [400 Bad Request]>.status_code
+
+tests\test_deployment_readiness.py:34: AssertionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_deployment_readiness.py::test_render_staging_allows_local_portal_without_dashboard_change[true-staging-True]
+1 failed, 3 passed, 1 warning in 1.35s
