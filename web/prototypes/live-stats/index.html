@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>Statoo — Prototype de saisie en direct</title>
+    <link rel="icon" href="../../icons/logo-transparent.png" />
+    <link rel="stylesheet" href="prototype.css" />
+  </head>
+  <body>
+    <div class="lab">
+      <div class="lab-heading">
+        <div>
+          <p class="eyebrow">STATOO · ATELIER D’INTERFACE</p>
+          <h1>Au rythme du jeu.</h1>
+          <p class="muted">
+            Une action, quelques appuis. La saisie reste avec vous.
+          </p>
+        </div>
+        <span class="prototype-tag">Prototype · données fictives</span>
+      </div>
+      <div class="lab-tools">
+        <div class="mode-switch" aria-label="Format">
+          <button data-mode="classic">Match · 2 équipes</button
+          ><button data-mode="tournament" class="selected">
+            Tournoi · 3 équipes
+          </button>
+        </div>
+        <div class="preferences">
+          <button id="theme">Changer le thème</button
+          ><label
+            >Taille du texte<select id="scale" aria-label="Taille du texte">
+              <option value="100">100 %</option>
+              <option value="130">130 %</option>
+              <option value="200">200 %</option>
+            </select></label
+          ><label
+            >Accès<select id="access" aria-label="Accès">
+              <option value="editor">Responsable</option>
+              <option value="viewer">Consultation</option>
+            </select></label
+          >
+        </div>
+      </div>
+      <div class="workspace">
+        <main class="app-shell">
+          <header class="app-bar">
+            <div>
+              <p class="eyebrow">LE FOOT, ENSEMBLE</p>
+              <h2>Séance en cours</h2>
+            </div>
+            <span id="session-status" class="status-pill">En cours</span>
+          </header>
+          <section class="context">
+            <div class="session-date">
+              <span>Vendredi 16 octobre · 18h30</span
+              ><strong id="format-label">Tournoi à 3 équipes</strong>
+            </div>
+            <div id="scores" class="scores"></div>
+            <section id="scorers" aria-label="Buteurs de la séance"></section>
+            <p id="score-help" class="muted small"></p>
+          </section>
+          <section class="entry">
+            <div class="section-heading">
+              <h2>Statistiques par équipe</h2>
+              <span id="roster-count" class="muted small"></span>
+            </div>
+            <div
+              id="teams"
+              role="tablist"
+              aria-label="Équipe à renseigner"
+            ></div>
+            <div class="entry-heading">
+              <div>
+                <p class="eyebrow">ÉQUIPE SÉLECTIONNÉE</p>
+                <h3 id="selected-name"></h3>
+              </div>
+              <span id="selected-total" class="muted small"></span>
+            </div>
+            <div class="event-actions">
+              <button id="goal" class="primary">+ Ajouter un but</button
+              ><button id="yellow">
+                <span class="card-mark yellow"></span>Carton jaune</button
+              ><button id="red">
+                <span class="card-mark red"></span>Carton rouge
+              </button>
+            </div>
+            <button id="undo-inline" class="inline-undo" disabled>
+              Annuler la dernière action
+            </button>
+            <div id="players" class="players"></div>
+          </section>
+          <div class="end-actions">
+            <button id="finish" class="primary">Terminer la séance</button
+            ><button id="resume" hidden>Reprendre la saisie</button>
+            <p id="save-status" role="status" class="save-status"></p>
+            <p id="error" role="alert" class="error" hidden></p>
+            <button id="retry" hidden>Réessayer la sauvegarde</button>
+          </div>
+        </main>
+        <aside class="journal-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">POUR GARDER LE FIL</p>
+              <h2>Dernières actions</h2>
+            </div>
+            <span id="event-count" class="count">0</span>
+          </div>
+          <p class="muted small">
+            Chaque action peut être corrigée. Rien à valider après chaque
+            statistique.
+          </p>
+          <button id="undo" disabled>Annuler la dernière action</button>
+          <ol id="journal"></ol>
+          <p id="empty" class="empty">
+            Le coup d’envoi est donné.<br />Ajoutez votre première action.
+          </p>
+          <div class="prototype-note">
+            <strong>À essayer</strong>
+            <p>
+              Ajoutez une victoire, puis un but à la même équipe : les deux
+              compteurs sont indépendants. Changez d’équipe pour saisir ses
+              statistiques.
+            </p>
+            <p>
+              La démo conserve vos essais sur cet appareil. Elle n’envoie aucune
+              donnée à Statoo.
+            </p>
+            <button id="reset" class="text-button">
+              Réinitialiser la démo
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <dialog id="picker" aria-labelledby="picker-title">
+      <div class="dialog-heading">
+        <div>
+          <p id="picker-team" class="eyebrow"></p>
+          <h2 id="picker-title"></h2>
+        </div>
+        <button id="picker-close">Fermer</button>
+      </div>
+      <p id="picker-help" class="muted small"></p>
+      <div id="choices" class="choices"></div>
+      <button id="picker-back" hidden>Retour au buteur</button>
+    </dialog>
+    <dialog id="review" aria-labelledby="review-title">
+      <p class="eyebrow">AVANT DE QUITTER LE TERRAIN</p>
+      <h2 id="review-title">Récapitulatif de la séance</h2>
+      <p class="muted">
+        Vérifiez les compteurs. Vous pourrez reprendre la saisie dans cette
+        démonstration.
+      </p>
+      <div id="review-body"></div>
+      <div class="dialog-actions">
+        <button id="review-cancel">Continuer la saisie</button
+        ><button id="review-confirm" class="primary">
+          Confirmer la clôture
+        </button>
+      </div>
+    </dialog>
+    <script type="module" src="prototype.mjs"></script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+TAP version 13
+# Retour
+# Détail séance
+# Clôturer la séance
+# Football · 3v3 · Classée AC du Port 1 - 0 En cours Olympique des Collines ven. 16 oct. 2026 · 23h46 Non attribués, 1 but, AC du Port
+# Ajouter un joueur
+# AC du Port Actif
+# Olympique des Collines
+# Ajouter un but
+# Carton jaune
+# Carton rouge
+# Annuler la dernière action
+# Ajouter un but pour Alice
+# Ajouter un but pour Camille
+# Ajouter un but pour Émile
+# Modifier ce but
+# Ajouter des joueurs (retardataires)
+# Point financier
+# Subtest: INT-11/14/15 live input on real Flutter web and persistence
+ok 1 - INT-11/14/15 live input on real Flutter web and persistence
+  ---
+  duration_ms: 23451.1681
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24546.9552

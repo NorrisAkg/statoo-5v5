@@ -156,51 +156,56 @@ class SessionHeader extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
-        Container(
-          key: const ValueKey('session-scorers'),
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: colors.background900,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: colors.background700),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Buteurs de la séance',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: colors.foreground400, fontSize: 11),
-              ),
-              const SizedBox(height: 10),
-              if (isTournament)
-                // Stack three camps to keep names readable on narrow phones.
-                Column(
-                  children: [
-                    for (final team in teams) ...[
-                      _scorers(context, team, showTitle: true),
-                      if (team != teams.last) const SizedBox(height: 12),
+        if (participants.any(
+              (p) =>
+                  p.participation.sessionId == session.id &&
+                  p.participation.goals > 0,
+            ) ||
+            session.unassignedGoalsA +
+                    session.unassignedGoalsB +
+                    session.unassignedGoalsC >
+                0) ...[
+          const SizedBox(height: 8),
+          Container(
+            key: const ValueKey('session-scorers'),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: colors.background900,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: colors.background700),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (isTournament)
+                  // Stack three camps to keep names readable on narrow phones.
+                  Column(
+                    children: [
+                      for (final team in teams) ...[
+                        _scorers(context, team, showTitle: true),
+                        if (team != teams.last) const SizedBox(height: 12),
+                      ],
                     ],
-                  ],
-                )
-              else
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: _scorers(context, Team.a)),
-                    const SizedBox(width: 16),
-                    Expanded(child: _scorers(context, Team.b)),
-                  ],
-                ),
-            ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _scorers(context, Team.a)),
+                      const SizedBox(width: 16),
+                      Expanded(child: _scorers(context, Team.b)),
+                    ],
+                  ),
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
 
-  Color _teamColor(BuildContext context, Team team) => session.teamColor(context, team);
+  Color _teamColor(BuildContext context, Team team) =>
+      session.teamColor(context, team);
 
   String _teamName(Team team) => session.teamName(team);
 
@@ -298,12 +303,6 @@ class SessionHeader extends StatelessWidget {
           ),
         if (unassigned > 0)
           _scorerRow(context, team, 'Non attribués', unassigned),
-        if (scorers.isEmpty && unassigned == 0)
-          Text(
-            'Aucun buteur',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
-          ),
       ],
     );
   }
@@ -326,11 +325,11 @@ class SessionHeader extends StatelessWidget {
         spacing: 3,
         runSpacing: 3,
         children: [
-          for (var goal = 0; goal < goals; goal++)
-            Icon(
-              Remix.football_fill,
-              size: 14,
-              color: _teamColor(context, team),
+          Icon(Remix.football_fill, size: 14, color: _teamColor(context, team)),
+          if (goals > 1)
+            Text(
+              'x$goals',
+              style: TextStyle(color: _teamColor(context, team), fontSize: 12),
             ),
         ],
       ),

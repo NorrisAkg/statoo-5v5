@@ -1,0 +1,67 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as model from './model.mjs';
+import { chromium } from 'playwright';
+test('LIVE-17/20 reject isolated assists and edit a goal atomically', () => {
+  const s = model.record(model.createDemo(), {type:'goal',team:'A',player:'a1'});
+  assert.throws(() => model.record(s,{type:'assist',team:'A',player:'a2'}));
+  const edited = model.editGoal(s,s.events[0].id,{player:'a3',assist:'a2'});
+  assert.equal(edited.events.length,1);
+  assert.equal(model.stats(edited).A.goals,1);
+  assert.equal(model.stats(edited).players.a1.goals,0);
+  assert.equal(model.stats(edited).players.a2.assists,1);
+  assert.equal(model.stats(model.editGoal(edited,s.events[0].id,{player:'a3',assist:null})).players.a2.assists,0);
+  assert.equal(model.stats(model.editGoal(edited,s.events[0].id,{player:null,assist:null})).A.unassigned,1);
+  assert.deepEqual(s.events[0].assist,null);
+  for (const values of [{player:'a1',assist:'a1'},{player:'b1'},{player:null,assist:'a2'}])
+    assert.throws(() => model.editGoal(s,s.events[0].id,values));
+  assert.throws(() => model.editGoal(s,'missing',{player:'a1'}));
+  assert.throws(() => model.editGoal(model.setClosed(s,true),s.events[0].id,{player:'a1'}));
+  const legacy = {...s,events:[{type:'assist',team:'A',player:'a2',id:'old'}]};
+  assert.equal(model.stats(model.restore(JSON.stringify(legacy),'tournament')).players.a2.assists,1);
+});
+test('LIVE-18/19/20/21/22 contextual goal flow, scorers and journal correction', async () => {
+  const browser = await chromium.launch({channel:'chrome',headless:true});
+  try {
+    const p = await browser.newPage({viewport:{width:393,height:852}});
+    await p.goto('http://127.0.0.1:19094/prototypes/live-stats/');
+    assert.equal(await p.locator('#assist').count(),0);
+    await p.getByRole('button',{name:'Match · 2 équipes',exact:true}).click();
+    await p.getByRole('button',{name:'Ajouter un but',exact:true}).click();
+    await p.getByRole('button',{name:'Karim Benali',exact:true}).click();
+    assert.equal(await p.locator('#picker-title').innerText(),'But de Karim Benali');
+    await p.getByRole('button',{name:'Retour au buteur',exact:true}).click();
+    await p.getByRole('button',{name:'Hugo Bernard',exact:true}).click();
+    await p.getByRole('button',{name:'Annuler le but',exact:true}).click();
+    assert.equal(await p.locator('#event-count').innerText(),'0');
+    await p.getByRole('button',{name:'Ajouter un but',exact:true}).click();
+    await p.getByRole('button',{name:'Karim Benali',exact:true}).click();
+    await p.getByRole('button',{name:'Aucun passeur',exact:true}).click();
+    assert.match(await p.locator('#scorers').innerText(),/Karim Benali/);
+    assert.equal(await p.locator('#match-score').innerText(),'1 – 0');
+    await p.getByRole('button',{name:'Modifier ce but',exact:true}).click();
+    await p.getByRole('button',{name:'Karim Benali',exact:true}).click();
+    await p.getByRole('button',{name:'Youssef El Amrani',exact:true}).click();
+    assert.equal(await p.locator('#event-count').innerText(),'1');
+    assert.match(await p.locator('#journal').innerText(),/Passe de Youssef/);
+    await p.getByRole('button',{name:'Modifier ce but',exact:true}).click();
+    await p.getByRole('button',{name:'Hugo Bernard',exact:true}).click();
+    await p.keyboard.press('Escape');
+    assert.match(await p.locator('#journal').innerText(),/Karim Benali/);
+    await p.getByRole('button',{name:'Terminer la séance',exact:true}).click();
+    await p.getByRole('button',{name:'Confirmer la clôture',exact:true}).click();
+    assert.equal(await p.getByRole('button',{name:'Modifier ce but',exact:true}).count(),0);
+    await p.getByRole('button',{name:'Reprendre la saisie',exact:true}).click();
+    await p.reload();
+    await p.getByRole('button',{name:'Match · 2 équipes',exact:true}).click();
+    assert.equal(await p.locator('#match-score').innerText(),'1 – 0');
+    await p.getByRole('tab',{name:'Union des Cèdres',exact:true}).click();
+    await p.getByRole('button',{name:'Modifier ce but',exact:true}).click();
+    await p.keyboard.press('Escape');
+    await p.getByRole('button',{name:'Ajouter un but',exact:true}).click();
+    assert.equal(await p.locator('#picker-team').innerText(),'Union des Cèdres');
+    await p.keyboard.press('Escape');
+    await p.getByLabel('Accès',{exact:true}).selectOption('viewer');
+    assert.equal(await p.getByRole('button',{name:'Modifier ce but',exact:true}).count(),0);
+  } finally {await browser.close();}
+});

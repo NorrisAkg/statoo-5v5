@@ -7,6 +7,7 @@ import '../../ranking/application/ranking_providers.dart';
 import '../../shared/application/shared_providers.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
+import '../data/live_stats_repository.dart';
 import '../data/sessions_repository.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
@@ -17,6 +18,18 @@ import '../domain/team_appearance.dart';
 final Provider<SessionsRepository> sessionsRepositoryProvider =
     Provider<SessionsRepository>((ref) {
       return SqliteSessionsRepository(AppDatabase.instance);
+    });
+
+final Provider<LiveStatsRepository> liveStatsRepositoryProvider = Provider(
+  (ref) => LiveStatsRepository(ref.watch(sharedServiceProvider).database),
+);
+// Riverpod infers the auto-disposed family type, as for sessionDetailProvider.
+// ignore: specify_nonobvious_property_types
+final liveJournalProvider = FutureProvider.autoDispose
+    .family<List<Map<String, dynamic>>, String>((ref, id) {
+      final group = ref.watch(activeTeamIdProvider);
+      if (group == null) return [];
+      return ref.watch(liveStatsRepositoryProvider).journal(group, id);
     });
 
 class SessionsFilterNotifier extends Notifier<String> {
@@ -106,6 +119,32 @@ class SessionsController {
   final Ref _ref;
 
   SessionsRepository get _repo => _ref.read(sessionsRepositoryProvider);
+
+  Future<void> recordLive(
+    String id,
+    Map<String, dynamic>? action, {
+    String? edit,
+  }) async {
+    final group = _ref.read(activeTeamIdProvider);
+    if (group == null) throw StateError('Aucun groupe sélectionné.');
+    final shared = _ref.read(sharedServiceProvider);
+    await shared.requireWrite(group, 'sport', sessionId: id);
+    final live = _ref.read(liveStatsRepositoryProvider);
+    if (action == null) {
+      await live.undo(group, id);
+    } else {
+      await live.apply(group, id, action, edit: edit);
+    }
+    _invalidateAll(id);
+    _ref.invalidate(liveJournalProvider(id));
+    try {
+      await shared.queueSport(group, id);
+    } on Object {
+      throw StateError(
+        'Action conservée localement. Synchronisation indisponible ; réessayez depuis le groupe partagé.',
+      );
+    }
+  }
 
   void _invalidateAll([String? sessionId]) {
     final teamId = _ref.read(activeTeamIdProvider);
