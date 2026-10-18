@@ -82,6 +82,9 @@ void main() {
       await container.read(playersListProvider.future);
       await tester.tap(find.text('Ajouter un gestionnaire'));
       await tester.pumpAndSettle();
+      expect(find.byType(TextField), findsOneWidget);
+      expect(find.text('Un mot de passe de 8 caractères sera généré automatiquement.'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), 'alice');
       final create = find.widgetWithText(FilledButton, 'Créer');
       expect(tester.widget<FilledButton>(create).onPressed, isNull);
       expect(

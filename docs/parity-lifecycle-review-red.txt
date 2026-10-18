@@ -1,0 +1,44 @@
+F.F                                                                      [100%]
+================================== FAILURES ===================================
+______________ test_active_session_is_unique_shared_and_released ______________
+
+system = (<starlette.testclient.TestClient object at 0x0000021098B1E660>, {'admin': {'Authorization': 'Bearer PpkGBhQH_F4vTFD32...9bc9-7f8f5cf2536b', 'finance': '5b1f4eeb-bdef-4efd-aca8-1a5a5da909b5', 'vice': '7bdac785-cf41-4a5d-a40d-f69db8155386'})
+
+    def test_active_session_is_unique_shared_and_released(system):
+        c, t, _ = system
+        def send(value, occurrence, revision=0):
+            body = event('sport', value, revision=revision)
+            body['occurrence_id'] = occurrence
+            return c.post('/groups/%2300000001/sync', headers=t['sport'], json=body)
+        first = send(payload('one'), 'one')
+        assert first.status_code == 200, first.text
+        state = c.get('/groups/%2300000001', headers=t['members']).json()
+        assert state.get('active_session_id') == 'one'
+        rejected = send(payload('two'), 'two')
+        assert rejected.status_code == 409
+>       assert rejected.json()['detail']['code'] == 'active_session_conflict'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: string indices must be integers, not 'str'
+
+backend\tests\test_session_lifecycle.py:26: TypeError
+_ test_legacy_group_does_not_explicitly_clear_existing_device_active_session __
+
+system = (<starlette.testclient.TestClient object at 0x0000021098D87250>, {'admin': {'Authorization': 'Bearer L8CH8zjyvYhBBU0ex...b27f-1bb674082cb0', 'finance': 'c938be07-0ac1-495f-91a2-d16149c5545e', 'vice': 'caf4baf3-9eda-4f96-9f60-cbd273a4fdce'})
+
+    def test_legacy_group_does_not_explicitly_clear_existing_device_active_session(system):
+        c, t, _ = system
+        data = c.get('/groups/%2300000001', headers=t['sport']).json()
+>       assert 'active_session_id' not in data
+E       AssertionError: assert 'active_session_id' not in {'name': 'Group', 'roles': ['ADMIN', 'PDT', 'VP', 'TR', 'TGA', 'SG', ...], 'members': [{'id': 'a', 'name': 'Alice'}, {'id': 'b', 'name': 'Bob'}, {'id': 'c', 'name': 'Charlie'}, {'id': 'd', 'name': 'Diane'}], 'documents': {}, ...}
+
+backend\tests\test_session_lifecycle.py:51: AssertionError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_session_lifecycle.py::test_active_session_is_unique_shared_and_released
+FAILED backend\tests\test_session_lifecycle.py::test_legacy_group_does_not_explicitly_clear_existing_device_active_session
+2 failed, 1 passed, 1 warning in 17.02s

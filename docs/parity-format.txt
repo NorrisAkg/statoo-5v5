@@ -1,0 +1,4 @@
+scripts/package-universal-web.mjs 284ms
+web/tests/parity-contract.e2e.mjs 94ms
+web/tests/parity-shared.e2e.mjs 51ms
+web/tests/universal-packaging.test.mjs 15ms

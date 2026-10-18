@@ -1,0 +1,11 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT01/03 entry and direct join seen=false
+00:01 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+00:01 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT02 create preserves setup intent seen=false
+00:01 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/widget_test.dart: App smoke test when onboarding and team exist
+00:01 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT01/03 entry and direct join seen=true
+00:01 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT02 create preserves setup intent seen=true
+00:01 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT04 direct setup explains Admin and later responsibilities
+00:02 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT05/09 responsibilities Admin only admin=false
+00:02 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_entry_test.dart: ENT05/09 responsibilities Admin only admin=true
+00:02 +9: All tests passed!

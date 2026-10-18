@@ -1,0 +1,17 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema
+00:00 +0 -1: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema [E]
+  Expected: 'pwa-s'
+    Actual: <null>
+     Which: not an <Instance of 'String'>
+  
+  package:matcher                                      expect
+  package:flutter_test/src/widget_tester.dart 473:18   expect
+  test\features\shared\pwa_wire_import_test.dart 73:7  main.<fn>
+  
+00:00 +0 -1: (tearDownAll)
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema

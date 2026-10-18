@@ -24,6 +24,8 @@ import '../domain/backup_payload.dart';
 import 'confirm_replacement.dart';
 import 'financial_defaults_section.dart';
 import 'mvp_weights_section.dart';
+import 'collective_access_section.dart';
+import '../../shared/data/collective_access.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -56,6 +58,14 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           _buildSectionTitle(context, 'Groupe & Équipes'),
           _buildTeamSection(context, ref),
+          if (group != null && CollectiveAccess(shared, group).allowed) ...[
+            const SizedBox(height: 24),
+            CollectiveAccessSection(
+              key: ValueKey('collective-access-$group-${shared.accountId}'),
+              access: CollectiveAccess(shared, group),
+              groupName: ref.watch(activeTeamProvider).asData?.value?.name ?? group,
+            ),
+          ],
           const SizedBox(height: 24),
           _buildSectionTitle(context, 'Séances & Matchs'),
           AppCard(

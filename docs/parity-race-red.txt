@@ -1,0 +1,10 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/lifecycle_sync_test.dart
+00:00 +0: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +0 -1: PAR22 competing offline start is recoverable and does not block the outbox [E]
+  HttpException: 409: {code: active_session_conflict, active_session_id: a, message: Une autre séance est déjà en cours.}
+  package:statoo/core/data/shared_http_native.dart 17:7  sendSharedRequest
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox

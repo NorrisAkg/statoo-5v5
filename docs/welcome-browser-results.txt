@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: OFF-09 abandoning a preparation requires confirmation
+ok 1 - OFF-09 abandoning a preparation requires confirmation
+  ---
+  duration_ms: 3473.1404
+  type: 'test'
+  ...
+# Subtest: OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+ok 2 - OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+  ---
+  duration_ms: 14480.9659
+  type: 'test'
+  ...
+# Subtest: GRP-06/07/08/09 creation separates members and explains collective access
+ok 3 - GRP-06/07/08/09 creation separates members and explains collective access
+  ---
+  duration_ms: 3627.4338
+  type: 'test'
+  ...
+# Subtest: ACC03/04/05/06/11 returning visit and responsive forms
+ok 4 - ACC03/04/05/06/11 returning visit and responsive forms
+  ---
+  duration_ms: 3473.1142
+  type: 'test'
+  ...
+# Subtest: ACC01/02/04/05/06 onboarding, fields and sticky navigation
+ok 5 - ACC01/02/04/05/06 onboarding, fields and sticky navigation
+  ---
+  duration_ms: 4215.6769
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18627.1556

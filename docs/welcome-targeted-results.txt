@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: ACC09/10 short name is submitted and locked for uncertain publication
+ok 1 - ACC09/10 short name is submitted and locked for uncertain publication
+  ---
+  duration_ms: 3414.7758
+  type: 'test'
+  ...
+# Subtest: ACC03 skipping onboarding still works with unavailable storage
+ok 2 - ACC03 skipping onboarding still works with unavailable storage
+  ---
+  duration_ms: 1908.2936
+  type: 'test'
+  ...
+# Subtest: ACC03/04/05/06/11 returning visit and responsive forms
+ok 3 - ACC03/04/05/06/11 returning visit and responsive forms
+  ---
+  duration_ms: 2312.6917
+  type: 'test'
+  ...
+# Subtest: ACC01/02/04/05/06 onboarding, fields and sticky navigation
+ok 4 - ACC01/02/04/05/06 onboarding, fields and sticky navigation
+  ---
+  duration_ms: 4783.3174
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12998.1593

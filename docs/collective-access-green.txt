@@ -1,0 +1,27 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC01/04/05 remembers verified access across instances and checks current username on copy
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC02 wrong reentry preserves previous value; invalid bounds never saved
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC03 isolates group, account, server and expired identities
+00:00 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC06/07 network retains cached value; rotation discards it
+00:00 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC08 changed context while verifying never stores password
+00:00 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC09 forget and logout remove device secret
+00:00 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC09 logout leaves another server cache intact
+00:00 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC06 authorization refusal 401 discards stale credentials
+00:00 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC06 authorization refusal 403 discards stale credentials
+00:00 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+00:01 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC03 hidden from non Admin
+00:01 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07 clipboard failure has no success; retry remains possible
+00:01 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07/08 failed storage stays in form and cancel preserves old access
+00:01 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 1.0 ThemeMode.light
+00:01 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 1.0 ThemeMode.dark
+00:01 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 1.3 ThemeMode.light
+00:01 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 1.3 ThemeMode.dark
+00:01 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 2.0 ThemeMode.light
+00:01 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 320.0 2.0 ThemeMode.dark
+00:01 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 1.0 ThemeMode.light
+00:02 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 1.0 ThemeMode.dark
+00:02 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 1.3 ThemeMode.light
+00:02 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 1.3 ThemeMode.dark
+00:02 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 2.0 ThemeMode.light
+00:02 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10 layout 393.0 2.0 ThemeMode.dark
+00:02 +25: All tests passed!

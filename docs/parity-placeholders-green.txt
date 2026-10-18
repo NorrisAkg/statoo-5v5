@@ -1,0 +1,10 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/shared_group_screen_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: PAR18 every connection input keeps an explanatory placeholder
+00:02 +1: CPT-06/07 individual creation requires member and responsibility
+00:03 +2: join and share forms remain usable on a narrow screen (dark: false)
+00:03 +3: join and share forms remain usable on a narrow screen (dark: true)
+00:04 +4: management shows only permitted actions (admin: false)
+00:04 +5: management shows only permitted actions (admin: true)
+00:04 +6: (tearDownAll)
+00:04 +6: All tests passed!

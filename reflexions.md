@@ -7,6 +7,10 @@ Un espace libre pour noter mes idées, mes questions et mes envies.
 ## Notes du 15 octobre 2026
 
 ### Ce que j’ai en tête
+- [x] **Copier les accès collectifs — implémenté, déploiement en attente.** Prévoir une option dans les paramètres pour copier l'identifiant et le mot de passe commun du groupe
+  - Réglages > Accès des membres, réservé à l’Admin. Ressaisie du mot de passe existant, vérification serveur, mémorisation protégée sur cet appareil et copie explicite. Revérification avant copie ; oubli local et nettoyage à la déconnexion. [Scénarios et preuves](docs/tdd-collective-access-2026-10-17.md).
+
+- [x] **Accès des gestionnaires — implémenté, déploiement en attente.** Mot de passe de 8 caractères généré à la création, copie des accès par gestionnaire, vérification des anciens mots de passe ou remplacement confirmé. Mémorisation protégée sur l’appareil Admin ; aucune récupération d’un mot de passe depuis son empreinte. [Scénarios et preuves](docs/tdd-manager-access-2026-10-17.md).
 
 #### Implémentés — recette en cours
 
@@ -50,5 +54,3 @@ Les trois points ci-dessous sont implémentés sur `codex/remaining-reflections-
 ---
 
 ## Notes libres
-
-

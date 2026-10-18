@@ -1,0 +1,27 @@
+TAP version 13
+# Subtest: PAR02/06/08/09/16/17 local group, explicit start, persistence and backup on web
+not ok 1 - PAR02/06/08/09/16/17 local group, explicit start, persistence and backup on web
+  ---
+  duration_ms: 34934.3375
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\parity-contract.e2e.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://127.0.0.1:18087/", waiting until "load"[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\ky-solutions\projects\persos\statoo 5v5\web\tests\parity-contract.e2e.mjs:22:18)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 36464.0623

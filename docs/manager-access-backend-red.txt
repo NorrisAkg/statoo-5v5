@@ -1,0 +1,146 @@
+FFFFFFFFF                                                                [100%]
+================================== FAILURES ===================================
+__________________ test_verify_existing_manager_is_read_only __________________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4ADEA50>, '#78228150', '/groups/%2378228150', {'Authorization':...JZ4'}, 'ab0ff293-8db1-486c-85ce-44b2cd113a13', {'Authorization': 'Bearer ninb4yMcElqjrfaofSv2QcV6lhhOh0b9y6tjdTfjcO0'})
+
+    def test_verify_existing_manager_is_read_only(manager):
+        c, group, path, admin, target, _ = manager
+        before = c.get(path, headers=admin).json()
+        result = c.post(f'{path}/accounts/{target}/password/verify', headers=admin, json={'password': PASSWORD})
+>       assert result.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:20: AssertionError
+_________________ test_reset_only_target_revokes_its_sessions _________________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4C87610>, '#66100988', '/groups/%2366100988', {'Authorization':...5Rs'}, '5a128966-4af0-4580-96ed-76b577c9da9b', {'Authorization': 'Bearer hLPaTJeNOO3dGdFrusaxsfUG2RjuBzjE1k2ks6FwLrA'})
+
+    def test_reset_only_target_revokes_its_sessions(manager):
+        c, group, path, admin, target, sport = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': 'aB3dE6fG'})
+>       assert result.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:29: AssertionError
+_____________ test_manager_access_is_admin_scoped_and_individual ______________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4C15A90>, '#58811061', '/groups/%2358811061', {'Authorization':...ZS4'}, 'c441f931-84da-4051-bdc5-5fdbccac1f87', {'Authorization': 'Bearer 7NvOHuIGqsf6TFAVyMWs994AdSSiKtsYSKuzWH-R2k0'})
+
+    def test_manager_access_is_admin_scoped_and_individual(manager):
+        c, group, path, admin, target, sport = manager
+        snapshot = c.get(path, headers=admin).json()
+        shared = next(a['id'] for a in snapshot['accounts'] if a['shared'])
+        own = next(a['id'] for a in snapshot['accounts'] if 'ADMIN' in a['roles'])
+        for suffix in ['/password', '/password/verify']:
+            url = f'{path}/accounts/{target}{suffix}'
+>           assert c.post(url, json={'password': 'aB3dE6fG'}).status_code == 401
+E           AssertionError: assert 404 == 401
+E            +  where 404 = <Response [404 Not Found]>.status_code
+E            +    where <Response [404 Not Found]> = post('/groups/%2358811061/accounts/c441f931-84da-4051-bdc5-5fdbccac1f87/password', json={'password': 'aB3dE6fG'})
+E            +      where post = <starlette.testclient.TestClient object at 0x00000233A4C15A90>.post
+
+tests\test_manager_access.py:48: AssertionError
+______________ test_reset_requires_generated_password_contract[] ______________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4C4F360>, '#77432849', '/groups/%2377432849', {'Authorization':...7C8'}, '3a867b60-7a4d-4eec-963d-ed6b4aa13b16', {'Authorization': 'Bearer raV3GkENOMX8hOhJdVLuawibEpcYy0CLXnGTFNnwVus'})
+password = ''
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+___________ test_reset_requires_generated_password_contract[short] ____________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4C4FE10>, '#58849932', '/groups/%2358849932', {'Authorization':...A8o'}, 'b6a754c4-e9eb-4709-9f39-e0a7c10bc308', {'Authorization': 'Bearer bHqW5h9058Mq77992Wv_x0qBNthX-cVXFrlnEjvD_W4'})
+password = 'short'
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+_________ test_reset_requires_generated_password_contract[Longer123] __________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4EA0DD0>, '#29624466', '/groups/%2329624466', {'Authorization':...3HQ'}, '79effb0a-3b0b-4cb7-a081-2248b6cf427c', {'Authorization': 'Bearer a09Cmgz0EBPcEtCi60xUZ6PbQOfwMKXLGjcoNgt4tTs'})
+password = 'Longer123'
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+__________ test_reset_requires_generated_password_contract[abcdefgh] __________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4EE2690>, '#33625445', '/groups/%2333625445', {'Authorization':...-l8'}, 'fa1fd05c-22e0-4e7c-8458-56da13ddceac', {'Authorization': 'Bearer 2MBwgwzqSzbgOx-GljJrPyfbgNO6OhqyUm7Cw0Q7xXA'})
+password = 'abcdefgh'
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+__________ test_reset_requires_generated_password_contract[ABCDEFGH] __________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4F1F570>, '#37077608', '/groups/%2337077608', {'Authorization':...TT4'}, 'b753d4e3-9da1-4c0d-946e-62abc8763392', {'Authorization': 'Bearer rdB7uee4FsmYNfCKQ6KYNuMKhGn8HTNel4f5300Vkjg'})
+password = 'ABCDEFGH'
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+__________ test_reset_requires_generated_password_contract[12345678] __________
+
+manager = (<starlette.testclient.TestClient object at 0x00000233A4EE0160>, '#80463274', '/groups/%2380463274', {'Authorization':..._wU'}, 'f738e87f-55a6-4c4f-a9aa-5b495bfa6f2e', {'Authorization': 'Bearer 3lQP2ySOe87VZHKA1tUQcj98t-fqOC1IWyZcf6rWrpA'})
+password = '12345678'
+
+    @pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+    def test_reset_requires_generated_password_contract(manager, password):
+        c, _, path, admin, target, _ = manager
+        result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
+>       assert result.status_code == 422
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests\test_manager_access.py:60: AssertionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_manager_access.py::test_verify_existing_manager_is_read_only
+FAILED tests/test_manager_access.py::test_reset_only_target_revokes_its_sessions
+FAILED tests/test_manager_access.py::test_manager_access_is_admin_scoped_and_individual
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[]
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[short]
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[Longer123]
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[abcdefgh]
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[ABCDEFGH]
+FAILED tests/test_manager_access.py::test_reset_requires_generated_password_contract[12345678]
+9 failed, 1 warning in 12.77s

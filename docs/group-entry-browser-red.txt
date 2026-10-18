@@ -1,0 +1,36 @@
+TAP version 13
+# Groupe partagé
+# Votre groupe, ensemble Partagez vos séances, vos classements et les finances du groupe.
+# Créer votre accès Admin
+# Afficher le mot de passe
+# Accès des membres
+# Afficher le mot de passe
+# Créer le groupe partagé
+# Sans connexion, votre groupe reste sur cet appareil. Vous pourrez le partager plus tard.
+# Continuer sur cet appareil
+# Subtest: ENT02/05/06 create group, assign responsibility, join as member
+not ok 1 - ENT02/05/06 create group, assign responsibility, join as member
+  ---
+  duration_ms: 25930.8739
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\group-entry.e2e.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.scrollIntoViewIfNeeded: Timeout 20000ms exceeded.
+    Call log:
+    [2m  - waiting for getByText('Mot de passe commun', { exact: true })[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\ky-solutions\projects\persos\statoo 5v5\web\tests\group-entry.e2e.mjs:30:23)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 26420.6926

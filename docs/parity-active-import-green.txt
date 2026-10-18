@@ -1,0 +1,6 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (setUpAll)
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (tearDownAll)
+00:01 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/group_id_transport_test.dart: GRP-10 group hash remains in HTTP path, including API prefix
+00:01 +2: All tests passed!

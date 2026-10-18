@@ -1,0 +1,17 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart
+00:00 +0: PAR23 merge preserves short names (existing target: false)
+00:00 +0 -1: PAR23 merge preserves short names (existing target: false) [E]
+  Expected: 'FC'
+    Actual: ''
+     Which: is different. Both strings start the same, but the actual value is missing the following trailing characters: FC
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\features\team\short_name_test.dart 23:7        main.<fn>
+  
+00:00 +0 -1: PAR23 merge preserves short names (existing target: true)
+00:00 +1 -1: PAR23 local short name survives reload and enters the common backup
+00:00 +2 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 merge preserves short names (existing target: false)

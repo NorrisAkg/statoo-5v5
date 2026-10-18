@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'collective_access_key.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
@@ -142,7 +143,14 @@ class SharedService {
   }
 
   Future<void> disconnect() async {
+    final accessKey = collectiveAccessKey(baseUrl, groupId, accountId);
     if (connected) await request('POST', '/auth/logout');
+    if (accessKey != null) {
+      final values = await storage.readAll();
+      for (final key in values.keys.where((k) => k == accessKey || k.startsWith('${accessKey}_manager_')).toList()) {
+        await storage.delete(key: key);
+      }
+    }
     await storage.delete(key: 'statoo_connection');
     identity = null;
     token = null;

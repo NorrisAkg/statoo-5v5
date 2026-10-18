@@ -1,0 +1,45 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+______________ test_active_session_is_unique_shared_and_released ______________
+
+system = (<starlette.testclient.TestClient object at 0x000001FB26C6A660>, {'admin': {'Authorization': 'Bearer j6qw3ejj9moK1St4p...a654-b7930dfe8995', 'finance': '6e41e317-bc70-4384-ab29-eda92b8c74ef', 'vice': 'cdef0bd9-5fe0-4564-98e4-904ddc270a24'})
+
+    def test_active_session_is_unique_shared_and_released(system):
+        c, t, _ = system
+        def send(value, occurrence, revision=0):
+            body = event('sport', value, revision=revision)
+            body['occurrence_id'] = occurrence
+            return c.post('/groups/%2300000001/sync', headers=t['sport'], json=body)
+        first = send(payload('one'), 'one')
+        assert first.status_code == 200, first.text
+        state = c.get('/groups/%2300000001', headers=t['members']).json()
+>       assert state.get('active_session_id') == 'one'
+E       AssertionError: assert None == 'one'
+E        +  where None = <built-in method get of dict object at 0x000001FB26E32340>('active_session_id')
+E        +    where <built-in method get of dict object at 0x000001FB26E32340> = {'name': 'Group', 'roles': ['ADMIN', 'PDT', 'VP', 'TR', 'TGA', 'SG', ...], 'members': [{'id': 'a', 'name': 'Alice'}, {...domain': 'sport', 'occurrence_id': 'one', 'owner': 'ad0e3d14-2af4-446f-a654-b7930dfe8995', 'generation': 0, ...}}, ...}.get
+
+backend\tests\test_session_lifecycle.py:24: AssertionError
+__ test_invalid_start_and_conflicting_candidate_do_not_change_active_session __
+
+system = (<starlette.testclient.TestClient object at 0x000001FB26DFF610>, {'admin': {'Authorization': 'Bearer zkga4yUJf0ZbUYBWG...ae11-11c221e2572d', 'finance': '5235c1d1-2fc7-45d1-b21b-0aca31fe0320', 'vice': '7fa44242-7a5f-4fec-baea-49a58e50dbc7'})
+
+    def test_invalid_start_and_conflicting_candidate_do_not_change_active_session(system):
+        c, t, _ = system
+        bad = payload('s')
+        bad['participations'] = []
+        r = c.post('/groups/%2300000001/sync', headers=t['sport'], json=event('sport', bad))
+>       assert r.status_code == 422
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+backend\tests\test_session_lifecycle.py:39: AssertionError
+============================== warnings summary ===============================
+backend\.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\ky-solutions\projects\persos\statoo 5v5\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED backend\tests\test_session_lifecycle.py::test_active_session_is_unique_shared_and_released
+FAILED backend\tests\test_session_lifecycle.py::test_invalid_start_and_conflicting_candidate_do_not_change_active_session
+2 failed, 1 warning in 22.88s

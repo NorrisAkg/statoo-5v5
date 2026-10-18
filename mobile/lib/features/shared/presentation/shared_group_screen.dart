@@ -3,11 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/shared_http_error.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
@@ -16,8 +17,11 @@ import '../../finance/application/finance_providers.dart';
 import '../../onboarding/application/onboarding_provider.dart';
 import '../../players/application/players_provider.dart';
 import '../../sessions/application/sessions_provider.dart';
+import '../../settings/presentation/collective_access_section.dart';
 import '../../team/application/team_provider.dart';
 import '../application/shared_providers.dart';
+import '../data/collective_access.dart';
+import '../data/manager_password.dart';
 import '../data/registration_operation.dart';
 import '../domain/registration_members.dart';
 import 'decision_details.dart';
@@ -35,7 +39,11 @@ const roleLabels = <String, String>{
 };
 
 class SharedGroupScreen extends ConsumerStatefulWidget {
-  const SharedGroupScreen({this.initialCreate = false, this.setup = false, super.key});
+  const SharedGroupScreen({
+    this.initialCreate = false,
+    this.setup = false,
+    super.key,
+  });
   final bool initialCreate;
   final bool setup;
   @override
@@ -73,13 +81,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
 
   @override
   void dispose() {
-    for (final c in [
-      _group,
-      _user,
-      _password,
-      _sharedUser,
-      _sharedPassword,
-    ]) {
+    for (final c in [_group, _user, _password, _sharedUser, _sharedPassword]) {
       c.dispose();
     }
     super.dispose();
@@ -148,7 +150,11 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         where: 'team_id = ?',
         whereArgs: [group],
       );
-      final shortNames = await db.query('meta', where: 'key = ?', whereArgs: ['team_short_name_$group']);
+      final shortNames = await db.query(
+        'meta',
+        where: 'key = ?',
+        whereArgs: ['team_short_name_$group'],
+      );
       registration = {
         'operation_id': await registrationOperationId(db, group),
         'group_id': group,
@@ -185,10 +191,11 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       await ref.read(playersListProvider.future);
       if (mounted) await _showAddAccount();
     } on Object catch (error) {
-      if (mounted) setState(() {
-        _failed = true;
-        _message = 'Impossible de charger ou créer le compte : $error';
-      });
+      if (mounted)
+        setState(() {
+          _failed = true;
+          _message = 'Impossible de charger ou créer le compte : $error';
+        });
     } finally {
       _decisionOpen = false;
     }
@@ -196,102 +203,229 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
 
   Future<void> _showAddAccount() async {
     final name = TextEditingController();
-    final password = TextEditingController();
+    String? nameError;
+    String? requestError;
+    String? createdWarning;
+    var sending = false;
     String? member;
     final roles = <String>{};
     final players = ref.read(playersListProvider).value ?? [];
     final result = await showAppFormDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, update) => _dialog(
-          ctx,
-          title: const Text('Compte individuel et rôles'),
-          content: SizedBox(
-            width: 400,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  DropdownButtonFormField<String>(
-                    initialValue: member,
-                    decoration: const InputDecoration(labelText: 'Membre'),
-                    items: players
-                        .map(
-                          (p) => DropdownMenuItem(
-                            value: p.id,
-                            child: Text(p.name),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) => update(() => member = value),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: name,
-                    decoration: const InputDecoration(labelText: 'Identifiant'),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: password,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Mot de passe (8 caractères minimum)',
+        builder: (ctx, update) => PopScope(
+          canPop: !sending,
+          child: _dialog(
+            ctx,
+            title: const Text('Compte individuel et rôles'),
+            content: SizedBox(
+              width: 400,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<String>(
+                      initialValue: member,
+                      decoration: const InputDecoration(labelText: 'Membre'),
+                      items: players
+                          .map(
+                            (p) => DropdownMenuItem(
+                              value: p.id,
+                              child: Text(p.name),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: sending
+                          ? null
+                          : (value) => update(() => member = value),
                     ),
-                  ),
-                  for (final entry in roleLabels.entries.where(
-                    (e) => e.key != 'ADMIN' && e.key != 'MEMBER',
-                  ))
-                    CheckboxListTile(
-                      title: Text(entry.value),
-                      value: roles.contains(entry.key),
-                      onChanged: (value) => update(() {
-                        if (value == true) {
-                          roles.add(entry.key);
-                        } else {
-                          roles.remove(entry.key);
-                        }
-                      }),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: name,
+                      enabled: !sending,
+                      decoration: InputDecoration(
+                        labelText: 'Identifiant',
+                        hintText: 'Ex. : alice',
+                        errorText: nameError,
+                      ),
                     ),
-                  const SizedBox(height: 8),
-                  const Text('Sélectionnez au moins un rôle de responsable.'),
-                ],
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Un mot de passe de 8 caractères sera généré automatiquement.',
+                    ),
+                    for (final entry in roleLabels.entries.where(
+                      (e) => e.key != 'ADMIN' && e.key != 'MEMBER',
+                    ))
+                      CheckboxListTile(
+                        title: Text(entry.value),
+                        value: roles.contains(entry.key),
+                        onChanged: sending
+                            ? null
+                            : (value) => update(() {
+                                if (value == true) {
+                                  roles.add(entry.key);
+                                } else {
+                                  roles.remove(entry.key);
+                                }
+                              }),
+                      ),
+                    if (requestError != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        requestError!,
+                        style: TextStyle(
+                          color: Theme.of(ctx).colorScheme.error,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 8),
+                    const Text('Sélectionnez au moins un rôle de responsable.'),
+                  ],
+                ),
               ),
             ),
+            actions: [
+              TextButton(
+                onPressed: sending ? null : () => Navigator.pop(ctx, false),
+                child: const Text('Annuler'),
+              ),
+              FilledButton(
+                onPressed: sending || member == null || roles.isEmpty
+                    ? null
+                    : () async {
+                        update(() {
+                          nameError = name.text.trim().isEmpty
+                              ? 'Saisissez un identifiant.'
+                              : name.text.trim().length > 100
+                              ? 'L’identifiant doit contenir au maximum 100 caractères.'
+                              : null;
+                          requestError = null;
+                        });
+                        if (nameError != null) return;
+                        update(() => sending = true);
+                        try {
+                          final service = ref.read(sharedServiceProvider);
+                          final group = service.groupId!;
+                          final originalUrl = service.baseUrl;
+                          final originalAdmin = service.accountId;
+                          final password = generateManagerPassword();
+                          final created = await service.request(
+                            'POST',
+                            '/groups/$group/accounts',
+                            {
+                              'username': name.text.trim(),
+                              'password': password,
+                              'member_id': member,
+                              'roles': roles.toList(),
+                            },
+                          );
+                          try {
+                            if (service.groupId != group ||
+                                service.baseUrl != originalUrl ||
+                                service.accountId != originalAdmin) {
+                              throw const CollectiveAccessException(
+                                'Le groupe ou le compte a changé.',
+                              );
+                            }
+                            await CollectiveAccess(
+                              service,
+                              group,
+                              managerAccountId: created['id'] as String,
+                            ).remember(password);
+                          } on Object {
+                            createdWarning = 'Compte créé. Son mot de passe n’a pas pu être mémorisé. Ouvrez ses accès pour générer un nouveau mot de passe.';
+                          }
+                          if (ctx.mounted) {
+                            update(() => sending = false);
+                            Navigator.pop(ctx, true);
+                          }
+                        } on Object catch (error) {
+                          if (!ctx.mounted) return;
+                          update(() {
+                            sending = false;
+                            requestError = switch (error) {
+                              SharedNetworkException() => 'Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez.',
+                              SharedApiException(statusCode: 409) => 'Cet identifiant ou ce membre est déjà associé à un compte. Vérifiez les comptes existants.',
+                              SharedApiException(statusCode: 422) => 'Les informations du compte sont invalides. Vérifiez les champs puis réessayez.',
+                              SharedApiException(statusCode: 401 || 403) => 'Vous n’avez plus l’autorisation de créer ce compte. Reconnectez-vous avec un accès Admin.',
+                              _ => 'Impossible de créer le compte pour le moment. Réessayez dans quelques instants.',
+                            };
+                          });
+                        }
+                      },
+                child: const Text('Créer'),
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: member == null || roles.isEmpty
-                  ? null
-                  : () => Navigator.pop(ctx, true),
-              child: const Text('Créer'),
-            ),
-          ],
         ),
       ),
     );
-    final wire = {
-      'username': name.text.trim(),
-      'password': password.text,
-      'member_id': member,
-      'roles': roles.toList(),
-    };
     name.dispose();
-    password.dispose();
-    if (result == true && member != null && roles.isNotEmpty) {
+    if (result == true && mounted) {
       await _perform(() async {
-        final service = ref.read(sharedServiceProvider);
-        await service.request(
-          'POST',
-          '/groups/${service.groupId}/accounts',
-          wire,
-        );
-        await service.synchronize();
+        try {
+          await ref.read(sharedServiceProvider).synchronize();
+        } on Object {
+          throw const CollectiveAccessException(
+            'Compte créé. Actualisation impossible : synchronisez pour afficher le nouvel état.',
+          );
+        }
       });
+      if (createdWarning != null && mounted) {
+        setState(() {
+          _failed = true;
+          _message = createdWarning;
+        });
+      }
     }
+  }
+
+  Widget _managerAccess(Map<String, dynamic> account) {
+    final service = ref.read(sharedServiceProvider);
+    final group = service.groupId;
+    if (group == null || !CollectiveAccess(service, group).allowed) {
+      return const SizedBox.shrink();
+    }
+    return TextButton.icon(
+      icon: const Icon(Remix.key_2_line),
+      label: Text('Accès de ${account['username']}'),
+      onPressed: _busy || _decisionOpen
+          ? null
+          : () async {
+              _decisionOpen = true;
+              try {
+                await showAppFormDialog<void>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    scrollable: true,
+                    contentPadding: const EdgeInsets.all(8),
+                    content: SizedBox(
+                      width: 420,
+                      child: CollectiveAccessSection(
+                        access: CollectiveAccess(
+                          service,
+                          group,
+                          managerAccountId: account['id'] as String,
+                        ),
+                        groupName:
+                            service.snapshot?['name'] as String? ?? group,
+                        managerName: account['username'] as String,
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        child: const Text('Fermer'),
+                      ),
+                    ],
+                  ),
+                );
+              } finally {
+                _decisionOpen = false;
+              }
+            },
+    );
   }
 
   Future<void> _approveOpening() async {
@@ -988,39 +1122,44 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Semantics(label: label, child: TextField(
-          controller: controller,
-          enabled: !_busy,
-          obscureText: password && !_shownPasswords.contains(controller),
-          autocorrect: false,
-          keyboardType: keyboardType,
-          style: TextStyle(color: context.colors.foreground50, fontSize: 14),
-          decoration: InputDecoration(
-            hintText: hint ?? (password ? 'Au moins 8 caractères' : 'Ex. : membres'),
-            prefixIcon: icon == null
-                ? null
-                : Icon(icon, color: context.colors.foreground400, size: 20),
-            suffixIcon: password
-                ? IconButton(
-                    tooltip: _shownPasswords.contains(controller)
-                        ? 'Masquer le mot de passe'
-                        : 'Afficher le mot de passe',
-                    icon: Icon(
-                      _shownPasswords.contains(controller)
-                          ? Remix.eye_off_line
-                          : Remix.eye_line,
-                      color: context.colors.foreground400,
-                      size: 20,
-                    ),
-                    onPressed: () => setState(() {
-                      if (!_shownPasswords.add(controller)) {
-                        _shownPasswords.remove(controller);
-                      }
-                    }),
-                  )
-                : null,
+        Semantics(
+          label: label,
+          child: TextField(
+            controller: controller,
+            enabled: !_busy,
+            obscureText: password && !_shownPasswords.contains(controller),
+            autocorrect: false,
+            keyboardType: keyboardType,
+            style: TextStyle(color: context.colors.foreground50, fontSize: 14),
+            decoration: InputDecoration(
+              hintText:
+                  hint ??
+                  (password ? 'Au moins 8 caractères' : 'Ex. : membres'),
+              prefixIcon: icon == null
+                  ? null
+                  : Icon(icon, color: context.colors.foreground400, size: 20),
+              suffixIcon: password
+                  ? IconButton(
+                      tooltip: _shownPasswords.contains(controller)
+                          ? 'Masquer le mot de passe'
+                          : 'Afficher le mot de passe',
+                      icon: Icon(
+                        _shownPasswords.contains(controller)
+                            ? Remix.eye_off_line
+                            : Remix.eye_line,
+                        color: context.colors.foreground400,
+                        size: 20,
+                      ),
+                      onPressed: () => setState(() {
+                        if (!_shownPasswords.add(controller)) {
+                          _shownPasswords.remove(controller);
+                        }
+                      }),
+                    )
+                  : null,
+            ),
           ),
-        )),
+        ),
       ],
     ),
   );
@@ -1128,43 +1267,44 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          if (!widget.setup) SizedBox(
-            width: double.infinity,
-            child: SegmentedButton<bool>(
-              showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: false, label: Text('Rejoindre')),
-                ButtonSegment(value: true, label: Text('Partager')),
-              ],
-              selected: {_create},
-              onSelectionChanged: _busy
-                  ? null
-                  : (values) => setState(() => _create = values.first),
-              style: ButtonStyle(
-                textStyle: const WidgetStatePropertyAll(
-                  TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                ),
-                foregroundColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.selected)
-                      ? context.colors.primary400
-                      : context.colors.foreground300,
-                ),
-                backgroundColor: WidgetStateProperty.resolveWith(
-                  (states) => states.contains(WidgetState.selected)
-                      ? context.colors.primary500.withValues(alpha: 0.15)
-                      : context.colors.background800,
-                ),
-                side: WidgetStatePropertyAll(
-                  BorderSide(color: context.colors.background700),
-                ),
-                shape: WidgetStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+          if (!widget.setup)
+            SizedBox(
+              width: double.infinity,
+              child: SegmentedButton<bool>(
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(value: false, label: Text('Rejoindre')),
+                  ButtonSegment(value: true, label: Text('Partager')),
+                ],
+                selected: {_create},
+                onSelectionChanged: _busy
+                    ? null
+                    : (values) => setState(() => _create = values.first),
+                style: ButtonStyle(
+                  textStyle: const WidgetStatePropertyAll(
+                    TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  foregroundColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.selected)
+                        ? context.colors.primary400
+                        : context.colors.foreground300,
+                  ),
+                  backgroundColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.selected)
+                        ? context.colors.primary500.withValues(alpha: 0.15)
+                        : context.colors.background800,
+                  ),
+                  side: WidgetStatePropertyAll(
+                    BorderSide(color: context.colors.background700),
+                  ),
+                  shape: WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     ),
@@ -1245,37 +1385,72 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     ),
     if (widget.setup && _create) ...[
       const SizedBox(height: 12),
-      const Text('Sans connexion, votre groupe reste sur cet appareil. Vous pourrez le partager plus tard.'),
-      TextButton(onPressed: _busy ? null : _finishSetup, child: const Text('Continuer sur cet appareil')),
+      const Text(
+        'Sans connexion, votre groupe reste sur cet appareil. Vous pourrez le partager plus tard.',
+      ),
+      TextButton(
+        onPressed: _busy ? null : _finishSetup,
+        child: const Text('Continuer sur cet appareil'),
+      ),
     ],
   ];
 
   List<Widget> _responsibilitySetup() {
     final service = ref.watch(sharedServiceProvider);
-    final accounts = (service.snapshot?['accounts'] as List? ?? []).whereType<Map<String, dynamic>>();
+    final accounts = (service.snapshot?['accounts'] as List? ?? [])
+        .whereType<Map<String, dynamic>>();
     return [
       _heading('Désigner les responsables'),
-      const Text('Votre accès Admin est prêt. Choisissez les membres qui géreront le groupe et attribuez leurs rôles. Vous pourrez les modifier dans Comptes et rôles.'),
+      const Text(
+        'Votre accès Admin est prêt. Choisissez les membres qui géreront le groupe et attribuez leurs rôles. Vous pourrez les modifier dans Comptes et rôles.',
+      ),
       const SizedBox(height: 16),
-      AppCard(child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        for (final account in accounts.where((a) => a['shared'] != true))
-          _action(title: account['username'] as String,
-            subtitle: (account['roles'] as List).map((r) => roleLabels[r] ?? r).join(' · '),
-            icon: Remix.user_line, onTap: _busy ? null : () => unawaited(_changeRoles(account))),
-        _action(title: 'Ajouter un gestionnaire', subtitle: 'Choisir un membre et ses responsabilités', icon: Remix.add_line,
-          onTap: _busy ? null : () => unawaited(_addAccount())),
-      ])),
+      AppCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (final account in accounts.where(
+              (a) => a['shared'] != true,
+            )) ...[
+              _action(
+                title: account['username'] as String,
+                subtitle: (account['roles'] as List)
+                    .map((r) => roleLabels[r] ?? r)
+                    .join(' · '),
+                icon: Remix.user_line,
+                onTap: _busy ? null : () => unawaited(_changeRoles(account)),
+              ),
+              _managerAccess(account),
+            ],
+            _action(
+              title: 'Ajouter un gestionnaire',
+              subtitle: 'Choisir un membre et ses responsabilités',
+              icon: Remix.add_line,
+              onTap: _busy ? null : () => unawaited(_addAccount()),
+            ),
+          ],
+        ),
+      ),
       const SizedBox(height: 16),
-      const Text('Les simples membres utilisent l’accès collectif en lecture seule.'),
+      const Text(
+        'Les simples membres utilisent l’accès collectif en lecture seule.',
+      ),
       const SizedBox(height: 24),
-      PrimaryButton(label: 'Terminer et ouvrir le groupe', onPressed: _busy ? null : _finishSetup),
-      TextButton(onPressed: _busy ? null : _finishSetup, child: const Text('Plus tard')),
+      PrimaryButton(
+        label: 'Terminer et ouvrir le groupe',
+        onPressed: _busy ? null : _finishSetup,
+      ),
+      TextButton(
+        onPressed: _busy ? null : _finishSetup,
+        child: const Text('Plus tard'),
+      ),
     ];
   }
 
   List<Widget> _management() {
     final service = ref.watch(sharedServiceProvider);
-    if (widget.setup && service.roles.contains('ADMIN')) return _responsibilitySetup();
+    if (widget.setup && service.roles.contains('ADMIN'))
+      return _responsibilitySetup();
     final documents =
         (service.snapshot?['documents'] as Map<String, dynamic>? ?? {}).values
             .cast<Map<String, dynamic>>()
@@ -1292,7 +1467,12 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         .toList();
     return [
       if (service.syncWarning != null) ...[
-        AppCard(child: Text(service.syncWarning!, style: TextStyle(color: context.colors.warning))),
+        AppCard(
+          child: Text(
+            service.syncWarning!,
+            style: TextStyle(color: context.colors.warning),
+          ),
+        ),
         const SizedBox(height: 16),
       ],
       AppCard(
@@ -1405,6 +1585,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
                         )
                       : null,
                 ),
+                if (account['shared'] != true) _managerAccess(account),
                 Divider(color: context.colors.background700, height: 1),
               ],
               _action(
@@ -1543,7 +1724,9 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           children: [
-            ...service.connected && !_connectionFailed ? _management() : _connection(),
+            ...service.connected && !_connectionFailed
+                ? _management()
+                : _connection(),
             if (_busy) ...[
               const SizedBox(height: 16),
               const LinearProgressIndicator(),

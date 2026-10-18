@@ -1,0 +1,68 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart
+lib/features/shared/presentation/shared_group_screen.dart:282:41: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                        passwordError = password.text.length < 8 ? 'Le mot de passe doit contenir au moins 8 caractères.' : password.text.length > 200 ? 'Le mot de passe doit contenir au maximum 200 caractères.' : null;
+                                        ^^^^^^^^
+lib/features/shared/presentation/shared_group_screen.dart:282:125: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                        passwordError = password.text.length < 8 ? 'Le mot de passe doit contenir au moins 8 caractères.' : password.text.length > 200 ? 'Le mot de passe doit contenir au maximum 200 caractères.' : null;
+                                                                                          ^^^^^^^^
+lib/features/shared/presentation/shared_group_screen.dart:291:39: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                          'password': password.text,
+                                      ^^^^^^^^
+lib/features/shared/presentation/shared_group_screen.dart:321:5: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+    password.dispose();
+    ^^^^^^^^
+lib/features/shared/presentation/shared_group_screen.dart:1301:11: Error: The method '_managerAccess' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing method, or defining a method named '_managerAccess'.
+          _managerAccess(account),
+          ^^^^^^^^^^^^^^
+lib/features/shared/presentation/shared_group_screen.dart:1446:48: Error: The method '_managerAccess' isn't defined for the type '_SharedGroupScreenState'.
+ - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+Try correcting the name to the name of an existing method, or defining a method named '_managerAccess'.
+                if (account['shared'] != true) _managerAccess(account),
+                                               ^^^^^^^^^^^^^^
+00:00 +0 -1: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart [E]
+  Failed to load "C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart":
+  Compilation failed for testPath=C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart: lib/features/shared/presentation/shared_group_screen.dart:282:41: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                          passwordError = password.text.length < 8 ? 'Le mot de passe doit contenir au moins 8 caractères.' : password.text.length > 200 ? 'Le mot de passe doit contenir au maximum 200 caractères.' : null;
+                                          ^^^^^^^^
+  lib/features/shared/presentation/shared_group_screen.dart:282:125: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                          passwordError = password.text.length < 8 ? 'Le mot de passe doit contenir au moins 8 caractères.' : password.text.length > 200 ? 'Le mot de passe doit contenir au maximum 200 caractères.' : null;
+                                                                                                                              ^^^^^^^^
+  lib/features/shared/presentation/shared_group_screen.dart:291:39: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+                            'password': password.text,
+                                        ^^^^^^^^
+  lib/features/shared/presentation/shared_group_screen.dart:321:5: Error: The getter 'password' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing getter, or defining a getter or field named 'password'.
+      password.dispose();
+      ^^^^^^^^
+  lib/features/shared/presentation/shared_group_screen.dart:1301:11: Error: The method '_managerAccess' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing method, or defining a method named '_managerAccess'.
+            _managerAccess(account),
+            ^^^^^^^^^^^^^^
+  lib/features/shared/presentation/shared_group_screen.dart:1446:48: Error: The method '_managerAccess' isn't defined for the type '_SharedGroupScreenState'.
+   - '_SharedGroupScreenState' is from 'package:statoo/features/shared/presentation/shared_group_screen.dart' ('lib/features/shared/presentation/shared_group_screen.dart').
+  Try correcting the name to the name of an existing method, or defining a method named '_managerAccess'.
+                  if (account['shared'] != true) _managerAccess(account),
+                                                 ^^^^^^^^^^^^^^
+  .
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_validation_test.dart

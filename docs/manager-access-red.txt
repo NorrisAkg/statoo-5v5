@@ -1,0 +1,31 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_access_test.dart
+00:00 +0: GES01 secure generated passwords always meet 8 character contract
+00:00 +0 -1: GES01 secure generated passwords always meet 8 character contract [E]
+  Expected: match '^[A-Za-z0-9]{8}$'
+    Actual: ''
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\features\shared\manager_access_test.dart 30:7  main.<fn>
+  
+00:00 +0 -1: GES02/07 targets and collective secret remain isolated; copy current manager login
+00:00 +0 -2: GES02/07 targets and collective secret remain isolated; copy current manager login [E]
+  400: Incorrect
+  test\features\shared\collective_access_test.dart 41:7  FakeShared.request
+  
+00:00 +0 -2: GES04 explicit regeneration uses target endpoint and saves only verified result
+00:00 +0 -3: GES04 explicit regeneration uses target endpoint and saves only verified result [E]
+  Expected: an object with length of <8>
+    Actual: <null>
+     Which: has no length property
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\features\shared\manager_access_test.dart 59:5  main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_access_test.dart: GES01 secure generated passwords always meet 8 character contract
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_access_test.dart: GES02/07 targets and collective secret remain isolated; copy current manager login
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/manager_access_test.dart: GES04 explicit regeneration uses target endpoint and saves only verified result

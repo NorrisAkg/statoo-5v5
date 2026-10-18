@@ -1,0 +1,6 @@
+Analyzing 8 items...                                            
+
+   info - Sort directive sections alphabetically. Try sorting the directives - lib\core\data\shared_http.dart:3:1 - directives_ordering
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\players\presentation\new_player_bottom_sheet.dart:71:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - lib\features\shared\data\shared_service.dart:450:93 - curly_braces_in_flow_control_structures
+

@@ -1,0 +1,2 @@
+web/tests/welcome.e2e.mjs 93ms
+web/tests/browser.e2e.mjs 137ms

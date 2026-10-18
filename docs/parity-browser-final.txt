@@ -1,0 +1,47 @@
+
+> test:web:parity
+> node --test --test-concurrency=1 web/tests/parity-contract.e2e.mjs web/tests/parity-shared.e2e.mjs
+
+TAP version 13
+# Subtest: PAR02/06/08/09/16/17 local group, explicit start, persistence and backup on web
+not ok 1 - PAR02/06/08/09/16/17 local group, explicit start, persistence and backup on web
+  ---
+  duration_ms: 58194.2947
+  type: 'test'
+  location: 'C:\\Users\\ky-solutions\\projects\\persos\\statoo 5v5\\web\\tests\\parity-contract.e2e.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    '' !== 'SQ'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'SQ'
+  actual: ''
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/web/tests/parity-contract.e2e.mjs:118:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: PAR14/18/21 browser joins a real shared group and resumes its active session
+ok 2 - PAR14/18/21 browser joins a real shared group and resumes its active session
+  ---
+  duration_ms: 23887.6883
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 86291.3241
+npm notice
+npm notice New major version of npm available! 10.9.8 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

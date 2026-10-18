@@ -29,6 +29,10 @@ SINGULAR = set(ROLES) - {"MEMBER"}
 AUTHORS = {"sport": {"ADMIN", "PDT", "VP", "SG", "SGA"}, "finance": {"TR", "TGA"}}
 
 
+class SharedPasswordCheck(BaseModel):
+    password: str
+
+
 class Credentials(BaseModel):
     group_id: str = Field(min_length=1, max_length=100)
     username: str = Field(min_length=1, max_length=100)
@@ -361,6 +365,42 @@ def create_app(url: str | None = None):
         group.state = state
         return public_account(account)
 
+    def individual_access(group_id, account_id, auth):
+        session, group, state, actor = scoped(group_id, auth)
+        require(actor, {"ADMIN"})
+        target = next((a for a in state["accounts"] if a["id"] == account_id), None)
+        if target is None:
+            fail(404, "Compte introuvable")
+        if target["shared"]:
+            fail(422, "Compte individuel requis")
+        return session, group, state, actor, target
+
+    @app.post('/groups/{group_id}/accounts/{account_id}/password/verify')
+    def verify_manager_password(group_id: str, account_id: str, body: SharedPasswordCheck, auth=Depends(authenticate)):
+        _, group, _, _, target = individual_access(group_id, account_id, auth)
+        if not 8 <= len(body.password) <= 200:
+            fail(422, "Le mot de passe doit contenir entre 8 et 200 caractères.")
+        if not password_matches(body.password, target['password']):
+            fail(400, "Le mot de passe du gestionnaire est incorrect.")
+        return {'verified': True, 'group_id': group.id, 'username': target['username']}
+
+    @app.post('/groups/{group_id}/accounts/{account_id}/password')
+    def reset_manager_password(group_id: str, account_id: str, body: SharedPasswordCheck, auth=Depends(authenticate)):
+        session, group, state, actor, target = individual_access(group_id, account_id, auth)
+        if target['id'] == actor['id']:
+            fail(409, "Cette action ne peut pas remplacer votre propre mot de passe Admin.")
+        if (len(body.password) != 8 or not body.password.isascii() or not body.password.isalnum()
+                or not any(c.islower() for c in body.password)
+                or not any(c.isupper() for c in body.password)
+                or not any(c.isdigit() for c in body.password)):
+            fail(422, "Le nouveau mot de passe doit contenir 8 caractères, avec majuscules, minuscules et chiffres.")
+        target['password'] = password_hash(body.password)
+        for token in session.scalars(select(Token).where(Token.group_id == group.id, Token.account_id == account_id)):
+            session.delete(token)
+        audit(state, actor, 'manager_password_reset')
+        group.state = state
+        return {'ok': True}
+
     @app.put("/groups/{group_id}/accounts/{account_id}/roles")
     def roles(group_id: str, account_id: str, body: RoleInput, auth=Depends(authenticate)):
         _, group, state, actor = scoped(group_id, auth)
@@ -401,6 +441,17 @@ def create_app(url: str | None = None):
         audit(state, actor, "members_updated")
         group.state = state
         return {"ok": True}
+
+    @app.post("/groups/{group_id}/shared-access/verify")
+    def verify_shared(group_id: str, body: SharedPasswordCheck, auth=Depends(authenticate)):
+        _, group, state, actor = scoped(group_id, auth)
+        require(actor, {"ADMIN"})
+        if not 8 <= len(body.password) <= 200:
+            fail(422, "Le mot de passe doit contenir entre 8 et 200 caractères.")
+        shared = next(a for a in state["accounts"] if a["shared"])
+        if not password_matches(body.password, shared["password"]):
+            fail(400, "Le mot de passe commun est incorrect.")
+        return {"verified": True, "group_id": group.id, "username": shared["username"]}
 
     @app.put("/groups/{group_id}/shared-access")
     def rotate_shared(group_id: str, body: Credentials, auth=Depends(authenticate)):

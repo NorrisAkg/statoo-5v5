@@ -1,0 +1,65 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart
+00:00 +0: ACC01/04/05 remembers verified access across instances and checks current username on copy
+00:00 +0 -1: ACC01/04/05 remembers verified access across instances and checks current username on copy [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test\features\shared\collective_access_test.dart 41:5  main.<fn>
+  
+00:00 +0 -1: ACC02 wrong reentry preserves previous value; invalid bounds never saved
+00:00 +0 -2: ACC02 wrong reentry preserves previous value; invalid bounds never saved [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test\features\shared\collective_access_test.dart 52:13  main.<fn>
+  
+00:00 +0 -2: ACC03 isolates group, account, server and expired identities
+00:00 +0 -3: ACC03 isolates group, account, server and expired identities [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<String>'>
+     Which: emitted ''
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test\features\shared\collective_access_test.dart 68:11  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test\features\shared\collective_access_test.dart 59:5   main.<fn>
+  
+00:00 +0 -3: ACC06/07 network retains cached value; rotation discards it
+00:00 +0 -4: ACC06/07 network retains cached value; rotation discards it [E]
+  Expected: throws <Instance of 'SharedNetworkException'>
+    Actual: <Instance of 'Future<String>'>
+     Which: emitted ''
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test\features\shared\collective_access_test.dart 79:11  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test\features\shared\collective_access_test.dart 77:5   main.<fn>
+  
+00:00 +0 -4: ACC08 changed context while verifying never stores password
+00:00 +0 -5: ACC08 changed context while verifying never stores password [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<void>'>
+     Which: emitted <null>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test\features\shared\collective_access_test.dart 91:11  main.<fn>
+  
+00:00 +0 -5: ACC09 forget and logout remove device secret
+00:00 +1 -5: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC01/04/05 remembers verified access across instances and checks current username on copy
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC02 wrong reentry preserves previous value; invalid bounds never saved
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC03 isolates group, account, server and expired identities
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC06/07 network retains cached value; rotation discards it
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/shared/collective_access_test.dart: ACC08 changed context while verifying never stores password

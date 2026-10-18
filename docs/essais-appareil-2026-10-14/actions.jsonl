@@ -111,3 +111,87 @@
 {"at": "2026-10-15T08:23:45", "action": "label", "values": ["Enregistrer en brouillon"], "capture": "94-seconde-seance"}
 {"at": "2026-10-15T08:26:18", "action": "tree", "values": [], "capture": null}
 {"at": "2026-10-15T08:26:22", "action": "font", "values": ["2.0"], "capture": "95-detail-texte-200"}
+{"at": "2026-10-15T13:44:34", "action": "launch", "values": [], "capture": "100-reserves-nouvel-apk"}
+{"at": "2026-10-15T14:34:43", "action": "launch", "values": [], "capture": "101-reserves-reprise"}
+{"at": "2026-10-15T14:42:36", "action": "capture", "values": ["102-reserves-activite"], "capture": "102-reserves-activite"}
+{"at": "2026-10-15T14:42:50", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:43:03", "action": "tap", "values": ["320", "2270"], "capture": null}
+{"at": "2026-10-15T14:43:09", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:43:25", "action": "tap", "values": ["500", "735"], "capture": null}
+{"at": "2026-10-15T14:43:31", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:43:54", "action": "font", "values": ["2.0"], "capture": "103-detail-200-haut"}
+{"at": "2026-10-15T14:44:00", "action": "swipe", "values": ["100", "2100", "100", "900", "450"], "capture": "104-detail-200-composition"}
+{"at": "2026-10-15T14:44:06", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:44:55", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T14:44:59", "action": "tap", "values": ["100", "2270"], "capture": null}
+{"at": "2026-10-15T14:45:03", "action": "swipe", "values": ["100", "2050", "100", "600", "450"], "capture": null}
+{"at": "2026-10-15T14:45:09", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:45:46", "action": "label", "values": ["Groupe partagé et synchronisation"], "capture": null}
+{"at": "2026-10-15T14:45:52", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T14:46:08", "action": "tap", "values": ["500", "1650"], "capture": "105-arbitrage-differences"}
+{"at": "2026-10-15T14:46:15", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:09:19", "action": "label", "values": ["Retenir cette version"], "capture": "106-arbitrage-erreur-visible"}
+{"at": "2026-10-15T15:09:25", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:09:56", "action": "tap", "values": ["350", "1450"], "capture": null}
+{"at": "2026-10-15T15:09:59", "action": "tap", "values": ["500", "1720"], "capture": "107-arbitrage-details-deplies"}
+{"at": "2026-10-15T15:10:07", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:11:06", "action": "label", "values": ["Annuler"], "capture": "108-arbitrage-annule"}
+{"at": "2026-10-15T15:29:44", "action": "launch", "values": [], "capture": "109-point-financier-demarrage"}
+{"at": "2026-10-15T15:39:28", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T15:39:39", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:40:28", "action": "tap", "values": ["320", "2270"], "capture": null}
+{"at": "2026-10-15T15:40:32", "action": "tap", "values": ["500", "735"], "capture": null}
+{"at": "2026-10-15T15:40:36", "action": "swipe", "values": ["100", "2000", "100", "1000", "450"], "capture": null}
+{"at": "2026-10-15T15:40:43", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:41:11", "action": "label", "values": ["Point financier"], "capture": "110-point-financier-consultation"}
+{"at": "2026-10-15T15:41:18", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:41:53", "action": "tap", "values": ["810", "310"], "capture": "111-point-financier-depenses"}
+{"at": "2026-10-15T15:41:57", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T15:42:00", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T15:42:04", "action": "tap", "values": ["100", "2270"], "capture": null}
+{"at": "2026-10-15T15:42:13", "action": "label", "values": ["qa-depart"], "capture": null}
+{"at": "2026-10-15T15:42:22", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:43:08", "action": "tap", "values": ["500", "1630"], "capture": null}
+{"at": "2026-10-15T15:43:12", "action": "tap", "values": ["320", "2270"], "capture": null}
+{"at": "2026-10-15T15:43:20", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:43:45", "action": "tap", "values": ["500", "730"], "capture": null}
+{"at": "2026-10-15T15:43:49", "action": "swipe", "values": ["100", "2050", "100", "650", "450"], "capture": null}
+{"at": "2026-10-15T15:43:55", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:44:31", "action": "label", "values": ["Point financier"], "capture": "112-point-financier-edition"}
+{"at": "2026-10-15T15:44:35", "action": "swipe", "values": ["100", "1800", "100", "1150", "450"], "capture": "113-point-financier-champs"}
+{"at": "2026-10-15T15:44:41", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:45:21", "action": "tap", "values": ["300", "1180"], "capture": "114-point-financier-clavier"}
+{"at": "2026-10-15T15:45:25", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T15:45:29", "action": "font", "values": ["2.0"], "capture": "115-point-financier-200"}
+{"at": "2026-10-15T15:45:34", "action": "swipe", "values": ["100", "1700", "100", "800", "450"], "capture": "116-point-financier-200-champs"}
+{"at": "2026-10-15T15:46:25", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:47:18", "action": "label", "values": ["Point financier"], "capture": null}
+{"at": "2026-10-15T15:47:25", "action": "capture", "values": ["117-point-financier-clavier-verifie"], "capture": "117-point-financier-clavier-verifie"}
+{"at": "2026-10-15T15:48:51", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T15:49:06", "action": "capture", "values": ["118-point-financier-200-verifie"], "capture": "118-point-financier-200-verifie"}
+{"at": "2026-10-15T15:49:13", "action": "capture", "values": ["119-point-financier-200-champs-verifies"], "capture": "119-point-financier-200-champs-verifies"}
+{"at": "2026-10-15T15:56:43", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T15:56:51", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T15:57:27", "action": "capture", "values": ["122-point-financier-apk-final"], "capture": "122-point-financier-apk-final"}
+{"at": "2026-10-15T15:58:16", "action": "tap", "values": ["320", "2270"], "capture": null}
+{"at": "2026-10-15T15:58:20", "action": "tap", "values": ["500", "730"], "capture": null}
+{"at": "2026-10-15T15:58:24", "action": "swipe", "values": ["100", "2050", "100", "650", "450"], "capture": null}
+{"at": "2026-10-15T15:58:31", "action": "label", "values": ["Point financier"], "capture": null}
+{"at": "2026-10-15T15:58:43", "action": "capture", "values": ["120-point-financier-200-corrige"], "capture": "120-point-financier-200-corrige"}
+{"at": "2026-10-15T15:58:50", "action": "capture", "values": ["121-point-financier-200-champs-corriges"], "capture": "121-point-financier-200-champs-corriges"}
+{"at": "2026-10-15T18:05:04", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T18:05:10", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:06:44", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:07:09", "action": "swipe", "values": ["100", "2050", "100", "600", "450"], "capture": null}
+{"at": "2026-10-15T18:07:16", "action": "label", "values": ["Finances du groupe"], "capture": null}
+{"at": "2026-10-15T18:07:22", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:16:57", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T18:17:09", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:23:58", "action": "launch", "values": [], "capture": null}
+{"at": "2026-10-15T18:24:05", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:24:50", "action": "swipe", "values": ["100", "2050", "100", "600", "450"], "capture": null}
+{"at": "2026-10-15T18:24:56", "action": "label", "values": ["Finances du groupe"], "capture": null}
+{"at": "2026-10-15T18:25:42", "action": "back", "values": [], "capture": null}
+{"at": "2026-10-15T18:25:48", "action": "label", "values": ["Réglages"], "capture": null}
+{"at": "2026-10-15T18:25:54", "action": "tree", "values": [], "capture": null}
+{"at": "2026-10-15T18:39:20", "action": "tree", "values": [], "capture": null}

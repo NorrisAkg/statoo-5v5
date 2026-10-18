@@ -1,0 +1,6 @@
+Analyzing collective_access.dart, manager_password.dart, collective_access_section.dart, shared_group_screen.dart...
+
+   info - lib\features\shared\presentation\shared_group_screen.dart:195:9 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+   info - lib\features\shared\presentation\shared_group_screen.dart:1453:7 - Statements in an if should be enclosed in a block. Try wrapping the statement in a block. - curly_braces_in_flow_control_structures
+
+2 issues found.

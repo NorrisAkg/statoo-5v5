@@ -1,0 +1,45 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation throws FormatException when json is empty (B-01 protection)
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation throws FormatException when json has no teams (B-01 protection)
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation throws FormatException when app identifier is for another app
+00:00 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation parses legacy single-team (v1) backup and exposes teams list
+00:00 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation parses multi-team (v2) backup and exposes all teams
+00:00 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation toJson serializes with version 2 and teams list
+00:01 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_service_test.dart: (setUpAll)
+00:04 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 merge preserves short names (existing target: false)
+00:04 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 merge preserves short names (existing target: false)
+00:04 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 merge preserves short names (existing target: false)
+00:04 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests createBackupPayload exports all teams and full data
+00:04 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 merge preserves short names (existing target: true)
+00:04 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/team/short_name_test.dart: PAR23 local short name survives reload and enters the common backup
+00:05 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/group_settings_test.dart: defaults apply when nothing is stored
+00:05 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/group_settings_test.dart: values are saved per group and never leak to another group
+00:05 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: (setUpAll)
+00:05 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: (setUpAll)
+00:05 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: (setUpAll)
+00:05 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/group_settings_test.dart: FIX-06 shared minimum follows server updates and cannot be changed locally
+00:05 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: add
+00:05 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: add
+00:05 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: remove
+00:05 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: rename
+00:05 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-06 matching confirmation permits exactly the reviewed replacement
+00:05 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: (setUpAll)
+00:05 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=false
+00:05 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=true
+00:05 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=false
+00:05 +25: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=true
+00:05 +26: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=false
+00:06 +27: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=true
+00:06 +28: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=false
+00:06 +29: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=true
+00:06 +30: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=false
+00:06 +31: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=true
+00:06 +32: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=false
+00:06 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=true
+00:06 +34: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=false
+00:06 +35: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=true
+00:06 +36: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-12 export/restore preserves ranked results and financial metadata
+00:06 +37: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-07 inconsistent tournament is kept as draft without invented result
+00:06 +38: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-05/06 classic scored remains closed, incomplete becomes draft
+00:06 +39: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/tournament_backup_test.dart: (tearDownAll)
+00:06 +39: All tests passed!

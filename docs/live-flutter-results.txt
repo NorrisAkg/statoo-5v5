@@ -1,0 +1,165 @@
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart
+00:00 +0: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +1: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +2: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +3: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +4: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +5: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +6: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/late_players_test.dart: SessionsController.addLatePlayers throws StateError when no active team is selected
+00:00 +7: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) (setUpAll)
+00:00 +8: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) (setUpAll)
+00:00 +9: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) (setUpAll)
+00:00 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) (setUpAll)
+00:00 +10: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) team goal first, scorer second: the score stays at 1
+00:00 +11: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) scorer entered alone raises the score and the result
+00:00 +12: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) changing the scorer or removing a goal keeps the score
+00:00 +13: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) a second scorer consumes the remaining free goal only
+00:00 +14: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) an own goal consumes a free goal, otherwise it raises the score
+00:00 +15: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) a three-team session never gets a match score
+00:00 +16: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) another group cannot move the score
+00:00 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/goal_score_sync_test.dart: score stays in sync with scorers (SQLite) (tearDownAll)
+00:00 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_roster_editing_test.dart: (setUpAll)
+00:00 +17: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_roster_editing_test.dart: Live Roster Editing Integration Tests (Chantier 3) switchPlayerTeam throws StateError if uneven teams diff exceeds 1 and allowUnevenTeams is false
+00:02 +18: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:02 +19: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:02 +20: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:02 +21: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +22: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +23: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +24: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +25: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +26: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +27: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:03 +28: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:04 +29: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:04 +30: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:04 +31: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_header_test.dart: INT-13 no empty labels, no heading, ball xN
+00:04 +32: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_test.dart: INT-08/14 controller denies member and SG queues aggregate payload
+00:04 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/live_stats_test.dart: (tearDownAll)
+00:05 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: (setUpAll)
+00:05 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: (setUpAll)
+00:05 +33: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:05 +34: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:05 +35: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +36: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +37: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +38: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +39: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +40: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +41: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +42: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +43: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +44: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +45: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +46: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +47: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +48: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +49: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +50: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +51: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +52: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +53: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +54: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +55: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +56: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +57: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:06 +58: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:07 +59: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:09 +60: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:09 +61: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:09 +62: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 SG can compose teams without creating members
+00:10 +63: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-06 direct new session route prevents readonly input
+00:10 +64: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX03-22 local creation exposes the optional occurrence reference
+00:10 +65: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:13 +66: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:13 +67: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:13 +68: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:13 +69: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:14 +70: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:15 +71: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:15 +72: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:15 +73: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:15 +74: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:16 +75: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:16 +76: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:16 +77: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:16 +78: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:17 +79: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:17 +80: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+00:17 +81: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:17 +82: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:18 +83: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:18 +84: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:18 +85: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:18 +86: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:18 +87: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=false
+00:18 +88: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +89: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +90: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +91: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +92: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +93: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +94: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +95: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +96: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +97: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +98: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +99: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +100: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +101: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +102: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +103: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +104: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +105: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +106: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +107: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +108: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +109: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +110: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +111: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +112: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +113: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:20 +114: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:20 +115: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=2.0 dark=false
+00:20 +116: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 320.0 dp scale=2.0 dark=false
+00:20 +117: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: (setUpAll)
+00:20 +117: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: (setUpAll)
+00:20 +118: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: (setUpAll)
+00:20 +118: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +119: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +120: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +121: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +122: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +123: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +124: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:21 +125: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:22 +126: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:22 +127: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:22 +128: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:22 +129: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:23 +130: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:23 +131: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores ranked filter
+00:23 +132: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:23 +133: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:23 +134: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:23 +135: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +136: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +137: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +138: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +139: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +140: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +141: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:24 +142: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +143: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +144: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +145: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +146: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +147: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +148: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +149: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +150: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:25 +151: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+00:26 +152: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-09 refreshed source replaces last closed session
+00:26 +153: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+00:26 +154: C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/home/latest_session_test.dart: (tearDownAll)
+00:26 +154: All tests passed!

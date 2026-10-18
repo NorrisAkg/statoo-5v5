@@ -2,6 +2,8 @@
 
 Campagne commencée le 14 octobre 2026 et poursuivie le 15 octobre. Ce document complète le journal TDD et l’audit initial. **Les huit corrections ne sont pas déclarées intégralement validées sur appareil.** Les résultats ci-dessous portent sur les manipulations et les données effectivement observées.
 
+Mise à jour : les réserves D01–D04 sont reprises dans le [lot TDD du 15 octobre](../tdd-reserves-ui-ux.md). Les captures ci-dessous restent l’historique avant ce lot ; elles ne décrivent pas automatiquement le dernier code. D01 était déjà corrigé dans HEAD ; D02/D03/D04 ont reçu les corrections et tests indiqués dans ce suivi.
+
 ## Environnement et précautions
 
 - Téléphone Android physique `7522b268`, écran 1080 × 2400. Tests en portrait, texte système à 90 % ; valeur finale relue : `0.9`.

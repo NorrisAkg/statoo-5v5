@@ -116,7 +116,20 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 
 - 17 octobre 2026, ajout joueur : pendant le clavier, avatar compact de 48 px, espacements resserrés et aide secondaire masquée ; commande « Masquer le clavier » sans perte de saisie. Photo toujours accessible et retour à la présentation complète sans clavier. Ajout en série et règles de validation inchangés. Preuves et limites : `tdd-player-keyboard-2026-10-17.md`.
 
+## Arbitrage du 17 octobre — copie des accès collectifs
+
+- Dans Réglages, carte « Accès des membres » réservée à l’Admin du groupe partagé actif. Formulaire défilant, mot de passe masqué avec affichage explicite, erreur dans le formulaire ; mémorisation après vérification serveur seulement.
+- Carte mémorisée sans affichage du secret : copie explicite, vérification d’un autre mot de passe et oubli sur cet appareil. Le texte copié contient le nom et l’identifiant du groupe, l’identifiant commun actuel, son mot de passe et la mention lecture seule. Confirmation après écriture du presse-papiers.
+- Même composant Flutter web/mobile. Stockage protégé natif / WebCrypto navigateur, isolé par serveur, groupe et compte ; aucun mot de passe commun ajouté à SQLite ou aux sauvegardes.
+- Scénarios et limites de validation : `tdd-collective-access-2026-10-17.md`.
 
 - 17 octobre 2026, adaptation petits écrans : utiliser les contraintes disponibles et le facteur de texte pour les colonnes de l'accueil/statistiques ; conserver les hauteurs naturelles des boutons et les libellés complets. Sous-titres d'en-tête mesurés avec la police du thème, lignes secondaires repliables. Navigation principale défilante si les cinq libellés ne tiennent pas sans réduction. Dans l'effectif, validation placée dans le contenu avec clavier/grand texte. Sur le web, zone supérieure réservée au menu PWA, sans changement des métriques clavier. Scénarios et preuves : `tdd-responsive-small-screens-2026-10-17.md`.
 
 - Précisions responsive du même lot : badges d'étape à hauteur mesurée, libellé Nom court placé au-dessus du champ avec aide défilante, menu Application à largeur intrinsèque bornée par la fenêtre et fond du bandeau cohérent avec le thème. Vérification navigateur : 18 configurations du vrai build ; recette iPhone physique distincte.
+
+## Arbitrage du 18 octobre — accès des gestionnaires
+
+- Création d’un gestionnaire : membre, identifiant et responsabilités ; aucun champ de saisie du mot de passe. Génération aléatoire de 8 caractères (majuscules, minuscules et chiffres) puis mémorisation protégée après confirmation du serveur. Erreurs de création dans le dialogue, réessai conservant les choix ; compte créé distingué d’une mémorisation ou actualisation échouée.
+- Dans Comptes et rôles et dans la désignation initiale, action « Accès de <identifiant> » par compte individuel. Fiche avec secret masqué, copie explicite, vérification du mot de passe existant, oubli local et génération d’un nouveau après confirmation. Le remplacement déconnecte uniquement le compte cible ; pas de remplacement de son propre mot de passe Admin depuis cette fiche.
+- Confirmation « Accès copiés » visible dans la fiche et annoncée comme région accessible, après écriture réussie du presse-papiers ; un SnackBar derrière une modale ne constitue pas un retour visible.
+- Même Flutter mobile/web ; preuves et limites : `tdd-manager-access-2026-10-17.md`.

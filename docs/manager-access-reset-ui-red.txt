@@ -1,0 +1,48 @@
+Waiting for another flutter command to release the startup lock...
+00:00 +0: loading C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart
+00:00 +0: GES03/04 regeneration requires confirmation and can be cancelled
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Renseigner le mot de passe existant": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/settings/collective_access_section_test.dart:52:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/ky-solutions/projects/persos/statoo%205v5/mobile/test/features/settings/collective_access_section_test.dart line 52
+The test description was:
+  GES03/04 regeneration requires confirmation and can be cancelled
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: GES03/04 regeneration requires confirmation and can be cancelled [E]
+  Test failed. See exception logs above.
+  The test description was: GES03/04 regeneration requires confirmation and can be cancelled
+  
+00:00 +0 -1: ACC05 explicit verification and copy; password never displayed afterwards
+00:01 +1 -1: ACC03 hidden from non Admin
+00:01 +2 -1: ACC07 clipboard failure has no success; retry remains possible
+00:01 +3 -1: ACC07/08 failed storage stays in form and cancel preserves old access
+00:02 +4 -1: ACC10 layout 320.0 1.0 ThemeMode.light
+00:02 +5 -1: ACC10 layout 320.0 1.0 ThemeMode.dark
+00:02 +6 -1: ACC10 layout 320.0 1.3 ThemeMode.light
+00:02 +7 -1: ACC10 layout 320.0 1.3 ThemeMode.dark
+00:02 +8 -1: ACC10 layout 320.0 2.0 ThemeMode.light
+00:03 +9 -1: ACC10 layout 320.0 2.0 ThemeMode.dark
+00:03 +10 -1: ACC10 layout 393.0 1.0 ThemeMode.light
+00:03 +11 -1: ACC10 layout 393.0 1.0 ThemeMode.dark
+00:03 +12 -1: ACC10 layout 393.0 1.3 ThemeMode.light
+00:03 +13 -1: ACC10 layout 393.0 1.3 ThemeMode.dark
+00:03 +14 -1: ACC10 layout 393.0 2.0 ThemeMode.light
+00:03 +15 -1: ACC10 layout 393.0 2.0 ThemeMode.dark
+00:03 +16 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/ky-solutions/projects/persos/statoo 5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
