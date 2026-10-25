@@ -1,0 +1,82 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: MIG01 empty historical v6 with views opens as v8
+00:00 +1: MIG02 preserves all historical v6 data across groups and formats
+00:00 +2: MIG03 removing views must not cascade-delete participations
+00:00 +3: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+00:00 +4: MIG05 rejects null-team without losing original data
+Shell: error SqfliteFfiException(sqlite_error: 1299, , SqliteException(1299): while executing, NOT NULL constraint failed: sessions_new.team_id, constraint failed (code 1299)
+Shell:   Causing statement:             INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           , parameters: }) DatabaseException(SqliteException(1299): while executing, NOT NULL constraint failed: sessions_new.team_id, constraint failed (code 1299)
+Shell:   Causing statement:             INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           , parameters: ) sql '            INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           ' {details: {database: {path: /tmp/statoo-migration-test-VQWKZX/statoo.db, id: 1, readOnly: false, singleInstance: true}}} during open, closing...
+00:00 +5: MIG06 rejects orphan without losing original data
+Shell: error Bad state: Migration annulée : les données contiennent des références invalides. during open, closing...
+00:00 +5 -1: MIG06 rejects orphan without losing original data [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Instance of 'Future<Map<String, Object?>>'>
+     Which: threw StateError:<Bad state: Migration annulée : les données contiennent des références invalides.>
+            stack package:statoo/core/data/app_database.dart 164:11   AppDatabase._initDatabase.<fn>
+                  ===== asynchronous gap ===========================
+                  package:matcher                                     expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8   expectLater
+                  test/core/data/database_migration_test.dart 250:13  main.<fn>
+                  ===== asynchronous gap ===========================
+                  dart:async                                          _CustomZone.registerUnaryCallback
+                  test/core/data/database_migration_test.dart 249:22  main.<fn>
+
+            which is not an instance of 'Exception'
+
+  package:matcher                                     expectLater
+  package:flutter_test/src/widget_tester.dart 507:8   expectLater
+  test/core/data/database_migration_test.dart 250:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                          _CustomZone.registerUnaryCallback
+  test/core/data/database_migration_test.dart 249:22  main.<fn>
+
+00:00 +5 -1: MIG07 historical v7 still upgrades additively
+00:00 +6 -1: MIG08 reopening migrated v8 preserves data and schema
+00:01 +7 -1: MIG09 fresh installation still opens with foreign keys and views
+00:01 +8 -1: MIG10 preserves 50 players, 500 sessions and 5000 participations
+00:01 +9 -1: (tearDownAll)
+00:01 +9 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data

@@ -33,13 +33,22 @@ class AppDatabase {
       path,
       version: 8,
       onConfigure: (db) async {
-        await db.execute('PRAGMA foreign_keys = ON;');
+        // sqflite wraps onUpgrade in a transaction: this pragma must be set
+        // beforehand to avoid cascading away children when rebuilding sessions.
+        final version = await db.getVersion();
+        final rebuildsSessions = version > 0 && version < 7;
+        await db.execute(
+          'PRAGMA foreign_keys = ${rebuildsSessions ? 'OFF' : 'ON'};',
+        );
       },
       onCreate: (db, version) async {
         await _createSchema(db);
         await _createViews(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        // Views and tenant triggers must not refer to a temporarily absent table.
+        // Dropping them here is rolled back along with a failed migration.
+        await _dropViews(db);
         if (oldVersion < 4) {
           final columns = await db.rawQuery('PRAGMA table_info(sessions)');
           final hasTeamId = columns.any((c) => c['name'] == 'team_id');
@@ -103,7 +112,6 @@ class AppDatabase {
           await db.execute('ALTER TABLE participations_new RENAME TO participations;');
         }
         if (oldVersion < 7) {
-          await db.execute('PRAGMA foreign_keys = OFF;');
           await db.execute('''
             CREATE TABLE IF NOT EXISTS sessions_new (
               id TEXT PRIMARY KEY,
@@ -129,7 +137,7 @@ class AppDatabase {
             );
           ''');
           await db.execute('''
-            INSERT OR IGNORE INTO sessions_new (
+            INSERT INTO sessions_new (
               id, team_id, played_at, status, split_mode, session_type,
               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
               wins_a, wins_b, wins_c, draw_points, result,
@@ -145,15 +153,21 @@ class AppDatabase {
           ''');
           await db.execute('DROP TABLE sessions;');
           await db.execute('ALTER TABLE sessions_new RENAME TO sessions;');
-          await db.execute('PRAGMA foreign_keys = ON;');
         }
         if (oldVersion < 8) {
           await migrateTeamAppearance(db);
         }
-        await _dropViews(db);
         await _createViews(db);
+        if (oldVersion < 7 &&
+            (await db.rawQuery('PRAGMA foreign_key_check')).isNotEmpty) {
+          // Check before sqflite commits both the schema and user_version.
+          throw StateError(
+            'Migration annulée : les données contiennent des références invalides.',
+          );
+        }
       },
       onOpen: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON;');
         await _dropViews(db);
         await _createViews(db);
       },
