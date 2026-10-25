@@ -34,7 +34,11 @@ Les corrections et évolutions suivent désormais le TDD : scénarios et résult
 
 Le premier lot couvre les huit majeurs de l'audit UI/UX : [catalogue de scénarios](tdd-majeurs-ui-ux.md). Conserver la traçabilité entre identifiant du scénario, test, preuve RED et résultat GREEN. Toute nouvelle règle découverte reçoit son scénario avant implémentation.
 
-CLAUDE.md et GEMINI.md demandent une revue dédiée après implémentation avant commit. Pour un commit demandé, consulter la compétence .agents/skills/commit/SKILL.md. Aucun commit n'a été réalisé pour cet onboarding.
+### Revue de code — instruction utilisateur du 25 octobre 2026
+
+Après chaque correction ou évolution et ses vérifications, faire systématiquement un passage distinct de revue de code, même sans demande de commit. Examiner le diff du périmètre, les règles métier, l’intégrité, les permissions, les erreurs et la pertinence des tests ; consigner les constats et les limites dans le suivi du lot. Une suite verte ne remplace pas cette revue. Corriger les défauts bloquants en TDD et vérifier les corrections avant de conclure ou de commiter.
+
+Cette consigne est persistante dans `AGENTS.md` et complète les règles de revue de CLAUDE.md et GEMINI.md. Pour un commit demandé, consulter la compétence `.agents/skills/commit/SKILL.md` ; limiter le staging aux fichiers du périmètre validé et conserver les hooks.
 
 Les règles Windows sont dans .agents/rules/powershell_windows.md. Les consignes persistantes pour les agents sont dans `AGENTS.md` à la racine du dépôt.
 

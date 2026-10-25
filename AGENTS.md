@@ -18,6 +18,12 @@ Conserver les scénarios et les résultats observés dans le dépôt. Distinguer
 
 Voir aussi `docs/conventions.md` pour les conventions du projet.
 
+## Revue de code systématique — instruction utilisateur du 25 octobre 2026
+
+Après toute correction ou évolution, une fois l’implémentation et ses vérifications exécutées, réaliser systématiquement une revue de code, même si aucun commit n’est demandé. Cette revue est un passage distinct de l’implémentation et porte sur le diff du périmètre, les règles métier, l’intégrité des données, les permissions, les erreurs et la pertinence des tests.
+
+Consigner les constats et les limites de la revue dans le suivi du lot. Corriger les défauts bloquants selon le cycle TDD, puis vérifier les corrections avant de conclure. Ne commiter qu’après une revue sans défaut bloquant et les contrôles pertinents réussis ; ne pas inclure les travaux hors périmètre. Une suite verte ne remplace pas la revue de code.
+
 ## Design — mémoire persistante, instruction utilisateur du 15 octobre 2026
 
 Avant toute création, refonte ou modification d’un écran, **lire `docs/design-system.md`**, puis examiner le thème actuel, les composants partagés et au moins deux écrans de référence du même parcours. Cette étape s’applique aussi aux dialogues, feuilles modales et états secondaires.
