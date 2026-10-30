@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/occurrence_registry.dart';
 import '../../finance/application/finance_providers.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
@@ -93,6 +94,16 @@ final FutureProvider<Session?> activeDraftSessionProvider =
 
 // Inferred Riverpod provider family type.
 // ignore: specify_nonobvious_property_types
+final nextSessionReferenceProvider = FutureProvider.autoDispose
+    .family<String, DateTime>((ref, date) async {
+      final teamId = ref.watch(activeTeamIdProvider);
+      if (teamId == null) return '';
+      final db = await ref.watch(sharedServiceProvider).database.database;
+      return await nextFreeOccurrenceReference(db, teamId, date);
+    });
+
+// Inferred Riverpod provider family type.
+// ignore: specify_nonobvious_property_types
 final sessionDetailProvider = FutureProvider.autoDispose
     .family<Session?, String>((ref, id) {
       final teamId = ref.watch(activeTeamIdProvider);
@@ -165,7 +176,8 @@ class SessionsController {
       ..invalidate(playerOfTheMonthProvider)
       ..invalidate(groupTotalsProvider)
       ..invalidate(playersListProvider)
-      ..invalidate(deletablePlayerIdsProvider);
+      ..invalidate(deletablePlayerIdsProvider)
+      ..invalidate(nextSessionReferenceProvider);
 
     if (teamId != null) {
       _ref.invalidate(teamCountsProvider(teamId));

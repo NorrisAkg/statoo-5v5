@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../../../core/data/occurrence_registry.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
@@ -91,9 +92,10 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
       initialDate: DateTime.now(),
     );
     if (date == null || !mounted) return;
-    final reference = TextEditingController(
-      text: '${date.toIso8601String().substring(0, 10)}-1',
-    );
+    final db = await container.read(sharedServiceProvider).database.database;
+    final autoRef = await nextFreeOccurrenceReference(db, group, date);
+    if (!mounted) return;
+    final reference = TextEditingController(text: autoRef);
     final accepted = await showAppFormDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
