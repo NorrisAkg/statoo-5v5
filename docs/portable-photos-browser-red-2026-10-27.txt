@@ -1,0 +1,27 @@
+TAP version 13
+# Subtest: F15 real web restores an embedded photo and renders it after reload
+not ok 1 - F15 real web restores an embedded photo and renders it after reload
+  ---
+  duration_ms: 28797.901443
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/portable-photos-flutter.e2e.mjs:22:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    locator.click: Timeout 20000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('button', { name: 'Joueurs', exact: true })[22m
+    
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/portable-photos-flutter.e2e.mjs:75:66)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 30125.049667

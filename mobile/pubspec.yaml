@@ -47,6 +47,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.5.5
+  image: ^4.10.1
   image_picker: ^1.2.3
   share_plus: ^13.3.0
   file_picker: ^13.1.0

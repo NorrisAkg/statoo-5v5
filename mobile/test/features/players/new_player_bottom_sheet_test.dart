@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:remixicon/remixicon.dart';
@@ -109,6 +113,79 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
   });
+
+  for (final outcome in ['valid', 'cancel', 'invalid']) {
+    testWidgets(
+      'photo picker preserves input and stores portable data: $outcome',
+      (tester) async {
+        final directory = (await tester.runAsync(
+          () => Directory.systemTemp.createTemp('statoo-picker-'),
+        ))!;
+        final file = (await tester.runAsync(
+          () => File('${directory.path}/photo.png').writeAsBytes(
+            base64Decode(
+              'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg==',
+            ),
+          ),
+        ))!;
+        addTearDown(() => directory.delete(recursive: true));
+        const channel = MethodChannel('plugins.flutter.io/image_picker');
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          channel,
+          (_) async => outcome == 'cancel' ? null : file.path,
+        );
+        addTearDown(
+          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            channel,
+            null,
+          ),
+        );
+        if (outcome == 'invalid') {
+          await tester.runAsync(() => file.writeAsString('invalid'));
+        }
+        final repo = _MockPlayersRepository();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
+              playersRepositoryProvider.overrideWithValue(repo),
+              activeTeamIdProvider.overrideWith(
+                () => ActiveTeamIdNotifier(initialValue: 'team_1'),
+              ),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.lightTheme,
+              home: const Scaffold(body: NewPlayerBottomSheet()),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).first, 'Photo Player');
+        await tester.tap(find.byType(CircleAvatar));
+        for (var i = 0; i < 30; i++) {
+          await tester.pump();
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 20)),
+          );
+        }
+        await tester.pumpAndSettle();
+        expect(find.text('Photo Player'), findsOneWidget);
+        if (outcome == 'invalid') {
+          expect(find.textContaining('Photo non ajoutée'), findsOneWidget);
+        }
+        await tester.tap(find.byIcon(Remix.add_line));
+        await tester.pumpAndSettle();
+        final saved = (await repo.getPlayers()).single;
+        expect(
+          saved.avatarUrl,
+          outcome == 'valid'
+              ? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/iZk9HQAAAABJRU5ErkJggg=='
+              : isNull,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   group('NewPlayerBottomSheet', () {
     for (final width in [320.0, 393.0]) {

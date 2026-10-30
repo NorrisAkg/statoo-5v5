@@ -1,0 +1,61 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: selection uses actual image type and embedded bytes
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: valid JPEG is portable
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: valid WEBP is portable
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: extreme aspect ratio is rejected before decoding
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: too many bytes rejected before decoding
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: non-image is rejected
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: misleading MIME is rejected
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: excessive dimensions rejected
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.0 dark=false
+00:02 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: local PNG export survives loss of source and another database
+00:02 +10: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.0 dark=true
+00:02 +11: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.0 dark=true
+00:02 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: legacy v2 round trip null
+00:02 +13: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.3 dark=false
+00:02 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: legacy v1 round trip data:image
+00:02 +15: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.3 dark=true
+00:02 +16: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.3 dark=true
+00:02 +17: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 1.3 dark=true
+00:02 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: legacy v2 round trip https://ex
+00:03 +19: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 2.0 dark=false
+00:03 +20: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 2.0 dark=false
+00:03 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: export refuses corrupt local photo without mutation
+00:03 +22: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 2.0 dark=true
+00:03 +23: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 2.0 dark=true
+00:03 +24: /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: avatar fits 320.0 2.0 dark=true
+00:03 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +30: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +31: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +32: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:03 +33: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:04 +34: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:04 +35: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:04 +36: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:04 +37: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:05 +38: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: photo picker preserves input and stores portable data: valid
+00:09 +39: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: image budget rejects a large collection before SQL changes
+00:11 +40: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: image budget rejects a large collection before SQL changes
+00:12 +41: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: image budget rejects a large collection before SQL changes
+00:13 +42: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+00:13 +43: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+00:13 +44: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+00:13 +45: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark true
+00:13 +46: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.3 dark false
+00:13 +47: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.3 dark true
+00:13 +48: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 2.0 dark false
+00:14 +49: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 2.0 dark true
+00:14 +50: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 1.0 dark false
+00:14 +51: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 1.0 dark true
+00:14 +52: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 1.3 dark false
+00:14 +53: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 1.3 dark true
+00:15 +54: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 2.0 dark false
+00:15 +55: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 2.0 dark true
+00:15 +56: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard keeps creation controls visible and can be dismissed without losing input
+00:16 +57: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+00:16 +58: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet shows inline error message when attempting to add duplicate player name
+00:16 +59: All tests passed!

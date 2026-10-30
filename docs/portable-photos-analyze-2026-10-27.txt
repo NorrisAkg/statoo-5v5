@@ -1,0 +1,7 @@
+Analyzing 14 items...                                           
+
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/settings/presentation/settings_screen.dart:27:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/settings/presentation/settings_screen.dart:28:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/settings/presentation/settings_screen.dart:225:35 • curly_braces_in_flow_control_structures
+
+3 issues found. (ran in 6.4s)

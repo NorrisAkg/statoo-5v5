@@ -1,0 +1,22 @@
+- group: Application
+- text: "Restauration réussie : 1 joueurs et 0 séances restaurés."
+- heading "Mon groupe Mon groupe" [level=2]
+- button "Réglages"
+- group:
+  - text: Aucune séance pour le moment Créez votre première séance pour commencer à suivre vos statistiques !
+  - button "Nouvelle séance"
+  - button "Joueur du mois En attente des séances · Aucun MVP désigné"
+  - button "Classement Voir tout"
+  - button "Joueurs -"
+  - button "Séances 0"
+  - button "Stats -"
+  - button "Finances du groupe"
+  - button "Groupe partagé et synchronisation"
+  - button "Aucune sauvegarde cloud Sauvegarder"
+- text: "Restauration réussie : 1 joueurs et 0 séances restaurés."
+- group:
+  - button "Accueil"
+  - button "Séances"
+  - button "Joueurs"
+  - button "Classement"
+  - button "Stats"

@@ -1,0 +1,18 @@
+- group: Application
+- heading "Étape 1 sur 2 · Votre équipe" [level=2]
+- group:
+  - text: Créez votre équipe Donnez un nom et une identité à votre groupe d'amis pour lancer vos séances et suivre vos classements. Nom de l'équipe ou du groupe *
+  - 'textbox "ex: FC Urban, Les Galactiques..."'
+  - text: Nom court (facultatif)
+  - 'textbox "Nom court (facultatif) Ex. : LI"'
+  - text: 30 caractères restants Initiales ou surnom ; sinon, le nom complet sera utilisé. Format de jeu habituel
+  - button "4v4"
+  - button "5v5"
+  - button "6v6"
+  - button "7v7"
+  - text: Complexe ou terrain habituel (facultatif)
+  - 'textbox "ex: Urban Soccer, Le Five..."'
+  - button "Continuer vers l'effectif"
+  - button "Rejoindre un groupe partagé"
+  - button "J'ai déjà une sauvegarde Statoo"
+- text: "Erreur lors de la restauration : FormatException: Photo illisible : choisissez une autre image."

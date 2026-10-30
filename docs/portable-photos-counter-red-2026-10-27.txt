@@ -1,0 +1,16 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: merge does not warn about a discarded photo of a reused player
+00:00 +0 -1: merge does not warn about a discarded photo of a reused player [E]
+  Expected: <0>
+    Actual: <1>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/settings/portable_photos_test.dart 171:5  main.<fn>
+  
+00:00 +0 -1: (tearDownAll)
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: merge does not warn about a discarded photo of a reused player

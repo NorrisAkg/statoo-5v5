@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:remixicon/remixicon.dart';
 
+import '../../../core/media/player_photo.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../shared/application/shared_providers.dart';
@@ -25,7 +25,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _nameFocusNode = FocusNode();
-  XFile? _imageFile;
+  String? _photo;
   Uint8List? _imageBytes;
   final ImagePicker _picker = ImagePicker();
   String? _nameError;
@@ -34,14 +34,24 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
 
   Future<void> _pickImage() async {
     if (!ref.read(canWriteProvider('members'))) return;
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      final bytes = await image.readAsBytes();
-      if (!mounted) return;
-      setState(() {
-        _imageFile = image;
-        _imageBytes = bytes;
-      });
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        if (await image.length() > PlayerPhoto.maxBytes) {
+          throw const FormatException(
+            'Photo trop volumineuse : maximum 2 Mio.',
+          );
+        }
+        final bytes = await image.readAsBytes();
+        final photo = await PlayerPhoto.encode(bytes);
+        if (!mounted) return;
+        setState(() {
+          _photo = photo;
+          _imageBytes = bytes;
+        });
+      }
+    } on Object catch (error) {
+      if (mounted) setState(() => _nameError = 'Photo non ajoutée : $error');
     }
   }
 
@@ -49,7 +59,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
     _nameController.clear();
     _nicknameController.clear();
     setState(() {
-      _imageFile = null;
+      _photo = null;
       _imageBytes = null;
       _nameError = null;
     });
@@ -87,9 +97,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
             nickname: _nicknameController.text.trim().isNotEmpty
                 ? _nicknameController.text.trim()
                 : null,
-            avatarUrl: kIsWeb && _imageBytes != null
-                ? 'data:${_imageFile?.mimeType ?? "image/jpeg"};base64,${base64Encode(_imageBytes!)}'
-                : _imageFile?.path,
+            avatarUrl: _photo,
           );
 
       if (mounted) {
@@ -186,7 +194,7 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                   backgroundImage: _imageBytes != null
                       ? MemoryImage(_imageBytes!)
                       : null,
-                  child: _imageFile == null
+                  child: _imageBytes == null
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

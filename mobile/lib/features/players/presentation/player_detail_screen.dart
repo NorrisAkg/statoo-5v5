@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/player_avatar.dart';
 import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../application/players_provider.dart';
@@ -159,7 +159,7 @@ class PlayerDetailScreen extends ConsumerWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InitialAvatar(initial: initials, baseColor: context.colors.primary500, size: 76),
+        PlayerAvatar(source: player.avatarUrl, initial: initials, baseColor: context.colors.primary500, size: 76),
         const SizedBox(width: 20),
         Expanded(
           child: Column(

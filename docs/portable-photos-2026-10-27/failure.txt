@@ -1,0 +1,16 @@
+- group: Application
+- heading "Joueurs" [level=2]
+- button "Changer de groupe"
+- text: 1 actifs · QA photos portables
+- group:
+  - textbox "Rechercher un joueur…"
+  - text: ACTIFS (1)
+  - group "Alexandre Photo portable":
+    - button "Supprimer ce joueur"
+- button
+- group:
+  - button "Accueil"
+  - button "Séances"
+  - button "Joueurs"
+  - button "Classement"
+  - button "Stats"

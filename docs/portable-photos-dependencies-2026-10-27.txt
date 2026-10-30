@@ -1,0 +1,7 @@
+Resolving dependencies...
+Downloading packages...
+  image 4.10.1 (from transitive dependency to direct dependency)
+  vector_math 2.4.0 (2.4.3 available)
+Changed 1 dependency!
+1 package has newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.

@@ -1,0 +1,5 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart
+00:00 +0: photo picker preserves input and stores portable data: valid
+00:04 +1: photo picker preserves input and stores portable data: cancel
+00:05 +2: photo picker preserves input and stores portable data: invalid
+00:07 +3: All tests passed!

@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: F15 real web restores an embedded photo and renders it after reload
+ok 1 - F15 real web restores an embedded photo and renders it after reload
+  ---
+  duration_ms: 19346.992534
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 20182.661552

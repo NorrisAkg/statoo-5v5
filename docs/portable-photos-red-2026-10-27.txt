@@ -1,0 +1,146 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: local PNG export survives loss of source and another database
+00:00 +0 -1: local PNG export survives loss of source and another database [E]
+  Expected: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg=='
+    Actual: '/tmp/statoo-photo-STEZJK/portrait.png'
+     Which: is different.
+            Expected: data:image ...
+              Actual: /tmp/stato ...
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/portable_photos_test.dart 42:5  main.<fn>
+  
+00:00 +0 -1: legacy v1 round trip null
+00:00 +1 -1: legacy v2 round trip null
+00:00 +2 -1: legacy v1 round trip data:image
+00:00 +3 -1: legacy v2 round trip data:image
+00:00 +4 -1: legacy v1 round trip https://ex
+00:00 +5 -1: legacy v2 round trip https://ex
+00:00 +6 -1: export refuses missing local photo without mutation
+00:00 +6 -2: export refuses missing local photo without mutation [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<BackupPayload>'>
+     Which: emitted <Instance of 'BackupPayload'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 67:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 66:7   main.<fn>
+  
+00:00 +6 -2: export refuses corrupt local photo without mutation
+00:00 +6 -3: export refuses corrupt local photo without mutation [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<BackupPayload>'>
+     Which: emitted <Instance of 'BackupPayload'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 67:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 64:30  main.<fn>
+  
+00:00 +6 -3: export refuses large local photo without mutation
+00:00 +6 -4: export refuses large local photo without mutation [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<BackupPayload>'>
+     Which: emitted <Instance of 'BackupPayload'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 67:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 65:28  main.<fn>
+  
+00:00 +6 -4: invalid embedded photo rejects restore atomically data:image/png;base64,???
+00:00 +6 -5: invalid embedded photo rejects restore atomically data:image/png;base64,??? [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 74:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 73:7   main.<fn>
+  
+00:00 +6 -5: invalid embedded photo rejects restore atomically data:image/png;base64,SGVsbG8=
+00:00 +6 -6: invalid embedded photo rejects restore atomically data:image/png;base64,SGVsbG8= [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 74:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 73:7   main.<fn>
+  
+00:00 +6 -6: invalid embedded photo rejects restore atomically data:image/svg+xml;base64,PHN2Zy8+
+00:00 +6 -7: invalid embedded photo rejects restore atomically data:image/svg+xml;base64,PHN2Zy8+ [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/portable_photos_test.dart 74:13  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/portable_photos_test.dart 73:7   main.<fn>
+  
+00:00 +6 -7: legacy path is not imported /private/photo.png
+00:00 +6 -8: legacy path is not imported /private/photo.png [E]
+  Expected: null
+    Actual: '/private/photo.png'
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/portable_photos_test.dart 81:7  main.<fn>
+  
+00:00 +6 -8: legacy path is not imported file:///private/photo.png
+00:00 +6 -9: legacy path is not imported file:///private/photo.png [E]
+  Expected: null
+    Actual: 'file:///private/photo.png'
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/portable_photos_test.dart 81:7  main.<fn>
+  
+00:00 +6 -9: legacy path is not imported blob:old-browser
+00:00 +6 -10: legacy path is not imported blob:old-browser [E]
+  Expected: null
+    Actual: 'blob:old-browser'
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/portable_photos_test.dart 81:7  main.<fn>
+  
+00:00 +6 -10: legacy path is not imported C:\old\photo.png
+00:01 +6 -11: legacy path is not imported C:\old\photo.png [E]
+  Expected: null
+    Actual: 'C:\\old\\photo.png'
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/portable_photos_test.dart 81:7  main.<fn>
+  
+00:01 +6 -11: merge keeps existing photo and imports new one
+00:01 +7 -11: (tearDownAll)
+00:01 +7 -11: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: export refuses corrupt local photo without mutation
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: export refuses large local photo without mutation
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: export refuses missing local photo without mutation
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/portable_photos_test.dart: invalid embedded photo rejects restore atomically data:image/png;base64,???
+  ... and 7 more

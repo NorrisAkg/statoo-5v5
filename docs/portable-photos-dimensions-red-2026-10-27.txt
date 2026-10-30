@@ -1,0 +1,23 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart
+00:00 +0: extreme aspect ratio is rejected before decoding
+Shell: [ERROR:flutter/lib/ui/painting/image_decoder_skia.cc(39)] Could not resize to empty dimensions.
+00:00 +0 -1: extreme aspect ratio is rejected before decoding [E]
+  Expected: throws <Instance of 'FormatException'> with `dimensions`: contains '4096'
+    Actual: <Instance of 'Future<String>'>
+     Which: threw FormatException:<FormatException: Photo illisible : choisissez une autre image.>
+            stack package:statoo/core/media/player_photo.dart 67:7   PlayerPhoto.encode
+                  ===== asynchronous gap ===========================
+                  package:matcher                                    expectLater
+                  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+                  test/core/media/player_photo_test.dart 29:11       main.<fn>
+                  
+            which has `dimensions` with value 'Photo illisible : choisissez une autre image.' which does not contain '4096'
+  
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test/core/media/player_photo_test.dart 29:11       main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/core/media/player_photo_test.dart: extreme aspect ratio is rejected before decoding

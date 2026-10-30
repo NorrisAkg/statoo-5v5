@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/app_bar_subtitle.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/player_avatar.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
 import '../../shared/application/shared_providers.dart';
@@ -271,7 +272,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
           ),
           child: Row(
             children: [
-              InitialAvatar(initial: initial, baseColor: color, size: 48),
+              PlayerAvatar(source: player.avatarUrl, initial: initial, baseColor: color, size: 48),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
