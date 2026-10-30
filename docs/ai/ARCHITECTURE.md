@@ -106,6 +106,22 @@ mobile/lib/
 3. **Pendant le match** : Saisie des scores, attribution des buts aux buteurs, passes décisives, cartons.
 4. **Clôture** : Validation par `SessionCloseRules` (contrôles stricts de cohérence), bascule du statut à `CLOSED`, calcul des points de classement, suppression du pointeur actif dans `meta`, invalidation de tous les providers dérivés (`rankingProviders`, `statsProviders`).
 
-### 3.3 Synchronisation Web & Mobile (Parité)
-- Le pont de synchronisation supporte l'export/import du wire format sport et finance compatible entre SQLite local et l'API distante.
-- En mode hors-ligne, les brouillons sont conservés localement avec identifiant d'opération idempotent pour rejeu automatique dès reconnexion.
+### 3.3 Synchronisation Web & Mobile (Outbox & Retry Hors-Ligne)
+- **Format filaire (wire format)** : Structure JSON normalisée (`sport` et `finance`) avec `occurrence_id`, `revision`, `operation_id` et payload authentifié via Bearer token.
+- **File Outbox locale** : Toute mutation initiée hors-ligne ou en cours de séance est stockée dans la file d'attente locale avec statut `pending`.
+- **Politique de traitement et d'erreurs (Règles F05 / QUE01-QUE10)** :
+  - **Erreurs réseau transitoires (401, 408, 429, 5xx, timeout, coupure réseau)** : Conservation du statut `pending`, mémorisation de l'erreur dans `syncWarning`, arrêt de la passe sans boucle infinie. La reprise retransmet exactement le même payload avec le même `operation_id` (idempotence stricte).
+  - **Refus définitifs (400, 403, 404, 409 générique, 410, 422)** : L'événement passe au statut `rejected` avec code et message conservés. Le traitement des documents indépendants continue (isolation des échecs). Une nouvelle action explicite de l'utilisateur est requise pour corriger et émettre une nouvelle opération.
+  - **Conflits de séance active (409 `active_session_conflict`)** : Statut `blocked` spécifique, conservé sans rejeu automatique afin d'empêcher l'écrasement silencieux d'un match initié sur un autre appareil.
+  - **Isolation multi-tenant et multi-auteurs** : Les opérations sont partitionnées par `team_id` et auteur ; un refus sur l'auteur A n'interrompt pas le flux de l'auteur B.
+  - **Détails complets** : Se référer à [`docs/outbox-sync.md`](file:///home/norris/my-projects/statoo-5v5/docs/outbox-sync.md).
+
+### 3.4 Cycle de vie et Résilience SQLite
+- **Mise en sommeil et fermeture propre (`AppLifecycleObserver`)** :
+  - L'observateur `WidgetsBindingObserver` dans `main.dart` écoute `didChangeAppLifecycleState`.
+  - Lors des passages en `AppLifecycleState.paused` ou `AppLifecycleState.detached`, la méthode `AppDatabase.instance.handleLifecycle(state)` libère les verrous et ferme la connexion SQLite (`close()`), prévenant tout verrou persistant ou corruption de mémoire partagée.
+  - Au réveil (`resumed` / accès transparent via le getter `AppDatabase.instance.database`), la connexion SQLite est réouverte à chaud à la demande de façon transparente.
+- **Auto-guérison et idempotence du schéma (`_ensureViews`)** :
+  - Au démarrage ou à la réouverture, `AppDatabase._ensureViews()` inspecte directement `sqlite_master` pour vérifier la présence des 7 vues SQL d'agrégation (`v_standings`, `v_top_scorers`, etc.) et des triggers d'intégrité multi-tenant.
+  - En cas d'absence ou d'incohérence, les vues manquantes sont recréées automatiquement de façon idempotente sans destruction aveugle du schéma ni réinitialisation de `meta`.
+
