@@ -11,6 +11,19 @@ class AppDatabase {
 
   static final AppDatabase instance = AppDatabase._internal();
 
+  @visibleForTesting
+  static const int schemaVersion = 8;
+
+  static const _requiredViews = [
+    'v_standings_per_match',
+    'v_standings',
+    'v_player_match_results',
+    'v_top_scorers',
+    'v_top_assists',
+    'v_top_cards',
+    'v_group_totals',
+  ];
+
   Database? _database;
 
   Future<Database> get database async {
@@ -168,10 +181,32 @@ class AppDatabase {
       },
       onOpen: (db) async {
         await db.execute('PRAGMA foreign_keys = ON;');
-        await _dropViews(db);
-        await _createViews(db);
+        await _ensureViews(db);
       },
     );
+  }
+
+  Future<void> _ensureViews(Database db) async {
+    final existingViewsResult = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='view'",
+    );
+    final existingViews = existingViewsResult
+        .map((r) => r['name']! as String)
+        .toSet();
+    final missingView = _requiredViews.any((v) => !existingViews.contains(v));
+
+    final existingTriggersResult = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='trigger'",
+    );
+    final existingTriggers = existingTriggersResult
+        .map((r) => r['name']! as String)
+        .toSet();
+    final missingTrigger = _tenantTriggers.any((t) => !existingTriggers.contains(t));
+
+    if (missingView || missingTrigger) {
+      await _dropViews(db);
+      await _createViews(db);
+    }
   }
 
   @visibleForTesting
