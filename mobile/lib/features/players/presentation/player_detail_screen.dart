@@ -6,6 +6,7 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../shared/application/shared_providers.dart';
+import '../../team/application/team_provider.dart';
 import '../application/players_provider.dart';
 import '../domain/player.dart';
 import '../domain/player_detail_data.dart';
@@ -27,6 +28,7 @@ class PlayerDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(activeTeamProvider);
     final writable = ref.watch(canWriteProvider('members'));
     final playerAsync = ref.watch(playerDetailProvider(playerId));
     final statsAsync = ref.watch(playerStatsProvider(playerId));

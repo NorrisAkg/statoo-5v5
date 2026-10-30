@@ -41,6 +41,9 @@ Future<void> main() async {
         hasTeamProvider.overrideWith(
           () => HasTeamNotifier(initialValue: hasTeam),
         ),
+        activeTeamIdProvider.overrideWith(
+          () => ActiveTeamIdNotifier(initialValue: team?.id),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -52,15 +55,23 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shared = ref.read(sharedServiceProvider);
-    shared.onChanged = () {
-      ref.read(sharedStatusProvider.notifier).refresh();
-      ref.invalidate(allSessionsProvider); ref.invalidate(activeSessionIdProvider);
-      ref.invalidate(playersListProvider); ref.invalidate(sessionDetailProvider); ref.invalidate(sessionParticipantsProvider);
-      ref.invalidate(standingsProvider); ref.invalidate(standingsPerMatchProvider);
-      ref.invalidate(topScorersProvider); ref.invalidate(topAssistsProvider); ref.invalidate(topCardsProvider);
-      ref.invalidate(monthlyMvpRankingProvider); ref.invalidate(groupTotalsProvider);
-      ref.invalidate(financialPointsProvider); ref.invalidate(financialTotalsProvider);
+    ref.read(sharedServiceProvider).onChanged = () {
+      ref
+        ..read(sharedStatusProvider.notifier).refresh()
+        ..invalidate(allSessionsProvider)
+        ..invalidate(activeSessionIdProvider)
+        ..invalidate(playersListProvider)
+        ..invalidate(sessionDetailProvider)
+        ..invalidate(sessionParticipantsProvider)
+        ..invalidate(standingsProvider)
+        ..invalidate(standingsPerMatchProvider)
+        ..invalidate(topScorersProvider)
+        ..invalidate(topAssistsProvider)
+        ..invalidate(topCardsProvider)
+        ..invalidate(monthlyMvpRankingProvider)
+        ..invalidate(groupTotalsProvider)
+        ..invalidate(financialPointsProvider)
+        ..invalidate(financialTotalsProvider);
     };
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeModeProvider);
