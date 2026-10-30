@@ -2,6 +2,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import secrets
 import threading
 import time
@@ -11,10 +12,11 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-from pydantic import BaseModel, Field, StrictInt, field_validator
+from pydantic import BaseModel, Field, StrictInt, ValidationError, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -22,11 +24,13 @@ from sqlalchemy.exc import IntegrityError
 from .finance import Point, totals, validate_point
 from .config import load_environment
 from .models import Base, Group, Token, RegistrationOperation, database
+from .portal import PortalFiles
 from .security import password_hash, password_matches, token_digest
 
 ROLES = ["ADMIN", "PDT", "VP", "TR", "TGA", "SG", "SGA", "CENSOR", "MEMBER"]
 SINGULAR = set(ROLES) - {"MEMBER"}
 AUTHORS = {"sport": {"ADMIN", "PDT", "VP", "SG", "SGA"}, "finance": {"TR", "TGA"}}
+VALIDATION_MESSAGE = "Les données saisies sont invalides. Vérifiez les champs requis et leur format."
 
 
 class SharedPasswordCheck(BaseModel):
@@ -37,6 +41,14 @@ class Credentials(BaseModel):
     group_id: str = Field(min_length=1, max_length=100)
     username: str = Field(min_length=1, max_length=100)
     password: str = Field(min_length=8, max_length=200)
+
+    @field_validator('username')
+    @classmethod
+    def non_blank_username(cls, value):
+        if not value.strip():
+            raise ValueError('Identifiant de connexion requis')
+        # Keep the original value for historical registration fingerprints.
+        return value
 
 
 class Registration(Credentials):
@@ -53,12 +65,26 @@ class Registration(Credentials):
     shared_password: str = Field(min_length=8, max_length=200)
     members: list[dict] = Field(default_factory=list, max_length=1000)
 
+    @field_validator('shared_username')
+    @classmethod
+    def non_blank_shared_username(cls, value):
+        if not value.strip():
+            raise ValueError('Identifiant collectif requis')
+        return value
+
 
 class AccountInput(BaseModel):
     username: str = Field(min_length=1, max_length=100)
     password: str = Field(min_length=8, max_length=200)
     member_id: str
     roles: list[str]
+
+    @field_validator('username')
+    @classmethod
+    def non_blank_username(cls, value):
+        if not value.strip():
+            raise ValueError('Identifiant de connexion requis')
+        return value
 
 
 class RoleInput(BaseModel):
@@ -170,6 +196,10 @@ def create_app(url: str | None = None):
             engine.dispose()
 
     app = FastAPI(title="Statoo", version="0.1.0", lifespan=lifespan)
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(_request: Request, _error: RequestValidationError):
+        return JSONResponse(status_code=422, content={"detail": VALIDATION_MESSAGE})
     @app.get("/portal/config.json")
     def portal_config():
         # Explicit public allowlist: never serialize the server environment.
@@ -177,7 +207,7 @@ def create_app(url: str | None = None):
 
     portal = Path(__file__).resolve().parents[2] / "web"
     if portal.is_dir():
-        app.mount("/portal", StaticFiles(directory=portal, html=True), name="portal")
+        app.mount("/portal", PortalFiles(directory=portal, html=True), name="portal")
     origins = [origin.strip() for origin in os.getenv("CORS_ORIGINS", "").split(",") if origin.strip()]
     if os.getenv("RENDER") == "true" and os.getenv("RENDER_GIT_BRANCH") == "staging":
         origins.extend(["http://127.0.0.1:18085", "http://localhost:18085",
@@ -263,7 +293,7 @@ def create_app(url: str | None = None):
         previous = replay()
         if previous:
             return previous
-        if body.username.casefold() == body.shared_username.casefold():
+        if body.username.strip().casefold() == body.shared_username.strip().casefold():
             fail(422, "Identifiants individuels et collectifs distincts requis")
         ids = [m.get("id") for m in body.members]
         if any(not isinstance(x, str) or not x.strip() or len(x) > 100 for x in ids):
@@ -542,6 +572,8 @@ def create_app(url: str | None = None):
                 projected = totals(other_points + [body.payload], state["opening"])
                 if any(v["penalty_debt"] < 0 for v in projected["members"].values()):
                     raise ValueError("Le règlement dépasse les pénalités dues ; aucun crédit de pénalité autorisé")
+            except ValidationError:
+                fail(422, VALIDATION_MESSAGE)
             except ValueError as exc:
                 fail(422, str(exc))
         else:
@@ -672,22 +704,56 @@ def validate_sport(payload, known, group_id, minimum=6):
     parts = payload.get("participations", [])
     if not isinstance(session, dict) or not isinstance(parts, list) or len(parts) > 1000 or any(not isinstance(p, dict) for p in parts):
         fail(422, "Séance ou participants invalides")
-    if not session.get("id") or session.get("team_id") != group_id or session.get("status") not in {"DRAFT", "CLOSED", "CANCELLED"}:
+    def identifier(value):
+        return isinstance(value, str) and bool(value.strip())
+
+    if not identifier(session.get('id')) or session.get("team_id") != group_id or session.get("status") not in ("DRAFT", "CLOSED", "CANCELLED"):
         fail(422, "Séance invalide")
+    played_at = session.get('played_at')
+    if not isinstance(played_at, str) or not re.fullmatch(
+        r'\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})?)?', played_at
+    ):
+        fail(422, 'Date de séance invalide')
+    try:
+        datetime.fromisoformat(played_at)
+    except ValueError:
+        fail(422, 'Date de séance invalide')
+    kind = session.get('session_type', 'CLASSIC_2')
+    if kind not in ('CLASSIC_2', 'TOURNAMENT_3'):
+        fail(422, 'Format de séance invalide')
+    tournament = kind == 'TOURNAMENT_3'
+    teams = ('A', 'B', 'C') if tournament else ('A', 'B')
+    allowed = ('A', 'B', 'C', 'DRAW_AB', 'DRAW_BC', 'DRAW_AC', 'DRAW_ALL') if tournament else ('A', 'B', 'DRAW')
+    if session.get('result') is not None and session['result'] not in allowed:
+        fail(422, 'Résultat invalide')
+    if session.get('split_mode') not in (None, 'RANDOM', 'RANDOM_ADJUSTED', 'MANUAL'):
+        fail(422, 'Mode de répartition invalide')
+    for flag in ('allow_uneven_teams', 'is_ranked'):
+        if flag in session and (type(session[flag]) is not int or session[flag] not in (0, 1)):
+            fail(422, 'Option de séance invalide')
+    for field in ('score_a', 'score_b', 'score_c', 'wins_a', 'wins_b', 'wins_c',
+                  'draw_points', 'unassigned_goals_a', 'unassigned_goals_b', 'unassigned_goals_c'):
+        value = session.get(field, 0)
+        if field.startswith('score_') and value is None:
+            continue
+        if type(value) is not int or value < 0:
+            fail(422, 'Chiffres de séance invalides')
     if 'is_active' in payload and type(payload['is_active']) is not bool:
         fail(422, 'État de séance actif invalide')
     ids = [p.get("player_id") for p in parts]
-    if len(ids) != len(set(ids)) or not set(ids).issubset(known):
+    participation_ids = [p.get('id') for p in parts]
+    if (any(not identifier(value) for value in ids + participation_ids)
+            or len(participation_ids) != len(set(participation_ids))
+            or len(ids) != len(set(ids)) or not set(ids).issubset(known)):
         fail(422, "Participants inconnus ou en double")
     for part in parts:
-        if part.get("session_id") != session["id"] or part.get("team") not in {"A", "B", "C"}:
+        if part.get("session_id") != session["id"] or part.get("team") not in teams:
             fail(422, "Participation invalide")
         if any(type(part.get(k, 0)) is not int or part.get(k, 0) < 0 for k in ("goals", "assists", "yellow_cards", "red_cards")):
             fail(422, "Statistiques invalides")
     if payload.get('is_active') and session['status'] == 'DRAFT':
         if len(parts) < minimum:
             fail(422, f'Sélectionnez au minimum {minimum} joueurs pour débuter la séance')
-        teams = ['A', 'B', 'C'] if session.get('session_type') == 'TOURNAMENT_3' else ['A', 'B']
         if any(p['team'] not in teams for p in parts):
             fail(422, 'Tous les présents doivent être affectés à une équipe valide')
         counts = [sum(p['team'] == team for p in parts) for team in teams]
@@ -696,18 +762,23 @@ def validate_sport(payload, known, group_id, minimum=6):
     if session["status"] == "CLOSED":
         if len(parts) < minimum:
             fail(422, f"Sélectionnez au minimum {minimum} joueurs pour clôturer la séance")
-        tournament = session.get("session_type") == "TOURNAMENT_3"
-        allowed = {"A", "B", "C", "DRAW_AB", "DRAW_BC", "DRAW_AC", "DRAW_ALL"} if tournament else {"A", "B", "DRAW"}
         if session.get("result") not in allowed:
             fail(422, "Résultat requis")
-        if not tournament:
+        if tournament:
+            wins = [session.get('wins_' + team.lower(), 0) for team in teams]
+            if max(wins) == 0:
+                fail(422, 'Victoires requises pour clôturer le tournoi')
+            leaders = ''.join(team for team, count in zip(teams, wins) if count == max(wins))
+            expected = leaders if len(leaders) == 1 else 'DRAW_ALL' if len(leaders) == 3 else 'DRAW_' + leaders
+            if session['result'] != expected:
+                fail(422, 'Résultat du tournoi incohérent')
+        else:
             a, b = session.get("score_a"), session.get("score_b")
             if type(a) is not int or type(b) is not int or min(a, b) < 0:
                 fail(422, "Score requis")
             expected = "A" if a > b else "B" if b > a else "DRAW"
             if session["result"] != expected:
                 fail(422, "Résultat incohérent")
-        teams = ["A", "B", "C"] if tournament else ["A", "B"]
         counts = [sum(p["team"] == team for p in parts) for team in teams]
         if not session.get("allow_uneven_teams") and max(counts) - min(counts) > 1:
             fail(422, "Équipes déséquilibrées")

@@ -35,7 +35,7 @@ def version(group, count, kind='CLASSIC_2', status='CLOSED'):
                             'session_type': kind, 'status': status, 'result': 'A' if kind == 'TOURNAMENT_3' else 'DRAW',
                             'score_a': None if kind == 'TOURNAMENT_3' else 0,
                             'score_b': None if kind == 'TOURNAMENT_3' else 0, 'wins_a': 1, 'wins_b': 0, 'wins_c': 0},
-                'participations': [{'player_id': str(i), 'team': teams[i % len(teams)]} for i in range(count)]}}
+                'participations': [{'id': str(uuid.uuid4()), 'player_id': str(i), 'team': teams[i % len(teams)]} for i in range(count)]}}
 
 
 def event(group, count, **kwargs):

@@ -1,0 +1,48 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (setUpAll)
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: WEB-41 imports a real PWA wire fixture into the unchanged mobile schema
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/pwa_wire_import_test.dart: (tearDownAll)
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks a session whose score was never entered
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks a score without result
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers accepts a 0-0 draw once entered
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks a team size gap above 1 unless uneven teams are allowed
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers reports every blocker at once
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when player goals + unassigned do not match the score
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers accepts when player goals + unassigned exactly match the score
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when player goals exceed the score
+00:00 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when assists exceed player goals for the session
+00:00 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers accepts when assists are equal to or less than player goals
+00:00 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when assists exist on a 0-0 match without player goals
+00:00 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when unique scorer is also the unique assister (John auto-passe)
+00:00 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers accepts when teammate assists the unique scorer
+00:00 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: closeBlockers blocks when a player assists exceed teammate goals in multi-goal match
+00:00 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession refuses to close without a score, whatever the screen checked
+00:00 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession closes a scored session with balanced teams
+00:00 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession reports a refused write instead of claiming success
+00:00 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession closes a session on a 0-0 goalless draw (score nul et vierge)
+00:00 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession refuses to close when team assists exceed team player goals
+00:00 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.closeSession refuses to close when a player is credited with a self-assist (John)
+00:00 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.createDraftSession initializes new session score to 0 - 0 with draw result
+00:00 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_close_test.dart: SessionsController.startSession initializes unscored session to 0 - 0 with draw when starting
+00:00 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers accepts perfectly balanced 15 players (5-5-5)
+00:01 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers accepts surplus 16 players (6-5-5)
+00:01 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers accepts surplus 17 players (6-6-5)
+00:01 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers blocks team gap > 1 unless uneven allowed (e.g. 7-5-5)
+00:01 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - closeBlockers blocks when tournament has no result decided yet
+00:01 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Clean win for Team C gives 3 pts to Team C, 0 to Team A and B
+00:01 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Tie between Team A and B (drawAB) with default 1 point
+00:01 +30: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Tie between Team A and B (drawAB) with configured 2 points
+00:01 +31: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - StatsCalculator Three-way tie (drawAll) awards configured points to all 3 teams
+00:01 +32: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams createDraftSession with tournament3 assigns A, B and C and initializes wins
+00:01 +33: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams updateTournamentWins updates wins counter and result
+00:01 +34: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams closeSession closes a tournament session with a decided result
+00:01 +35: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: SessionsController - Tournament 3 Teams closeSession recomputes and synchronizes result when wins changed
+00:01 +36: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns null when 0 wins are recorded for all 3 teams
+00:01 +37: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamA when A has strictly more wins
+00:01 +38: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamB when B has strictly more wins
+00:01 +39: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns teamC when C has strictly more wins
+00:01 +40: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAB when A and B tie for the lead
+00:01 +41: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawBC when B and C tie for the lead
+00:01 +42: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAC when A and C tie for the lead
+00:01 +43: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/tournament_3_teams_test.dart: Tournament 3 Teams - computeTournamentResult returns drawAll when all 3 teams tie with at least 1 win
+00:01 +44: All tests passed!

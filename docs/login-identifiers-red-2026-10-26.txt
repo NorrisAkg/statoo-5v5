@@ -1,0 +1,397 @@
+FF.FFFFFFFFF...FFF...FFF..FFF.                                           [100%]
+=================================== FAILURES ===================================
+__ test_equivalent_initial_identifiers_are_rejected_atomically[admin- admin ] __
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+individual = 'admin', collective = ' admin '
+
+    @pytest.mark.parametrize('individual,collective', [
+        ('admin', ' admin '), (' admin ', 'admin'), (' AdMiN ', ' ADMIN '),
+        ('admin', '\tADMIN\n'), ('admin', '\u00a0ADMIN\u00a0'), ('Straße', ' STRASSE '),
+    ])
+    def test_equivalent_initial_identifiers_are_rejected_atomically(api, individual, collective):
+        c, engine = api
+        before = counts(engine)
+        response = c.post('/groups', json=registration(
+            username=individual, shared_username=collective, operation_id=str(uuid.uuid4())))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"wBF0NCXPqrxrNEWjdyPdDU0XEzTXNEJjNnfZkXYTgqo","expires_at":"2026-11-25T07:54:41.431571Z","group_id":"#49690320","account":{"id":"7c19d244-ba6a-4180-8069-33e1778c17fc","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:68: AssertionError
+__ test_equivalent_initial_identifiers_are_rejected_atomically[ admin -admin] __
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+individual = ' admin ', collective = 'admin'
+
+    @pytest.mark.parametrize('individual,collective', [
+        ('admin', ' admin '), (' admin ', 'admin'), (' AdMiN ', ' ADMIN '),
+        ('admin', '\tADMIN\n'), ('admin', '\u00a0ADMIN\u00a0'), ('Straße', ' STRASSE '),
+    ])
+    def test_equivalent_initial_identifiers_are_rejected_atomically(api, individual, collective):
+        c, engine = api
+        before = counts(engine)
+        response = c.post('/groups', json=registration(
+            username=individual, shared_username=collective, operation_id=str(uuid.uuid4())))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"OHt4kXneSFsoLgf_FF1Cfs5WxyltEsOOW5xTPqGXr1E","expires_at":"2026-11-25T07:54:44.072421Z","group_id":"#20599590","account":{"id":"2c34ca54-5c64-45e7-bd0c-8723a4c96e1e","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:68: AssertionError
+_ test_equivalent_initial_identifiers_are_rejected_atomically[admin-\tADMIN\n] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+individual = 'admin', collective = '\tADMIN\n'
+
+    @pytest.mark.parametrize('individual,collective', [
+        ('admin', ' admin '), (' admin ', 'admin'), (' AdMiN ', ' ADMIN '),
+        ('admin', '\tADMIN\n'), ('admin', '\u00a0ADMIN\u00a0'), ('Straße', ' STRASSE '),
+    ])
+    def test_equivalent_initial_identifiers_are_rejected_atomically(api, individual, collective):
+        c, engine = api
+        before = counts(engine)
+        response = c.post('/groups', json=registration(
+            username=individual, shared_username=collective, operation_id=str(uuid.uuid4())))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"uuETqSiymfaTUvoFHiTcqpHAzOldcurNHVPj8mttuJM","expires_at":"2026-11-25T07:54:46.449790Z","group_id":"#32034970","account":{"id":"68a9d2cf-5cb4-48e9-a321-1f915aaccb8b","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:68: AssertionError
+_ test_equivalent_initial_identifiers_are_rejected_atomically[admin-\xa0ADMIN\xa0] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+individual = 'admin', collective = '\xa0ADMIN\xa0'
+
+    @pytest.mark.parametrize('individual,collective', [
+        ('admin', ' admin '), (' admin ', 'admin'), (' AdMiN ', ' ADMIN '),
+        ('admin', '\tADMIN\n'), ('admin', '\u00a0ADMIN\u00a0'), ('Straße', ' STRASSE '),
+    ])
+    def test_equivalent_initial_identifiers_are_rejected_atomically(api, individual, collective):
+        c, engine = api
+        before = counts(engine)
+        response = c.post('/groups', json=registration(
+            username=individual, shared_username=collective, operation_id=str(uuid.uuid4())))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"BS63F89Qvg0kA6wtnb0ZhwEu8_OCPvfPpj9eGBAE-iA","expires_at":"2026-11-25T07:54:48.819267Z","group_id":"#48826507","account":{"id":"74e624a7-7c35-4cda-abb8-4c3ada413ee3","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:68: AssertionError
+_ test_equivalent_initial_identifiers_are_rejected_atomically[Stra\xdfe- STRASSE ] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+individual = 'Straße', collective = ' STRASSE '
+
+    @pytest.mark.parametrize('individual,collective', [
+        ('admin', ' admin '), (' admin ', 'admin'), (' AdMiN ', ' ADMIN '),
+        ('admin', '\tADMIN\n'), ('admin', '\u00a0ADMIN\u00a0'), ('Straße', ' STRASSE '),
+    ])
+    def test_equivalent_initial_identifiers_are_rejected_atomically(api, individual, collective):
+        c, engine = api
+        before = counts(engine)
+        response = c.post('/groups', json=registration(
+            username=individual, shared_username=collective, operation_id=str(uuid.uuid4())))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"luwABsSQitVErasb_CwocLxaBEvOcMX8CxCDDz3HLFg","expires_at":"2026-11-25T07:54:51.375971Z","group_id":"#49609227","account":{"id":"7f7995e0-08d3-4e94-a648-e1774178b732","username":"Straße","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:68: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[   -username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'username', value = '   '
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"c6tiQLJeNxAXz9XP41A0dpTD5yIZLBJjMwfdUGzJ6kA","expires_at":"2026-11-25T07:54:53.723129Z","group_id":"#04779992","account":{"id":"963ddd4f-7fd2-4726-8fe2-bc98a5f9382b","username":"","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[   -shared_username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'shared_username', value = '   '
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"hLambvo_wCnVL-3R4FX3EHay-ka5w3qidLsIreqTsl0","expires_at":"2026-11-25T07:54:56.143512Z","group_id":"#24494673","account":{"id":"16691547-2584-45eb-8282-ea786327df80","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[\t\n-username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'username', value = '\t\n'
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"zq5DaS3w14NdsxV1mfGA0k6km0youFSmi3oAyVonwI0","expires_at":"2026-11-25T07:54:58.489043Z","group_id":"#46093719","account":{"id":"76315c76-7b8d-458f-89f1-9554e74c7b87","username":"","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[\t\n-shared_username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'shared_username', value = '\t\n'
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"5FiVYnEAcPx7nb3n8VpErQL4nYpWvByzNXs0Ks_qcV4","expires_at":"2026-11-25T07:55:00.936833Z","group_id":"#93347410","account":{"id":"8978f012-5c37-4a1f-807a-493a6978560d","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[\xa0-username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'username', value = '\xa0'
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"RGiQVsR-KpL2ca0ztMTlEtE8rSXZrVnd77lAlxhlRKg","expires_at":"2026-11-25T07:55:03.279258Z","group_id":"#97366705","account":{"id":"3bb56508-b56e-4e17-b2c0-4f558ade4a3f","username":"","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+_ test_blank_registration_identifier_is_rejected_without_consuming_operation[\xa0-shared_username] _
+
+api = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, Engine(sqlite:///%3Amemory%3A))
+field = 'shared_username', value = '\xa0'
+
+    @pytest.mark.parametrize('field', ['username', 'shared_username'])
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_registration_identifier_is_rejected_without_consuming_operation(api, field, value):
+        c, engine = api
+        op = str(uuid.uuid4())
+        before = counts(engine)
+        response = c.post('/groups', json=registration(**{field: value}, operation_id=op))
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"token":"LvwTQAkgfhM-xZLNM3WzvTPT3fRTHUSetq6uYfCoz0s","expires_at":"2026-11-25T07:55:05.601878Z","group_id":"#24913280","account":{"id":"9f6abe13-e8dd-4d0c-83e9-a66891b37590","username":"admin","member_id":null,"roles":["ADMIN","MEMBER"],"shared":false}}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:80: AssertionError
+___________ test_blank_manager_is_rejected_without_state_change[   ] ___________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#07389471', '/groups/%2307389471', {'Authorization': 'Bearer hsd_SAVR9dUzk5vR2uY5EX_UlyTd4LuKrpAbxlWopv0'})
+value = '   '
+
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_manager_is_rejected_without_state_change(group, value):
+        c, _, path, admin = group
+        before = c.get(path, headers=admin).json()
+        response = c.post(path + '/accounts', headers=admin, json={
+            'username': value, 'password': ADMIN_PASSWORD, 'member_id': 'a', 'roles': ['SG'],
+        })
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"id":"e66c7a7d-cc1f-42cf-a11b-194ef20a8ca3","username":"","member_id":"a","roles":["MEMBER","SG"],"shared":false}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:110: AssertionError
+__________ test_blank_manager_is_rejected_without_state_change[\t\n] ___________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#61059181', '/groups/%2361059181', {'Authorization': 'Bearer AablPAK4nwb8Zd1Ex175NZCJYLXHY1i4wySLS9Uas_Y'})
+value = '\t\n'
+
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_manager_is_rejected_without_state_change(group, value):
+        c, _, path, admin = group
+        before = c.get(path, headers=admin).json()
+        response = c.post(path + '/accounts', headers=admin, json={
+            'username': value, 'password': ADMIN_PASSWORD, 'member_id': 'a', 'roles': ['SG'],
+        })
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"id":"159a4e06-6136-4d35-b559-4edc1af4cce3","username":"","member_id":"a","roles":["MEMBER","SG"],"shared":false}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:110: AssertionError
+__________ test_blank_manager_is_rejected_without_state_change[\xa0] ___________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#85089210', '/groups/%2385089210', {'Authorization': 'Bearer erzYuHdlC7XdiXblhuha1jolap_N0diG2hzbpFhmJQ0'})
+value = '\xa0'
+
+    @pytest.mark.parametrize('value', ['   ', '\t\n', '\u00a0'])
+    def test_blank_manager_is_rejected_without_state_change(group, value):
+        c, _, path, admin = group
+        before = c.get(path, headers=admin).json()
+        response = c.post(path + '/accounts', headers=admin, json={
+            'username': value, 'password': ADMIN_PASSWORD, 'member_id': 'a', 'roles': ['SG'],
+        })
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"id":"b05dfdbd-53dd-4ff1-9e56-76bd80f85724","username":"","member_id":"a","roles":["MEMBER","SG"],"shared":false}
+E       assert 201 == 422
+E        +  where 201 = <Response [201 Created]>.status_code
+
+tests/test_login_identifiers.py:110: AssertionError
+____ test_invalid_collective_rotation_does_not_revoke_current_login[ -422] _____
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#00846948', '/groups/%2300846948', {'Authorization': 'Bearer 6JlqtblpZU1I7QexX6HeM8Eh7N9XDZb4xDx2wDOW_tI'})
+value = ' ', status = 422
+
+    @pytest.mark.parametrize('value,status', [(' ', 422), ('\t\n', 422), ('\u00a0', 422), (' ADMIN ', 409)])
+    def test_invalid_collective_rotation_does_not_revoke_current_login(group, value, status):
+        c, group_id, path, admin = group
+        reader = login(c, group_id, 'readers', MEMBER_PASSWORD)
+        assert reader.status_code == 200
+        headers = {'Authorization': 'Bearer ' + reader.json()['token']}
+        before = c.get(path, headers=admin).json()
+        response = c.put(path + '/shared-access', headers=admin, json={
+            'group_id': group_id, 'username': value, 'password': 'Changed-Password-2026',
+        })
+>       assert response.status_code == status, response.text
+E       AssertionError: {"ok":true}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_login_identifiers.py:148: AssertionError
+___ test_invalid_collective_rotation_does_not_revoke_current_login[\t\n-422] ___
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#09326107', '/groups/%2309326107', {'Authorization': 'Bearer 0GCjPsr16qf_eQZrCDz1FzR9wwLqaTkA6c9YYONQS9w'})
+value = '\t\n', status = 422
+
+    @pytest.mark.parametrize('value,status', [(' ', 422), ('\t\n', 422), ('\u00a0', 422), (' ADMIN ', 409)])
+    def test_invalid_collective_rotation_does_not_revoke_current_login(group, value, status):
+        c, group_id, path, admin = group
+        reader = login(c, group_id, 'readers', MEMBER_PASSWORD)
+        assert reader.status_code == 200
+        headers = {'Authorization': 'Bearer ' + reader.json()['token']}
+        before = c.get(path, headers=admin).json()
+        response = c.put(path + '/shared-access', headers=admin, json={
+            'group_id': group_id, 'username': value, 'password': 'Changed-Password-2026',
+        })
+>       assert response.status_code == status, response.text
+E       AssertionError: {"ok":true}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_login_identifiers.py:148: AssertionError
+___ test_invalid_collective_rotation_does_not_revoke_current_login[\xa0-422] ___
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#10790335', '/groups/%2310790335', {'Authorization': 'Bearer 05eSfpTHrVoeC6_g3EEVUmxM3txSGwt__KR7nPoMCiU'})
+value = '\xa0', status = 422
+
+    @pytest.mark.parametrize('value,status', [(' ', 422), ('\t\n', 422), ('\u00a0', 422), (' ADMIN ', 409)])
+    def test_invalid_collective_rotation_does_not_revoke_current_login(group, value, status):
+        c, group_id, path, admin = group
+        reader = login(c, group_id, 'readers', MEMBER_PASSWORD)
+        assert reader.status_code == 200
+        headers = {'Authorization': 'Bearer ' + reader.json()['token']}
+        before = c.get(path, headers=admin).json()
+        response = c.put(path + '/shared-access', headers=admin, json={
+            'group_id': group_id, 'username': value, 'password': 'Changed-Password-2026',
+        })
+>       assert response.status_code == status, response.text
+E       AssertionError: {"ok":true}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_login_identifiers.py:148: AssertionError
+__________________ test_blank_login_is_a_validation_error[ ] ___________________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#75424997', '/groups/%2375424997', {'Authorization': 'Bearer 101DudGUQI9ffsmdz2xJZi3bv-RYnbcTeC8S9_1HZWo'})
+value = ' '
+
+    @pytest.mark.parametrize('value', [' ', '\t\n', '\u00a0'])
+    def test_blank_login_is_a_validation_error(group, value):
+        c, group_id, _, _ = group
+>       assert login(c, group_id, value, ADMIN_PASSWORD).status_code == 422
+E       AssertionError: assert 401 == 422
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+E        +    where <Response [401 Unauthorized]> = login(<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#75424997', ' ', 'Admin-Password-2026')
+
+tests/test_login_identifiers.py:171: AssertionError
+_________________ test_blank_login_is_a_validation_error[\t\n] _________________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#15131671', '/groups/%2315131671', {'Authorization': 'Bearer 75myMpA8pFOcTT7Xp1IWVj4CtjzTz7pN1LSiF-6igTg'})
+value = '\t\n'
+
+    @pytest.mark.parametrize('value', [' ', '\t\n', '\u00a0'])
+    def test_blank_login_is_a_validation_error(group, value):
+        c, group_id, _, _ = group
+>       assert login(c, group_id, value, ADMIN_PASSWORD).status_code == 422
+E       AssertionError: assert 401 == 422
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+E        +    where <Response [401 Unauthorized]> = login(<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#15131671', '\t\n', 'Admin-Password-2026')
+
+tests/test_login_identifiers.py:171: AssertionError
+_________________ test_blank_login_is_a_validation_error[\xa0] _________________
+
+group = (<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#36494450', '/groups/%2336494450', {'Authorization': 'Bearer R6MTOjbsMxpELxkLx6OHizD0TIoZpgaw2SEfAk5hfR0'})
+value = '\xa0'
+
+    @pytest.mark.parametrize('value', [' ', '\t\n', '\u00a0'])
+    def test_blank_login_is_a_validation_error(group, value):
+        c, group_id, _, _ = group
+>       assert login(c, group_id, value, ADMIN_PASSWORD).status_code == 422
+E       AssertionError: assert 401 == 422
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+E        +    where <Response [401 Unauthorized]> = login(<starlette.testclient.TestClient object at 0x7fd48f7d9790>, '#36494450', '\xa0', 'Admin-Password-2026')
+
+tests/test_login_identifiers.py:171: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/norris/my-projects/statoo-5v5/backend/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_login_identifiers.py::test_equivalent_initial_identifiers_are_rejected_atomically[admin- admin ]
+FAILED tests/test_login_identifiers.py::test_equivalent_initial_identifiers_are_rejected_atomically[ admin -admin]
+FAILED tests/test_login_identifiers.py::test_equivalent_initial_identifiers_are_rejected_atomically[admin-\tADMIN\n]
+FAILED tests/test_login_identifiers.py::test_equivalent_initial_identifiers_are_rejected_atomically[admin-\xa0ADMIN\xa0]
+FAILED tests/test_login_identifiers.py::test_equivalent_initial_identifiers_are_rejected_atomically[Stra\xdfe- STRASSE ]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[   -username]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[   -shared_username]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[\t\n-username]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[\t\n-shared_username]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[\xa0-username]
+FAILED tests/test_login_identifiers.py::test_blank_registration_identifier_is_rejected_without_consuming_operation[\xa0-shared_username]
+FAILED tests/test_login_identifiers.py::test_blank_manager_is_rejected_without_state_change[   ]
+FAILED tests/test_login_identifiers.py::test_blank_manager_is_rejected_without_state_change[\t\n]
+FAILED tests/test_login_identifiers.py::test_blank_manager_is_rejected_without_state_change[\xa0]
+FAILED tests/test_login_identifiers.py::test_invalid_collective_rotation_does_not_revoke_current_login[ -422]
+FAILED tests/test_login_identifiers.py::test_invalid_collective_rotation_does_not_revoke_current_login[\t\n-422]
+FAILED tests/test_login_identifiers.py::test_invalid_collective_rotation_does_not_revoke_current_login[\xa0-422]
+FAILED tests/test_login_identifiers.py::test_blank_login_is_a_validation_error[ ]
+FAILED tests/test_login_identifiers.py::test_blank_login_is_a_validation_error[\t\n]
+FAILED tests/test_login_identifiers.py::test_blank_login_is_a_validation_error[\xa0]
+20 failed, 10 passed, 1 warning in 78.49s (0:01:18)

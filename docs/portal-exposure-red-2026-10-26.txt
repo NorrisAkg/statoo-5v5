@@ -1,0 +1,551 @@
+FFFFFFF.FFFFF.FFFFFFF.FFFFF............................................. [ 78%]
+..........FFFFFF.F..                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_private_portal_paths_are_not_served[GET-tests/client.test.mjs] ______
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/client.test.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[GET-tests/fixtures/mobile-snapshot.json] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/fixtures/mobile-snapshot.json', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_________ test_private_portal_paths_are_not_served[GET-tests/serve.py] _________
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/serve.py', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+__ test_private_portal_paths_are_not_served[GET-tests/audit/client.audit.mjs] __
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/audit/client.audit.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[GET-prototypes/live-stats/index.html] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/index.html', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[GET-prototypes/live-stats/model.mjs] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/model.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+___________ test_private_portal_paths_are_not_served[GET-README.md] ____________
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'README.md', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_____ test_private_portal_paths_are_not_served[GET-prototypes/live-stats/] _____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____ test_private_portal_paths_are_not_served[GET-%74ests/client.test.mjs] _____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = '%74ests/client.test.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____ test_private_portal_paths_are_not_served[GET-tests%2fclient.test.mjs] _____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests%2fclient.test.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[GET-icons/%2e%2e/tests/client.test.mjs] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'icons/%2e%2e/tests/client.test.mjs', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[GET-tests/client.test.mjs?download=1] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/client.test.mjs?download=1', method = 'GET'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_____ test_private_portal_paths_are_not_served[HEAD-tests/client.test.mjs] _____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/client.test.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-tests/fixtures/mobile-snapshot.json] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/fixtures/mobile-snapshot.json', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+________ test_private_portal_paths_are_not_served[HEAD-tests/serve.py] _________
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/serve.py', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-tests/audit/client.audit.mjs] __
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/audit/client.audit.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/index.html] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/index.html', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/model.mjs] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/model.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+___________ test_private_portal_paths_are_not_served[HEAD-README.md] ___________
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'README.md', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____ test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/] _____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'prototypes/live-stats/', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____ test_private_portal_paths_are_not_served[HEAD-%74ests/client.test.mjs] ____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = '%74ests/client.test.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____ test_private_portal_paths_are_not_served[HEAD-tests%2fclient.test.mjs] ____
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests%2fclient.test.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-icons/%2e%2e/tests/client.test.mjs] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'icons/%2e%2e/tests/client.test.mjs', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+_ test_private_portal_paths_are_not_served[HEAD-tests/client.test.mjs?download=1] _
+
+client = <starlette.testclient.TestClient object at 0x728f1389f1d0>
+path = 'tests/client.test.mjs?download=1', method = 'HEAD'
+
+    @pytest.mark.parametrize('path', PRIVATE)
+    @pytest.mark.parametrize('method', ['GET', 'HEAD'])
+    def test_private_portal_paths_are_not_served(client, path, method):
+        response = client.request(method, '/portal/' + path)
+>       assert response.status_code == 404
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_portal_exposure.py:43: AssertionError
+____________ test_new_files_are_private_by_default[private-new.mjs] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_0')
+path = 'private-new.mjs'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'private-new.mjs'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f13973fb0>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+__________ test_new_files_are_private_by_default[icons/private.json] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_1')
+path = 'icons/private.json'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'icons/private.json'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f12800ef0>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+___________ test_new_files_are_private_by_default[fonts/private.txt] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_2')
+path = 'fonts/private.txt'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'fonts/private.txt'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f11ef2f60>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+__________ test_new_files_are_private_by_default[vendor/private.mjs] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_3')
+path = 'vendor/private.mjs'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'vendor/private.mjs'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f11ea4a10>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+____________ test_new_files_are_private_by_default[dist/index.html] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_4')
+path = 'dist/index.html'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'dist/index.html'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f1287f890>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+_______ test_new_files_are_private_by_default[universal-dist/index.html] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_new_files_are_private_by_5')
+path = 'universal-dist/index.html'
+
+    @pytest.mark.parametrize('path', ['private-new.mjs', 'icons/private.json',
+                                     'fonts/private.txt', 'vendor/private.mjs',
+                                     'dist/index.html', 'universal-dist/index.html'])
+    def test_new_files_are_private_by_default(tmp_path, path):
+        (tmp_path / 'index.html').write_text('Synthetic public index')
+        private = tmp_path / path
+        private.parent.mkdir(parents=True, exist_ok=True)
+        private.write_text('Synthetic private content')
+        # Substitute only the portal root; do not write into the real web tree.
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = tmp_path
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/' + path).status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get(('/portal/' + 'universal-dist/index.html'))
+E            +      where get = <starlette.testclient.TestClient object at 0x728f11eac290>.get
+
+tests/test_portal_exposure.py:100: AssertionError
+___________________ test_private_symlink_stays_private[True] ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-norris/pytest-1/test_private_symlink_stays_pri1')
+inside = True
+
+    @pytest.mark.parametrize('inside', [False, True])
+    def test_private_symlink_stays_private(tmp_path, inside):
+        portal = tmp_path / 'portal'
+        portal.mkdir()
+        secret = (portal if inside else tmp_path) / 'private.txt'
+        secret.write_text('Synthetic outside content')
+        (portal / 'index.html').symlink_to(secret)
+        with patch('app.main.Path') as mocked:
+            mocked.return_value.resolve.return_value.parents.__getitem__.return_value.__truediv__.return_value = portal
+            app = create_app('sqlite:///:memory:')
+        with TestClient(app) as c:
+>           assert c.get('/portal/index.html').status_code == 404
+E           AssertionError: assert 200 == 404
+E            +  where 200 = <Response [200 OK]>.status_code
+E            +    where <Response [200 OK]> = get('/portal/index.html')
+E            +      where get = <starlette.testclient.TestClient object at 0x728f1162be90>.get
+
+tests/test_portal_exposure.py:115: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/norris/my-projects/statoo-5v5/backend/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests/fixtures/mobile-snapshot.json]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests/serve.py]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests/audit/client.audit.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-prototypes/live-stats/index.html]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-prototypes/live-stats/model.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-README.md]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-prototypes/live-stats/]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-%74ests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests%2fclient.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-icons/%2e%2e/tests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[GET-tests/client.test.mjs?download=1]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests/fixtures/mobile-snapshot.json]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests/serve.py]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests/audit/client.audit.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/index.html]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/model.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-README.md]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-prototypes/live-stats/]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-%74ests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests%2fclient.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-icons/%2e%2e/tests/client.test.mjs]
+FAILED tests/test_portal_exposure.py::test_private_portal_paths_are_not_served[HEAD-tests/client.test.mjs?download=1]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[private-new.mjs]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[icons/private.json]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[fonts/private.txt]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[vendor/private.mjs]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[dist/index.html]
+FAILED tests/test_portal_exposure.py::test_new_files_are_private_by_default[universal-dist/index.html]
+FAILED tests/test_portal_exposure.py::test_private_symlink_stays_private[True]
+31 failed, 61 passed, 1 warning in 1.86s

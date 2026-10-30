@@ -1,0 +1,2007 @@
+FFFFFFFF......FFFF.FF.FFFFFFF.FF......FFF.FFFFFFF........FFFFFFFFFFFFFFF [ 47%]
+FFFF..F.F..F.FFFFFFFFFFF.............................FFFFFFFFFFFF.FFF... [ 95%]
+.......                                                                  [100%]
+=================================== FAILURES ===================================
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-0] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-1] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = 7
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-2] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-3] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-4] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = 'not-a-date'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-5] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = '2026-02-30'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-6] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = '2026-W43-7'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-played_at-7] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'played_at', value = '__missing__'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-session_type-0] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'session_type', value = 'UNKNOWN'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-session_type-1] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'session_type', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-session_type-2] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'session_type', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-session_type-3] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'session_type', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-status-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'status', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-status-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'status', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-result-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'result', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-result-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'result', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_________ test_invalid_document_is_422_and_never_persisted[part-id-0] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'id', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_________ test_invalid_document_is_422_and_never_persisted[part-id-1] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'id', value = ''
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_________ test_invalid_document_is_422_and_never_persisted[part-id-2] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'id', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_________ test_invalid_document_is_422_and_never_persisted[part-id-3] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'id', value = '__missing__'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_________ test_invalid_document_is_422_and_never_persisted[part-id-4] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'id', value = '__duplicate__'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[part-player_id-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'player_id', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[part-player_id-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'player_id', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+________ test_invalid_document_is_422_and_never_persisted[part-team-0] _________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'team', value = 'C'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+________ test_invalid_document_is_422_and_never_persisted[part-team-1] _________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'team', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+________ test_invalid_document_is_422_and_never_persisted[part-team-2] _________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'part', field = 'team', value = {}
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-0] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'allow_uneven_teams', value = 'false'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-1] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'allow_uneven_teams', value = 2
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-2] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'allow_uneven_teams', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-is_ranked-0] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'is_ranked', value = 'true'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-is_ranked-1] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'is_ranked', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-split_mode-0] ____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'split_mode', value = 'UNKNOWN'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+____ test_invalid_document_is_422_and_never_persisted[session-split_mode-1] ____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'split_mode', value = []
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-score_c-0] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'score_c', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-score_c-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'score_c', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-score_c-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'score_c', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-score_c-3] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'score_c', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_a-0_0] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_a', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_a-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_a', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_a-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_a', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_a-3] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_a', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_a-0_1] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_a', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_b-0_0] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_b', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_b-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_b', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_b-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_b', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_b-3] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_b', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_b-0_1] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_b', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_c-0_0] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_c', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_c-1] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_c', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_c-2] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_c', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+______ test_invalid_document_is_422_and_never_persisted[session-wins_c-3] ______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_c', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____ test_invalid_document_is_422_and_never_persisted[session-wins_c-0_1] _____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'wins_c', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_a-2] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_a', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_a-0_1] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_a', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_b-2] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_b', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: Internal Server Error
+E       assert 500 == 422
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_b-0_1] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_b', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-0_0] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_c', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-1] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_c', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-2] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_c', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-3] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_c', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_ test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-0_1] _
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'unassigned_goals_c', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+__ test_invalid_document_is_422_and_never_persisted[session-draw_points-0_0] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'draw_points', value = -1
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-draw_points-1] ____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'draw_points', value = True
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-draw_points-2] ____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'draw_points', value = '1'
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+___ test_invalid_document_is_422_and_never_persisted[session-draw_points-3] ____
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'draw_points', value = 1.5
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+__ test_invalid_document_is_422_and_never_persisted[session-draw_points-0_1] ___
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+section = 'session', field = 'draw_points', value = None
+
+    @pytest.mark.parametrize('section,field,value', invalid_cases())
+    def test_invalid_document_is_422_and_never_persisted(api, section, field, value):
+        c, path, auth, group = api
+        body = version(group)
+        target = body['payload']['participations'][0] if section == 'part' else body['payload'] if section == 'payload' else body['payload']['session']
+        if value == '__missing__':
+            target.pop(field)
+        elif value == '__duplicate__':
+            target[field] = body['payload']['participations'][1][field]
+        else:
+            target[field] = value
+        before = c.get(path, headers=auth).json()
+        response = c.post(path + '/sync', headers=auth, json=body)
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"status":"accepted","revision":1}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/test_sport_validation.py:90: AssertionError
+_____________ test_tournament_winner_is_derived_from_wins[wins0-A] _____________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (1, 0, 0), result = 'A'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': 'abee3e83-d76c-40e2-a5f5-96f85c0b6203', 'occurrence_id': '3c3c4030-af7b-45cc-acdd-bf9f446b9882', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+_____________ test_tournament_winner_is_derived_from_wins[wins1-B] _____________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (0, 1, 0), result = 'B'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '9c54a34a-e550-4483-b4a4-cc1900a8ae80', 'occurrence_id': '22a7917a-ced1-4e17-a114-b5bf3dc5dc3d', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+_____________ test_tournament_winner_is_derived_from_wins[wins2-C] _____________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (0, 0, 1), result = 'C'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '7a4f590c-9aad-41bf-86c2-edc2ecbdfa11', 'occurrence_id': '554c6bbf-82d2-4aac-bbcd-7811e8ed4904', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+__________ test_tournament_winner_is_derived_from_wins[wins3-DRAW_AB] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (2, 2, 1), result = 'DRAW_AB'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': 'f2a2e435-08a9-401e-86fd-5cf91e2e49f7', 'occurrence_id': 'a67fd684-dfef-4f53-ba61-b0acda906985', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+__________ test_tournament_winner_is_derived_from_wins[wins4-DRAW_BC] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (1, 2, 2), result = 'DRAW_BC'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '3ba157e7-be93-4d5d-82a3-bb0e8675f27a', 'occurrence_id': '1ff29414-673d-4cd5-858e-c66c58292bf3', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+__________ test_tournament_winner_is_derived_from_wins[wins5-DRAW_AC] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (2, 1, 2), result = 'DRAW_AC'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': 'aca8992f-7134-4dd0-8b07-d46ca5b61368', 'occurrence_id': '9b43650b-e265-4cd6-805f-abf1c8a14a1a', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+_________ test_tournament_winner_is_derived_from_wins[wins6-DRAW_ALL] __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+wins = (1, 1, 1), result = 'DRAW_ALL'
+
+    @pytest.mark.parametrize('wins,result', [((1, 0, 0), 'A'), ((0, 1, 0), 'B'),
+        ((0, 0, 1), 'C'), ((2, 2, 1), 'DRAW_AB'), ((1, 2, 2), 'DRAW_BC'),
+        ((2, 1, 2), 'DRAW_AC'), ((1, 1, 1), 'DRAW_ALL')])
+    def test_tournament_winner_is_derived_from_wins(api, wins, result):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        session = body['payload']['session']
+        session.update(zip(['wins_a', 'wins_b', 'wins_c'], wins))
+        session.update(result=result, score_a=None, score_b=None)
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+        wrong = copy.deepcopy(body)
+        wrong['payload']['session']['result'] = 'C' if result != 'C' else 'A'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=wrong).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '531cb4f1-7f66-426d-ac38-b6cce716d142', 'occurrence_id': '77cbf29f-c4df-4b76-b7a8-371b05f936b7', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:117: AssertionError
+__________ test_zero_win_tournament_cannot_close_but_can_remain_draft __________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+
+    def test_zero_win_tournament_cannot_close_but_can_remain_draft(api):
+        c, path, auth, group = api
+        body = version(group, 'TOURNAMENT_3')
+        body['payload']['session'].update(wins_a=0, wins_b=0, wins_c=0, result='DRAW_ALL')
+        for i, part in enumerate(body['payload']['participations']):
+            part['team'] = 'ABC'[i % 3]
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '212bc2f0-34d6-4d1b-93c8-34fb4ffe243d', 'occurrence_id': 'e2ff9f4d-8663-4b93-a17a-c6514acc0460', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:128: AssertionError
+________ test_invalid_numbers_are_rejected_even_without_closing[DRAFT] _________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+status = 'DRAFT'
+
+    @pytest.mark.parametrize('status', ['DRAFT', 'CANCELLED'])
+    def test_invalid_numbers_are_rejected_even_without_closing(api, status):
+        c, path, auth, group = api
+        body = version(group, status=status)
+        body['payload']['session']['wins_b'] = -1
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '30ac17ac-773e-4e8c-ab1a-61cc6ec27cc5', 'occurrence_id': '9d5461a0-90f3-47d6-85cc-920d97a696fd', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:138: AssertionError
+______ test_invalid_numbers_are_rejected_even_without_closing[CANCELLED] _______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+status = 'CANCELLED'
+
+    @pytest.mark.parametrize('status', ['DRAFT', 'CANCELLED'])
+    def test_invalid_numbers_are_rejected_even_without_closing(api, status):
+        c, path, auth, group = api
+        body = version(group, status=status)
+        body['payload']['session']['wins_b'] = -1
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': 'f9d78a95-9803-4c26-aee3-c6bcb51db698', 'occurrence_id': '35c4fcc1-6b30-4261-bfcb-53341e21d5c8', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:138: AssertionError
+______________ test_negative_unassigned_cannot_cancel_player_goal ______________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+
+    def test_negative_unassigned_cannot_cancel_player_goal(api):
+        c, path, auth, group = api
+        body = version(group)
+        body['payload']['session']['unassigned_goals_a'] = -1
+        body['payload']['participations'][0]['goals'] = 1
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '5aff1c6e-f2c1-43b6-b9d0-479202ea6fd4', 'occurrence_id': '028184d1-1817-484e-9d23-0173d70b8178', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:146: AssertionError
+___________ test_classic_team_c_is_invalid_even_with_uneven_override ___________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+
+    def test_classic_team_c_is_invalid_even_with_uneven_override(api):
+        c, path, auth, group = api
+        body = version(group)
+        body['payload']['session']['allow_uneven_teams'] = 1
+        body['payload']['participations'][0]['team'] = 'C'
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '6ce3b256-1c9a-4139-be2d-97f65d08e5cb', 'occurrence_id': 'f72f8553-0914-4dea-a43a-0a765ef7ae58', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:154: AssertionError
+________ test_invalid_correction_preserves_current_document_and_history ________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+
+    def test_invalid_correction_preserves_current_document_and_history(api):
+        c, path, auth, group = api
+        body = version(group)
+        assert c.post(path + '/sync', headers=auth, json=body).status_code == 200
+        body.update(operation_id=str(uuid.uuid4()), base_revision=1)
+        body['payload']['session']['played_at'] = 'broken'
+        before = c.get(path, headers=auth).json()
+>       assert c.post(path + '/sync', headers=auth, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, json={'domain': 'sport', 'operation_id': '3d5f1be9-af32-4e54-ab49-ec90d5228692', 'occurrence_id': '014319d3-c3f7-4d12-a876-86467ca75658', 'base_revision': 1, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:173: AssertionError
+_____________ test_invalid_other_author_does_not_create_candidate ______________
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+
+    def test_invalid_other_author_does_not_create_candidate(api):
+        c, path, auth, group = api
+        body = version(group)
+        assert c.post(path + '/sync', headers=auth, json=body).status_code == 200
+        other = president_auth(c, group)
+        body.update(operation_id=str(uuid.uuid4()))
+        body['payload']['session']['played_at'] = 'invalid'
+        before = c.get(path, headers=other).json()
+>       assert c.post(path + '/sync', headers=other, json=body).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post(('/groups/%2350456336' + '/sync'), headers={'Authorization': 'Bearer c9Zy4Bua2-9235nRDmKSCs9uS-c8c8XMxo-5-3jL-iY'}, json={'domain': 'sport', 'operation_id': 'baa12652-b1ef-46d9-b48e-5e9e9c78e2dd', 'occurrence_id': 'b224be09-c387-4f92-bf11-36a6f85c0a01', 'base_revision': 0, ...})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:193: AssertionError
+______ test_old_invalid_candidate_is_revalidated_but_current_can_be_kept _______
+
+api = (<starlette.testclient.TestClient object at 0x712240300890>, '/groups/%2350456336', {'Authorization': 'Bearer RDn8kzKIZBT11ogjQt00Uf-CBvg8zLnSfgkL7X1TUYs'}, '#50456336')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7122401c0b00>
+
+    def test_old_invalid_candidate_is_revalidated_but_current_can_be_kept(api, monkeypatch):
+        c, path, auth, group = api
+        body = version(group)
+        assert c.post(path + '/sync', headers=auth, json=body).status_code == 200
+        other = president_auth(c, group)
+        body.update(operation_id=str(uuid.uuid4()))
+        body['payload']['session']['played_at'] = 'invalid'
+        # Reproduce a historical candidate accepted before strict validation.
+        with monkeypatch.context() as patch:
+            patch.setattr('app.main.validate_sport', lambda *args: None)
+            response = c.post(path + '/sync', headers=other, json=body)
+            assert response.status_code == 200, response.text
+            assert response.json()['status'] == 'conflict'
+        url = path + '/documents/sport/' + body['occurrence_id'] + '/resolve'
+        decision = {'revision': 1, 'candidate_id': body['operation_id'], 'reason': 'Review'}
+        before = c.get(path, headers=other).json()
+>       assert c.post(url, headers=other, json=decision).status_code == 422
+E       AssertionError: assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = post('/groups/%2350456336/documents/sport/efd8d652-1e06-4617-b6fc-b8d92c66841a/resolve', headers={'Authorization': 'Bearer bUli_FLFLnCpG9AqfTQVXb5lugHZ35DtsFt1lWNPJ-0'}, json={'revision': 1, 'candidate_id': '5c4a67a5-7b50-4d74-8e60-17128291826b', 'reason': 'Review'})
+E        +      where post = <starlette.testclient.TestClient object at 0x712240300890>.post
+
+tests/test_sport_validation.py:213: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/norris/my-projects/statoo-5v5/backend/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-4]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-5]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-6]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-played_at-7]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-session_type-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-session_type-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-session_type-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-session_type-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-status-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-status-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-result-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-result-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-id-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-id-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-id-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-id-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-id-4]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-player_id-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-player_id-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-team-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-team-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[part-team-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-allow_uneven_teams-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-is_ranked-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-is_ranked-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-split_mode-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-split_mode-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-score_c-0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-score_c-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-score_c-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-score_c-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_a-0_0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_a-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_a-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_a-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_a-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_b-0_0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_b-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_b-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_b-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_b-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_c-0_0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_c-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_c-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_c-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-wins_c-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_a-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_a-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_b-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_b-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-0_0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-unassigned_goals_c-0_1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-draw_points-0_0]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-draw_points-1]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-draw_points-2]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-draw_points-3]
+FAILED tests/test_sport_validation.py::test_invalid_document_is_422_and_never_persisted[session-draw_points-0_1]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins0-A]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins1-B]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins2-C]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins3-DRAW_AB]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins4-DRAW_BC]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins5-DRAW_AC]
+FAILED tests/test_sport_validation.py::test_tournament_winner_is_derived_from_wins[wins6-DRAW_ALL]
+FAILED tests/test_sport_validation.py::test_zero_win_tournament_cannot_close_but_can_remain_draft
+FAILED tests/test_sport_validation.py::test_invalid_numbers_are_rejected_even_without_closing[DRAFT]
+FAILED tests/test_sport_validation.py::test_invalid_numbers_are_rejected_even_without_closing[CANCELLED]
+FAILED tests/test_sport_validation.py::test_negative_unassigned_cannot_cancel_player_goal
+FAILED tests/test_sport_validation.py::test_classic_team_c_is_invalid_even_with_uneven_override
+FAILED tests/test_sport_validation.py::test_invalid_correction_preserves_current_document_and_history
+FAILED tests/test_sport_validation.py::test_invalid_other_author_does_not_create_candidate
+FAILED tests/test_sport_validation.py::test_old_invalid_candidate_is_revalidated_but_current_can_be_kept
+81 failed, 70 passed, 1 warning in 10.76s
