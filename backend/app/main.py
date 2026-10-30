@@ -37,6 +37,11 @@ class SharedPasswordCheck(BaseModel):
     password: str
 
 
+class PasswordChange(BaseModel):
+    current_password: str = Field(min_length=1, max_length=200)
+    new_password: str = Field(min_length=1, max_length=200)
+
+
 class Credentials(BaseModel):
     group_id: str = Field(min_length=1, max_length=100)
     username: str = Field(min_length=1, max_length=100)
@@ -145,6 +150,21 @@ def fail(code, message):
     raise HTTPException(code, message)
 
 
+def validate_user_password(password: str, username: str | None = None):
+    if len(password) < 8 or len(password) > 200:
+        fail(422, "Le mot de passe doit contenir entre 8 et 200 caractères.")
+    if not any(c.islower() for c in password):
+        fail(422, "Le mot de passe doit contenir au moins une lettre minuscule.")
+    if not any(c.isupper() for c in password):
+        fail(422, "Le mot de passe doit contenir au moins une lettre majuscule.")
+    if not any(c.isdigit() for c in password):
+        fail(422, "Le mot de passe doit contenir au moins un chiffre.")
+    if any(ord(c) < 32 or ord(c) == 127 for c in password):
+        fail(422, "Le mot de passe contient des caractères non autorisés.")
+    if username and password.strip().casefold() == username.strip().casefold():
+        fail(422, "Le mot de passe ne doit pas être identique à votre identifiant.")
+
+
 def public_account(account):
     return {key: account[key] for key in ("id", "username", "member_id", "roles", "shared")}
 
@@ -218,6 +238,15 @@ def create_app(url: str | None = None):
     # FastAPI can enter and exit this dependency on different worker threads.
     lock = threading.Lock()
     attempts = {}
+    password_change_attempts = {}
+
+    def throttle(bucket, key, limit, window=60.0):
+        now = time.monotonic()
+        recent = [t for t in bucket.get(key, []) if now - t < window]
+        if len(recent) >= limit:
+            bucket[key] = recent
+            fail(429, "Trop de tentatives, réessayez dans une minute")
+        bucket[key] = recent + [now]
 
     def db():
         with lock, Session(engine) as session, session.begin():
@@ -293,6 +322,8 @@ def create_app(url: str | None = None):
         previous = replay()
         if previous:
             return previous
+        validate_user_password(body.password, username=body.username)
+        validate_user_password(body.shared_password, username=body.shared_username)
         if body.username.strip().casefold() == body.shared_username.strip().casefold():
             fail(422, "Identifiants individuels et collectifs distincts requis")
         ids = [m.get("id") for m in body.members]
@@ -388,6 +419,7 @@ def create_app(url: str | None = None):
             fail(409, "Identifiant déjà utilisé")
         if any(set(a["roles"]) & set(roles) & SINGULAR for a in state["accounts"]):
             fail(409, "Un rôle unique est déjà attribué")
+        validate_user_password(body.password, username=body.username)
         account = {"id": str(uuid.uuid4()), "username": body.username.strip(), "password": password_hash(body.password),
                    "member_id": body.member_id, "roles": roles, "shared": False}
         state["accounts"].append(account)
@@ -419,15 +451,33 @@ def create_app(url: str | None = None):
         session, group, state, actor, target = individual_access(group_id, account_id, auth)
         if target['id'] == actor['id']:
             fail(409, "Cette action ne peut pas remplacer votre propre mot de passe Admin.")
-        if (len(body.password) != 8 or not body.password.isascii() or not body.password.isalnum()
-                or not any(c.islower() for c in body.password)
-                or not any(c.isupper() for c in body.password)
-                or not any(c.isdigit() for c in body.password)):
-            fail(422, "Le nouveau mot de passe doit contenir 8 caractères, avec majuscules, minuscules et chiffres.")
+        validate_user_password(body.password, username=target['username'])
         target['password'] = password_hash(body.password)
         for token in session.scalars(select(Token).where(Token.group_id == group.id, Token.account_id == account_id)):
             session.delete(token)
         audit(state, actor, 'manager_password_reset')
+        group.state = state
+        return {'ok': True}
+
+    @app.post('/groups/{group_id}/account/password')
+    def change_own_password(group_id: str, body: PasswordChange, authorization: str = Header(default=''), auth=Depends(authenticate)):
+        session, group, state, actor = scoped(group_id, auth)
+        if actor.get('shared', False):
+            fail(422, 'Compte individuel requis')
+        throttle(password_change_attempts, actor['id'], limit=5, window=60.0)
+        if not password_matches(body.current_password, actor['password']):
+            fail(400, 'Mot de passe actuel incorrect')
+        validate_user_password(body.new_password, username=actor.get('username'))
+        if password_matches(body.new_password, actor['password']):
+            fail(422, "Le nouveau mot de passe doit être différent de l'ancien")
+        target_account = next(a for a in state['accounts'] if a['id'] == actor['id'])
+        target_account['password'] = password_hash(body.new_password)
+        actor['password'] = target_account['password']
+        current_digest = token_digest(authorization[7:])
+        for token in session.scalars(select(Token).where(Token.group_id == group.id, Token.account_id == actor['id'])):
+            if token.digest != current_digest:
+                session.delete(token)
+        audit(state, actor, 'password_changed')
         group.state = state
         return {'ok': True}
 
@@ -490,6 +540,7 @@ def create_app(url: str | None = None):
         shared = next(a for a in state["accounts"] if a["shared"])
         if any(not a["shared"] and a["username"].casefold() == body.username.strip().casefold() for a in state["accounts"]):
             fail(409, "Identifiant déjà utilisé")
+        validate_user_password(body.password, username=body.username)
         shared["username"] = body.username.strip()
         shared["password"] = password_hash(body.password)
         for token in session.scalars(select(Token).where(Token.group_id == group.id, Token.account_id == shared["id"])):

@@ -53,9 +53,16 @@ def test_manager_access_is_admin_scoped_and_individual(manager):
     assert c.post(f'{path}/accounts/{own}/password', headers=admin, json={'password': 'aB3dE6fG'}).status_code == 409
 
 
-@pytest.mark.parametrize('password', ['', 'short', 'Longer123', 'abcdefgh', 'ABCDEFGH', '12345678'])
+@pytest.mark.parametrize('password', ['', 'short', 'NoDigitsOrSymbols', 'abcdefgh', 'ABCDEFGH', '12345678'])
 def test_reset_requires_generated_password_contract(manager, password):
     c, _, path, admin, target, _ = manager
     result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': password})
     assert result.status_code == 422
     assert c.post(f'{path}/accounts/{target}/password/verify', headers=admin, json={'password': PASSWORD}).status_code == 200
+
+
+def test_reset_manager_password_accepts_longer_valid_password(manager):
+    c, _, path, admin, target, _ = manager
+    result = c.post(f'{path}/accounts/{target}/password', headers=admin, json={'password': 'Longer123'})
+    assert result.status_code == 200
+
