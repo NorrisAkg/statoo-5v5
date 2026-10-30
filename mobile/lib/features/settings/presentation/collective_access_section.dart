@@ -14,11 +14,13 @@ class CollectiveAccessSection extends StatefulWidget {
     required this.access,
     required this.groupName,
     this.managerName,
+    this.inDialog = false,
     super.key,
   });
   final CollectiveAccess access;
   final String groupName;
   final String? managerName;
+  final bool inDialog;
   @override
   State<CollectiveAccessSection> createState() =>
       _CollectiveAccessSectionState();
@@ -214,7 +216,7 @@ class _CollectiveAccessSectionState extends State<CollectiveAccessSection> {
         if (!mounted || !widget.access.allowed) return;
         await Clipboard.setData(ClipboardData(text: text));
         if (mounted) {
-          if (manager) {
+          if (manager || widget.inDialog) {
             setState(() => notice = 'Accès copiés');
           } else {
             ScaffoldMessenger.of(context)

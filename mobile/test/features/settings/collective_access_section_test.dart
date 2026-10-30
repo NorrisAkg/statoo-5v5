@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:statoo/core/theme/app_theme.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:statoo/features/shared/data/collective_access.dart';
 import 'package:statoo/features/settings/presentation/collective_access_section.dart';
+import 'package:statoo/features/shared/data/collective_access.dart';
 
 import '../shared/collective_access_test.dart' show FakeShared;
 
@@ -13,7 +13,7 @@ class MemoryAccess extends CollectiveAccess {
   bool saved = false;
   bool permitted = true;
   String? received;
-  Object? failure;
+  Exception? failure;
   int writes = 0;
   @override
   bool get allowed => permitted;
@@ -95,6 +95,55 @@ void main() {
       findsOneWidget,
     );
   });
+  testWidgets(
+    'COL-ACC-04 collective copy confirmation stays visible inside member dialog when inDialog is true',
+    (tester) async {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (_) async => null,
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      final access = MemoryAccess()..saved = true;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => showDialog<void>(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    content: CollectiveAccessSection(
+                      access: access,
+                      groupName: 'Atlas',
+                      inDialog: true,
+                    ),
+                  ),
+                ),
+                child: const Text('Ouvrir'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Ouvrir'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Copier les accès'));
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text('Accès copiés'),
+        ),
+        findsOneWidget,
+      );
+    },
+  );
   testWidgets(
     'GES03/04 regeneration requires confirmation and can be cancelled',
     (tester) async {
@@ -196,8 +245,9 @@ void main() {
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
         SystemChannels.platform,
         (call) async {
-          if (call.method == 'Clipboard.setData')
+          if (call.method == 'Clipboard.setData') {
             throw PlatformException(code: 'denied');
+          }
           return null;
         },
       );

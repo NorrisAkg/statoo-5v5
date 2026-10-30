@@ -463,4 +463,128 @@ void main() {
     s.pending!.complete();
     await t.pumpAndSettle();
   });
+
+  group('MGR-BOTTOM-SHEET Design System compliance', () {
+    testWidgets(
+      'MGR-SHEET-01 opens as a Modal BottomSheet with drag handle and close button, not an AlertDialog',
+      (t) async {
+        final s = Service();
+        t.view.physicalSize = const Size(393, 852);
+        t.view.devicePixelRatio = 1;
+        addTearDown(t.view.resetPhysicalSize);
+        addTearDown(t.view.resetDevicePixelRatio);
+        addTearDown(s.dispose);
+
+        await t.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(s),
+              playersListProvider.overrideWith(Players.new),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(),
+            ),
+          ),
+        );
+        await t.pumpAndSettle();
+
+        await t.tap(find.text('Ajouter un gestionnaire'));
+        await t.pumpAndSettle();
+
+        // Must be a Modal BottomSheet and NOT an AlertDialog
+        expect(find.byType(BottomSheet), findsOneWidget);
+        expect(find.byType(AlertDialog), findsNothing);
+
+        // Header and controls
+        expect(find.text('Compte individuel et rôles'), findsOneWidget);
+        expect(find.byTooltip('Fermer'), findsOneWidget);
+
+        // Drag handle present (BoxDecoration with width 40, height 4)
+        final handleFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is Container &&
+              widget.constraints?.maxWidth == 40 &&
+              widget.constraints?.maxHeight == 4,
+        );
+        expect(handleFinder, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'MGR-SHEET-02 close button dismisses bottom sheet without saving',
+      (t) async {
+        final s = Service();
+        t.view.physicalSize = const Size(393, 852);
+        t.view.devicePixelRatio = 1;
+        addTearDown(t.view.resetPhysicalSize);
+        addTearDown(t.view.resetDevicePixelRatio);
+        addTearDown(s.dispose);
+
+        await t.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(s),
+              playersListProvider.overrideWith(Players.new),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(),
+            ),
+          ),
+        );
+        await t.pumpAndSettle();
+
+        await t.tap(find.text('Ajouter un gestionnaire'));
+        await t.pumpAndSettle();
+
+        expect(find.byType(BottomSheet), findsOneWidget);
+
+        await t.tap(find.byTooltip('Fermer'));
+        await t.pumpAndSettle();
+
+        expect(find.byType(BottomSheet), findsNothing);
+        expect(s.calls, 0);
+      },
+    );
+
+    testWidgets(
+      'MGR-SHEET-03 bottom sheet respects keyboard insets and remains scrollable',
+      (t) async {
+        final s = Service();
+        t.view.physicalSize = const Size(393, 852);
+        t.view.devicePixelRatio = 1;
+        addTearDown(t.view.resetPhysicalSize);
+        addTearDown(t.view.resetDevicePixelRatio);
+        addTearDown(s.dispose);
+
+        await t.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedServiceProvider.overrideWithValue(s),
+              playersListProvider.overrideWith(Players.new),
+            ],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(),
+            ),
+          ),
+        );
+        await t.pumpAndSettle();
+
+        await t.scrollUntilVisible(
+          find.text('Ajouter un gestionnaire').first,
+          100,
+          scrollable: find.byType(Scrollable).first,
+        );
+        await t.tap(find.text('Ajouter un gestionnaire').first);
+        await t.pumpAndSettle();
+
+        expect(find.byType(BottomSheet), findsOneWidget);
+        expect(find.byType(SingleChildScrollView), findsWidgets);
+        expect(find.text('Créer'), findsOneWidget);
+        expect(t.takeException(), isNull);
+      },
+    );
+  });
 }

@@ -189,4 +189,180 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  group('COL-ACC Collective member access', () {
+    testWidgets(
+      'COL-ACC-01/02 admin can access collective credentials from Comptes et rôles',
+      (tester) async {
+        tester.view.physicalSize = const Size(800, 1800);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final service = SharedService(AppDatabase.instance)
+          ..baseUrl = 'https://example.test'
+          ..identity = {
+            'group_id': 'g',
+            'expires_at': DateTime.now()
+                .add(const Duration(days: 1))
+                .toIso8601String(),
+            'account': {
+              'id': 'me',
+              'roles': ['ADMIN', 'MEMBER'],
+            },
+          }
+          ..snapshot = {
+            'name': 'Notre groupe',
+            'documents': <String, dynamic>{},
+            'accounts': [
+              {
+                'id': 'shared',
+                'username': 'membres',
+                'roles': ['MEMBER'],
+                'shared': true,
+              },
+              {
+                'id': 'me',
+                'username': 'admin',
+                'roles': ['ADMIN', 'MEMBER'],
+                'shared': false,
+              },
+            ],
+          };
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedServiceProvider.overrideWithValue(service)],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Must display "Accès collectif des membres" button
+        expect(find.text('Accès collectif des membres'), findsOneWidget);
+
+        // Tapping the button opens the dialog
+        await tester.tap(find.text('Accès collectif des membres'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text('Accès des membres'), findsOneWidget);
+        expect(
+          find.text('Partagez l’accès commun en lecture seule à votre groupe.'),
+          findsOneWidget,
+        );
+
+        // Dismiss dialog
+        await tester.tap(find.text('Fermer'));
+        await tester.pumpAndSettle();
+        expect(find.byType(AlertDialog), findsNothing);
+
+        // Tapping the shared account row also opens the dialog
+        await tester.tap(find.text('membres'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text('Accès des membres'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'COL-ACC-03 admin can access collective credentials during responsibility setup',
+      (tester) async {
+        final service = SharedService(AppDatabase.instance)
+          ..baseUrl = 'https://example.test'
+          ..identity = {
+            'group_id': 'g',
+            'expires_at': DateTime.now()
+                .add(const Duration(days: 1))
+                .toIso8601String(),
+            'account': {
+              'id': 'me',
+              'roles': ['ADMIN', 'MEMBER'],
+            },
+          }
+          ..snapshot = {
+            'name': 'Notre groupe',
+            'documents': <String, dynamic>{},
+            'accounts': [
+              {
+                'id': 'shared',
+                'username': 'membres',
+                'roles': ['MEMBER'],
+                'shared': true,
+              },
+            ],
+          };
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedServiceProvider.overrideWithValue(service)],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(setup: true),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Désigner les responsables'), findsOneWidget);
+        expect(
+          find.text(
+            'Les simples membres utilisent l’accès collectif en lecture seule.',
+          ),
+          findsOneWidget,
+        );
+        expect(find.text('Accès collectif des membres'), findsOneWidget);
+
+        await tester.tap(find.text('Accès collectif des membres'));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text('Accès des membres'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'COL-ACC-05 non-admin cannot see collective access button in Comptes et rôles',
+      (tester) async {
+        final service = SharedService(AppDatabase.instance)
+          ..identity = {
+            'group_id': 'g',
+            'account': {
+              'id': 'shared',
+              'roles': ['MEMBER'],
+              'shared': true,
+            },
+          }
+          ..snapshot = {
+            'name': 'Notre groupe',
+            'documents': <String, dynamic>{},
+            'accounts': [
+              {
+                'id': 'shared',
+                'username': 'membres',
+                'roles': ['MEMBER'],
+                'shared': true,
+              },
+            ],
+          };
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [sharedServiceProvider.overrideWithValue(service)],
+            child: MaterialApp(
+              theme: AppTheme.darkTheme,
+              home: const SharedGroupScreen(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('Accès collectif des membres'), findsNothing);
+      },
+    );
+  });
 }
