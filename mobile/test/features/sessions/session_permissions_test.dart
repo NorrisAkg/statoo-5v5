@@ -7,14 +7,13 @@ import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
-import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/presentation/session_detail_screen.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
 class _DeniedController extends SessionsController {
-  _DeniedController(super.ref);
+  _DeniedController(super._ref);
   @override
   Future<void> recordLive(
     String id,

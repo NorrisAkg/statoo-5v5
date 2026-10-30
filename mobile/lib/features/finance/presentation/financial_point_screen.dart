@@ -36,7 +36,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   final List<FinancialMovement> _expenses = [];
   final List<FinancialMovement> _donations = [];
   final _search = TextEditingController();
-  FinancialPoint? _point;
+  late FinancialPoint _point;
   String? _error;
   String? _group;
   bool _loaded = false;
@@ -176,8 +176,8 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
 
   int _amount(TextEditingController c) => int.tryParse(c.text) ?? 0;
   FinancialPoint _current() => FinancialPoint(
-    playedAt: _point!.playedAt,
-    rate: _point!.rate,
+    playedAt: _point.playedAt,
+    rate: _point.rate,
     cancelled: _cancelled,
     lines: [
       for (final id in _contributions.keys)
@@ -255,8 +255,9 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
       await ref
           .read(financeRepositoryProvider)
           .savePoint(_group!, widget.sessionId, point, reason: correction);
-      ref.invalidate(financialPointsProvider);
-      ref.invalidate(financialTotalsProvider);
+      ref
+        ..invalidate(financialPointsProvider)
+        ..invalidate(financialTotalsProvider);
       if (mounted) {
         _savedBefore = true;
         _baseline = jsonEncode({
@@ -556,7 +557,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
             DateFormat(
               "EEE d MMM yyyy · HH'h'mm",
               'fr_FR',
-            ).format(_point!.playedAt),
+            ).format(_point.playedAt),
             style: TextStyle(color: context.colors.foreground400, fontSize: 13),
           ),
           const SizedBox(height: 12),
@@ -567,7 +568,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
             runSpacing: 8,
             children: [
               Text(
-                'Cotisation : ${_money(_point!.rate)} F',
+                'Cotisation : ${_money(_point.rate)} F',
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -582,9 +583,9 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
                     if (value != null && mounted) {
                       setState(
                         () => _point = FinancialPoint(
-                          playedAt: _point!.playedAt,
+                          playedAt: _point.playedAt,
                           rate: value,
-                          lines: _point!.lines,
+                          lines: _point.lines,
                         ),
                       );
                     }
@@ -628,7 +629,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
   );
 
   Future<int?> _askRate() async {
-    final c = TextEditingController(text: '${_point!.rate}');
+    final c = TextEditingController(text: '${_point.rate}');
     final value = await showAppFormDialog<int>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -785,7 +786,7 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
                 _contributions[player.id]!,
                 writable,
                 'Cotisation de ${player.name}',
-                _point!.rate,
+                _point.rate,
                 'Cotisation reçue',
               ),
               _moneyField(

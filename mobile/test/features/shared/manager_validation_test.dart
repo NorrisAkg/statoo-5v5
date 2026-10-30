@@ -7,11 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/core/data/shared_http_error.dart';
 import 'package:statoo/core/theme/app_theme.dart';
+import 'package:statoo/features/players/application/players_provider.dart';
+import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/shared/presentation/shared_group_screen.dart';
-import 'package:statoo/features/players/application/players_provider.dart';
-import 'package:statoo/features/players/domain/player.dart';
 
 class Players extends PlayersNotifier {
   @override
@@ -42,10 +42,10 @@ class Service extends SharedService {
     };
   }
   int calls = 0;
-  Object? failure;
+  Exception? failure;
   bool syncFailure = false;
   Completer<void>? pending;
-  Map? sent;
+  Map<String, dynamic>? sent;
   @override
   Future<Map<String, dynamic>> request(
     String method,
@@ -53,7 +53,7 @@ class Service extends SharedService {
     Object? body,
   ]) async {
     calls++;
-    sent = body as Map?;
+    sent = body as Map<String, dynamic>?;
     if (pending != null) await pending!.future;
     if (failure != null) throw failure!;
     return {'id': 'created'};

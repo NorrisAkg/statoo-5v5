@@ -75,8 +75,9 @@ class FinancialReport {
     };
     for (final point in points) {
       if (!point.playedAt.isBefore(end) ||
-          (openingDate != null && point.playedAt.isBefore(openingDate)))
+          (openingDate != null && point.playedAt.isBefore(openingDate))) {
         continue;
+      }
       cash += point.cashChange;
       for (final line in point.lines) {
         final previous =

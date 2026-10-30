@@ -131,8 +131,9 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
     reference.dispose();
     if (accepted != true || value.isEmpty || !mounted) return;
     try {
-      if (group != container.read(activeTeamIdProvider))
+      if (group != container.read(activeTeamIdProvider)) {
         throw StateError('Le groupe actif a changé.');
+      }
       final id = await container
           .read(financeRepositoryProvider)
           .createPeriod(
@@ -140,13 +141,15 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
             DateTime(date.year, date.month, date.day, 20),
             value,
           );
-      container.invalidate(financialPointsProvider);
-      container.invalidate(financialTotalsProvider);
+      container
+        ..invalidate(financialPointsProvider)
+        ..invalidate(financialTotalsProvider);
       if (mounted) unawaited(context.push('/seances/$id/finances'));
     } on Object catch (e) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('$e')));
+      }
     }
   }
 
@@ -510,16 +513,19 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
     final group = container.read(activeTeamIdProvider);
     final shared = container.read(sharedServiceProvider);
     try {
-      if (shared.connected && shared.groupId == group)
+      if (shared.connected && shared.groupId == group) {
         await shared.synchronize();
-      container.invalidate(financialPointsProvider);
-      container.invalidate(playersListProvider);
-      container.invalidate(financialReportProvider);
+      }
+      container
+        ..invalidate(financialPointsProvider)
+        ..invalidate(playersListProvider)
+        ..invalidate(financialReportProvider);
       await container.read(financialReportProvider.future);
     } on Object catch (error) {
-      if (mounted)
+      if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('$error')));
+      }
     }
   }
 

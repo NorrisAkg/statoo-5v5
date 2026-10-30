@@ -62,7 +62,7 @@ class FinanceRepository {
     DateTime? date,
   }) async {
     final db = await database.database;
-    return db.transaction((txn) async {
+    return await db.transaction((txn) async {
       final sessions = await txn.query(
         'sessions',
         where: 'id = ? AND team_id = ?',
@@ -232,13 +232,15 @@ class FinanceRepository {
     final pending = <PendingFinancialPeriod>[];
     for (final session in sessions) {
       final date = DateTime.parse(session['played_at']! as String);
-      if (!date.isBefore(end) || (since != null && date.isBefore(since)))
+      if (!date.isBefore(end) || (since != null && date.isBefore(since))) {
         continue;
+      }
       final id = session['id']! as String;
       final financialId = await canonical(group, id, date: date);
       if (!seen.add(financialId)) continue;
-      if (!known.containsKey(financialId))
+      if (!known.containsKey(financialId)) {
         pending.add(PendingFinancialPeriod(sessionId: id, date: date));
+      }
     }
     return pending;
   }
