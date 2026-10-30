@@ -91,18 +91,17 @@ Toutes les stories de dette technique identifiées lors de la prise en main (Spr
 - Le compte ADMIN est créé avec `member_id: None` (`main.py:303-304`) : le modèle supporte déjà un admin non-joueur, mais l'audit n'a aucun nom lisible.
 - `POST /groups` est idempotent via `operation_id` et rejoue en renvoyant un jeton (`main.py:281-291`). **Un code de secours généré côté serveur ne pourrait pas être ré-affiché au rejeu** : décision d'architecture à trancher dans ACCESS-01.
 
-### [ACCESS-03] Changement de son propre mot de passe et politique de mot de passe unifiée
+### [ACCESS-03] Changement de son propre mot de passe et politique de mot de passe unifiée — ✅ LIVRÉ (Commit 28fc6f7)
 - **En tant qu'** administrateur (ou gestionnaire),  
   **je veux** changer mon propre mot de passe depuis mon compte authentifié, avec la même politique de mot de passe partout,  
   **afin de** ne plus dépendre d'un tiers pour renouveler mes identifiants et d'éviter les règles contradictoires.
+- **Points** : 2 | **Statut** : Complété (commit `28fc6f7`)
 - **Critères d'acceptation** :
   - *Given* un compte individuel authentifié, *When* il envoie l'ancien et le nouveau mot de passe valides, *Then* le mot de passe est remplacé, les autres jetons du compte sont révoqués, le jeton courant reste valide, l'action est auditée.
   - *Given* un ancien mot de passe incorrect, *When* la demande est envoyée, *Then* 400/401 et aucune modification.
   - *Given* le compte collectif, *When* la demande est envoyée, *Then* 422 (compte individuel requis).
   - *Given* un mot de passe acceptable à l'inscription mais refusé à la réinitialisation (ou l'inverse), *Then* il n'existe plus d'écart : une seule politique documentée et testée.
-- **Points** : 2
-- **Priorité** : Haute (Valeur 3 × Risque 4 ÷ Effort 2 = 6)
-- **Rôles mobilisés** : `architect`, `test-engineer`, `implementer`, `backend-api`, `reviewer`
+
 
 ### [ACCESS-01] Code de secours administrateur à usage unique
 - **En tant qu'** administrateur,  
