@@ -252,7 +252,8 @@ void main() {
         return;
       }
       expect(goal, findsOneWidget);
-      expect(find.byIcon(Remix.check_line), findsOneWidget);
+      expect(find.byIcon(Remix.check_line), findsNothing);
+      expect(find.text('Actif'), findsNothing);
       await tester.scrollUntilVisible(
         goal,
         200,
@@ -281,4 +282,134 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets(
+    'LIVE-PILL-TABS: LiveStatsPanel renders full capsule pill tabs with dot, name, badge count and no square OutlinedButton or Actif label',
+    (tester) async {
+      const colorA = Color(0xFF3B82F6);
+      const colorB = Color(0xFFEF4444);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            liveJournalProvider('s_pill').overrideWith((ref) async => []),
+            sessionDetailProvider('s_pill').overrideWith(
+              (ref) async => Session(
+                id: 's_pill',
+                playedAt: DateTime(2026, 10, 30),
+                teamNames: const {'A': 'Galactiques', 'B': 'Invincibles'},
+                teamColors: const {'A': 0xFF3B82F6, 'B': 0xFFEF4444},
+              ),
+            ),
+            sessionParticipantsProvider('s_pill').overrideWith(
+              (ref) async => [
+                const SessionParticipantDetail(
+                  participation: Participation(
+                    id: 'p1',
+                    sessionId: 's_pill',
+                    playerId: 'p1',
+                    team: Team.a,
+                  ),
+                  playerName: 'Zidane',
+                ),
+                const SessionParticipantDetail(
+                  participation: Participation(
+                    id: 'p2',
+                    sessionId: 's_pill',
+                    playerId: 'p2',
+                    team: Team.a,
+                  ),
+                  playerName: 'Ronaldo',
+                ),
+                const SessionParticipantDetail(
+                  participation: Participation(
+                    id: 'p3',
+                    sessionId: 's_pill',
+                    playerId: 'p3',
+                    team: Team.b,
+                  ),
+                  playerName: 'Henry',
+                ),
+              ],
+            ),
+            activeSessionIdProvider.overrideWith((ref) async => 's_pill'),
+            canWriteSessionProvider((domain: 'sport', sessionId: 's_pill'))
+                .overrideWith((ref) async => true),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            home: const SessionDetailScreen(sessionId: 's_pill'),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Verify custom team names appear on pill tabs
+      expect(find.text('Galactiques'), findsWidgets);
+      expect(find.text('Invincibles'), findsWidgets);
+
+      // Verify NO 'Actif' or check icons on the tabs
+      expect(find.text('Actif'), findsNothing);
+      expect(find.byIcon(Remix.check_line), findsNothing);
+
+      // Verify NO OutlinedButton is used for the tabs
+      expect(find.widgetWithText(OutlinedButton, 'Galactiques'), findsNothing);
+      expect(find.widgetWithText(OutlinedButton, 'Invincibles'), findsNothing);
+
+      // Verify Team A pill tab container has capsule border radius (9999) and selected border color
+      final tabAContainer = tester.widget<AnimatedContainer>(
+        find.widgetWithText(AnimatedContainer, 'Galactiques'),
+      );
+      final tabADeco = tabAContainer.decoration! as BoxDecoration;
+      expect(tabADeco.borderRadius, BorderRadius.circular(9999));
+      expect(tabADeco.border?.top.color, colorA);
+
+      // Verify Team B pill tab container has capsule border radius and transparent border when unselected
+      final tabBContainer = tester.widget<AnimatedContainer>(
+        find.widgetWithText(AnimatedContainer, 'Invincibles'),
+      );
+      final tabBDeco = tabBContainer.decoration! as BoxDecoration;
+      expect(tabBDeco.borderRadius, BorderRadius.circular(9999));
+      expect(tabBDeco.border?.top.color, Colors.transparent);
+
+      // Verify player count badges (2 for Team A, 1 for Team B)
+      final counterAText = tester.widget<Text>(find.descendant(
+        of: find.widgetWithText(AnimatedContainer, 'Galactiques'),
+        matching: find.text('2'),
+      ));
+      expect(counterAText.style?.color, colorA);
+
+      final counterBText = tester.widget<Text>(find.descendant(
+        of: find.widgetWithText(AnimatedContainer, 'Invincibles'),
+        matching: find.text('1'),
+      ));
+      expect(counterBText.style?.color, isNot(colorB));
+
+      // Verify team A players are visible initially
+      expect(find.text('Zidane'), findsOneWidget);
+      expect(find.text('Ronaldo'), findsOneWidget);
+      expect(find.text('Henry'), findsNothing);
+
+      // Tap on Team B tab
+      await tester.tap(find.widgetWithText(AnimatedContainer, 'Invincibles'));
+      await tester.pumpAndSettle();
+
+      // Now Team B is selected: its border is colorB, Team A border is transparent
+      final tabBAfter = tester.widget<AnimatedContainer>(
+        find.widgetWithText(AnimatedContainer, 'Invincibles'),
+      );
+      final tabBDecoAfter = tabBAfter.decoration! as BoxDecoration;
+      expect(tabBDecoAfter.border?.top.color, colorB);
+
+      final tabAAfter = tester.widget<AnimatedContainer>(
+        find.widgetWithText(AnimatedContainer, 'Galactiques'),
+      );
+      final tabADecoAfter = tabAAfter.decoration! as BoxDecoration;
+      expect(tabADecoAfter.border?.top.color, Colors.transparent);
+
+      // And Henry (Team B player) is visible, Zidane is not
+      expect(find.text('Henry'), findsOneWidget);
+      expect(find.text('Zidane'), findsNothing);
+    },
+  );
 }

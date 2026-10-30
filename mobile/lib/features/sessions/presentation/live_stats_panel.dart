@@ -113,7 +113,7 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
         Row(
           children: [
             for (int i = 0; i < teams.length; i++) ...[
-              if (i > 0) const SizedBox(width: 8),
+              if (i > 0) const SizedBox(width: 12),
               Expanded(
                 child: TeamTabPill(
                   title: s.teamName(teams[i]),

@@ -421,7 +421,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 onTap: () => setState(() => _selectedTeamTab = Team.a),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Expanded(
               child: _buildTeamTabButton(
                 context,
@@ -434,7 +434,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               ),
             ),
             if (isTournament) ...[
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               Expanded(
                 child: _buildTeamTabButton(
                   context,
