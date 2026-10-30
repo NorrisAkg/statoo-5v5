@@ -11,8 +11,10 @@ import '../domain/participation.dart';
 import '../domain/session.dart';
 import '../domain/session_summary.dart';
 import '../domain/team_appearance.dart';
+import 'player_discipline_sheet.dart';
 import 'session_team_colors.dart';
 import 'team_tab_pill.dart';
+
 
 /// Live entry shares the persisted aggregates used by home, finance and ranking.
 class LiveStatsPanel extends ConsumerStatefulWidget {
@@ -87,6 +89,43 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
     if (action != null && mounted) await mutate(action, edit: edit);
   }
 
+  Future<void> _openDisciplineSheet(SessionParticipantDetail p) async {
+    if (!writable) return;
+    final action = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => PlayerDisciplineSheet(
+        playerName: p.playerName,
+        playerId: p.participation.id,
+        team: p.participation.team,
+        yellowCards: p.participation.yellowCards,
+        redCards: p.participation.redCards,
+      ),
+    );
+    if (action != null && mounted) {
+      await mutate(action);
+      if (mounted) {
+        final isYellow = action['type'] == 'yellow';
+        final isDecrement = action['delta'] == -1;
+        final cardName = isYellow ? 'Carton jaune' : 'Carton rouge';
+        final verb = isDecrement ? 'retiré pour' : 'attribué à';
+        final msg = '$cardName $verb ${p.playerName}';
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(msg),
+              action: SnackBarAction(
+                label: 'Annuler',
+                onPressed: () => mutate(null),
+              ),
+            ),
+          );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = widget.session;
@@ -158,6 +197,8 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                             size: 16,
                             color: context.colors.foreground50,
                           ),
+                          const SizedBox(width: 6),
+                          const Text('Ajouter un but'),
                         ],
                       ),
                     ),
@@ -166,79 +207,21 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: Tooltip(
-                  message: 'Carton jaune',
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(48, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                    ),
-                    onPressed: writable ? () => pick('yellow') : null,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Remix.rectangle_fill,
-                            size: 20,
-                            color: context.colors.card,
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Remix.add_line,
-                            size: 16,
-                            color: context.colors.card,
-                          ),
-                        ],
-                      ),
-                    ),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(48, 48),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                   ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Tooltip(
-                  message: 'Carton rouge',
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(48, 48),
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                    ),
-                    onPressed: writable ? () => pick('red') : null,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Remix.rectangle_fill,
-                            size: 20,
-                            color: context.colors.danger,
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Remix.add_line,
-                            size: 16,
-                            color: context.colors.danger,
-                          ),
-                        ],
-                      ),
-                    ),
+                  onPressed: writable && operations.isNotEmpty && !journal.hasError
+                      ? () => mutate(null)
+                      : null,
+                  child: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('Annuler la dernière action'),
                   ),
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(minimumSize: const Size(48, 48)),
-            onPressed: writable && operations.isNotEmpty && !journal.hasError
-                ? () => mutate(null)
-                : null,
-            child: const Text('Annuler la dernière action'),
           ),
         ],
         if (busy) const LinearProgressIndicator(),
@@ -263,72 +246,79 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              p.playerName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Semantics(
-                              label:
-                                  '${p.playerName}: ${p.participation.goals} buts, ${p.participation.assists} passes, ${p.participation.yellowCards} cartons jaunes, ${p.participation.redCards} cartons rouges',
-                              excludeSemantics: true,
-                              child: Wrap(
-                                spacing: 8,
-                                runSpacing: 4,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  _buildStatItem(
-                                    icon: Icon(
-                                      Remix.football_line,
-                                      size: 13,
-                                      color: context.colors.primary400,
-                                    ),
-                                    count: p.participation.goals,
-                                    color: context.colors.primary400,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: writable ? () => _openDisciplineSheet(p) : null,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  p.playerName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  _buildStatItem(
-                                    icon: SoccerShoeIcon(
-                                      size: 13,
-                                      color: context.colors.secondary400,
-                                    ),
-                                    count: p.participation.assists,
-                                    color: context.colors.secondary400,
-                                  ),
-                                  _buildStatItem(
-                                    icon: Container(
-                                      width: 7,
-                                      height: 10,
-                                      decoration: BoxDecoration(
+                                ),
+                                const SizedBox(height: 3),
+                                Semantics(
+                                  label:
+                                      '${p.playerName}: ${p.participation.goals} buts, ${p.participation.assists} passes, ${p.participation.yellowCards} cartons jaunes, ${p.participation.redCards} cartons rouges',
+                                  excludeSemantics: true,
+                                  child: Wrap(
+                                    spacing: 8,
+                                    runSpacing: 4,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: [
+                                      _buildStatItem(
+                                        icon: Icon(
+                                          Remix.football_line,
+                                          size: 13,
+                                          color: context.colors.primary400,
+                                        ),
+                                        count: p.participation.goals,
+                                        color: context.colors.primary400,
+                                      ),
+                                      _buildStatItem(
+                                        icon: SoccerShoeIcon(
+                                          size: 13,
+                                          color: context.colors.secondary400,
+                                        ),
+                                        count: p.participation.assists,
+                                        color: context.colors.secondary400,
+                                      ),
+                                      _buildStatItem(
+                                        icon: Container(
+                                          width: 7,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: context.colors.card,
+                                            borderRadius:
+                                                BorderRadius.circular(1.5),
+                                          ),
+                                        ),
+                                        count: p.participation.yellowCards,
                                         color: context.colors.card,
-                                        borderRadius:
-                                            BorderRadius.circular(1.5),
                                       ),
-                                    ),
-                                    count: p.participation.yellowCards,
-                                    color: context.colors.card,
-                                  ),
-                                  _buildStatItem(
-                                    icon: Container(
-                                      width: 7,
-                                      height: 10,
-                                      decoration: BoxDecoration(
+                                      _buildStatItem(
+                                        icon: Container(
+                                          width: 7,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: context.colors.danger,
+                                            borderRadius:
+                                                BorderRadius.circular(1.5),
+                                          ),
+                                        ),
+                                        count: p.participation.redCards,
                                         color: context.colors.danger,
-                                        borderRadius:
-                                            BorderRadius.circular(1.5),
                                       ),
-                                    ),
-                                    count: p.participation.redCards,
-                                    color: context.colors.danger,
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       if (widget.editable)
@@ -360,13 +350,14 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                   (t) => t.name.toUpperCase() == a['team'],
                 );
                 final type = a['type'];
+                final isRemove = a['delta'] == -1;
                 final label = type == 'goal'
                     ? 'But'
                     : type == 'win'
-                    ? 'Victoire ${a['delta'] == -1 ? 'retirée' : 'ajoutée'}'
+                    ? 'Victoire ${isRemove ? 'retirée' : 'ajoutée'}'
                     : type == 'yellow'
-                    ? 'Carton jaune'
-                    : 'Carton rouge';
+                    ? (isRemove ? 'Carton jaune retiré' : 'Carton jaune')
+                    : (isRemove ? 'Carton rouge retiré' : 'Carton rouge');
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(

@@ -205,7 +205,15 @@ class LiveStatsRepository {
       }
     } else {
       if (p == null) throw StateError('Choisissez un joueur.');
-      increment(p, type == 'yellow' ? 'yellow_cards' : 'red_cards', sign);
+      final delta = (a['delta'] as int?) ?? 1;
+      if (![1, -1].contains(delta)) {
+        throw StateError('Carton invalide.');
+      }
+      increment(
+        p,
+        type == 'yellow' ? 'yellow_cards' : 'red_cards',
+        sign * delta,
+      );
     }
     if (s['session_type'] == 'TOURNAMENT_3') {
       final wins = [s['wins_a'] as int, s['wins_b'] as int, s['wins_c'] as int];

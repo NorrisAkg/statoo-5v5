@@ -1,9 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:statoo/core/data/app_database.dart';
-import 'package:statoo/features/sessions/data/live_stats_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
+import 'package:statoo/features/sessions/data/live_stats_repository.dart';
+
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
@@ -52,7 +53,7 @@ void main() {
       });
     }
   });
-  tearDown(() async => db.close());
+  tearDown(() => db.close());
   Future<Map<String, Object?>> session() async =>
       (await db.query('sessions')).single;
   Future<Map<String, Object?>> player(String id) async => (await db.query(
@@ -258,4 +259,104 @@ void main() {
       expect(queued.single['value'], contains('"assists":5'));
     },
   );
+
+  group('LiveStatsRepository - Card deltas and discipline', () {
+    test('DISC-01: delta 1 increments cards, delta -1 decrements cards', () async {
+      // Yellow cards
+      await add('yellow', player: 'p');
+      expect((await player('p'))['yellow_cards'], 1);
+
+      await add('yellow', player: 'p');
+      expect((await player('p'))['yellow_cards'], 2);
+
+      await add('yellow', player: 'p', delta: -1);
+      expect((await player('p'))['yellow_cards'], 1);
+
+      // Red cards
+      await add('red', player: 'p');
+      expect((await player('p'))['red_cards'], 1);
+
+      await add('red', player: 'p', delta: -1);
+      expect((await player('p'))['red_cards'], 0);
+    });
+
+    test('DISC-02: refuses negative card counter when delta is -1 and count is 0', () async {
+      expect((await player('p'))['yellow_cards'], 0);
+      await expectLater(
+        add('yellow', player: 'p', delta: -1),
+        throwsStateError,
+      );
+      expect((await player('p'))['yellow_cards'], 0);
+
+      expect((await player('p'))['red_cards'], 0);
+      await expectLater(
+        add('red', player: 'p', delta: -1),
+        throwsStateError,
+      );
+      expect((await player('p'))['red_cards'], 0);
+    });
+
+    test('DISC-03: refuses invalid delta for yellow and red cards', () async {
+      for (final invalidDelta in [0, 2, -2, 5, -10]) {
+        await expectLater(
+          repo.apply('t', 's', {
+            'type': 'yellow',
+            'team': 'A',
+            'player': 'p',
+            'delta': invalidDelta,
+          }),
+          throwsStateError,
+        );
+        await expectLater(
+          repo.apply('t', 's', {
+            'type': 'red',
+            'team': 'A',
+            'player': 'p',
+            'delta': invalidDelta,
+          }),
+          throwsStateError,
+        );
+      }
+      expect((await player('p'))['yellow_cards'], 0);
+      expect((await player('p'))['red_cards'], 0);
+      expect(await repo.journal('t', 's'), isEmpty);
+    });
+
+    test('DISC-04: undo functional after card addition and card decrement', () async {
+      // 1. Add yellow, then undo
+      await add('yellow', player: 'p');
+      expect((await player('p'))['yellow_cards'], 1);
+      expect((await repo.journal('t', 's')).length, 1);
+
+      await repo.undo('t', 's');
+      expect((await player('p'))['yellow_cards'], 0);
+      expect(await repo.journal('t', 's'), isEmpty);
+
+      // 2. Add 2 yellows, decrement 1, undo decrement, undo additions
+      await add('yellow', player: 'p');
+      await add('yellow', player: 'p');
+      expect((await player('p'))['yellow_cards'], 2);
+
+      await add('yellow', player: 'p', delta: -1);
+      expect((await player('p'))['yellow_cards'], 1);
+
+      // Undo the decrement -> yellow_cards should become 2
+      await repo.undo('t', 's');
+      expect((await player('p'))['yellow_cards'], 2);
+
+      // Undo one addition -> yellow_cards should become 1
+      await repo.undo('t', 's');
+      expect((await player('p'))['yellow_cards'], 1);
+
+      // Undo final addition -> yellow_cards should become 0
+      await repo.undo('t', 's');
+      expect((await player('p'))['yellow_cards'], 0);
+
+      // 3. Red card undo cycle
+      await add('red', player: 'p');
+      expect((await player('p'))['red_cards'], 1);
+      await repo.undo('t', 's');
+      expect((await player('p'))['red_cards'], 0);
+    });
+  });
 }

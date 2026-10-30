@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:remixicon/remixicon.dart';
+
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
@@ -20,7 +20,9 @@ Widget _buildTestWidget({
 }) {
   return ProviderScope(
     overrides: [
-      liveJournalProvider(session.id).overrideWith((ref) async => []),
+      liveJournalProvider(session.id).overrideWith((ref) async => [
+        {'id': 'dummy', 'action': {'type': 'goal', 'team': 'A', 'player': 'player1'}},
+      ]),
     ],
     child: MaterialApp(
       theme: theme ?? AppTheme.darkTheme,
@@ -103,7 +105,7 @@ void main() {
     );
 
     testWidgets(
-      'RED-02: Boutons compacts avec icônes et plus pour but, carton jaune et carton rouge',
+      'RED-02: Barre supérieure épurée : [Ajouter un but] et [Annuler], aucun carton en haut',
       (tester) async {
         await tester.pumpWidget(
           _buildTestWidget(
@@ -113,64 +115,29 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // 1. Le gros bouton avec le texte 'Ajouter un but' ne doit plus exister
-        expect(
-          find.widgetWithText(FilledButton, 'Ajouter un but'),
-          findsNothing,
-          reason: 'Le gros bouton textuel "Ajouter un but" doit être remplacé.',
-        );
-
-        // 2. Bouton But compact : football_line + add_line avec tooltip/semantics "Ajouter un but"
+        // 1. Bouton But présent avec libellé et icônes
         final goalButton = find.byTooltip('Ajouter un but');
         expect(goalButton, findsOneWidget);
-        expect(
-          find.descendant(of: goalButton, matching: find.byIcon(Remix.football_line)),
-          findsOneWidget,
-        );
-        expect(
-          find.descendant(of: goalButton, matching: find.byIcon(Remix.add_line)),
-          findsOneWidget,
-        );
+        expect(find.text('Ajouter un but'), findsOneWidget);
 
-        // 3. Bouton Carton Jaune compact : rectangle_fill + add_line avec tooltip/semantics "Carton jaune"
-        final yellowButton = find.byTooltip('Carton jaune');
-        expect(yellowButton, findsOneWidget);
-        expect(
-          find.descendant(of: yellowButton, matching: find.byIcon(Remix.rectangle_fill)),
-          findsOneWidget,
-        );
-        expect(
-          find.descendant(of: yellowButton, matching: find.byIcon(Remix.add_line)),
-          findsOneWidget,
-        );
+        // 2. Bouton Annuler présent
+        final undoButton = find.widgetWithText(OutlinedButton, 'Annuler la dernière action');
+        expect(undoButton, findsOneWidget);
 
-        // 4. Bouton Carton Rouge compact : rectangle_fill + add_line avec tooltip/semantics "Carton rouge"
-        final redButton = find.byTooltip('Carton rouge');
-        expect(redButton, findsOneWidget);
-        expect(
-          find.descendant(of: redButton, matching: find.byIcon(Remix.rectangle_fill)),
-          findsOneWidget,
-        );
-        expect(
-          find.descendant(of: redButton, matching: find.byIcon(Remix.add_line)),
-          findsOneWidget,
-        );
+        // 3. Aucun bouton carton d'équipe dans la barre supérieure
+        expect(find.byTooltip('Carton jaune'), findsNothing);
+        expect(find.byTooltip('Carton rouge'), findsNothing);
 
-        // 5. Cibles tactiles >= 48x48
+        // 4. Cibles tactiles >= 48dp
         final goalSize = tester.getSize(goalButton);
-        final yellowSize = tester.getSize(yellowButton);
-        final redSize = tester.getSize(redButton);
-        expect(goalSize.width, greaterThanOrEqualTo(48.0));
+        final undoSize = tester.getSize(undoButton);
         expect(goalSize.height, greaterThanOrEqualTo(48.0));
-        expect(yellowSize.width, greaterThanOrEqualTo(48.0));
-        expect(yellowSize.height, greaterThanOrEqualTo(48.0));
-        expect(redSize.width, greaterThanOrEqualTo(48.0));
-        expect(redSize.height, greaterThanOrEqualTo(48.0));
+        expect(undoSize.height, greaterThanOrEqualTo(48.0));
       },
     );
 
     testWidgets(
-      'RED-03: Alignement des 3 actions sur une seule ligne (Row) avec Annuler en dessous',
+      'RED-03: Alignement des 2 actions sur une seule ligne (Row)',
       (tester) async {
         await tester.pumpWidget(
           _buildTestWidget(
@@ -181,38 +148,19 @@ void main() {
         await tester.pumpAndSettle();
 
         final goalButton = find.byTooltip('Ajouter un but');
-        final yellowButton = find.byTooltip('Carton jaune');
-        final redButton = find.byTooltip('Carton rouge');
+        final undoButton = find.widgetWithText(OutlinedButton, 'Annuler la dernière action');
 
         expect(goalButton, findsOneWidget);
-        expect(yellowButton, findsOneWidget);
-        expect(redButton, findsOneWidget);
+        expect(undoButton, findsOneWidget);
 
         // Vérification de l'alignement horizontal (même centre vertical Y)
         final goalCenter = tester.getCenter(goalButton);
-        final yellowCenter = tester.getCenter(yellowButton);
-        final redCenter = tester.getCenter(redButton);
+        final undoCenter = tester.getCenter(undoButton);
 
         expect(
-          (goalCenter.dy - yellowCenter.dy).abs(),
+          (goalCenter.dy - undoCenter.dy).abs(),
           lessThan(2.0),
-          reason: 'Le bouton but et carton jaune doivent être alignés sur la même ligne.',
-        );
-        expect(
-          (yellowCenter.dy - redCenter.dy).abs(),
-          lessThan(2.0),
-          reason: 'Le bouton carton jaune et carton rouge doivent être alignés sur la même ligne.',
-        );
-
-        // Bouton "Annuler la dernière action" positionné sous la rangée
-        final undoButton = find.widgetWithText(OutlinedButton, 'Annuler la dernière action');
-        expect(undoButton, findsOneWidget);
-        final undoTop = tester.getTopLeft(undoButton).dy;
-        final goalBottom = tester.getBottomRight(goalButton).dy;
-        expect(
-          undoTop,
-          greaterThan(goalBottom),
-          reason: 'Le bouton Annuler doit être positionné sous la rangée des 3 actions.',
+          reason: 'Le bouton but et le bouton annuler doivent être alignés sur la même ligne.',
         );
       },
     );
@@ -250,56 +198,6 @@ void main() {
     );
 
     testWidgets(
-      'RED-05: Clic sur Carton jaune ouvre le dialogue de sélection de joueur',
-      (tester) async {
-        await tester.pumpWidget(
-          _buildTestWidget(
-            session: testSession,
-            players: testPlayers,
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byTooltip('Carton jaune'));
-        await tester.pumpAndSettle();
-
-        expect(find.text('Quel joueur reçoit le carton ?'), findsOneWidget);
-        expect(
-          find.descendant(
-            of: find.byType(AlertDialog),
-            matching: find.text('Karim'),
-          ),
-          findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets(
-      'RED-06: Clic sur Carton rouge ouvre le dialogue de sélection de joueur',
-      (tester) async {
-        await tester.pumpWidget(
-          _buildTestWidget(
-            session: testSession,
-            players: testPlayers,
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.byTooltip('Carton rouge'));
-        await tester.pumpAndSettle();
-
-        expect(find.text('Quel joueur reçoit le carton ?'), findsOneWidget);
-        expect(
-          find.descendant(
-            of: find.byType(AlertDialog),
-            matching: find.text('Karim'),
-          ),
-          findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets(
       "RED-07: Quand editable est faux, aucun bouton d'action n'est affiché",
       (tester) async {
         await tester.pumpWidget(
@@ -314,7 +212,7 @@ void main() {
         expect(find.byTooltip('Ajouter un but'), findsNothing);
         expect(find.byTooltip('Carton jaune'), findsNothing);
         expect(find.byTooltip('Carton rouge'), findsNothing);
-        expect(find.widgetWithText(OutlinedButton, 'Annuler la dernière action'), findsNothing);
+        expect(find.text('Annuler la dernière action'), findsNothing);
       },
     );
 
@@ -342,7 +240,8 @@ void main() {
               expect(
                 tester.takeException(),
                 isNull,
-                reason: 'Aucun RenderFlex overflow à $width dp avec scale $scale',
+                reason:
+                    'Aucun overflow RenderFlex ne doit survenir à $width dp avec scale $scale (dark=$dark).',
               );
             },
           );
