@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/features/sessions/data/sessions_repository.dart';
-import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
+import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/team_appearance.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 
@@ -66,16 +66,22 @@ void main() {
       for (final raw in documents.values) {
         final document = raw as Map<String, dynamic>;
         if (document['domain'] == 'sport') {
-          (document['payload']['session'] as Map)['status'] = 'DRAFT';
+          final payload = document['payload'] as Map<String, dynamic>?;
+          final sessionMap = payload?['session'] as Map<String, dynamic>?;
+          if (sessionMap != null) {
+            sessionMap['status'] = 'DRAFT';
+          }
         }
       }
       await service.importSnapshot(fixture);
       expect(await repo.getActiveSessionId(teamId: 'g'), 'pwa-s');
       await service.queueSport('g', 'pwa-s');
       final pending = await db.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_']);
-      final queued = jsonDecode(pending.single['value']! as String) as Map;
-      expect(queued['payload']['is_active'], isTrue);
-      expect((queued['payload']['session'] as Map).containsKey('is_active'), isFalse);
+      final queued = jsonDecode(pending.single['value']! as String) as Map<String, dynamic>;
+      final queuedPayload = queued['payload'] as Map<String, dynamic>;
+      expect(queuedPayload['is_active'], isTrue);
+      final queuedSession = queuedPayload['session'] as Map<String, dynamic>;
+      expect(queuedSession.containsKey('is_active'), isFalse);
       fixture['active_session_id'] = null;
       await service.importSnapshot(fixture);
       expect(await repo.getActiveSessionId(teamId: 'g'), 'pwa-s', reason: 'A pending local sport mutation must not be overwritten');
