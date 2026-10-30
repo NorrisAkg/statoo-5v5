@@ -1,33 +1,58 @@
-# Consignes persistantes du projet
+# AGENTS.md — Source de Vérité Unique
 
-## Parité web et mobile — instruction utilisateur du 16 octobre 2026
+## 1. Consignes Persistantes Obligatoires
+- **Parité Web-Mobile (16/10/2026)** : Mobile = référence fonctionnelle. Le web réutilise le code Flutter (`mobile/lib/main_web.dart`) et les mêmes règles/transitions métier. Aucune étape escamotée sur le web.
+- **Tests avant le code / TDD exhaustif (15/10/2026 & 30/10/2026)** : Pour TOUTE correction ou évolution, écrire **tous les tests incluant tous les scénarios possibles (nominaux, variantes, cas limites, erreurs, concurrence, isolation multi-tenant, régressions) et leurs résultats attendus AVANT tout code applicatif**. Cycle TDD strict : rouge (échec fonctionnel attendu), vert minimal, refactor/régression. Un échec de compilation ou de fixture n'est pas une preuve RED.
+- **Revue de code systématique (25/10/2026)** : Après chaque implémentation, effectuer obligatoirement une revue de code distincte (diff, métier, intégrité, erreurs, tests). Commit uniquement après validation sans bloquant.
+- **Design & Cadrage (15/10/2026)** : Lire `docs/design-system.md` avant tout écran ou modif UI. Poppins, `context.colors`, thèmes clair/sombre, 320/393 dp, texte agrandi, icônes `remixicon`.
 
-Tous les processus doivent suivre les mêmes étapes, actions explicites, confirmations, validations et statuts dans les deux environnements, **y compris le mode local sans compte et les sauvegardes/restaurations**. Le mobile est la référence des parcours ; ne pas inventer un raccourci web qui saute le démarrage d'une séance ou une autre transition métier.
+## 2. Stack Technique et Versions
+- **Mobile & Flutter Web** : Flutter 3.47.5, Dart 3.13.4, Riverpod 3.4.3, GoRouter 18.0.1, Freezed 3.1.0, sqflite 2.4.4.
+- **Web PWA Shell** : Node.js v22.23.2, Zod 4.6.7, esbuild 0.28.2, Playwright, Service Worker offline.
+- **Backend API** : Python 3.13.5, FastAPI 0.143.0, SQLAlchemy 2.1.4, Uvicorn, PostgreSQL (Neon) / SQLite dev.
 
-Le point d'entrée `mobile/lib/main_web.dart` réutilise l'application Flutter, ses écrans et ses règles. Réserver les adaptations de plateforme au stockage navigateur, au transport et aux fichiers. L'ancien portail sous `web/` est conservé pour la transition et les préparations historiques ; ce n'est pas une seconde référence fonctionnelle. Contrat, scénarios, résultats et limites : `docs/parite-web-mobile.md`. Tester la reprise interappareils et les refus/conflits, pas uniquement la présence de boutons similaires.
+## 3. Commandes Exactes
+```bash
+# Mobile (Flutter)
+cd mobile && flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter test                        # 836 tests unitaires & widgets
+dart analyze lib test               # Analyse statique rapide (~10s)
 
-## Tests avant le code — instruction utilisateur du 15 octobre 2026
+# Web (PWA / Tests d'intégration)
+npm run test:web                    # 61 tests unitaires ES modules
+npm run build:web                   # Build PWA & vérification package
+npm run format:web                  # Formatage prettier
 
-Pour toute correction ou évolution, écrire **tous les scénarios de test du périmètre prévu et leurs résultats attendus avant tout code applicatif**, même pour une modification simple. Couvrir les cas nominaux, variantes, limites, erreurs et régressions pertinents.
+# Backend (FastAPI / Pytest)
+& "backend/.venv/Scripts/pytest.exe" backend/tests   # 89 tests API
+```
 
-Suivre ensuite le cycle TDD : écrire les tests comportementaux, constater leur échec pour la raison attendue, implémenter le minimum nécessaire, puis vérifier les tests et les régressions. Un échec de compilation, de fixture ou d'environnement ne constitue pas une preuve RED.
+## 4. Architecture et Règle de Dépendance
+Structure Feature-First inspirée de Clean Architecture :
+- `mobile/lib/core/` : base de données (`app_database.dart`), router, thème, widgets partagés.
+- `mobile/lib/features/<nom>/` : découpé en 4 couches étanches :
+  1. `domain/` : Entités pures `freezed`, logique métier pure, 0 dépendance Flutter/Riverpod.
+  2. `data/` : Repositories SQLite, transactions, sérialisation JSON.
+  3. `application/` : Providers Riverpod, contrôleurs (mutations + invalidations explicites).
+  4. `presentation/` : Écrans, bottom sheets, widgets spécifiques, gestion responsive.
 
-Si un nouveau cas est découvert pendant l'implémentation, écrire d'abord son scénario et son test avant de modifier le code correspondant. Ne pas ajouter les scénarios après coup pour justifier une implémentation déjà écrite.
+## 5. Données et Multi-Tenant
+- Tout est scopé par `team_id`. La session active réside dans `meta` (`active_session_id_<teamId>`).
+- La table `participations` est l'unique source de vérité statistique (aucun cumul pré-enregistré).
+- Clôture bloquante si : score absent, joueur en double, déséquilibre d'effectif > 1 (sans dérogation).
 
-Conserver les scénarios et les résultats observés dans le dépôt. Distinguer les tests automatisés exécutés des contrôles manuels restant à faire. Cette règle s'applique à toutes les sessions intervenant sur ce projet.
+## 6. Zones Sensibles à Risque Élevé
+- `mobile/lib/features/sessions/` : logique de composition, synchronisation buts/scores, clôture.
+- `mobile/lib/core/data/app_database.dart` : migrations SQLite et recalcul des 7 vues SQL.
+- `backend/app/main.py` : gestion des accès rôles, tokens et opérations idempotentes.
+- `mobile/lib/features/finance/` : calculs de reliquat et validations comptables.
 
-Voir aussi `docs/conventions.md` pour les conventions du projet.
-
-## Revue de code systématique — instruction utilisateur du 25 octobre 2026
-
-Après toute correction ou évolution, une fois l’implémentation et ses vérifications exécutées, réaliser systématiquement une revue de code, même si aucun commit n’est demandé. Cette revue est un passage distinct de l’implémentation et porte sur le diff du périmètre, les règles métier, l’intégrité des données, les permissions, les erreurs et la pertinence des tests.
-
-Consigner les constats et les limites de la revue dans le suivi du lot. Corriger les défauts bloquants selon le cycle TDD, puis vérifier les corrections avant de conclure. Ne commiter qu’après une revue sans défaut bloquant et les contrôles pertinents réussis ; ne pas inclure les travaux hors périmètre. Une suite verte ne remplace pas la revue de code.
-
-## Design — mémoire persistante, instruction utilisateur du 15 octobre 2026
-
-Avant toute création, refonte ou modification d’un écran, **lire `docs/design-system.md`**, puis examiner le thème actuel, les composants partagés et au moins deux écrans de référence du même parcours. Cette étape s’applique aussi aux dialogues, feuilles modales et états secondaires.
-
-Respecter cette référence dans les nouveaux écrans. Vérifier séparément la cohérence visuelle et le cadrage : clair/sombre, 320/393 dp, texte 100/130/200 %, clavier et zones sûres, noms/montants longs et permissions. Écrire les scénarios avant le code selon la règle TDD ci-dessus. Ne jamais déclarer un écran validé visuellement sur la seule base de son code ou de tests sans débordement ; indiquer ce qui a été vu à l’écran, automatisé et non couvert.
-
-Conserver les nouveaux arbitrages de design dans `docs/design-system.md` et leurs preuves dans un suivi de vérification. Ne pas reprendre une ancienne convention (notamment Inter ou un thème sombre unique) qui contredit cette mémoire et le thème actuel.
+## 7. Équipe d'Agents Dédiés
+- `architect` : Planification, découpage en tâches, respect des règles Clean Architecture.
+- `implementer` : Implémentation du code minimal pour passer les tests au vert.
+- `test-engineer` : Rédaction des scénarios TDD, critères d'acceptation, exécution des suites.
+- `reviewer` : Revue de code obligatoire avant commit (qualité, régressions, AGENTS.md).
+- `mobile` : Spécialiste Flutter, Riverpod, SQLite local et design system.
+- `backend-api` : Spécialiste FastAPI, PostgreSQL, auth rôles et idempotence.
+- `web-parity` : Spécialiste PWA, parité mobile-web, offline et service workers.
