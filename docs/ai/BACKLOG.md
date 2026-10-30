@@ -6,6 +6,12 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ## Stories Terminées
 
+### [PARITY-01] Typage strict des fixtures et suppression des appels dynamiques dans l'import PWA — ✅ LIVRÉ (Sprint 2)
+- **En tant que** développeur parité web-mobile,  
+  **je veux** remplacer les types `dynamic` par des modèles typés dans `pwa_wire_import_test.dart`,  
+  **afin de** détecter à la compilation tout changement de schéma du format de synchronisation PWA / mobile.
+- **Points** : 1 | **Statut** : Complété (commit `4a62fdb`)
+
 ### [DATA-01] Versioning et fiabilisation des 7 vues SQL dans AppDatabase — ✅ LIVRÉ (Sprint 2)
 - **En tant qu'** architecte de données,  
   **je veux** fiabiliser et vérifier la présence des 7 vues SQL (`v_standings`, `v_top_scorers`, etc.) et des triggers multi-tenant de façon idempotente plutôt que de les détruire/recréer aveuglément à chaque ouverture,  
@@ -26,7 +32,7 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ---
 
-## Sprint 2 en Cours (4 points restants)
+## Sprint 2 en Cours (3 points restants)
 
 ### [PERF-01] Gestion du cycle de vie de connexion SQLite en arrière-plan
 - **En tant qu'** utilisateur mobile,  
@@ -41,18 +47,3 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 - **Points** : 3
 - **Priorité** : Moyenne (Valeur 3 × Risque 4 ÷ Effort 3 = 4)
 - **Rôles mobilisés** : `test-engineer`, `implementer`, `reviewer`, `mobile`
-
----
-
-### [PARITY-01] Typage strict des fixtures et suppression des appels dynamiques dans l'import PWA
-- **En tant que** développeur parité web-mobile,  
-  **je veux** remplacer les types `dynamic` par des modèles typés dans `pwa_wire_import_test.dart`,  
-  **afin de** détecter à la compilation tout changement de schéma du format de synchronisation PWA / mobile.
-- **Critères d'acceptation** :
-  - *Given* les fixtures de synchronisation importées du web vers SQLite,
-  - *When* le test `test/features/shared/pwa_wire_import_test.dart` est exécuté,
-  - *Then* tous les accès aux champs JSON s'effectuent via des interfaces ou classes typées.
-  - *Then* `dart analyze` ne rapporte plus d'`avoid_dynamic_calls`.
-- **Points** : 1
-- **Priorité** : Moyenne (Valeur 3 × Risque 2 ÷ Effort 1 = 6)
-- **Rôles mobilisés** : `test-engineer`, `implementer`, `reviewer`, `web-parity`
