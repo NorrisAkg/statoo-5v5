@@ -1,0 +1,422 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart
+00:00 +0: VER01 explicit version 3 (int) is rejected
+00:00 +0 -1: VER01 explicit version 3 (int) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -1: VER01 explicit version 999 (int) is rejected
+00:00 +0 -2: VER01 explicit version 999 (int) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -2: VER01 explicit version 0 (int) is rejected
+00:00 +0 -3: VER01 explicit version 0 (int) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -3: VER01 explicit version -1 (int) is rejected
+00:00 +0 -4: VER01 explicit version -1 (int) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -4: VER01 explicit version 2 (String) is rejected
+00:00 +0 -5: VER01 explicit version 2 (String) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -5: VER01 explicit version 999 (String) is rejected
+00:00 +0 -6: VER01 explicit version 999 (String) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -6: VER01 explicit version null (Null) is rejected
+00:00 +0 -7: VER01 explicit version null (Null) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -7: VER01 explicit version true (bool) is rejected
+00:00 +0 -8: VER01 explicit version true (bool) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -8: VER01 explicit version 2.0 (double) is rejected
+00:00 +0 -9: VER01 explicit version 2.0 (double) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -9: VER01 explicit version [] (List<dynamic>) is rejected
+00:00 +0 -10: VER01 explicit version [] (List<dynamic>) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -10: VER01 explicit version {} (_Map<dynamic, dynamic>) is rejected
+00:00 +0 -11: VER01 explicit version {} (_Map<dynamic, dynamic>) is rejected [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 37:7  main.<fn>
+  
+00:00 +0 -11: VER02 future version is refused before interpreting unknown teams shape
+00:00 +0 -12: VER02 future version is refused before interpreting unknown teams shape [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'plus récente'
+    Actual: <Closure: () => BackupPayload>
+     Which: threw _TypeError:<type 'String' is not a subtype of type 'List<dynamic>?' in type cast>
+            stack package:statoo/features/settings/domain/backup_payload.dart 32:36  new BackupPayload.fromJson
+                  test/features/settings/backup_version_test.dart 42:32              main.<fn>.<fn>
+                  package:matcher                                                    expect
+                  package:flutter_test/src/widget_tester.dart 473:18                 expect
+                  test/features/settings/backup_version_test.dart 42:5               main.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 42:5  main.<fn>
+  
+00:00 +0 -12: VER03 supported version 1 still parses
+00:00 +1 -12: VER07 supported object 1 still exports in current v2 format
+00:00 +2 -12: VER03 supported version 2 still parses
+00:00 +3 -12: VER07 supported object 2 still exports in current v2 format
+00:00 +4 -12: VER03 missing version remains legacy v1
+00:00 +5 -12: VER07 serialization cannot launder unsupported object 0 into v2
+00:00 +5 -13: VER07 serialization cannot launder unsupported object 0 into v2 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => Map<String, dynamic>>
+     Which: returned {
+                       'version': 2,
+                       'app': 'statoo_5v5',
+                       'exported_at': '2026-10-26T00:00:00.000',
+                       'team': {'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'},
+                       'teams': [{'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'}],
+                       'players': [
+                         {
+                           'id': 'new-player',
+                           'team_id': 'incoming',
+                           'name': 'New',
+                           'created_at': '2026-10-26',
+                           'updated_at': '2026-10-26'
+                         }
+                       ],
+                       'sessions': [
+                         {
+                           'id': 'new-session',
+                           'team_id': 'incoming',
+                           'played_at': '2026-10-26',
+                           'status': 'DRAFT'
+                         }
+                       ],
+                       'participations': [
+                         {
+                           'id': 'new-part',
+                           'session_id': 'new-session',
+                           'player_id': 'new-player',
+                           'team': 'A'
+                         }
+                       ],
+                       'meta': {},
+                       'settings': {'min_players_per_session': 8}
+                     }
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 58:7  main.<fn>
+  
+00:00 +5 -13: VER07 serialization cannot launder unsupported object -1 into v2
+00:00 +5 -14: VER07 serialization cannot launder unsupported object -1 into v2 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => Map<String, dynamic>>
+     Which: returned {
+                       'version': 2,
+                       'app': 'statoo_5v5',
+                       'exported_at': '2026-10-26T00:00:00.000',
+                       'team': {'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'},
+                       'teams': [{'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'}],
+                       'players': [
+                         {
+                           'id': 'new-player',
+                           'team_id': 'incoming',
+                           'name': 'New',
+                           'created_at': '2026-10-26',
+                           'updated_at': '2026-10-26'
+                         }
+                       ],
+                       'sessions': [
+                         {
+                           'id': 'new-session',
+                           'team_id': 'incoming',
+                           'played_at': '2026-10-26',
+                           'status': 'DRAFT'
+                         }
+                       ],
+                       'participations': [
+                         {
+                           'id': 'new-part',
+                           'session_id': 'new-session',
+                           'player_id': 'new-player',
+                           'team': 'A'
+                         }
+                       ],
+                       'meta': {},
+                       'settings': {'min_players_per_session': 8}
+                     }
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 58:7  main.<fn>
+  
+00:00 +5 -14: VER07 serialization cannot launder unsupported object 3 into v2
+00:00 +5 -15: VER07 serialization cannot launder unsupported object 3 into v2 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => Map<String, dynamic>>
+     Which: returned {
+                       'version': 2,
+                       'app': 'statoo_5v5',
+                       'exported_at': '2026-10-26T00:00:00.000',
+                       'team': {'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'},
+                       'teams': [{'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'}],
+                       'players': [
+                         {
+                           'id': 'new-player',
+                           'team_id': 'incoming',
+                           'name': 'New',
+                           'created_at': '2026-10-26',
+                           'updated_at': '2026-10-26'
+                         }
+                       ],
+                       'sessions': [
+                         {
+                           'id': 'new-session',
+                           'team_id': 'incoming',
+                           'played_at': '2026-10-26',
+                           'status': 'DRAFT'
+                         }
+                       ],
+                       'participations': [
+                         {
+                           'id': 'new-part',
+                           'session_id': 'new-session',
+                           'player_id': 'new-player',
+                           'team': 'A'
+                         }
+                       ],
+                       'meta': {},
+                       'settings': {'min_players_per_session': 8}
+                     }
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 58:7  main.<fn>
+  
+00:00 +5 -15: VER07 serialization cannot launder unsupported object 999 into v2
+00:00 +5 -16: VER07 serialization cannot launder unsupported object 999 into v2 [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => Map<String, dynamic>>
+     Which: returned {
+                       'version': 2,
+                       'app': 'statoo_5v5',
+                       'exported_at': '2026-10-26T00:00:00.000',
+                       'team': {'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'},
+                       'teams': [{'id': 'incoming', 'name': 'Incoming', 'created_at': '2026-10-26'}],
+                       'players': [
+                         {
+                           'id': 'new-player',
+                           'team_id': 'incoming',
+                           'name': 'New',
+                           'created_at': '2026-10-26',
+                           'updated_at': '2026-10-26'
+                         }
+                       ],
+                       'sessions': [
+                         {
+                           'id': 'new-session',
+                           'team_id': 'incoming',
+                           'played_at': '2026-10-26',
+                           'status': 'DRAFT'
+                         }
+                       ],
+                       'participations': [
+                         {
+                           'id': 'new-part',
+                           'session_id': 'new-session',
+                           'player_id': 'new-player',
+                           'team': 'A'
+                         }
+                       ],
+                       'meta': {},
+                       'settings': {'min_players_per_session': 8}
+                     }
+  
+  package:matcher                                       expect
+  package:flutter_test/src/widget_tester.dart 473:18    expect
+  test/features/settings/backup_version_test.dart 58:7  main.<fn>
+  
+00:00 +5 -16: Real restore boundary VER04/05 unsupported 0 merge=false refuses before DB access and preserves all state
+00:00 +5 -17: Real restore boundary VER04/05 unsupported 0 merge=false refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -17: Real restore boundary VER04/05 unsupported 0 merge=true refuses before DB access and preserves all state
+00:00 +5 -18: Real restore boundary VER04/05 unsupported 0 merge=true refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -18: Real restore boundary VER04/05 unsupported -1 merge=false refuses before DB access and preserves all state
+00:00 +5 -19: Real restore boundary VER04/05 unsupported -1 merge=false refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -19: Real restore boundary VER04/05 unsupported -1 merge=true refuses before DB access and preserves all state
+00:00 +5 -20: Real restore boundary VER04/05 unsupported -1 merge=true refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -20: Real restore boundary VER04/05 unsupported 3 merge=false refuses before DB access and preserves all state
+00:00 +5 -21: Real restore boundary VER04/05 unsupported 3 merge=false refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -21: Real restore boundary VER04/05 unsupported 3 merge=true refuses before DB access and preserves all state
+00:00 +5 -22: Real restore boundary VER04/05 unsupported 3 merge=true refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -22: Real restore boundary VER04/05 unsupported 999 merge=false refuses before DB access and preserves all state
+00:00 +5 -23: Real restore boundary VER04/05 unsupported 999 merge=false refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -23: Real restore boundary VER04/05 unsupported 999 merge=true refuses before DB access and preserves all state
+00:00 +5 -24: Real restore boundary VER04/05 unsupported 999 merge=true refuses before DB access and preserves all state [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'version'
+    Actual: <Instance of 'Future<RestoreResult>'>
+     Which: emitted <Instance of 'RestoreResult'>
+  
+  package:matcher                                         expectLater
+  package:flutter_test/src/widget_tester.dart 507:8       expectLater
+  test/features/settings/backup_version_test.dart 103:17  main.<fn>.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                              _CustomZone.registerUnaryCallback
+  test/features/settings/backup_version_test.dart 102:26  main.<fn>.<fn>
+  
+00:00 +5 -24: Real restore boundary VER06 supported 1 merge=false still restores actual data
+00:00 +6 -24: Real restore boundary VER06 supported 1 merge=true still restores actual data
+00:00 +7 -24: Real restore boundary VER06 supported 2 merge=false still restores actual data
+00:00 +8 -24: Real restore boundary VER06 supported 2 merge=true still restores actual data
+00:00 +9 -24: Real restore boundary VER08 current export round trip keeps supported version and local data
+00:00 +10 -24: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported -1 merge=false refuses before DB access and preserves all state
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported -1 merge=true refuses before DB access and preserves all state
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 0 merge=false refuses before DB access and preserves all state
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 0 merge=true refuses before DB access and preserves all state
+  ... and 20 more

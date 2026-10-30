@@ -1,0 +1,22 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart
+00:00 +0: VER09 future format is rejected before casting its app marker
+00:00 +0 -1: VER09 future format is rejected before casting its app marker [E]
+  Expected: throws <Instance of 'FormatException'> with `message`: contains 'plus récente'
+    Actual: <Closure: () => BackupPayload>
+     Which: threw _TypeError:<type '_Map<String, String>' is not a subtype of type 'String?' in type cast>
+            stack package:statoo/features/settings/domain/backup_payload.dart 19:29  new BackupPayload.fromJson
+                  test/features/settings/backup_version_test.dart 117:27             main.<fn>.<fn>
+                  package:matcher                                                    expect
+                  package:flutter_test/src/widget_tester.dart 473:18                 expect
+                  test/features/settings/backup_version_test.dart 116:5              main.<fn>
+                  
+            which is not an instance of 'FormatException'
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  test/features/settings/backup_version_test.dart 116:5  main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER09 future format is rejected before casting its app marker

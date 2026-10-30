@@ -1,0 +1,18 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/restore_atomicity_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: rollback after callback preserves both stores
+00:00 +1: successful restore is authoritative without preference writes
+00:00 +2: empty restore never resurrects legacy group
+00:00 +3: restored active group resolves second
+00:00 +4: restored active group resolves missing
+00:01 +5: missing minimum retains previous SQL fallback
+00:01 +6: missing minimum retains legacy fallback
+00:01 +7: scoped setting overrides restored fallback
+00:01 +8: merge does not install replacement marker or global setting
+00:01 +9: legacy migration remains available without replacement
+00:01 +10: import cannot disable replacement marker
+00:01 +11: absent minimum preserves default fallback
+00:01 +12: explicit group creation works after empty restore
+00:02 +13: bad SQL row preserves all old state
+00:02 +14: (tearDownAll)
+00:02 +14: All tests passed!

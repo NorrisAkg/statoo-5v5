@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/restored_settings.dart';
 
 /// Réglages entiers propres à un groupe, stockés dans `meta` sous `<clé>_<teamId>`.
 abstract class GroupSettingsRepository {
@@ -25,7 +26,11 @@ class SqliteGroupSettingsRepository implements GroupSettingsRepository {
       whereArgs: [groupSettingKey(key, teamId)],
       limit: 1,
     );
-    if (rows.isEmpty) return null;
+    if (rows.isEmpty) {
+      if (key != restoredMinimumKey) return null;
+      final global = await db.query('meta', where: 'key = ?', whereArgs: [restoredMinimumKey], limit: 1);
+      return global.isEmpty ? null : int.tryParse('${global.single['value']}');
+    }
     return int.tryParse('${rows.first['value']}');
   }
 

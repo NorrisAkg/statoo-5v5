@@ -79,7 +79,8 @@ void main() {
         expectedGroups: {'Alpha': 'Alpha', 'Bêta': 'Bêta'},
       );
       expect((await db.query('teams')).single['id'], 'new');
-      expect(await db.query('meta'), isEmpty);
+      expect(await db.query('meta', where: 'key = ?', whereArgs: ['outbox_demo']), isEmpty);
+      expect((await db.query('meta', where: 'key = ?', whereArgs: ['active_team_id'])).single['value'], 'new');
     },
   );
 }

@@ -813,7 +813,7 @@ class SettingsScreen extends ConsumerWidget {
       final message = (isMerge
           ? 'Fusion réussie : +${result.importedPlayersCount} joueurs, +${result.importedSessionsCount} séances (${result.reusedPlayersCount} joueurs réconciliés)'
           : 'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés') +
-          (result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.');
+          (result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.') + result.photoWarning;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

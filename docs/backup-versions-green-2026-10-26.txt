@@ -1,0 +1,73 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 3 (int) is rejected
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 999 (int) is rejected
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 0 (int) is rejected
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version -1 (int) is rejected
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 2 (String) is rejected
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 999 (String) is rejected
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version null (Null) is rejected
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version true (bool) is rejected
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version 2.0 (double) is rejected
+00:00 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version [] (List<dynamic>) is rejected
+00:00 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER01 explicit version {} (_Map<dynamic, dynamic>) is rejected
+00:00 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER02 future version is refused before interpreting unknown teams shape
+00:00 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER09 future format is rejected before casting its app marker
+00:00 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER03 supported version 1 still parses
+00:00 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 supported object 1 still exports in current v2 format
+00:00 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER03 supported version 2 still parses
+00:00 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 supported object 2 still exports in current v2 format
+00:00 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER03 missing version remains legacy v1
+00:00 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 serialization cannot launder unsupported object 0 into v2
+00:00 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 serialization cannot launder unsupported object -1 into v2
+00:00 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 serialization cannot launder unsupported object 3 into v2
+00:00 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: VER07 serialization cannot launder unsupported object 999 into v2
+00:00 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 0 merge=false refuses before DB access and preserves all state
+00:00 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 0 merge=true refuses before DB access and preserves all state
+00:00 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported -1 merge=false refuses before DB access and preserves all state
+00:00 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported -1 merge=true refuses before DB access and preserves all state
+00:00 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 3 merge=false refuses before DB access and preserves all state
+00:00 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 3 merge=true refuses before DB access and preserves all state
+00:00 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation throws FormatException when json is empty (B-01 protection)
+00:00 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=false refuses before DB access and preserves all state
+00:00 +30: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=false refuses before DB access and preserves all state
+00:00 +31: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=false refuses before DB access and preserves all state
+00:00 +32: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_payload_test.dart: BackupPayload.fromJson validation parses legacy single-team (v1) backup and exposes teams list
+00:00 +33: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=true refuses before DB access and preserves all state
+00:00 +34: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=true refuses before DB access and preserves all state
+00:00 +35: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 999 merge=true refuses before DB access and preserves all state
+00:00 +36: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER06 supported 1 merge=false still restores actual data
+00:00 +37: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER06 supported 1 merge=true still restores actual data
+00:00 +38: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER06 supported 2 merge=false still restores actual data
+00:00 +39: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER06 supported 2 merge=true still restores actual data
+00:00 +40: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER08 current export round trip keeps supported version and local data
+00:01 +41: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: (setUpAll)
+00:01 +41: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests replace mode restores all tables without foreign key violations
+00:01 +42: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests merge mode from another device remaps sessions and players without foreign key errors (B-02 & Maj. 4)
+00:01 +43: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests createBackupPayload exports all teams and full data
+00:01 +44: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: (tearDownAll)
+00:01 +44: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: (setUpAll)
+00:01 +44: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: add
+00:01 +45: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: remove
+00:01 +46: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-13 stale group confirmation is rejected atomically: rename
+00:01 +47: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: UX01-06 matching confirmation permits exactly the reviewed replacement
+00:01 +48: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_replacement_test.dart: (tearDownAll)
+00:02 +48: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: (setUpAll)
+00:02 +48: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=false
+00:02 +49: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores A, merge=true
+00:02 +50: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=false
+00:02 +51: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores B, merge=true
+00:02 +52: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=false
+00:02 +53: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores C, merge=true
+00:02 +54: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=false
+00:02 +55: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AB, merge=true
+00:02 +56: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=false
+00:02 +57: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_AC, merge=true
+00:02 +58: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=false
+00:02 +59: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_BC, merge=true
+00:02 +60: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=false
+00:02 +61: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=true
+00:02 +62: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-12 export/restore preserves ranked results and financial metadata
+00:02 +63: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-07 inconsistent tournament is kept as draft without invented result
+00:02 +64: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-05/06 classic scored remains closed, incomplete becomes draft
+00:02 +65: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: (tearDownAll)
+00:02 +65: All tests passed!

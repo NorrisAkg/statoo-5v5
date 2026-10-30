@@ -3,7 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/features/settings/data/backup_service.dart';
+import 'package:statoo/features/settings/data/group_settings_repository.dart';
 import 'package:statoo/features/settings/domain/backup_payload.dart';
+import 'package:statoo/features/team/data/team_repository.dart';
 
 void main() {
   setUpAll(() {
@@ -143,9 +145,8 @@ void main() {
       final participations = await db.query('participations');
       expect(participations.length, 1);
 
-      final prefs = await SharedPreferences.getInstance();
-      expect(prefs.getInt('min_players_per_session'), 8);
-      expect(prefs.getString('active_team_id'), 'team_a');
+      expect(await SqliteGroupSettingsRepository(AppDatabase.forTesting(db)).getInt('team_a', 'min_players_per_session'), 8);
+      expect(await SqliteTeamRepository(AppDatabase.forTesting(db)).getActiveTeamId(), 'team_a');
     });
 
     test('merge mode from another device remaps sessions and players without foreign key errors (B-02 & Maj. 4)', () async {

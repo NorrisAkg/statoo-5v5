@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/restored_settings.dart';
+import '../../../core/media/player_photo.dart';
 import '../../sessions/domain/session.dart';
 import '../../sessions/domain/session_close_rules.dart';
 import '../domain/backup_payload.dart';
@@ -59,37 +61,46 @@ class BackupService {
   /// Construit l'objet BackupPayload à partir de la base SQLite et des SharedPreferences.
   Future<BackupPayload> createBackupPayload() async {
     final db = await _appDatabase.database;
-
-    final teams = await db.query('teams');
-    final team = teams.isNotEmpty ? teams.first : null;
-
-    final players = await db.query('players');
-    final sessions = await db.query('sessions');
-    final participations = await db.query('participations');
-    final metaRows = await db.query('meta');
-
-    final meta = <String, dynamic>{};
-    for (final row in metaRows) {
-      final key = row['key'] as String?;
-      if (key != null) {
-        meta[key] = row['value'];
-      }
-    }
-
     final prefs = await SharedPreferences.getInstance();
     final minPlayers = prefs.getInt('min_players_per_session');
 
-    return BackupPayload(
-      version: 2,
-      exportedAt: DateTime.now(),
-      team: team,
-      teams: teams,
-      players: players,
-      sessions: sessions,
-      participations: participations,
-      meta: meta,
-      minPlayersPerSession: minPlayers,
-    );
+    // Keep related rows and sync metadata in the same SQLite snapshot.
+    // Preferences use a separate store; do not hold the SQL lock while reading it.
+    final payload = await db.transaction((txn) async {
+      final teams = await txn.query('teams');
+      final team = teams.isNotEmpty ? teams.first : null;
+
+      final players = await txn.query('players');
+      final sessions = await txn.query('sessions');
+      final participations = await txn.query('participations');
+      final metaRows = await txn.query('meta');
+
+      final meta = <String, dynamic>{};
+      for (final row in metaRows) {
+        final key = row['key'] as String?;
+        if (key != null && key != restoredDatabaseKey) {
+          meta[key] = row['value'];
+        }
+      }
+
+      return BackupPayload(
+        version: BackupPayload.currentVersion,
+        exportedAt: DateTime.now(),
+        team: team,
+        teams: teams,
+        players: players,
+        sessions: sessions,
+        participations: participations,
+        meta: meta,
+        minPlayersPerSession: int.tryParse('${meta[restoredMinimumKey]}') ?? minPlayers,
+      );
+    });
+    // File IO happens after releasing the SQL snapshot transaction.
+    final players = await PlayerPhoto.prepareRows(payload.players, importing: false);
+    return BackupPayload(version: payload.version, exportedAt: payload.exportedAt,
+      team: payload.team, teams: payload.teams, players: players,
+      sessions: payload.sessions, participations: payload.participations,
+      meta: payload.meta, minPlayersPerSession: payload.minPlayersPerSession);
   }
 
   /// Ouvre le sélecteur de fichier et parse le fichier JSON sélectionné.
@@ -132,8 +143,14 @@ class BackupService {
     String? targetTeamId,
     Map<String, String>? expectedGroups,
   }) async {
+    BackupPayload.validateVersion(payload.version);
     if (merge && payload.meta.keys.any((key) => key.startsWith('finance_') || key.startsWith('shared_') || key.startsWith('outbox_'))) {
       throw const FormatException('Cette sauvegarde contient des finances ou un groupe partagé. Utilisez la restauration complète pour conserver leurs identifiants et leur historique.');
+    }
+    final photoRows = await PlayerPhoto.prepareRows(payload.players, importing: true);
+    var unavailablePhotos = 0;
+    for (var i = 0; i < photoRows.length; i++) {
+      if (payload.players[i]['avatar_url'] != null && photoRows[i]['avatar_url'] == null) unavailablePhotos++;
     }
     final db = await _appDatabase.database;
 
@@ -145,6 +162,11 @@ class BackupService {
         return value;
       }
       if (!merge) {
+        final previousMinimum = await txn.query('meta', where: 'key = ?', whereArgs: [restoredMinimumKey]);
+        final prefs = await SharedPreferences.getInstance();
+        final minimum = payload.minPlayersPerSession
+            ?? (previousMinimum.isEmpty ? null : int.tryParse('${previousMinimum.single['value']}'))
+            ?? prefs.getInt(restoredMinimumKey);
         if (expectedGroups != null) {
           final groups = await txn.query('teams', columns: ['id', 'name']);
           if (groups.length != expectedGroups.length || groups.any((g) => expectedGroups[g['id']] != g['name'])) {
@@ -171,7 +193,7 @@ class BackupService {
         final defaultTeamId = teamsToInsert.isNotEmpty ? teamsToInsert.first['id'] as String : 'team_1';
         final validTeamIds = teamsToInsert.map((t) => t['id'] as String).toSet();
 
-        for (final p in payload.players) {
+        for (final p in photoRows) {
           final rawTeamId = p['team_id'] as String?;
           final effectiveTeamId = (rawTeamId != null && validTeamIds.contains(rawTeamId))
               ? rawTeamId
@@ -194,23 +216,25 @@ class BackupService {
         }
 
         for (final entry in payload.meta.entries) {
+          if (entry.key == restoredDatabaseKey || entry.key == restoredMinimumKey || entry.key == 'active_team_id') continue;
           await txn.insert('meta', {
             'key': entry.key,
             'value': entry.value?.toString(),
           }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
 
-        final prefs = await SharedPreferences.getInstance();
-        if (payload.minPlayersPerSession != null) {
-          await prefs.setInt('min_players_per_session', payload.minPlayersPerSession!);
+        // Commit restored settings with the rows. SharedPreferences cannot
+        // participate in this transaction and must never be mutated here.
+        await txn.insert('meta', {'key': restoredDatabaseKey, 'value': '1'});
+        if (minimum != null) {
+          await txn.insert('meta', {'key': restoredMinimumKey, 'value': '$minimum'});
         }
-
+        final savedActiveId = payload.meta['active_team_id'];
         if (teamsToInsert.isNotEmpty) {
-          final firstTeam = teamsToInsert.first;
-          final teamId = firstTeam['id'] as String;
-          final teamName = firstTeam['name'] as String? ?? 'Équipe';
-          await prefs.setString('active_team_id', teamId);
-          await prefs.setString('team_name', teamName);
+          await txn.insert('meta', {
+            'key': 'active_team_id',
+            'value': validTeamIds.contains(savedActiveId) ? savedActiveId : defaultTeamId,
+          });
         }
 
         return RestoreResult(
@@ -220,6 +244,7 @@ class BackupService {
           importedSessionsCount: payload.sessions.length,
           importedParticipationsCount: payload.participations.length,
           normalizedSessionsCount: normalizedCount,
+          unavailablePhotosCount: unavailablePhotos,
         );
       } else {
         // --- MODE FUSION INTELLIGENTE ---
@@ -289,8 +314,10 @@ class BackupService {
         final playerMapping = <String, String>{};
         var importedPlayersCount = 0;
         var reusedPlayersCount = 0;
+        var unavailableMergedPhotos = 0;
 
-        for (final bp in payload.players) {
+        for (var i = 0; i < photoRows.length; i++) {
+          final bp = photoRows[i];
           final bpId = bp['id']! as String;
           final bpName = (bp['name'] as String?)?.trim() ?? '';
           final normalizedName = bpName.toLowerCase();
@@ -305,6 +332,7 @@ class BackupService {
               targetId = 'p_${DateTime.now().millisecondsSinceEpoch}_$importedPlayersCount';
             }
 
+            if (payload.players[i]['avatar_url'] != null && bp['avatar_url'] == null) unavailableMergedPhotos++;
             final newPlayer = Map<String, dynamic>.from(bp);
             newPlayer['id'] = targetId;
             newPlayer['team_id'] = localTeamId;
@@ -378,6 +406,7 @@ class BackupService {
           reusedPlayersCount: reusedPlayersCount,
           skippedSessionsCount: skippedSessionsCount,
           normalizedSessionsCount: normalizedCount,
+          unavailablePhotosCount: unavailableMergedPhotos,
         );
       }
     });

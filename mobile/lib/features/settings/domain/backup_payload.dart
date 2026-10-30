@@ -16,13 +16,17 @@ class BackupPayload {
       throw const FormatException("Ce fichier n'est pas une sauvegarde Statoo valide (fichier vide).");
     }
 
+    final rawVersion = json.containsKey('version') ? json['version'] : 1;
+    if (rawVersion is! int) {
+      throw const FormatException('La version de cette sauvegarde est invalide.');
+    }
+    validateVersion(rawVersion);
+    final version = rawVersion;
+
     final app = json['app'] as String?;
     if (app != null && app != 'statoo_5v5') {
       throw FormatException("Ce fichier provient d'une autre application ($app).");
     }
-
-    final rawVersion = json['version'];
-    final version = rawVersion is int ? rawVersion : 1;
 
     final rawExportedAt = json['exported_at'] as String?;
     final exportedAt = rawExportedAt != null
@@ -83,6 +87,20 @@ class BackupPayload {
     );
   }
 
+  static const currentVersion = 2;
+
+  static void validateVersion(int version) {
+    if (version > currentVersion) {
+      throw FormatException(
+        'Cette sauvegarde utilise une version plus récente ($version). '
+        'Mettez Statoo à jour avant de la restaurer.',
+      );
+    }
+    if (version < 1) {
+      throw const FormatException('La version de cette sauvegarde est invalide.');
+    }
+  }
+
   final int version;
   final DateTime exportedAt;
   final Map<String, dynamic>? team;
@@ -93,21 +111,24 @@ class BackupPayload {
   final Map<String, dynamic> meta;
   final int? minPlayersPerSession;
 
-  Map<String, dynamic> toJson() => {
-        'version': 2,
-        'app': 'statoo_5v5',
-        'exported_at': exportedAt.toIso8601String(),
-        'team': team,
-        'teams': teams.isNotEmpty ? teams : (team != null ? [team!] : <Map<String, dynamic>>[]),
-        'players': players,
-        'sessions': sessions,
-        'participations': participations,
-        'meta': meta,
-        'settings': {
-          if (minPlayersPerSession != null)
-            'min_players_per_session': minPlayersPerSession,
-        },
-      };
+  Map<String, dynamic> toJson() {
+    validateVersion(version);
+    return {
+      'version': currentVersion,
+      'app': 'statoo_5v5',
+      'exported_at': exportedAt.toIso8601String(),
+      'team': team,
+      'teams': teams.isNotEmpty ? teams : (team != null ? [team!] : <Map<String, dynamic>>[]),
+      'players': players,
+      'sessions': sessions,
+      'participations': participations,
+      'meta': meta,
+      'settings': {
+        if (minPlayersPerSession != null)
+          'min_players_per_session': minPlayersPerSession,
+      },
+    };
+  }
 }
 
 class RestoreResult {
@@ -120,7 +141,12 @@ class RestoreResult {
     this.reusedPlayersCount = 0,
     this.skippedSessionsCount = 0,
     this.normalizedSessionsCount = 0,
+    this.unavailablePhotosCount = 0,
   });
+
+  final int unavailablePhotosCount;
+  String get photoWarning => unavailablePhotosCount == 0 ? ''
+      : '\n$unavailablePhotosCount photo(s) indisponible(s) : la sauvegarde contenait des chemins locaux. Ajoutez de nouveau ces photos.';
 
   final bool isMerge;
   final String teamName;
