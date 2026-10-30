@@ -65,7 +65,6 @@ void main() {
     Widget? home,
     SharedService? serviceOverride,
     SessionsRepository? repoOverride,
-    String Function(DateTime date)? referenceBuilderOverride,
     String? referenceOverride = '2026-10-30-1',
   }) {
     final service = serviceOverride ?? SharedService(AppDatabase.instance);
@@ -83,11 +82,7 @@ void main() {
     return ProviderScope(
       overrides: [
         if (repoOverride != null) sessionsRepositoryProvider.overrideWithValue(repoOverride),
-        if (referenceBuilderOverride != null)
-          nextSessionReferenceProvider.overrideWith(
-            (ref, date) async => referenceBuilderOverride(date),
-          )
-        else if (referenceOverride != null)
+        if (referenceOverride != null)
           nextSessionReferenceProvider.overrideWith(
             (ref, date) async => referenceOverride,
           ),
@@ -160,17 +155,13 @@ void main() {
       expect(find.textContaining('Admin, Président, Vice-président, SG ou SGA'), findsOneWidget);
     });
     testWidgets(
-      'UX03-22 local creation exposes the optional occurrence reference',
+      'UX03-22 local creation auto-generates reference and does not expose a manual text field',
       (tester) async {
         await tester.pumpWidget(createWidget());
         await tester.pumpAndSettle();
-        await tester.scrollUntilVisible(
-          find.widgetWithText(TextField, 'Référence de la séance'),
-          250,
-        );
         expect(
           find.widgetWithText(TextField, 'Référence de la séance'),
-          findsOneWidget,
+          findsNothing,
         );
       },
     );
@@ -390,82 +381,4 @@ void main() {
       }
     },
   );
-
-  testWidgets('auto-generates next reference on initial open without manual input', (tester) async {
-    tester.view.physicalSize = const Size(800, 2200);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(createWidget());
-    await tester.pumpAndSettle();
-
-    final refField = find.widgetWithText(TextField, '2026-10-30-1');
-    expect(refField, findsOneWidget);
-  });
-
-  testWidgets('auto-generates non-colliding reference when previous session exists for today', (tester) async {
-    tester.view.physicalSize = const Size(800, 2200);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(createWidget(referenceOverride: '2026-10-30-2'));
-    await tester.pumpAndSettle();
-
-    final refField = find.widgetWithText(TextField, '2026-10-30-2');
-    expect(refField, findsOneWidget);
-  });
-
-  testWidgets('keeps custom reference when user manually typed a custom reference', (tester) async {
-    tester.view.physicalSize = const Size(800, 2200);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(createWidget());
-    await tester.pumpAndSettle();
-
-    final refField = find.widgetWithText(TextField, '2026-10-30-1');
-    expect(refField, findsOneWidget);
-
-    await tester.enterText(refField, 'CUSTOM-REF-99');
-    await tester.pumpAndSettle();
-
-    expect(find.widgetWithText(TextField, 'CUSTOM-REF-99'), findsOneWidget);
-  });
-
-  testWidgets('updates reference dynamically when date changes if user has not edited it', (tester) async {
-    tester.view.physicalSize = const Size(800, 2200);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(
-      createWidget(
-        referenceBuilderOverride: (date) =>
-            '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}-1',
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    final today = DateTime.now();
-    final todayFormatted =
-        '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}-1';
-    expect(find.widgetWithText(TextField, todayFormatted), findsOneWidget);
-
-    await tester.tap(find.text('Date'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('OK'), findsOneWidget);
-    final targetDay = today.day == 15 ? 16 : 15;
-    await tester.tap(find.text('$targetDay').first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
-
-    final updatedDateFormatted =
-        '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${targetDay.toString().padLeft(2, '0')}-1';
-    expect(find.widgetWithText(TextField, updatedDateFormatted), findsOneWidget);
-  });
 }
