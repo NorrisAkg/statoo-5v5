@@ -6,6 +6,18 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ## Stories Terminées
 
+### [DOC-01] Synchronisation de la documentation d'architecture avec les flux outbox — ✅ LIVRÉ (Sprint 3)
+- **En tant que** nouveau contributeur,  
+  **je veux** une documentation à jour des mécanismes d'outbox et de retry offline,  
+  **afin de** comprendre immédiatement la tuyauterie de synchronisation mobile/web.
+- **Points** : 1 | **Statut** : Complété (commit `331a941`)
+
+### [API-01] Élimination de la dépréciation Starlette httpx sur les tests API — ✅ LIVRÉ (Sprint 3)
+- **En tant que** développeur backend,  
+  **je veux** éliminer le warning de dépréciation Starlette dans pytest,  
+  **afin de** maintenir la suite de tests backend 100% verte sans avertissement.
+- **Points** : 1 | **Statut** : Complété (commit `8e5d515`)
+
 ### [PERF-01] Gestion du cycle de vie de connexion SQLite en arrière-plan — ✅ LIVRÉ (Sprint 2)
 - **En tant qu'** utilisateur mobile,  
   **je veux** que l'application libère les verrous et mette en sommeil propre sa connexion SQLite lors du passage en arrière-plan (`AppLifecycleState.paused` / `detached`),  
@@ -38,20 +50,25 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ---
 
-## Backlog à Planifier (Sprint 3)
+---
 
-### [API-01] Élimination de la dépréciation Starlette httpx sur les tests API
-- **En tant que** développeur backend,  
-  **je veux** moderniser le client de test Starlette (`httpx` -> test client asynchrone / `httpx2`),  
-  **afin d'** éliminer le warning de dépréciation Starlette dans pytest.
-- **Points** : 1
-- **Priorité** : Basse (Valeur 2 × Risque 1 ÷ Effort 1 = 2)
-- **Rôles mobilisés** : `backend-api`, `reviewer`
+## Backlog Produit Futur & Perspectives
 
-### [DOC-01] Synchronisation de la documentation d'architecture avec les flux outbox
-- **En tant que** nouveau contributeur,  
-  **je veux** une documentation à jour des mécanismes d'outbox et de retry offline,  
-  **afin de** comprendre immédiatement la tuyauterie de synchronisation mobile/web.
-- **Points** : 1
-- **Priorité** : Basse (Valeur 2 × Risque 1 ÷ Effort 1 = 2)
-- **Rôles mobilisés** : `architect`, `reviewer`
+Toutes les stories de dette technique identifiées lors de la prise en main (Sprints 1, 2 et 3 — total 14 points) sont désormais **100% livrées, testées et documentées**.
+
+### Prochaines Évolutions Métier Candidates (Sprint 4)
+
+#### [FEAT-01] Export des statistiques de saison en PDF / CSV
+- **En tant que** capitaine ou trésorier,  
+  **je veux** exporter le bilan de la saison et les feuilles de match sous format PDF / CSV partageable,  
+  **afin de** faciliter la communication hors application et l'assemblée générale.
+- **Points** : 3
+- **Priorité** : Moyenne (Valeur 4 × Risque 2 ÷ Effort 3 = 2.6)
+
+#### [FEAT-02] Notifications push locales pour les rappels de match
+- **En tant que** joueur,  
+  **je veux** recevoir un rappel local la veille d'une séance programmée,  
+  **afin de** ne pas oublier le rendez-vous.
+- **Points** : 2
+- **Priorité** : Basse (Valeur 3 × Risque 1 ÷ Effort 2 = 1.5)
+
