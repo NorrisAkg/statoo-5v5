@@ -10,6 +10,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../shared/application/shared_providers.dart';
+import '../../team/application/team_provider.dart';
 import '../application/sessions_provider.dart';
 import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
@@ -22,6 +23,7 @@ import 'live_stats_panel.dart';
 import 'session_celebration.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
+import 'team_tab_pill.dart';
 
 class SessionDetailScreen extends ConsumerStatefulWidget {
   const SessionDetailScreen({
@@ -53,6 +55,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(activeTeamProvider);
     final sessionAsync = ref.watch(sessionDetailProvider(widget.sessionId));
     final participantsAsync = ref.watch(sessionParticipantsProvider(widget.sessionId));
     final activeSessionId = ref.watch(activeSessionIdProvider).value;
@@ -74,16 +77,72 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         actions: [
           sessionAsync.maybeWhen(
             data: (session) {
-              if (!_writable || session == null || session.status != SessionStatus.draft || session.id != activeSessionId) {
+              if (session == null) {
                 return const SizedBox.shrink();
               }
-              final participants = participantsAsync.value;
-              return IconButton(
-                icon: const Icon(Remix.stop_circle_line),
-                tooltip: 'Clôturer la séance',
-                onPressed: participants == null
-                    ? null
-                    : () => unawaited(_confirmClose(context, ref, session, participants)),
+              final participants = participantsAsync.value ?? const [];
+              final isDraft = session.status == SessionStatus.draft;
+              final isCurrentActive = isDraft && (session.id == activeSessionId);
+
+              return PopupMenuButton<String>(
+                icon: const Icon(Remix.more_2_fill),
+                tooltip: 'Options de la séance',
+                onSelected: (action) {
+                  switch (action) {
+                    case 'close':
+                      unawaited(_confirmClose(context, ref, session, participants));
+                    case 'finances':
+                      unawaited(context.push('/seances/${session.id}/finances'));
+                    case 'events':
+                      _showMatchEvents(context, session, participants);
+                    case 'delete':
+                      unawaited(_confirmDelete(context, ref, isDraft));
+                  }
+                },
+                itemBuilder: (context) => [
+                  if (_writable && isCurrentActive)
+                    const PopupMenuItem<String>(
+                      value: 'close',
+                      child: Row(
+                        children: [
+                          Icon(Remix.check_line, size: 18),
+                          SizedBox(width: 8),
+                          Text('Clôture'),
+                        ],
+                      ),
+                    ),
+                  const PopupMenuItem<String>(
+                    value: 'finances',
+                    child: Row(
+                      children: [
+                        Icon(Remix.wallet_line, size: 18),
+                        SizedBox(width: 8),
+                        Text('Point financier'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'events',
+                    child: Row(
+                      children: [
+                        Icon(Remix.file_list_line, size: 18),
+                        SizedBox(width: 8),
+                        Text('Faits de jeu'),
+                      ],
+                    ),
+                  ),
+                  if (_writable)
+                    PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(Remix.delete_bin_line, size: 18, color: context.colors.danger),
+                          const SizedBox(width: 8),
+                          Text('Suppression', style: TextStyle(color: context.colors.danger)),
+                        ],
+                      ),
+                    ),
+                ],
               );
             },
             orElse: () => const SizedBox.shrink(),
@@ -233,9 +292,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             onPressed: () => _openAddLatePlayers(context, session, participants),
           ),
         ],
-        const SizedBox(height: 24),
-        OutlinedButton.icon(onPressed: () => context.push('/seances/${session.id}/finances'),
-          icon: const Icon(Remix.wallet_line), label: const Text('Point financier')),
         const SizedBox(height: 16),
         if (_writable) _buildActions(
           context,
@@ -279,6 +335,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       },
     );
   }
+
   Widget _buildWarningBanner(
     BuildContext context, {
     required int scoreA,
@@ -393,43 +450,48 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ],
         ),
         const SizedBox(height: 14),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 200),
-          child: _selectedTeamTab == Team.a
-              ? _buildTeamCard(
-                  key: const ValueKey('team_a_card'),
-                  context,
-                  ref,
-                  session,
-                  session.teamName(Team.a),
-                  session.teamColor(context, Team.a),
-                  Team.a,
-                  teamAPlayers,
-                  isCurrentActive,
-                )
-              : _selectedTeamTab == Team.b
+        Builder(
+          builder: (context) {
+            final activeTab = (!isTournament && _selectedTeamTab == Team.c) ? Team.a : _selectedTeamTab;
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: activeTab == Team.a
                   ? _buildTeamCard(
-                      key: const ValueKey('team_b_card'),
+                      key: const ValueKey('team_a_card'),
                       context,
                       ref,
                       session,
-                      session.teamName(Team.b),
-                      session.teamColor(context, Team.b),
-                      Team.b,
-                      teamBPlayers,
+                      session.teamName(Team.a),
+                      session.teamColor(context, Team.a),
+                      Team.a,
+                      teamAPlayers,
                       isCurrentActive,
                     )
-                  : _buildTeamCard(
-                      key: const ValueKey('team_c_card'),
-                      context,
-                      ref,
-                      session,
-                      session.teamName(Team.c),
-                      session.teamColor(context, Team.c),
-                      Team.c,
-                      teamCPlayers,
-                      isCurrentActive,
-                    ),
+                  : activeTab == Team.b
+                      ? _buildTeamCard(
+                          key: const ValueKey('team_b_card'),
+                          context,
+                          ref,
+                          session,
+                          session.teamName(Team.b),
+                          session.teamColor(context, Team.b),
+                          Team.b,
+                          teamBPlayers,
+                          isCurrentActive,
+                        )
+                      : _buildTeamCard(
+                          key: const ValueKey('team_c_card'),
+                          context,
+                          ref,
+                          session,
+                          session.teamName(Team.c),
+                          session.teamColor(context, Team.c),
+                          Team.c,
+                          teamCPlayers,
+                          isCurrentActive,
+                        ),
+            );
+          },
         ),
       ],
     );
@@ -444,64 +506,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return TeamTabPill(
+      title: title,
+      playerCount: playerCount,
+      color: color,
+      textColor: textColor,
+      isSelected: isSelected,
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.15) : context.colors.background900,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isSelected ? color : context.colors.background700,
-            width: isSelected ? 1.5 : 1.0,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 7,
-              height: 7,
-              decoration: BoxDecoration(
-                color: isSelected ? color : color.withValues(alpha: 0.4),
-                shape: BoxShape.circle,
-              ),
-            ),
-            const SizedBox(width: 5),
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: isSelected ? context.colors.foreground50 : context.colors.foreground400,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                    fontSize: 13.5,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 5),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: isSelected ? color.withValues(alpha: 0.25) : context.colors.background800,
-                borderRadius: BorderRadius.circular(9999),
-              ),
-              child: Text(
-                '$playerCount',
-                style: TextStyle(
-                  color: isSelected ? textColor : context.colors.foreground500,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -993,19 +1004,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               onPressed: () => unawaited(_handleStartWaitingDraft(context, ref, session.id)),
             ),
           ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton.icon(
-              icon: const Icon(Remix.delete_bin_line, size: 18),
-              label: const Text('Supprimer le brouillon'),
-              style: TextButton.styleFrom(
-                foregroundColor: context.colors.danger,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-              ),
-              onPressed: () => unawaited(_confirmDelete(context, ref, true)),
-            ),
-          ),
         ] else if (isCurrentActive) ...[
           SizedBox(
             width: double.infinity,
@@ -1013,19 +1011,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               label: 'Clôturer la séance',
               icon: Remix.check_line,
               onPressed: () => unawaited(_confirmClose(context, ref, session, participants)),
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton.icon(
-              icon: const Icon(Remix.delete_bin_line, size: 18),
-              label: const Text('Supprimer ce match'),
-              style: TextButton.styleFrom(
-                foregroundColor: context.colors.danger,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-              ),
-              onPressed: () => unawaited(_confirmDelete(context, ref, true)),
             ),
           ),
         ] else ...[
@@ -1041,19 +1026,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton.icon(
-              icon: const Icon(Remix.delete_bin_line, size: 18),
-              label: const Text('Supprimer la séance'),
-              style: TextButton.styleFrom(
-                foregroundColor: context.colors.danger,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-              ),
-              onPressed: () => unawaited(_confirmDelete(context, ref, false)),
             ),
           ),
         ],
@@ -1424,6 +1396,205 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         }
       }
     }
+  }
+
+  void _showMatchEvents(
+    BuildContext context,
+    Session session,
+    List<SessionParticipantDetail> participants,
+  ) {
+    final journal = ref.read(liveJournalProvider(session.id)).value ?? const <Map<String, dynamic>>[];
+    final nameMap = <String, String>{};
+    for (final p in participants) {
+      nameMap[p.participation.id] = p.playerName;
+      nameMap[p.participation.playerId] = p.playerName;
+    }
+
+    unawaited(showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.colors.background900,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (bottomSheetContext) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (scrollContext, scrollController) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: context.colors.background700,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(Remix.file_list_line, color: context.colors.primary400, size: 22),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Faits de jeu',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  if (journal.isNotEmpty) ...[
+                    for (final entry in journal.reversed)
+                      Builder(
+                        builder: (itemContext) {
+                          final a = (entry['action'] as Map?) ?? const {};
+                          final type = a['type'] as String?;
+                          final teamCode = a['team'] as String?;
+                          final teamName = session.teamNames[teamCode] ?? 'Équipe $teamCode';
+                          final playerId = a['player'] as String?;
+                          final playerName = (playerId != null ? nameMap[playerId] : null) ?? 'Joueur inconnu';
+                          final assistId = a['assist'] as String?;
+                          final assistName = assistId != null ? nameMap[assistId] : null;
+
+                          Widget icon;
+                          String label;
+                          if (type == 'goal') {
+                            icon = Icon(Remix.football_line, size: 18, color: context.colors.primary400);
+                            label = 'But de $playerName ($teamName)';
+                          } else if (type == 'yellow') {
+                            icon = Icon(Remix.rectangle_fill, size: 18, color: context.colors.card);
+                            label = 'Carton jaune pour $playerName ($teamName)';
+                          } else if (type == 'red') {
+                            icon = Icon(Remix.rectangle_fill, size: 18, color: context.colors.danger);
+                            label = 'Carton rouge pour $playerName ($teamName)';
+                          } else if (type == 'win') {
+                            icon = Icon(Remix.trophy_line, size: 18, color: context.colors.secondary400);
+                            label = 'Victoire $teamName';
+                          } else {
+                            icon = const Icon(Remix.information_line, size: 18);
+                            label = 'Événement $teamName';
+                          }
+
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: context.colors.background800,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: context.colors.background700),
+                            ),
+                            child: Row(
+                              children: [
+                                icon,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        label,
+                                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                      ),
+                                      if (assistName != null)
+                                        Text(
+                                          'Passe décisive : $assistName',
+                                          style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                  ] else ...[
+                    Builder(
+                      builder: (itemContext) {
+                        final activeEvents = participants.where((p) =>
+                            p.participation.goals > 0 ||
+                            p.participation.assists > 0 ||
+                            p.participation.yellowCards > 0 ||
+                            p.participation.redCards > 0).toList();
+
+                        if (activeEvents.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 32),
+                              child: Text(
+                                'Aucun fait de jeu enregistré pour cette séance.',
+                                style: TextStyle(color: context.colors.foreground400),
+                              ),
+                            ),
+                          );
+                        }
+
+                        return Column(
+                          children: [
+                            for (final p in activeEvents)
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: context.colors.background800,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: context.colors.background700),
+                                ),
+                                child: Row(
+                                  children: [
+                                    if (p.participation.goals > 0)
+                                      Icon(Remix.football_line, size: 18, color: context.colors.primary400)
+                                    else if (p.participation.yellowCards > 0)
+                                      Icon(Remix.rectangle_fill, size: 18, color: context.colors.card)
+                                    else
+                                      Icon(Remix.rectangle_fill, size: 18, color: context.colors.danger),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            p.playerName,
+                                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            [
+                                              if (p.participation.goals > 0) '${p.participation.goals} but${p.participation.goals > 1 ? 's' : ''}',
+                                              if (p.participation.assists > 0) '${p.participation.assists} passe${p.participation.assists > 1 ? 's' : ''}',
+                                              if (p.participation.yellowCards > 0) '${p.participation.yellowCards} carton jaune',
+                                              if (p.participation.redCards > 0) '${p.participation.redCards} carton rouge',
+                                            ].join(' · '),
+                                            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ));
   }
 
   void _openAddLatePlayers(
