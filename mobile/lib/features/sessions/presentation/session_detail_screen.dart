@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +20,7 @@ import '../domain/session_summary.dart';
 import '../domain/team_appearance.dart';
 import 'add_late_players_bottom_sheet.dart';
 import 'live_stats_panel.dart';
+import 'match_events_timeline.dart';
 import 'session_celebration.dart';
 import 'session_header.dart';
 import 'session_team_colors.dart';
@@ -73,7 +74,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             }
           },
         ),
-        title: const Text('Détail séance'),
+        title: const Text('DÃ©tail sÃ©ance'),
         actions: [
           sessionAsync.maybeWhen(
             data: (session) {
@@ -86,7 +87,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
               return PopupMenuButton<String>(
                 icon: const Icon(Remix.more_2_fill),
-                tooltip: 'Options de la séance',
+                tooltip: 'Options de la sÃ©ance',
                 onSelected: (action) {
                   switch (action) {
                     case 'close':
@@ -107,7 +108,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                         children: [
                           Icon(Remix.check_line, size: 18),
                           SizedBox(width: 8),
-                          Text('Clôture'),
+                          Text('ClÃ´ture'),
                         ],
                       ),
                     ),
@@ -152,7 +153,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       body: sessionAsync.when(
         data: (session) {
           if (session == null) {
-            return const Center(child: Text('Séance introuvable.'));
+            return const Center(child: Text('SÃ©ance introuvable.'));
           }
 
           final isDraft = session.status == SessionStatus.draft;
@@ -202,7 +203,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
         ((goalsAssignedA + session.unassignedGoalsA != scoreA) ||
             (goalsAssignedB + session.unassignedGoalsB != scoreB));
 
-    final formattedDate = DateFormat("EEE d MMM yyyy · HH'h'mm", 'fr_FR').format(session.playedAt);
+    final formattedDate = DateFormat("EEE d MMM yyyy Â· HH'h'mm", 'fr_FR').format(session.playedAt);
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -234,8 +235,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 Expanded(
                   child: Text(
                     activeSessionId != null
-                        ? 'Cette séance est en brouillon. Une autre séance est actuellement en cours.'
-                        : 'Cette séance est prête en brouillon. Démarrez-la pour commencer à saisir les stats en direct.',
+                        ? 'Cette sÃ©ance est en brouillon. Une autre sÃ©ance est actuellement en cours.'
+                        : 'Cette sÃ©ance est prÃªte en brouillon. DÃ©marrez-la pour commencer Ã  saisir les stats en direct.',
                     style: TextStyle(color: context.colors.foreground300, fontSize: 13),
                   ),
                 ),
@@ -262,7 +263,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           spacing: 12,
           runSpacing: 8,
           children: [
-            Text('Composition & Équipes', style: Theme.of(context).textTheme.titleMedium),
+            Text('Composition & Ã‰quipes', style: Theme.of(context).textTheme.titleMedium),
             if (isDraft && _writable)
               TextButton.icon(
                 icon: const Icon(Remix.user_add_line, size: 16),
@@ -349,12 +350,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final diffB = teamBGoalsTotal != scoreB;
     final details = <String>[];
     if (diffA) {
-      final unassignedText = unassignedA > 0 ? ' (dont $unassignedA CSC/non attribué)' : '';
-      details.add('Équipe A : $teamAGoalsTotal but(s)$unassignedText pour $scoreA au score');
+      final unassignedText = unassignedA > 0 ? ' (dont $unassignedA CSC/non attribuÃ©)' : '';
+      details.add('Ã‰quipe A : $teamAGoalsTotal but(s)$unassignedText pour $scoreA au score');
     }
     if (diffB) {
-      final unassignedText = unassignedB > 0 ? ' (dont $unassignedB CSC/non attribué)' : '';
-      details.add('Équipe B : $teamBGoalsTotal but(s)$unassignedText pour $scoreB au score');
+      final unassignedText = unassignedB > 0 ? ' (dont $unassignedB CSC/non attribuÃ©)' : '';
+      details.add('Ã‰quipe B : $teamBGoalsTotal but(s)$unassignedText pour $scoreB au score');
     }
 
     return Container(
@@ -374,12 +375,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Avertissement : écart entre buts et score',
+                  'Avertissement : Ã©cart entre buts et score',
                   style: TextStyle(color: context.colors.warning, fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  details.join(' · '),
+                  details.join(' Â· '),
                   style: TextStyle(color: context.colors.warning, fontSize: 12),
                 ),
               ],
@@ -549,7 +550,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           if (players.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text('Aucun joueur assigné', style: TextStyle(color: context.colors.foreground500, fontSize: 13)),
+              child: Text('Aucun joueur assignÃ©', style: TextStyle(color: context.colors.foreground500, fontSize: 13)),
             )
           else
             ...players.map((p) => _buildPlayerRow(context, ref, session, p, color, isCurrentActive)),
@@ -588,9 +589,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('CSC adverse / Non attribué', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                const Text('CSC adverse / Non attribuÃ©', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                 Text(
-                  'Buts pour cette équipe sans joueur assigné',
+                  'Buts pour cette Ã©quipe sans joueur assignÃ©',
                   style: TextStyle(color: context.colors.foreground500, fontSize: 11),
                 ),
               ],
@@ -598,7 +599,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ),
           if (isCurrentActive) ...[
             IconButton(
-              tooltip: 'Diminuer les buts CSC / non attribués',
+              tooltip: 'Diminuer les buts CSC / non attribuÃ©s',
               icon: const Icon(Remix.subtract_line, size: 16),
               color: context.colors.foreground400,
               onPressed: unassigned > 0
@@ -620,7 +621,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             IconButton(
-              tooltip: 'Ajouter un but CSC / non attribué',
+              tooltip: 'Ajouter un but CSC / non attribuÃ©',
               icon: const Icon(Remix.add_line, size: 16),
               color: teamColor,
               onPressed: () {
@@ -672,7 +673,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 children: [
                   Text(item.playerName, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                   if (item.playerNickname != null)
-                    Text('« ${item.playerNickname} »', style: TextStyle(color: context.colors.foreground500, fontSize: 11)),
+                    Text('Â« ${item.playerNickname} Â»', style: TextStyle(color: context.colors.foreground500, fontSize: 11)),
                 ],
               ),
             ),
@@ -727,7 +728,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final team = item.participation.team;
     if (team == Team.c) return null;
     final label = team == Team.a ? 'A' : 'B';
-    if (goalDelta < 0) return "Le score de l'Équipe $label ne change pas.";
+    if (goalDelta < 0) return "Le score de l'Ã‰quipe $label ne change pas.";
 
     final participants = ref.read(sessionParticipantsProvider(session.id)).value ?? const [];
     final assigned = participants
@@ -741,8 +742,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       unassignedGoals: unassigned,
       added: goalDelta,
     );
-    if (increase == 0) return 'Ces buts sont déjà comptés dans le score.';
-    return "Le score de l'Équipe $label passera de $score à ${score + increase}.";
+    if (increase == 0) return 'Ces buts sont dÃ©jÃ  comptÃ©s dans le score.';
+    return "Le score de l'Ã‰quipe $label passera de $score Ã  ${score + increase}.";
   }
 
   void _editPlayerStats(
@@ -802,7 +803,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                     const SizedBox(height: 12),
                     _buildCounterRow(
                       context,
-                      label: 'Passes décisives',
+                      label: 'Passes dÃ©cisives',
                       icon: Remix.arrow_right_up_line,
                       value: assists,
                       onChanged: (v) => setModalState(() => assists = v),
@@ -859,7 +860,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                     const SizedBox(height: 12),
                     OutlinedButton.icon(
                       icon: const Icon(Remix.arrow_left_right_line, size: 16),
-                      label: Text('Basculer vers Équipe ${item.participation.team == Team.a ? 'B' : 'A'}'),
+                      label: Text('Basculer vers Ã‰quipe ${item.participation.team == Team.a ? 'B' : 'A'}'),
                       style: OutlinedButton.styleFrom(
                         visualDensity: VisualDensity.compact,
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -898,8 +899,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                             title: Text('Retirer ${item.playerName} ?'),
                             content: Text(
                               (item.participation.goals > 0 || item.participation.assists > 0)
-                                  ? 'Ce joueur a des statistiques enregistrées (${item.participation.goals} but(s), ${item.participation.assists} passe(s)). Elles seront supprimées.'
-                                  : 'Ce joueur sera retiré de la feuille de match de cette séance.',
+                                  ? 'Ce joueur a des statistiques enregistrÃ©es (${item.participation.goals} but(s), ${item.participation.assists} passe(s)). Elles seront supprimÃ©es.'
+                                  : 'Ce joueur sera retirÃ© de la feuille de match de cette sÃ©ance.',
                             ),
                             actions: [
                               TextButton(
@@ -999,7 +1000,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           SizedBox(
             width: double.infinity,
             child: PrimaryButton(
-              label: 'Démarrer la séance',
+              label: 'DÃ©marrer la sÃ©ance',
               icon: Remix.play_fill,
               onPressed: () => unawaited(_handleStartWaitingDraft(context, ref, session.id)),
             ),
@@ -1008,7 +1009,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           SizedBox(
             width: double.infinity,
             child: PrimaryButton(
-              label: 'Clôturer la séance',
+              label: 'ClÃ´turer la sÃ©ance',
               icon: Remix.check_line,
               onPressed: () => unawaited(_confirmClose(context, ref, session, participants)),
             ),
@@ -1018,7 +1019,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             width: double.infinity,
             child: OutlinedButton.icon(
               icon: const Icon(Remix.restart_line, size: 18),
-              label: const Text('Rouvrir la séance'),
+              label: const Text('Rouvrir la sÃ©ance'),
               onPressed: () => unawaited(_confirmReopen(context, ref)),
               style: OutlinedButton.styleFrom(
                 foregroundColor: context.colors.foreground50,
@@ -1039,9 +1040,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Une séance est déjà en cours'),
+          title: const Text('Une sÃ©ance est dÃ©jÃ  en cours'),
           content: const Text(
-            "Il ne peut y avoir qu'une seule séance en cours à la fois. Clôturez ou annulez la séance en cours avant de pouvoir débuter celle-ci.",
+            "Il ne peut y avoir qu'une seule sÃ©ance en cours Ã  la fois. ClÃ´turez ou annulez la sÃ©ance en cours avant de pouvoir dÃ©buter celle-ci.",
           ),
           actions: [
             TextButton(
@@ -1053,7 +1054,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                 Navigator.pop(ctx);
                 unawaited(context.push('/seances/$currentActiveId'));
               },
-              child: const Text('Voir la séance en cours'),
+              child: const Text('Voir la sÃ©ance en cours'),
             ),
           ],
         ),
@@ -1065,7 +1066,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     await _sportMutation(() async { started = await ref.read(sessionsControllerProvider).startSession(targetSessionId); });
     if (context.mounted && started) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Séance démarrée ! Saisie en direct activée.')),
+        const SnackBar(content: Text('SÃ©ance dÃ©marrÃ©e ! Saisie en direct activÃ©e.')),
       );
     }
   }
@@ -1126,23 +1127,23 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       final totalB = goalsB + session.unassignedGoalsB;
       final details = <String>[];
       if (totalA != scoreA) {
-        details.add('Équipe A : $totalA but(s) attribués vs $scoreA au score');
+        details.add('Ã‰quipe A : $totalA but(s) attribuÃ©s vs $scoreA au score');
       }
       if (totalB != scoreB) {
-        details.add('Équipe B : $totalB but(s) attribués vs $scoreB au score');
+        details.add('Ã‰quipe B : $totalB but(s) attribuÃ©s vs $scoreB au score');
       }
       if (isTournament && session.scoreC != null) {
         final scoreC = session.scoreC ?? 0;
         final totalC = goalsC + session.unassignedGoalsC;
         if (totalC != scoreC) {
-          details.add('Équipe C : $totalC but(s) attribués vs $scoreC au score');
+          details.add('Ã‰quipe C : $totalC but(s) attribuÃ©s vs $scoreC au score');
         }
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Clôture impossible : ${details.join(' · ')}. '
-            'Corrigez les buts des joueurs ou le score avant de clôturer.',
+            'ClÃ´ture impossible : ${details.join(' Â· ')}. '
+            'Corrigez les buts des joueurs ou le score avant de clÃ´turer.',
           ),
           duration: const Duration(seconds: 5),
         ),
@@ -1153,19 +1154,19 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     if (blockers.contains(CloseBlocker.assistsExceedGoals)) {
       final details = <String>[];
       if (assistsA > goalsA) {
-        details.add('Équipe A : $assistsA passe(s) pour $goalsA but(s) marqué(s)');
+        details.add('Ã‰quipe A : $assistsA passe(s) pour $goalsA but(s) marquÃ©(s)');
       }
       if (assistsB > goalsB) {
-        details.add('Équipe B : $assistsB passe(s) pour $goalsB but(s) marqué(s)');
+        details.add('Ã‰quipe B : $assistsB passe(s) pour $goalsB but(s) marquÃ©(s)');
       }
       if (isTournament && assistsC > goalsC) {
-        details.add('Équipe C : $assistsC passe(s) pour $goalsC but(s) marqué(s)');
+        details.add('Ã‰quipe C : $assistsC passe(s) pour $goalsC but(s) marquÃ©(s)');
       }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Clôture impossible : ${details.join(' · ')}. '
-            "Le nombre de passes décisives d'une équipe ne peut pas dépasser ses buts marqués.",
+            'ClÃ´ture impossible : ${details.join(' Â· ')}. '
+            "Le nombre de passes dÃ©cisives d'une Ã©quipe ne peut pas dÃ©passer ses buts marquÃ©s.",
           ),
           duration: const Duration(seconds: 5),
         ),
@@ -1187,13 +1188,13 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           Team.b => goalsB,
           Team.c => goalsC,
         };
-        return '${p.playerName} (${p.participation.goals} but(s), ${p.participation.assists} passe(s) pour $teamGoals but(s) de son équipe)';
+        return '${p.playerName} (${p.participation.goals} but(s), ${p.participation.assists} passe(s) pour $teamGoals but(s) de son Ã©quipe)';
       }).toList();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Clôture impossible : auto-passe détectée pour ${culprits.join(', ')}. '
-            'Un joueur ne peut pas se faire une passe décisive à lui-même.',
+            'ClÃ´ture impossible : auto-passe dÃ©tectÃ©e pour ${culprits.join(', ')}. '
+            'Un joueur ne peut pas se faire une passe dÃ©cisive Ã  lui-mÃªme.',
           ),
           duration: const Duration(seconds: 6),
         ),
@@ -1205,33 +1206,33 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     if (isTournament) {
       final res = computeTournamentResult(session.winsA, session.winsB, session.winsC);
       outcome = switch (res) {
-        MatchResult.teamA => 'Vainqueur : Équipe A (${session.winsA} victoires) — 3 pts',
-        MatchResult.teamB => 'Vainqueur : Équipe B (${session.winsB} victoires) — 3 pts',
-        MatchResult.teamC => 'Vainqueur : Équipe C (${session.winsC} victoires) — 3 pts',
+        MatchResult.teamA => 'Vainqueur : Ã‰quipe A (${session.winsA} victoires) â€” 3 pts',
+        MatchResult.teamB => 'Vainqueur : Ã‰quipe B (${session.winsB} victoires) â€” 3 pts',
+        MatchResult.teamC => 'Vainqueur : Ã‰quipe C (${session.winsC} victoires) â€” 3 pts',
         MatchResult.drawAB =>
-          'Égalité : Équipes A et B (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune',
+          'Ã‰galitÃ© : Ã‰quipes A et B (${session.winsA} victoires) â€” ${session.drawPoints} pt(s) chacune',
         MatchResult.drawBC =>
-          'Égalité : Équipes B et C (${session.winsB} victoires) — ${session.drawPoints} pt(s) chacune',
+          'Ã‰galitÃ© : Ã‰quipes B et C (${session.winsB} victoires) â€” ${session.drawPoints} pt(s) chacune',
         MatchResult.drawAC =>
-          'Égalité : Équipes A et C (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune',
+          'Ã‰galitÃ© : Ã‰quipes A et C (${session.winsA} victoires) â€” ${session.drawPoints} pt(s) chacune',
         MatchResult.drawAll =>
-          'Égalité à trois (${session.winsA} victoires) — ${session.drawPoints} pt(s) chacune',
-        _ => 'Points calculés pour le classement général',
+          'Ã‰galitÃ© Ã  trois (${session.winsA} victoires) â€” ${session.drawPoints} pt(s) chacune',
+        _ => 'Points calculÃ©s pour le classement gÃ©nÃ©ral',
       };
     } else {
       final scoreA = session.scoreA ?? 0;
       final scoreB = session.scoreB ?? 0;
       outcome = scoreA > scoreB
-          ? 'Victoire Équipe A ($scoreA – $scoreB)'
+          ? 'Victoire Ã‰quipe A ($scoreA â€“ $scoreB)'
           : scoreB > scoreA
-              ? 'Victoire Équipe B ($scoreA – $scoreB)'
-              : 'Match nul ($scoreA – $scoreB)';
+              ? 'Victoire Ã‰quipe B ($scoreA â€“ $scoreB)'
+              : 'Match nul ($scoreA â€“ $scoreB)';
     }
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Clôturer la séance ?'),
+        title: const Text('ClÃ´turer la sÃ©ance ?'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1253,8 +1254,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                   const SizedBox(height: 4),
                   Text(
                     session.isRanked
-                        ? 'Séance classée · Intégrée au classement général'
-                        : 'Séance amicale · Statistiques seules (hors classement)',
+                        ? 'SÃ©ance classÃ©e Â· IntÃ©grÃ©e au classement gÃ©nÃ©ral'
+                        : 'SÃ©ance amicale Â· Statistiques seules (hors classement)',
                     style: TextStyle(color: context.colors.foreground400, fontSize: 12),
                   ),
                 ],
@@ -1262,7 +1263,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Une fois clôturée, la séance mettra à jour les classements.',
+              'Une fois clÃ´turÃ©e, la sÃ©ance mettra Ã  jour les classements.',
               style: TextStyle(color: context.colors.foreground300, fontSize: 13),
             ),
           ],
@@ -1274,7 +1275,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Clôturer'),
+            child: const Text('ClÃ´turer'),
           ),
         ],
       ),
@@ -1287,12 +1288,12 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       final remaining = await controller.closeSession(session.id);
       closed = remaining.isEmpty;
       message = remaining.isEmpty
-          ? 'Séance clôturée avec succès !'
+          ? 'SÃ©ance clÃ´turÃ©e avec succÃ¨s !'
           : _closeBlockerMessage(remaining.first, session);
     } on SessionCloseException {
-      message = "La séance n'a pas pu être clôturée. Rechargez-la et réessayez.";
+      message = "La sÃ©ance n'a pas pu Ãªtre clÃ´turÃ©e. Rechargez-la et rÃ©essayez.";
     } on Object catch (e) {
-      message = 'Erreur lors de la clôture : $e';
+      message = 'Erreur lors de la clÃ´ture : $e';
     }
     if (!context.mounted) return;
     if (closed) {
@@ -1304,19 +1305,19 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
 
   String _closeBlockerMessage(CloseBlocker blocker, Session session) => switch (blocker) {
     CloseBlocker.missingScore => session.sessionType == SessionType.tournament3
-        ? 'Clôture impossible : au moins une victoire doit être enregistrée.'
-        : 'Clôture impossible : renseignez le score de la séance.',
+        ? 'ClÃ´ture impossible : au moins une victoire doit Ãªtre enregistrÃ©e.'
+        : 'ClÃ´ture impossible : renseignez le score de la sÃ©ance.',
     CloseBlocker.unevenTeams => session.sessionType == SessionType.tournament3
-        ? "Clôture impossible : l'écart d'effectif entre les 3 équipes dépasse 1 et l'option équipes inégales n'est pas activée."
-        : "Clôture impossible : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
+        ? "ClÃ´ture impossible : l'Ã©cart d'effectif entre les 3 Ã©quipes dÃ©passe 1 et l'option Ã©quipes inÃ©gales n'est pas activÃ©e."
+        : "ClÃ´ture impossible : l'Ã©cart d'effectif dÃ©passe 1 et l'option Ã©quipes inÃ©gales n'est pas activÃ©e.",
     CloseBlocker.goalsMismatch =>
-      'Clôture impossible : le total des buts attribués ne correspond pas au score. Corrigez avant de clôturer.',
+      'ClÃ´ture impossible : le total des buts attribuÃ©s ne correspond pas au score. Corrigez avant de clÃ´turer.',
     CloseBlocker.assistsExceedGoals =>
-      'Clôture impossible : le nombre de passes décisives dépasse le nombre de buts marqués par les joueurs.',
+      'ClÃ´ture impossible : le nombre de passes dÃ©cisives dÃ©passe le nombre de buts marquÃ©s par les joueurs.',
     CloseBlocker.selfAssist =>
-      'Clôture impossible : un joueur ne peut pas se faire de passe décisive à lui-même.',
+      'ClÃ´ture impossible : un joueur ne peut pas se faire de passe dÃ©cisive Ã  lui-mÃªme.',
     CloseBlocker.duplicatePlayer =>
-      'Clôture impossible : un même joueur est inscrit plusieurs fois dans la séance.',
+      'ClÃ´ture impossible : un mÃªme joueur est inscrit plusieurs fois dans la sÃ©ance.',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {
@@ -1326,11 +1327,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final proceed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(isAnotherActive ? 'Une séance est déjà en cours' : 'Modifier cette séance ?'),
+        title: Text(isAnotherActive ? 'Une sÃ©ance est dÃ©jÃ  en cours' : 'Modifier cette sÃ©ance ?'),
         content: Text(
           isAnotherActive
-              ? 'Une autre séance est actuellement en cours. Cette séance sera rouverte en tant que brouillon en attente et sortira temporairement du classement.'
-              : "Cette séance repassera en mode brouillon pour vous permettre d'ajuster le score, les effectifs ou les statistiques. Elle sortira temporairement du classement jusqu'à sa reclôture.",
+              ? 'Une autre sÃ©ance est actuellement en cours. Cette sÃ©ance sera rouverte en tant que brouillon en attente et sortira temporairement du classement.'
+              : "Cette sÃ©ance repassera en mode brouillon pour vous permettre d'ajuster le score, les effectifs ou les statistiques. Elle sortira temporairement du classement jusqu'Ã  sa reclÃ´ture.",
         ),
         actions: [
           TextButton(
@@ -1351,7 +1352,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Séance rouverte en brouillon pour modification.'),
+          content: Text('SÃ©ance rouverte en brouillon pour modification.'),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -1362,11 +1363,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(isDraft ? 'Supprimer ce match en cours ?' : 'Supprimer la séance ?'),
+        title: Text(isDraft ? 'Supprimer ce match en cours ?' : 'Supprimer la sÃ©ance ?'),
         content: Text(
           isDraft
-              ? 'Ce match en cours sera définitivement supprimé. Les scores et statistiques saisis seront perdus.'
-              : 'Cette séance et toutes ses participations seront définitivement supprimées du classement.',
+              ? 'Ce match en cours sera dÃ©finitivement supprimÃ©. Les scores et statistiques saisis seront perdus.'
+              : 'Cette sÃ©ance et toutes ses participations seront dÃ©finitivement supprimÃ©es du classement.',
         ),
         actions: [
           TextButton(
@@ -1387,7 +1388,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       if (!deleted) return;
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Séance supprimée.')),
+          const SnackBar(content: Text('SÃ©ance supprimÃ©e.')),
         );
         if (context.canPop()) {
           context.pop();
@@ -1404,11 +1405,6 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     List<SessionParticipantDetail> participants,
   ) {
     final journal = ref.read(liveJournalProvider(session.id)).value ?? const <Map<String, dynamic>>[];
-    final nameMap = <String, String>{};
-    for (final p in participants) {
-      nameMap[p.participation.id] = p.playerName;
-      nameMap[p.participation.playerId] = p.playerName;
-    }
 
     unawaited(showModalBottomSheet<void>(
       context: context,
@@ -1419,9 +1415,9 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       ),
       builder: (bottomSheetContext) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.6,
+          initialChildSize: 0.7,
           minChildSize: 0.3,
-          maxChildSize: 0.9,
+          maxChildSize: 0.95,
           expand: false,
           builder: (scrollContext, scrollController) {
             return Padding(
@@ -1453,141 +1449,11 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  if (journal.isNotEmpty) ...[
-                    for (final entry in journal.reversed)
-                      Builder(
-                        builder: (itemContext) {
-                          final a = (entry['action'] as Map?) ?? const {};
-                          final type = a['type'] as String?;
-                          final teamCode = a['team'] as String?;
-                          final teamName = session.teamNames[teamCode] ?? 'Équipe $teamCode';
-                          final playerId = a['player'] as String?;
-                          final playerName = (playerId != null ? nameMap[playerId] : null) ?? 'Joueur inconnu';
-                          final assistId = a['assist'] as String?;
-                          final assistName = assistId != null ? nameMap[assistId] : null;
-
-                          Widget icon;
-                          String label;
-                          if (type == 'goal') {
-                            icon = Icon(Remix.football_line, size: 18, color: context.colors.primary400);
-                            label = 'But de $playerName ($teamName)';
-                          } else if (type == 'yellow') {
-                            icon = Icon(Remix.rectangle_fill, size: 18, color: context.colors.card);
-                            label = 'Carton jaune pour $playerName ($teamName)';
-                          } else if (type == 'red') {
-                            icon = Icon(Remix.rectangle_fill, size: 18, color: context.colors.danger);
-                            label = 'Carton rouge pour $playerName ($teamName)';
-                          } else if (type == 'win') {
-                            icon = Icon(Remix.trophy_line, size: 18, color: context.colors.secondary400);
-                            label = 'Victoire $teamName';
-                          } else {
-                            icon = const Icon(Remix.information_line, size: 18);
-                            label = 'Événement $teamName';
-                          }
-
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: context.colors.background800,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: context.colors.background700),
-                            ),
-                            child: Row(
-                              children: [
-                                icon,
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        label,
-                                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                                      ),
-                                      if (assistName != null)
-                                        Text(
-                                          'Passe décisive : $assistName',
-                                          style: TextStyle(color: context.colors.foreground400, fontSize: 12),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                  ] else ...[
-                    Builder(
-                      builder: (itemContext) {
-                        final activeEvents = participants.where((p) =>
-                            p.participation.goals > 0 ||
-                            p.participation.assists > 0 ||
-                            p.participation.yellowCards > 0 ||
-                            p.participation.redCards > 0).toList();
-
-                        if (activeEvents.isEmpty) {
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 32),
-                              child: Text(
-                                'Aucun fait de jeu enregistré pour cette séance.',
-                                style: TextStyle(color: context.colors.foreground400),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return Column(
-                          children: [
-                            for (final p in activeEvents)
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: context.colors.background800,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: context.colors.background700),
-                                ),
-                                child: Row(
-                                  children: [
-                                    if (p.participation.goals > 0)
-                                      Icon(Remix.football_line, size: 18, color: context.colors.primary400)
-                                    else if (p.participation.yellowCards > 0)
-                                      Icon(Remix.rectangle_fill, size: 18, color: context.colors.card)
-                                    else
-                                      Icon(Remix.rectangle_fill, size: 18, color: context.colors.danger),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            p.playerName,
-                                            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            [
-                                              if (p.participation.goals > 0) '${p.participation.goals} but${p.participation.goals > 1 ? 's' : ''}',
-                                              if (p.participation.assists > 0) '${p.participation.assists} passe${p.participation.assists > 1 ? 's' : ''}',
-                                              if (p.participation.yellowCards > 0) '${p.participation.yellowCards} carton jaune',
-                                              if (p.participation.redCards > 0) '${p.participation.redCards} carton rouge',
-                                            ].join(' · '),
-                                            style: TextStyle(color: context.colors.foreground400, fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
+                  MatchEventsTimeline(
+                    session: session,
+                    participants: participants,
+                    journal: journal,
+                  ),
                 ],
               ),
             );
