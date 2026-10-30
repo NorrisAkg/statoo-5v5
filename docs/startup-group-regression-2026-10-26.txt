@@ -1,0 +1,1086 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 108.0.0 (110.0.0 available)
+  analyzer 14.4.0 (14.6.0 available)
+  android_file_picker 2.0.0 (2.1.1 available)
+  archive 4.3.0 (4.5.2 available)
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_daemon 4.1.6 (4.1.7 available)
+  build_runner 2.16.1 (2.17.1 available)
+  built_collection 5.1.1 (5.1.2 available)
+  cli_util 0.4.2 (0.6.0 available)
+  code_assets 1.2.1 (2.1.0 available)
+  code_builder 4.12.0 (4.13.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  cupertino_ui 1.1.1 (1.1.4 available)
+  dart_style 3.1.13 (3.1.14 available)
+  file_picker 13.1.0 (13.2.0 available)
+  file_picker_darwin 2.1.2 (2.3.4 available)
+  file_picker_linux 2.0.1 (2.0.2 available)
+  file_picker_platform_interface 4.0.0 (4.2.0 available)
+  file_picker_web 4.0.0 (4.2.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  freezed 4.0.2 (4.0.3 available)
+  go_router 18.0.1 (18.1.1 available)
+  google_fonts 8.2.1 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  http_multi_server 3.2.2 (3.2.3 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+23 (0.8.13+25 available)
+  image_picker_ios 0.8.13+8 (0.8.13+13 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.0 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  json_serializable 6.14.1 (6.15.2 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.4.0 (1.8.0 available)
+  meta 1.18.3 (1.19.0 available)
+  native_toolchain_c 0.19.2 (0.19.5 available)
+  objective_c 9.5.0 (9.6.2 available)
+  petitparser 7.0.2 (7.1.0 available)
+  pubspec_parse 1.6.0 (1.7.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  share_plus 13.3.0 (13.3.1 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.28 (2.5.3 available)
+  shared_preferences_foundation 2.5.7 (2.6.0 available)
+  shelf 1.4.2 (1.4.3 available)
+  source_gen 4.3.0 (4.3.1 available)
+  source_helper 1.3.13 (1.4.0 available)
+  sqflite 2.4.4 (2.4.5 available)
+  sqflite_android 2.4.4 (2.4.5 available)
+  sqflite_common 2.5.13 (2.5.14 available)
+  sqflite_common_ffi 2.4.3 (2.4.5 available)
+  sqflite_darwin 2.4.4 (2.4.4+1 available)
+  sqflite_platform_interface 2.4.2 (2.4.3 available)
+  sqlite3 3.5.2 (3.8.0 available)
+  synchronized 3.4.2 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  windows_file_picker 2.0.0 (2.0.1 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: (setUpAll)
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:01 +4: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:01 +5: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:02 +6: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:03 +7: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:03 +8: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:03 +9: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:03 +10: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: direct stats startup gets the persisted group before any home read
+00:03 +11: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y01 back has a name and pops CreateTeamScreen
+00:03 +12: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y01 back has a name and pops CreateTeamScreen
+00:03 +13: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y01 back has a name and pops CreateTeamScreen
+00:03 +14: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y01 back has a name and pops CreateTeamScreen
+00:04 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/finance/finances_screen_test.dart: narrow table sorts, searches and exposes separate balances (false)
+00:04 +24: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:05 +25: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:05 +26: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:05 +27: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:05 +28: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:07 +29: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:08 +30: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:09 +31: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:09 +32: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:10 +33: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:10 +34: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:10 +35: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:10 +36: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:11 +37: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:11 +38: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:11 +39: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:11 +40: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:11 +41: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves sqlite selection without crossing groups
+00:12 +42: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.0/dark=false/tournament=false with keyboard
+00:12 +43: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.0/dark=false/tournament=false with keyboard
+00:13 +44: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:13 +45: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:13 +46: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:14 +47: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:14 +48: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:15 +49: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:15 +50: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:15 +51: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:16 +52: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:16 +53: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:17 +54: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:17 +55: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:17 +56: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:17 +57: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:18 +58: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:18 +59: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:18 +60: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:19 +61: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:19 +62: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:19 +63: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:20 +64: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves preferences selection without crossing groups
+00:21 +65: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.3/dark=true/tournament=true with keyboard
+00:21 +66: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:22 +67: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:22 +68: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/decision_details_test.dart: D02-03 additions and removals differ from zero; unchanged values are expandable
+00:22 +69: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:22 +70: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:23 +71: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:23 +72: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:23 +73: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:24 +74: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:24 +75: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:24 +76: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:25 +77: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:25 +78: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:25 +79: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:26 +80: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:26 +81: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:27 +82: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:27 +83: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:27 +84: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:27 +85: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:28 +86: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:28 +87: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:28 +88: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:28 +89: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +90: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +91: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +92: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +93: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +94: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:29 +95: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:30 +96: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:30 +97: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:30 +98: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:30 +99: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves stale selection without crossing groups
+00:30 +100: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=false/tournament=true with keyboard
+00:31 +101: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=false/tournament=true with keyboard
+00:31 +102: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/group_entry_test.dart: ENT01/03 entry and direct join seen=false
+00:31 +103: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:31 +104: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:31 +105: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:32 +106: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:32 +107: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:32 +108: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:32 +109: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:33 +110: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:33 +111: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:33 +112: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:33 +113: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +114: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +115: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +116: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +117: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +118: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +119: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +120: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +121: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +122: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +123: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +124: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +125: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +126: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +127: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +128: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:34 +129: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:35 +130: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +131: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +132: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +133: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +134: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +135: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +136: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +137: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +138: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +139: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +140: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:36 +141: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +142: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +143: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +144: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +145: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +146: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +147: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +148: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +149: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +150: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +151: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +152: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +153: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +154: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +155: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +156: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +157: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +158: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +159: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +160: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +161: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:37 +162: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:38 +163: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:38 +164: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:38 +165: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:38 +166: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +167: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +168: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +169: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +170: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +171: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +172: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +173: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:41 +174: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:42 +175: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: startup resolves missing selection without crossing groups
+00:42 +176: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +177: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +178: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +179: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +180: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +181: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +182: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +183: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +184: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: PAR18 every connection input keeps an explanatory placeholder
+00:42 +185: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +186: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +187: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +188: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +189: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +190: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +191: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +192: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +193: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:43 +194: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +195: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +196: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +197: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +198: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +199: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:44 +200: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:45 +201: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: empty installation stays empty and redirects to welcome
+00:45 +202: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:45 +203: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:45 +204: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_group_screen_test.dart: join and share forms remain usable on a narrow screen (dark: true)
+00:45 +205: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +206: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +207: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +208: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +209: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +210: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +211: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:45 +212: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: legacy team preferences initialize the migrated group
+00:46 +213: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:47 +214: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:47 +215: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:47 +216: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:48 +217: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:50 +218: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:50 +219: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:50 +220: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:50 +221: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:50 +222: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:52 +223: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: onboarding remains required while the group is initialized
+00:54 +224: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/manager_validation_test.dart: V01 invalid credentials stay in dialog password length 0
+00:54 +225: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/manager_validation_test.dart: V01 invalid credentials stay in dialog password length 0
+00:55 +226: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:56 +227: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:57 +228: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:57 +229: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:57 +230: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:58 +231: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:58 +232: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:59 +233: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:59 +234: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+00:59 +235: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:00 +236: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:00 +237: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:00 +238: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:01 +239: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:01 +240: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:02 +241: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:02 +242: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:02 +243: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:02 +244: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:02 +245: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:03 +246: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:03 +247: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:03 +248: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:04 +249: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:04 +250: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:04 +251: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:04 +252: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:05 +253: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: selection after startup persists into the next boot
+01:05 +254: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+01:06 +255: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+01:06 +256: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+01:07 +257: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+01:07 +258: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 320.0 text 1.0 dark false
+01:08 +259: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:08 +260: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:08 +261: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:08 +262: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:08 +263: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:08 +264: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:09 +265: /home/norris/my-projects/statoo-5v5/mobile/test/startup/active_group_test.dart: database read failure does not boot a false empty application
+01:09 +266: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:09 +267: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:09 +268: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:09 +269: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:10 +270: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:10 +271: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:10 +272: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:11 +273: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect MEMBER
+01:11 +274: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard actions reachable 393.0 text 2.0 dark false
+01:11 +275: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect CENSOR
+01:11 +276: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect CENSOR
+01:11 +277: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard keeps creation controls visible and can be dismissed without losing input
+01:12 +278: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard keeps creation controls visible and can be dismissed without losing input
+01:12 +279: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet keyboard keeps creation controls visible and can be dismissed without losing input
+01:12 +280: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-02/04 players mutations reflect ADMIN
+01:12 +281: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +282: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +283: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +284: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +285: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +286: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +287: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +288: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet refocuses name field after creating player with createAnother button
+01:13 +289: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+01:14 +290: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+01:14 +291: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+01:14 +292: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/player_permissions_test.dart: UX06-07 late denied submission retains inputs and displays error
+01:14 +293: /home/norris/my-projects/statoo-5v5/mobile/test/features/players/new_player_bottom_sheet_test.dart: NewPlayerBottomSheet shows inline error message when attempting to add duplicate player name
+01:16 +294: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:17 +295: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:17 +296: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:17 +297: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:17 +298: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +299: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +300: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +301: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +302: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +303: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +304: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +305: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +306: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +307: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +308: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +309: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +310: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +311: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +312: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +313: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +314: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +315: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +316: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +317: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +318: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +319: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +320: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +321: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +322: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +323: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:18 +324: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:19 +325: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:19 +326: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:19 +327: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:19 +328: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES09 copy confirmation stays visible inside manager dialog
+01:19 +329: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_version_test.dart: Real restore boundary VER04/05 unsupported 3 merge=true refuses before DB access and preserves all state
+01:19 +330: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +331: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +332: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +333: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +334: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +335: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:19 +336: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:20 +337: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: GES03/04 regeneration requires confirmation and can be cancelled
+01:20 +338: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +339: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +340: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +341: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +342: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +343: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +344: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +345: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +346: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:21 +347: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:22 +348: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:22 +349: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:22 +350: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC05 explicit verification and copy; password never displayed afterwards
+01:22 +351: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests replace mode restores all tables without foreign key violations
+01:22 +352: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests replace mode restores all tables without foreign key violations
+01:22 +353: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC03 hidden from non Admin
+01:22 +354: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-01/02/11 restores DRAW_ALL, merge=true
+01:22 +355: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/backup_service_test.dart: BackupService SQLite integration tests merge mode from another device remaps sessions and players without foreign key errors (B-02 & Maj. 4)
+01:22 +356: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07 clipboard failure has no success; retry remains possible
+01:22 +357: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07 clipboard failure has no success; retry remains possible
+01:22 +358: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07 clipboard failure has no success; retry remains possible
+01:22 +359: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07 clipboard failure has no success; retry remains possible
+01:22 +360: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/tournament_backup_test.dart: UX07-05/06 classic scored remains closed, incomplete becomes draft
+01:22 +361: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07/08 failed storage stays in form and cancel preserves old access
+01:23 +362: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC07/08 failed storage stays in form and cancel preserves old access
+01:23 +363: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: v7 appearance migration preserves existing rows and supplies nullable defaults
+01:23 +364: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10/GES08 layout 320.0 1.0 ThemeMode.light manager=false
+01:23 +365: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:23 +366: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:24 +367: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:24 +368: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:24 +369: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:25 +370: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:25 +371: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:25 +372: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:25 +373: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:26 +374: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:26 +375: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:26 +376: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +377: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +378: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +379: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +380: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +381: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +382: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +383: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:27 +384: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:28 +385: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:28 +386: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:28 +387: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:28 +388: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:28 +389: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: controller blocks duplicates before saving and SQLite backup keeps custom teams
+01:29 +390: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_permissions_test.dart: UX06-02 readonly active session stays labelled in progress without mutations
+01:29 +391: /home/norris/my-projects/statoo-5v5/mobile/test/features/settings/collective_access_section_test.dart: ACC10/GES08 layout 393.0 2.0 ThemeMode.light manager=false
+01:29 +392: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:29 +393: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:29 +394: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:29 +395: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:30 +396: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:30 +397: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:30 +398: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:30 +399: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +400: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +401: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +402: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +403: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +404: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +405: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +406: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +407: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +408: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +409: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +410: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +411: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +412: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +413: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +414: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +415: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +416: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +417: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +418: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +419: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +420: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:32 +421: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +422: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +423: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +424: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +425: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +426: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +427: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +428: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +429: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +430: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +431: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +432: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +433: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +434: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +435: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +436: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +437: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +438: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +439: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +440: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +441: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:33 +442: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: palette selection, duplicate feedback, name focus and reset
+01:34 +443: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/team_appearance_test.dart: (tearDownAll)
+01:34 +443: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: (setUpAll)
+01:34 +443: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+01:35 +444: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+01:35 +445: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/1.0/false
+01:38 +446: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_screen_test.dart: SessionDetailScreen displays 2 team tabs and switches between Team A and Team B
+01:38 +447: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:39 +448: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:39 +449: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:39 +450: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:40 +451: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:40 +452: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:40 +453: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:40 +454: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:40 +455: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/scoring_and_unassigned_goals_test.dart: Scoring and Unassigned Goals (CSC) Integration Tests SessionsController updates player stats and synchronizes team score
+01:41 +456: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/2.0/true
+01:41 +457: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/2.0/true
+01:41 +458: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/2.0/true
+01:41 +459: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 320.0/2.0/true
+01:41 +460: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+01:41 +461: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+01:42 +462: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+01:42 +463: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+01:42 +464: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=1.3 dark=false
+01:42 +465: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/false
+01:42 +466: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=false
+01:42 +467: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +468: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +469: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +470: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +471: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +472: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +473: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:42 +474: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:43 +475: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:43 +476: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.0/true
+01:43 +477: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=true
+01:43 +478: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=true
+01:43 +479: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=true
+01:43 +480: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 320.0 dp scale=1.3 dark=true
+01:43 +481: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/false
+01:43 +482: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/false
+01:43 +483: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/false
+01:43 +484: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/false
+01:43 +485: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/false
+01:43 +486: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=2.0 dark=false
+01:44 +487: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/true
+01:44 +488: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/true
+01:44 +489: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/1.3/true
+01:44 +490: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 320.0 dp scale=2.0 dark=true
+01:44 +491: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+01:44 +492: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+01:44 +493: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-15 populated tournament 393.0/2.0/false
+01:45 +494: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +495: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +496: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +497: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +498: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +499: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:45 +500: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +501: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +502: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +503: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +504: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +505: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-09 animation reduced=false
+01:46 +506: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.0 dark=true
+01:46 +507: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.0 dark=true
+01:46 +508: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-11/12 live goal picker and consultation false
+01:46 +509: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_screen_test.dart: INT-11/12 live goal picker and consultation false
+01:46 +510: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: INT-08 refuses other group, inactive, closed
+01:46 +511: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=1.0 dark=true
+01:46 +512: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=1.0 dark=true
+01:46 +513: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 320.0 1.0 dark=false
+01:46 +514: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: INT-09 transaction rollback includes journal
+01:46 +515: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=false
+01:47 +516: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=false
+01:47 +517: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=false
+01:47 +518: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=false
+01:47 +519: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 320.0 1.3 dark=false
+01:47 +520: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: MERGE-02/03 controller denies member and all sport roles queue live stats
+01:47 +521: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: MERGE-02/03 controller denies member and all sport roles queue live stats
+01:47 +522: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: MERGE-02/03 controller denies member and all sport roles queue live stats
+01:47 +523: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: MERGE-02/03 controller denies member and all sport roles queue live stats
+01:47 +524: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_stats_test.dart: MERGE-02/03 controller denies member and all sport roles queue live stats
+01:47 +525: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 320.0 2.0 dark=true
+01:47 +526: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=1.3 dark=true
+01:47 +527: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 393.0 1.0 dark=false
+01:47 +528: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.3 dark=true
+01:47 +529: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.3 dark=true
+01:48 +530: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=1.3 dark=true
+01:48 +531: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 393.0 1.3 dark=true
+01:48 +532: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=1.3 dark=true
+01:48 +533: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 393.0 2.0 dark=false
+01:48 +534: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=2.0 dark=false
+01:48 +535: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_celebration_test.dart: REF-10 celebration 393.0 2.0 dark=true
+01:48 +536: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=2.0 dark=false
+01:48 +537: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 readonly fits 393.0 dp scale=2.0 dark=false
+01:48 +538: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 waiting fits 393.0 dp scale=2.0 dark=true
+01:48 +539: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/session_detail_responsive_test.dart: D04-01/02/03/04/05/06 active fits 393.0 dp scale=2.0 dark=true
+01:49 +540: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+01:49 +541: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+01:51 +542: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+01:51 +543: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+01:51 +544: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+01:52 +545: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/live_roster_editing_test.dart: Live Roster Editing Integration Tests (Chantier 3) switchPlayerTeam throws StateError if uneven teams diff exceeds 1 and allowUnevenTeams is false
+01:52 +546: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:52 +547: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:52 +548: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:53 +549: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:53 +550: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:53 +551: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:54 +552: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:54 +553: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:54 +554: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:54 +555: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: CreateTeamScreen renders form fields and validates team name
+01:55 +556: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:55 +557: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:55 +558: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:55 +559: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +560: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +561: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +562: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +563: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +564: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +565: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+01:56 +566: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: AddTeamPlayersScreen renders player input form and allows adding players
+01:56 +567: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: AddTeamPlayersScreen renders player input form and allows adding players
+01:56 +568: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_test.dart: AddTeamPlayersScreen renders player input form and allows adding players
+01:57 +569: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Search filters player list by name or nickname
+01:57 +570: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+01:59 +571: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+02:01 +572: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+02:01 +573: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+02:02 +574: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/team_switcher_test.dart: TeamSwitcherBottomSheet renders all teams and highlights active team
+02:02 +575: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_tiles_test.dart: HomeScreen Tiles displays correct values for Joueurs, Séances and Stats tiles
+02:02 +576: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+02:02 +577: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+02:03 +578: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-09 picker is single flight
+02:03 +579: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: (tearDownAll)
+02:04 +579: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: (setUpAll)
+02:04 +579: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+02:06 +580: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+02:06 +581: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-01/02/03 active=false tournament=false
+02:07 +582: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +583: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +584: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +585: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +586: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +587: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: REF-05 hiding player of month removes the block
+02:07 +588: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:07 +589: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +590: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +591: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +592: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +593: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +594: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays Joueur du mois card with icon-based stats and card stats
+02:08 +595: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-01/02/03 latest closed session ignores draft filter
+02:08 +596: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-08 narrow screen long names and many scorers light=true
+02:09 +597: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays pending state card when MVP is null
+02:09 +598: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/player_of_the_month_card_test.dart: HomeScreen Player of the Month card displays pending state card when MVP is null
+02:09 +599: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-09 loading does not claim no goals
+02:09 +600: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/multi_tenant_isolation_and_archived_players_test.dart: Multi-tenant isolation and archived players in standings (Chantier 4) v_standings preserves archived players with their historical points and stats
+02:09 +601: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-05 tournament shows three club colors and victories
+02:09 +602: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-10 failure preserves score and indicates unavailable scorers
+02:09 +603: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-10 failure preserves score and indicates unavailable scorers
+02:09 +604: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-10 failure preserves score and indicates unavailable scorers
+02:09 +605: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-06 classic result keeps both scores and club colors
+02:09 +606: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/home_scorers_test.dart: BUT-11/12 updates scorers and discards previous session
+02:10 +607: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: D01-02 restored DRAW_ALL without match scores shows three victories
+02:10 +608: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-07 active session keeps priority
+02:10 +609: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-08 no closed or active session keeps empty state
+02:10 +610: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-09 refreshed source replaces last closed session
+02:11 +611: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +612: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +613: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +614: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +615: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +616: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +617: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +618: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +619: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +620: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +621: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +622: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +623: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +624: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +625: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +626: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +627: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: ACC-10 tap opens the displayed tournament
+02:11 +628: /home/norris/my-projects/statoo-5v5/mobile/test/features/home/latest_session_test.dart: (tearDownAll)
+02:11 +628: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: (setUpAll)
+02:11 +628: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: archived players are excluded from the points per match standings
+02:11 +629: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: a two-team draw is worth 1 point whatever the tournament draw setting
+02:12 +630: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: a three-team draw uses the session draw points
+02:12 +631: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_per_match_view_test.dart: (tearDownAll)
+02:12 +631: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +632: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +633: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +634: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +635: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +636: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +637: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +638: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +639: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:13 +640: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +641: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +642: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +643: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +644: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +645: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +646: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:14 +647: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/mvp_tab_test.dart: StandingsScreen 2 View Modes (Championnat & MVP du mois) renders Championship with 5 tabs and switches to MVP du mois view
+02:15 +648: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+02:15 +649: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+02:18 +650: /home/norris/my-projects/statoo-5v5/mobile/test/features/ranking/standings_screen_test.dart: StandingsScreen Cartons tab renders all 5 tabs including Cartons and navigates to Cartons view
+02:18 +651: /home/norris/my-projects/statoo-5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=320.0 scale=1.0
+02:19 +652: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP create width=320.0 scale=1.0 dark=false keyboard=0.0
+02:19 +653: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:20 +654: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:21 +655: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:21 +656: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +657: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +658: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +659: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +660: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +661: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=false
+02:22 +662: /home/norris/my-projects/statoo-5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=393.0 scale=1.3
+02:22 +663: /home/norris/my-projects/statoo-5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=393.0 scale=1.3
+02:23 +664: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.0 dark=false keyboard=0.0
+02:23 +665: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP home-rich width=320.0 scale=1.0 dark=false keyboard=0.0
+02:23 +666: /home/norris/my-projects/statoo-5v5/mobile/test/design/navigation_responsive_test.dart: RSP06 navigation width=393.0 scale=2.0
+02:23 +667: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: onboarding width=320.0 scale=1.0 dark=false
+02:24 +668: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: onboarding width=320.0 scale=1.0 dark=false
+02:24 +669: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=1.0 dark=false keyboard=0.0
+02:24 +670: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: edit width=320.0 scale=1.0 dark=false
+02:24 +671: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: edit width=320.0 scale=1.0 dark=false
+02:24 +672: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=0.0
+02:25 +673: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=0.0
+02:25 +674: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=0.0
+02:25 +675: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=0.0
+02:25 +676: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=true
+02:25 +677: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.0 dark=true
+02:25 +678: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=300.0
+02:25 +679: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=320.0 scale=1.0 dark=false keyboard=300.0
+02:25 +680: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: onboarding width=320.0 scale=1.0 dark=true
+02:26 +681: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: onboarding width=320.0 scale=1.0 dark=true
+02:26 +682: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP ranking width=320.0 scale=1.0 dark=false keyboard=0.0
+02:26 +683: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: edit width=320.0 scale=1.0 dark=true
+02:26 +684: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.0 dark=false keyboard=0.0
+02:27 +685: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=320.0 scale=1.0 dark=false keyboard=0.0
+02:27 +686: /home/norris/my-projects/statoo-5v5/mobile/test/design/layout_audit_test.dart: finance width=320.0 scale=1.3 dark=false
+02:27 +687: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:27 +688: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:27 +689: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:28 +690: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:28 +691: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:29 +692: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:29 +693: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:29 +694: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:29 +695: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-01/02 actual primary button has normal text contrast dark=false
+02:29 +696: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:29 +697: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +698: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +699: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +700: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +701: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +702: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:30 +703: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:31 +704: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:31 +705: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:31 +706: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG01 empty historical v6 with views opens as v8
+02:31 +707: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+02:31 +708: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+02:31 +709: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+02:32 +710: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+02:32 +711: /home/norris/my-projects/statoo-5v5/mobile/test/core/theme/contrast_test.dart: UX08-08 actual back icon contrasts with transparent app bar dark=false
+02:32 +712: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +713: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +714: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +715: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +716: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +717: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +718: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:32 +719: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +720: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +721: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +722: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +723: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +724: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +725: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +726: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +727: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:33 +728: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +729: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +730: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +731: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +732: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +733: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +734: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +735: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +736: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +737: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +738: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +739: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +740: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:34 +741: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +742: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +743: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +744: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +745: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +746: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +747: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +748: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +749: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +750: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +751: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:35 +752: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +753: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +754: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +755: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +756: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +757: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +758: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:36 +759: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +760: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +761: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +762: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +763: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +764: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +765: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:37 +766: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +767: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +768: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +769: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +770: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +771: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:38 +772: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:39 +773: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:39 +774: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:39 +775: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +776: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +777: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +778: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +779: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +780: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:40 +781: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:41 +782: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:41 +783: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:41 +784: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG02 preserves all historical v6 data across groups and formats
+02:42 +785: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:42 +786: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:42 +787: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:42 +788: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:42 +789: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:42 +790: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:43 +791: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:43 +792: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:43 +793: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:43 +794: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:43 +795: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +796: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +797: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +798: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +799: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +800: /home/norris/my-projects/statoo-5v5/mobile/test/widget_test.dart: Shows group entry after onboarding when no team exists
+02:44 +801: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:44 +802: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:45 +803: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:45 +804: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:45 +805: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:46 +806: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:46 +807: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:46 +808: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:46 +809: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:46 +810: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +811: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +812: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +813: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +814: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +815: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:47 +816: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +817: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +818: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +819: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +820: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +821: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:48 +822: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:49 +823: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:49 +824: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:49 +825: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:50 +826: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:50 +827: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG04 restores foreign keys, group guards, RESTRICT and CASCADE
+02:50 +828: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP players width=320.0 scale=2.0 dark=true keyboard=0.0
+Shell: error SqfliteFfiException(sqlite_error: 1299, , SqliteException(1299): while executing, NOT NULL constraint failed: sessions_new.team_id, constraint failed (code 1299)
+Shell:   Causing statement:             INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT 
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           , parameters: }) DatabaseException(SqliteException(1299): while executing, NOT NULL constraint failed: sessions_new.team_id, constraint failed (code 1299)
+Shell:   Causing statement:             INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT 
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           , parameters: ) sql '            INSERT INTO sessions_new (
+Shell:               id, team_id, played_at, status, split_mode, session_type,
+Shell:               allow_uneven_teams, is_ranked, score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             )
+Shell:             SELECT 
+Shell:               id, team_id, played_at, status, split_mode,
+Shell:               session_type, allow_uneven_teams, is_ranked,
+Shell:               score_a, score_b, score_c,
+Shell:               wins_a, wins_b, wins_c, draw_points, result,
+Shell:               unassigned_goals_a, unassigned_goals_b, unassigned_goals_c, notes
+Shell:             FROM sessions;
+Shell:           ' {details: {database: {path: /tmp/statoo-migration-test-IZMUPC/statoo.db, id: 1, readOnly: false, singleInstance: true}}} during open, closing...
+02:50 +829: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG05 rejects null-team without losing original data
+02:50 +830: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP entry width=320.0 scale=2.0 dark=true keyboard=0.0
+02:50 +831: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:50 +832: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:51 +833: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:51 +834: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:51 +835: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:51 +836: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:51 +837: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+02:52 +838: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG06 rejects orphan without losing original data
+Shell: error Bad state: Migration annulée : les données contiennent des références invalides. during open, closing...
+02:52 +839: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP shared width=320.0 scale=2.0 dark=true keyboard=0.0
+02:52 +840: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +841: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +842: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +843: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +844: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +845: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:52 +846: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +847: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +848: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +849: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +850: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +851: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +852: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +853: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +854: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +855: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +856: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:53 +857: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +858: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +859: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +860: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +861: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +862: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +863: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:54 +864: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:55 +865: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:55 +866: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:55 +867: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:55 +868: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:55 +869: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +870: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +871: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +872: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +873: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +874: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +875: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +876: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:56 +877: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +878: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +879: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +880: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +881: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +882: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +883: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +884: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +885: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:57 +886: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:58 +887: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:58 +888: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:58 +889: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG07 historical v7 still upgrades additively
+02:58 +890: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP members width=393.0 scale=1.3 dark=false keyboard=0.0
+02:58 +891: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG08 reopening migrated v8 preserves data and schema
+02:58 +892: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG08 reopening migrated v8 preserves data and schema
+02:58 +893: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP sessions width=393.0 scale=1.3 dark=false keyboard=0.0
+02:58 +894: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG09 fresh installation still opens with foreign keys and views
+02:58 +895: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG09 fresh installation still opens with foreign keys and views
+02:58 +896: /home/norris/my-projects/statoo-5v5/mobile/test/design/small_screen_responsive_test.dart: RSP stats width=393.0 scale=1.3 dark=false keyboard=0.0
+02:58 +897: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +898: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +899: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +900: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +901: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +902: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +903: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +904: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+02:59 +905: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:00 +906: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:00 +907: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:00 +908: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:00 +909: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:00 +910: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +911: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +912: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +913: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +914: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +915: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +916: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +917: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:01 +918: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +919: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +920: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +921: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +922: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +923: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +924: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +925: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:02 +926: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +927: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +928: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +929: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +930: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +931: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +932: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +933: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +934: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:03 +935: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +936: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +937: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +938: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +939: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +940: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +941: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +942: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:04 +943: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +944: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +945: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +946: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +947: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +948: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +949: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:05 +950: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +951: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +952: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +953: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +954: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +955: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +956: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:06 +957: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:07 +958: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:07 +959: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:07 +960: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG10 preserves 50 players, 500 sessions and 5000 participations
+03:10 +961: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: MIG11 failed migration restores the historical views exactly
+Shell: error Bad state: Migration annulée : les données contiennent des références invalides. during open, closing...
+03:10 +962: /home/norris/my-projects/statoo-5v5/mobile/test/core/data/database_migration_test.dart: (tearDownAll)
+03:10 +962: All tests passed!

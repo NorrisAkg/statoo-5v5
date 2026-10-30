@@ -1,0 +1,20 @@
+TAP version 13
+# {"width":320,"scale":1,"colorScheme":"light","searchName":"Rechercher un joueur","errors":[],"keyboard":"Enter creates and marks present"}
+# {"width":393,"scale":1,"colorScheme":"dark","searchName":"Rechercher un joueur","errors":[],"keyboard":"Enter creates and marks present"}
+# {"width":320,"scale":2,"colorScheme":"dark","searchName":"Rechercher un joueur","errors":[],"keyboard":"Enter creates and marks present"}
+# {"width":393,"scale":2,"colorScheme":"light","searchName":"Rechercher un joueur","errors":[],"keyboard":"Enter creates and marks present"}
+# Subtest: F08 actual Flutter web names, keyboard actions and visible composition
+ok 1 - F08 actual Flutter web names, keyboard actions and visible composition
+  ---
+  duration_ms: 103769.902796
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 104470.337119

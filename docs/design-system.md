@@ -133,3 +133,39 @@ Les captures hors de l’application, les données privées, les arbres UI péri
 - Dans Comptes et rôles et dans la désignation initiale, action « Accès de <identifiant> » par compte individuel. Fiche avec secret masqué, copie explicite, vérification du mot de passe existant, oubli local et génération d’un nouveau après confirmation. Le remplacement déconnecte uniquement le compte cible ; pas de remplacement de son propre mot de passe Admin depuis cette fiche.
 - Confirmation « Accès copiés » visible dans la fiche et annoncée comme région accessible, après écriture réussie du presse-papiers ; un SnackBar derrière une modale ne constitue pas un retour visible.
 - Même Flutter mobile/web ; preuves et limites : `tdd-manager-access-2026-10-17.md`.
+
+## Arbitrage du 26 octobre — noms accessibles des commandes
+
+- Les commandes répétées de composition nomment le joueur complet dans leur
+  sémantique : « Marquer <nom> présent », « Équipe A/B/C pour <nom> »,
+  « Retirer <nom> de la séance ». Les libellés visuels courts sont conservés.
+- Les icônes isolées Retour, retrait de l'effectif et nouvelle séance ont un
+  tooltip contextuel, exposé par les sémantiques natives Flutter. Conserver les
+  rôles, actions et états natifs des boutons/segments.
+- La recherche de composition possède un label permanent « Rechercher un joueur »
+  et une frontière sémantique propre ; elle ne doit pas agréger les textes des lignes.
+- Dans la composition modifiable, bandeau d'étapes et compteur peuvent revenir
+  à la ligne ; les commandes d'un joueur passent sous son identité lorsque la
+  largeur ou le texte l'exige. Ne pas réduire le texte pour les faire tenir.
+- À grand texte, avec clavier ou sous 360 dp, bandeau et actions sont dans le contenu défilant.
+  Les actions Précédent/Continuer/Débuter sont empilées à grand texte ou sous 360 dp. Le passage
+  d'étape repart en haut, sans perdre les valeurs ; l'ouverture/fermeture du
+  clavier conserve l'éditeur et son focus.
+- Le label de recherche flotte en permanence, en 14 px avant le facteur utilisateur,
+  avec une hauteur de champ d'au moins 48 px. L'icône de recherche est décorative :
+  son espace peut être compacté pour conserver le label intégral à texte 200 %.
+- Preuves et limites : `tdd-accessible-commands-2026-10-26.md` ; tests sémantiques,
+  matrice du parcours réellement modifiable, contrôles Chrome et captures.
+  TalkBack/VoiceOver sur appareil physique restent une recette distincte.
+
+## Arbitrage du 27 octobre — photos portables des joueurs
+
+- Liste, détail et compositions utilisent un portrait circulaire partagé, aux
+  dimensions existantes (48/76/36/34 dp). Conserver les couleurs de groupe/équipe
+  et les initiales en absence de photo, pendant le chargement ou sur erreur.
+- Le portrait est décoratif : le nom adjacent porte l'identité accessible ; ne pas
+  ajouter de lecture redondante ni de nouvelle action sur la photo de consultation.
+- La sélection valide les données avant de remplacer l'aperçu. Erreur affichée dans
+  le formulaire existant, nom conservé ; même image intégrée sur web et mobile.
+- Une restauration contenant uniquement d'anciens chemins signale le nombre de photos
+  indisponibles dans son résultat. Scénarios et limites : `tdd-portable-photos-2026-10-27.md`.

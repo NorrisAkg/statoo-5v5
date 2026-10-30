@@ -1,0 +1,36 @@
+TAP version 13
+# Application
+# Retour
+# Groupe partagé
+# Votre groupe, ensemble Partagez vos séances, vos classements et les finances du groupe.
+# Votre accès au groupe
+# Afficher le mot de passe
+# Se connecter
+# Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil.
+# Subtest: GES browser: create generated manager access, copy, login, persistence and confirmed reset
+not ok 1 - GES browser: create generated manager access, copy, login, persistence and confirmed reset
+  ---
+  duration_ms: 43172.912034
+  type: 'test'
+  location: '/home/norris/my-projects/statoo-5v5/web/tests/manager-access.e2e.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+  code: 'ERR_TEST_FAILURE'
+  name: 'TimeoutError'
+  stack: |-
+    login (/home/norris/my-projects/statoo-5v5/web/tests/manager-access.e2e.mjs:29:14)
+    async TestContext.<anonymous> (/home/norris/my-projects/statoo-5v5/web/tests/manager-access.e2e.mjs:40:5)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 43922.18914

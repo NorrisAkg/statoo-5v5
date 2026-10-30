@@ -1,0 +1,138 @@
+Analyzing mobile...                                             
+
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • lib/core/theme/app_theme.dart:77:20 • avoid_redundant_argument_values
+   info • Returning a 'Future' without 'await'. Try adding an 'await' or making the body non-async • lib/features/finance/data/finance_repository.dart:65:5 • async_return_with_no_await
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/data/finance_repository.dart:236:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/data/finance_repository.dart:241:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/domain/financial_report.dart:79:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/presentation/finances_screen.dart:135:9 • curly_braces_in_flow_control_structures
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/features/finance/presentation/finances_screen.dart:144:7 • cascade_invocations
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/presentation/finances_screen.dart:148:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/presentation/finances_screen.dart:514:9 • curly_braces_in_flow_control_structures
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/features/finance/presentation/finances_screen.dart:516:7 • cascade_invocations
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/finance/presentation/finances_screen.dart:521:9 • curly_braces_in_flow_control_structures
+   info • Use 'late' for private members with a non-nullable type. Try making adding the modifier 'late' • lib/features/finance/presentation/financial_point_screen.dart:39:19 • use_late_for_private_fields_and_variables
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/features/finance/presentation/financial_point_screen.dart:259:7 • cascade_invocations
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/players/application/players_provider.dart:6:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/players/presentation/edit_player_bottom_sheet.dart:56:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/players/presentation/edit_player_bottom_sheet.dart:85:9 • curly_braces_in_flow_control_structures
+   info • 'bool' parameters should be named parameters. Try converting the parameter to a named parameter • lib/features/settings/application/home_preferences.dart:13:27 • avoid_positional_boolean_parameters
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/settings/presentation/financial_defaults_section.dart:70:21 • curly_braces_in_flow_control_structures
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/settings/presentation/settings_screen.dart:27:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/settings/presentation/settings_screen.dart:28:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/settings/presentation/settings_screen.dart:225:35 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/shared/application/shared_providers.dart:43:9 • curly_braces_in_flow_control_structures
+   info • Place 'package:' imports before relative imports. Try sorting the directives • lib/features/shared/data/shared_service.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • lib/features/shared/data/shared_service.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/shared/data/shared_service.dart:9:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/shared/domain/registration_members.dart:11:5 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/shared/presentation/shared_group_screen.dart:195:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • lib/features/shared/presentation/shared_group_screen.dart:1453:7 • curly_braces_in_flow_control_structures
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/main.dart:56:5 • cascade_invocations
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • lib/main.dart:58:44 • cascade_invocations
+   info • Unnecessary type annotation on a function expression parameter. Try removing the type annotation • test/core/shared_network_error_test.dart:27:20 • avoid_types_on_closure_parameters
+   info • Unnecessary type annotation on a function expression parameter. Try removing the type annotation • test/core/shared_network_error_test.dart:82:14 • avoid_types_on_closure_parameters
+   info • Multiple variables declared on a single line. Try splitting the variable declarations into multiple lines • test/core/theme/contrast_test.dart:12:35 • avoid_multiple_declarations_per_line
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/finance/finance_test.dart:6:1 • directives_ordering
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • test/features/finance/finance_test.dart:31:7 • cascade_invocations
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • test/features/finance/finance_test.dart:46:5 • cascade_invocations
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • test/features/finance/financial_point_screen_test.dart:80:5 • cascade_invocations
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • test/features/finance/financial_point_screen_test.dart:390:11 • cascade_invocations
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/home/home_scorers_test.dart:142:11 • curly_braces_in_flow_control_structures
+   info • Closure should be a tearoff. Try using a tearoff rather than a closure • test/features/home/home_scorers_test.dart:208:25 • unnecessary_lambdas
+   info • Closure should be a tearoff. Try using a tearoff rather than a closure • test/features/home/home_scorers_test.dart:221:9 • unnecessary_lambdas
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/home/latest_session_test.dart:12:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/players/player_permissions_test.dart:10:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/late_players_test.dart:10:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/live_header_test.dart:6:1 • directives_ordering
+   info • Unnecessary use of multiple underscores. Try using '_' • test/features/sessions/live_header_test.dart:40:35 • unnecessary_underscores
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/live_stats_screen_test.dart:6:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/live_stats_screen_test.dart:10:1 • directives_ordering
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • test/features/sessions/live_stats_screen_test.dart:21:5 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • test/features/sessions/live_stats_screen_test.dart:22:7 • curly_braces_in_flow_control_structures
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/live_stats_test.dart:5:1 • directives_ordering
+   info • Returning a 'Future' without 'await'. Try adding an 'await' or making the body non-async • test/features/sessions/live_stats_test.dart:55:21 • async_return_with_no_await
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/new_session_screen_test.dart:11:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/new_session_screen_test.dart:14:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/new_session_screen_test.dart:16:1 • directives_ordering
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • test/features/sessions/session_celebration_test.dart:38:5 • curly_braces_in_flow_control_structures
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:10:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/session_close_test.dart:11:1 • directives_ordering
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:100:86 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:100:103 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:107:91 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:107:108 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:112:87 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:112:104 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:126:86 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:126:103 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:210:25 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:211:25 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:234:25 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:257:25 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value. Try removing the argument • test/features/sessions/session_close_test.dart:282:25 • avoid_redundant_argument_values
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/sessions/session_permissions_test.dart:10:1 • directives_ordering
+warning • Unused import: 'package:statoo/features/sessions/domain/participation.dart'. Try removing the import directive • test/features/sessions/session_permissions_test.dart:10:8 • unused_import
+   info • The super parameter named 'ref'' does not share the same name as the corresponding parameter in the super constructor, '_ref'. Try using the name of the corresponding parameter in the super constructor • test/features/sessions/session_permissions_test.dart:17:21 • matching_super_parameters
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:5:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:10:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:11:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/sessions/tournament_3_teams_test.dart:12:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/settings/collective_access_section_test.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/settings/collective_access_section_test.dart:7:1 • directives_ordering
+   info • Don't throw instances of classes that don't extend either 'Exception' or 'Error'. Try throwing a different class of object • test/features/settings/collective_access_section_test.dart:25:32 • only_throw_errors
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/settings/collective_access_section_test.dart:200:13 • curly_braces_in_flow_control_structures
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/settings/group_settings_test.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/settings/home_preferences_test.dart:2:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/collective_access_test.dart:4:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/collective_access_test.dart:8:1 • directives_ordering
+   info • Don't throw instances of classes that don't extend either 'Exception' or 'Error'. Try throwing a different class of object • test/features/shared/collective_access_test.dart:38:32 • only_throw_errors
+   info • Don't cast a nullable value to a non-nullable type. Try adding a not-null assertion ('!') to make the type non-nullable • test/features/shared/collective_access_test.dart:40:10 • cast_nullable_to_non_nullable
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/shared/collective_access_test.dart:41:7 • curly_braces_in_flow_control_structures
+   info • Unnecessary duplication of receiver. Try using a cascade to avoid the duplication • test/features/shared/collective_access_test.dart:110:5 • cascade_invocations
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/lifecycle_sync_test.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/lifecycle_sync_test.dart:9:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/shared/lifecycle_sync_test.dart:54:9 • curly_braces_in_flow_control_structures
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/shared/lifecycle_sync_test.dart:70:11 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block. Try wrapping the statement in a block • test/features/shared/lifecycle_sync_test.dart:96:7 • curly_braces_in_flow_control_structures
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/manager_access_test.dart:2:1 • directives_ordering
+   info • Returning a 'Future' without 'await'. Try adding an 'await' or making the body non-async • test/features/shared/manager_access_test.dart:25:5 • async_return_with_no_await
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/manager_validation_test.dart:13:1 • directives_ordering
+warning • The generic type 'Map<dynamic, dynamic>?' should have explicit type arguments but doesn't. Use explicit type arguments for 'Map<dynamic, dynamic>?' • test/features/shared/manager_validation_test.dart:48:3 • strict_raw_type
+   info • Don't throw instances of classes that don't extend either 'Exception' or 'Error'. Try throwing a different class of object • test/features/shared/manager_validation_test.dart:58:32 • only_throw_errors
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/pwa_wire_import_test.dart:9:1 • directives_ordering
+   info • Method invocation or property access on a 'dynamic' target. Try giving the target a type • test/features/shared/pwa_wire_import_test.dart:69:12 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target. Try giving the target a type • test/features/shared/pwa_wire_import_test.dart:77:14 • avoid_dynamic_calls
+   info • Method invocation or property access on a 'dynamic' target. Try giving the target a type • test/features/shared/pwa_wire_import_test.dart:78:15 • avoid_dynamic_calls
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/shared/shared_group_screen_test.dart:10:1 • directives_ordering
+   info • Returning a 'Future' without 'await'. Try adding an 'await' or making the body non-async • test/features/team/create_team_restore_test.dart:23:5 • async_return_with_no_await
+   info • Sort directive sections alphabetically. Try sorting the directives • test/features/team/short_name_test.dart:7:1 • directives_ordering
+   info • Statements in an if should be enclosed in a block. Try wrapping the statement in a block • test/features/team/short_name_test.dart:42:11 • curly_braces_in_flow_control_structures
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:7:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:8:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:9:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:10:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:11:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:12:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:13:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:14:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:15:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:16:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • test/features/team/team_test.dart:17:1 • directives_ordering
+
+134 issues found. (ran in 146.0s)

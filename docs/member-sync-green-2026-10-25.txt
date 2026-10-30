@@ -1,0 +1,18 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM01 repeated imports retain rename, cleared nickname and archive
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: read-only collective and foreign group cannot write
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: read-only collective and foreign group cannot write
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM03 conflicting remote edits never overwrite the local field
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: ENT11 copied roster imports without changing local members
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM04 remote acknowledgement releases the field for later changes
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: pending versions coalesce; attempted transmission is immutable for retry
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: pending versions coalesce; attempted transmission is immutable for retry
+00:01 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM06 local and remote additions coexist and other groups stay intact
+00:01 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: restored shared marker prevents writes before restarting the service
+00:01 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM07 unchanged fields import remote values and optional defaults
+00:01 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: obligations are imported for absent members without cross-group alias collisions
+00:01 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM08 foreign ID rolls back rows and persisted baseline
+00:01 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM11 boolean web activity stays compatible with SQLite integers
+00:01 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM09 locally changed avatar survives a remote conflict
+00:01 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM10 omitted optional baseline fields do not freeze remote updates
+00:02 +16: All tests passed!

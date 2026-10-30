@@ -1,0 +1,91 @@
+[
+  {
+    "scenario": "nominal",
+    "observed": 200,
+    "expected": "200"
+  },
+  {
+    "scenario": "invalid_date",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "missing_date",
+    "observed": 500,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "unknown_type",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "invalid_score_type",
+    "observed": 422,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "tournament_negative_wins_and_wrong_winner",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "classic_with_team_c",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "negative_unassigned_goals",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "missing_participation_ids",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "duplicate_participation_ids",
+    "observed": 200,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "unhashable_player_id",
+    "observed": 500,
+    "expected": "4xx"
+  },
+  {
+    "scenario": "validation_password_echo",
+    "observed": 422,
+    "expected": "422 without submitted password",
+    "submitted_password_echoed": true
+  },
+  {
+    "scenario": "public_test_source",
+    "observed": 200,
+    "expected": "not public",
+    "source_served": true
+  },
+  {
+    "scenario": "static_traversal",
+    "observed": 404,
+    "expected": "404"
+  },
+  {
+    "scenario": "snapshot_has_no_credentials",
+    "observed": 200,
+    "expected": "200 without hashes",
+    "hash_marker_found": false,
+    "accepted_documents": 8
+  },
+  {
+    "scenario": "normalized_username_collision_registration",
+    "observed": 201,
+    "expected": "422"
+  },
+  {
+    "scenario": "colliding_collective_login",
+    "observed": 401,
+    "expected": "200 if creation accepted"
+  }
+]

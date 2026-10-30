@@ -112,6 +112,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         elevation: 0,
         leading: Navigator.of(context).canPop()
             ? IconButton(
+                tooltip: 'Retour',
                 icon: const Icon(Remix.arrow_left_s_line),
                 onPressed: () => Navigator.of(context).pop(),
               )
@@ -537,6 +538,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                           ),
                                         ),
                                         IconButton(
+                                          tooltip: 'Retirer ${player.name} du groupe',
                                           icon: Icon(
                                             Remix.delete_bin_line,
                                             size: 18,

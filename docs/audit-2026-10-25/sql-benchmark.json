@@ -1,0 +1,36 @@
+{
+  "scope": "Python SQLite memory, 50 players / 500 sessions / 5000 participations; not a device benchmark",
+  "sqlite_version": "3.45.1",
+  "queries": {
+    "v_standings": {
+      "rows": 50,
+      "median_ms": 35.71,
+      "max_ms": 49.22
+    },
+    "v_standings_per_match": {
+      "rows": 50,
+      "median_ms": 23.48,
+      "max_ms": 30.15
+    },
+    "v_top_scorers": {
+      "rows": 50,
+      "median_ms": 11.94,
+      "max_ms": 16.54
+    },
+    "v_top_assists": {
+      "rows": 50,
+      "median_ms": 12.99,
+      "max_ms": 16.48
+    },
+    "v_top_cards": {
+      "rows": 50,
+      "median_ms": 13.3,
+      "max_ms": 20.92
+    },
+    "v_group_totals": {
+      "rows": 1,
+      "median_ms": 4.56,
+      "max_ms": 6.56
+    }
+  }
+}

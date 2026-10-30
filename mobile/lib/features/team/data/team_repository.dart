@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
+import '../../../core/data/restored_settings.dart';
 import '../domain/team_info.dart';
 
 abstract class TeamRepository {
@@ -52,6 +53,7 @@ class SqliteTeamRepository implements TeamRepository {
       if (val != null && val.isNotEmpty) return val;
     }
 
+    if (await hasRestoredDatabase(db)) return null;
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('active_team_id');
   }
@@ -83,6 +85,8 @@ class SqliteTeamRepository implements TeamRepository {
       await setActiveTeamId(first.id);
       return first;
     }
+
+    if (await hasRestoredDatabase(await _appDatabase.database)) return null;
 
     // Rétrocompatibilité avec SharedPreferences si migration
     final prefs = await SharedPreferences.getInstance();

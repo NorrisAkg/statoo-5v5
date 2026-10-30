@@ -1,0 +1,123 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart
+00:00 +0: QUE01 permanent 400 is isolated, durable and does not lose local data
+00:00 +0 -1: QUE01 permanent 400 is isolated, durable and does not lose local data [E]
+  400: Refus 400
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -1: QUE01 permanent 403 is isolated, durable and does not lose local data
+00:00 +0 -2: QUE01 permanent 403 is isolated, durable and does not lose local data [E]
+  403: Refus 403
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -2: QUE01 permanent 404 is isolated, durable and does not lose local data
+00:00 +0 -3: QUE01 permanent 404 is isolated, durable and does not lose local data [E]
+  404: Refus 404
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -3: QUE01 permanent 409 is isolated, durable and does not lose local data
+00:00 +0 -4: QUE01 permanent 409 is isolated, durable and does not lose local data [E]
+  409: Refus 409
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -4: QUE01 permanent 410 is isolated, durable and does not lose local data
+00:00 +0 -5: QUE01 permanent 410 is isolated, durable and does not lose local data [E]
+  410: Refus 410
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -5: QUE01 permanent 422 is isolated, durable and does not lose local data
+00:00 +0 -6: QUE01 permanent 422 is isolated, durable and does not lose local data [E]
+  422: Refus 422
+  test/features/shared/outbox_rejections_test.dart 87:46          main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -6: QUE02 transient 401: Expired stops safely then retries identical wire
+00:00 +0 -7: QUE02 transient 401: Expired stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -7: QUE02 transient 408: Timeout stops safely then retries identical wire
+00:00 +0 -8: QUE02 transient 408: Timeout stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -8: QUE02 transient 429: Limited stops safely then retries identical wire
+00:00 +0 -9: QUE02 transient 429: Limited stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -9: QUE02 transient 503: Unavailable stops safely then retries identical wire
+00:00 +0 -10: QUE02 transient 503: Unavailable stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -10: QUE02 transient Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. stops safely then retries identical wire
+00:00 +0 -11: QUE02 transient Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -11: QUE02 transient FormatException: Unreadable stops safely then retries identical wire
+00:00 +0 -12: QUE02 transient FormatException: Unreadable stops safely then retries identical wire [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 122:7  main.<fn>
+  
+00:00 +0 -12: QUE03/04 dependent correction waits one pass then acknowledgement releases import
+00:00 +0 -13: QUE03/04 dependent correction waits one pass then acknowledgement releases import [E]
+  422: Invalid
+  test/features/shared/outbox_rejections_test.dart 140:44         main.<fn>.<fn>
+  test/features/shared/outbox_rejections_test.dart 39:78          QueueService.request
+  package:statoo/features/shared/data/shared_service.dart 521:26  SharedService.synchronize
+  
+00:00 +0 -13: QUE05 rejected financial draft survives remote finance import
+00:00 +1 -13: QUE07 foreign group and author are never sent or changed
+00:00 +2 -13: QUE09 initial snapshot failure notifies without touching the outbox
+00:00 +2 -14: QUE09 initial snapshot failure notifies without touching the outbox [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18      expect
+  test/features/shared/outbox_rejections_test.dart 191:5  main.<fn>
+  
+00:00 +2 -14: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 400 is isolated, durable and does not lose local data
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 403 is isolated, durable and does not lose local data
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 404 is isolated, durable and does not lose local data
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 409 is isolated, durable and does not lose local data
+  ... and 10 more

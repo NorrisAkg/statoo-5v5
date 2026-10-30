@@ -1,0 +1,70 @@
+TAP version 13
+# {"width":320,"scale":1,"colorScheme":"light","createRect":{"x":45,"y":477,"width":230,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":103.15625,"y":8,"width":113.6875,"height":48,"top":8,"right":216.84375,"bottom":56,"left":103.15625},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none; cursor: text;"}
+# {"width":320,"scale":1,"colorScheme":"light","menu":{"x":103.15625,"y":8,"width":113.6875,"height":48},"badge":{"x":72,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":320,"scale":1,"colorScheme":"dark","createRect":{"x":45,"y":477,"width":230,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":103.15625,"y":8,"width":113.6875,"height":48,"top":8,"right":216.84375,"bottom":56,"left":103.15625},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none; cursor: text;"}
+# {"width":320,"scale":1,"colorScheme":"dark","menu":{"x":103.15625,"y":8,"width":113.6875,"height":48},"badge":{"x":72,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":320,"scale":1.3,"colorScheme":"light","createRect":{"x":45,"y":348.29998779296875,"width":230,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":91.2421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":228.7578125,"bottom":57.296875,"left":91.2421875},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":320,"scale":1.3,"colorScheme":"light","menu":{"x":91.2421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":72,"y":68.29999542236328,"width":232,"height":54},"errors":[]}
+# {"width":320,"scale":1.3,"colorScheme":"dark","createRect":{"x":45,"y":348.29998779296875,"width":230,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":91.2421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":228.7578125,"bottom":57.296875,"left":91.2421875},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":320,"scale":1.3,"colorScheme":"dark","menu":{"x":91.2421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":72,"y":68.29999542236328,"width":232,"height":54},"errors":[]}
+# {"width":320,"scale":2,"colorScheme":"light","createRect":{"x":45,"y":357,"width":230,"height":92}}
+# {"scrollY":0,"menuAfter":{"x":63.3203125,"y":8,"width":193.359375,"height":64,"top":8,"right":256.6796875,"bottom":72,"left":63.3203125},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none; cursor: pointer;"}
+# {"width":320,"scale":2,"colorScheme":"light","menu":{"x":63.3203125,"y":8,"width":193.359375,"height":64},"badge":{"x":72,"y":94,"width":232,"height":56},"errors":[]}
+# {"width":320,"scale":2,"colorScheme":"dark","createRect":{"x":45,"y":357,"width":230,"height":92}}
+# {"scrollY":0,"menuAfter":{"x":63.3203125,"y":8,"width":193.359375,"height":64,"top":8,"right":256.6796875,"bottom":72,"left":63.3203125},"viewport":{"height":568,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none; cursor: pointer;"}
+# {"width":320,"scale":2,"colorScheme":"dark","menu":{"x":63.3203125,"y":8,"width":193.359375,"height":64},"badge":{"x":72,"y":94,"width":232,"height":56},"errors":[]}
+# {"width":390,"scale":1,"colorScheme":"light","createRect":{"x":45,"y":479,"width":300,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":138.15625,"y":8,"width":113.6875,"height":48,"top":8,"right":251.84375,"bottom":56,"left":138.15625},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":1,"colorScheme":"light","menu":{"x":138.15625,"y":8,"width":113.6875,"height":48},"badge":{"x":101.13543701171875,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":390,"scale":1,"colorScheme":"dark","createRect":{"x":45,"y":479,"width":300,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":138.15625,"y":8,"width":113.6875,"height":48,"top":8,"right":251.84375,"bottom":56,"left":138.15625},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":1,"colorScheme":"dark","menu":{"x":138.15625,"y":8,"width":113.6875,"height":48},"badge":{"x":101.13543701171875,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":390,"scale":1.3,"colorScheme":"light","createRect":{"x":45,"y":542.2999877929688,"width":300,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":126.2421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":263.7578125,"bottom":57.296875,"left":126.2421875},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":1.3,"colorScheme":"light","menu":{"x":126.2421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":77.33809661865234,"y":77.29999542236328,"width":235.31250762939453,"height":32},"errors":[]}
+# {"width":390,"scale":1.3,"colorScheme":"dark","createRect":{"x":45,"y":542.2999877929688,"width":300,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":126.2421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":263.7578125,"bottom":57.296875,"left":126.2421875},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":1.3,"colorScheme":"dark","menu":{"x":126.2421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":77.33809661865234,"y":77.29999542236328,"width":235.31250762939453,"height":32},"errors":[]}
+# {"width":390,"scale":2,"colorScheme":"light","createRect":{"x":45,"y":605,"width":300,"height":54}}
+# {"scrollY":0,"menuAfter":{"x":98.3203125,"y":8,"width":193.359375,"height":64,"top":8,"right":291.6796875,"bottom":72,"left":98.3203125},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":2,"colorScheme":"light","menu":{"x":98.3203125,"y":8,"width":193.359375,"height":64},"badge":{"x":74.12993621826172,"y":105.5,"width":241.73438262939453,"height":33},"errors":[]}
+# {"width":390,"scale":2,"colorScheme":"dark","createRect":{"x":45,"y":605,"width":300,"height":54}}
+# {"scrollY":0,"menuAfter":{"x":98.3203125,"y":8,"width":193.359375,"height":64,"top":8,"right":291.6796875,"bottom":72,"left":98.3203125},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":390,"scale":2,"colorScheme":"dark","menu":{"x":98.3203125,"y":8,"width":193.359375,"height":64},"badge":{"x":74.12993621826172,"y":105.5,"width":241.73438262939453,"height":33},"errors":[]}
+# {"width":393,"scale":1,"colorScheme":"light","createRect":{"x":45,"y":479,"width":303,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":139.65625,"y":8,"width":113.6875,"height":48,"top":8,"right":253.34375,"bottom":56,"left":139.65625},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":1,"colorScheme":"light","menu":{"x":139.65625,"y":8,"width":113.6875,"height":48},"badge":{"x":102.63543701171875,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":393,"scale":1,"colorScheme":"dark","createRect":{"x":45,"y":479,"width":303,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":139.65625,"y":8,"width":113.6875,"height":48,"top":8,"right":253.34375,"bottom":56,"left":139.65625},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":1,"colorScheme":"dark","menu":{"x":139.65625,"y":8,"width":113.6875,"height":48},"badge":{"x":102.63543701171875,"y":78.5,"width":187.71875,"height":27},"errors":[]}
+# {"width":393,"scale":1.3,"colorScheme":"light","createRect":{"x":45,"y":542.2999877929688,"width":303,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":127.7421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":265.2578125,"bottom":57.296875,"left":127.7421875},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":1.3,"colorScheme":"light","menu":{"x":127.7421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":78.83809661865234,"y":77.29999542236328,"width":235.31250762939453,"height":32},"errors":[]}
+# {"width":393,"scale":1.3,"colorScheme":"dark","createRect":{"x":45,"y":542.2999877929688,"width":303,"height":40}}
+# {"scrollY":0,"menuAfter":{"x":127.7421875,"y":8,"width":137.515625,"height":49.296875,"top":8,"right":265.2578125,"bottom":57.296875,"left":127.7421875},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":1.3,"colorScheme":"dark","menu":{"x":127.7421875,"y":8,"width":137.515625,"height":49.296875},"badge":{"x":78.83809661865234,"y":77.29999542236328,"width":235.31250762939453,"height":32},"errors":[]}
+# {"width":393,"scale":2,"colorScheme":"light","createRect":{"x":45,"y":605,"width":303,"height":54}}
+# {"scrollY":0,"menuAfter":{"x":99.8203125,"y":8,"width":193.359375,"height":64,"top":8,"right":293.1796875,"bottom":72,"left":99.8203125},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":2,"colorScheme":"light","menu":{"x":99.8203125,"y":8,"width":193.359375,"height":64},"badge":{"x":75.62993621826172,"y":105.5,"width":241.73438262939453,"height":33},"errors":[]}
+# {"width":393,"scale":2,"colorScheme":"dark","createRect":{"x":45,"y":605,"width":303,"height":54}}
+# {"scrollY":0,"menuAfter":{"x":99.8203125,"y":8,"width":193.359375,"height":64,"top":8,"right":293.1796875,"bottom":72,"left":99.8203125},"viewport":{"height":844,"offsetTop":0,"scale":1},"body":"position: fixed; inset: 0px; overflow: hidden; padding: 0px; margin: 0px; user-select: none; touch-action: none;"}
+# {"width":393,"scale":2,"colorScheme":"dark","menu":{"x":99.8203125,"y":8,"width":193.359375,"height":64},"badge":{"x":75.62993621826172,"y":105.5,"width":241.73438262939453,"height":33},"errors":[]}
+# Subtest: RSP09/11 actual Flutter web frame separates PWA controls from app header
+ok 1 - RSP09/11 actual Flutter web frame separates PWA controls from app header
+  ---
+  duration_ms: 82704.891051
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 83255.751728

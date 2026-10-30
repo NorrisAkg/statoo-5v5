@@ -1,0 +1,42 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 400 is isolated, durable and does not lose local data
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 403 is isolated, durable and does not lose local data
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 404 is isolated, durable and does not lose local data
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 409 is isolated, durable and does not lose local data
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 410 is isolated, durable and does not lose local data
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE01 permanent 422 is isolated, durable and does not lose local data
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:00 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: read-only collective and foreign group cannot write
+00:00 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE02 transient FormatException: Unreadable stops safely then retries identical wire
+00:00 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: ENT11 copied roster imports without changing local members
+00:00 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE03/04 dependent correction waits one pass then acknowledgement releases import
+00:00 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: pending versions coalesce; attempted transmission is immutable for retry
+00:00 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE05 rejected financial draft survives remote finance import
+00:00 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: restored shared marker prevents writes before restarting the service
+00:00 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE07 foreign group and author are never sent or changed
+00:00 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/shared_service_test.dart: obligations are imported for absent members without cross-group alias collisions
+00:00 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE05 acknowledgement from another author does not discard a rejected draft
+00:00 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/outbox_rejections_test.dart: QUE09 initial snapshot failure notifies without touching the outbox
+00:01 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT01 successful logout clears local state and uses the previous token
+00:01 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. does not prevent durable logout
+00:01 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 401: Expired does not prevent durable logout
+00:01 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 403: Forbidden does not prevent durable logout
+00:01 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 500: Unavailable does not prevent durable logout
+00:01 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure FormatException: Invalid remote response does not prevent durable logout
+00:01 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT04 local logout finishes while remote revocation is suspended
+00:01 +30: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT05 other contexts, local data and protected outbox survive
+00:01 +31: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:01 +32: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT07 late snapshot GET 1 cannot revive credentials
+00:01 +33: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT07 late snapshot GET 2 cannot revive credentials
+00:01 +34: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT08 pending secure write cannot resurrect the saved connection
+00:01 +35: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT09 late login response is cancelled by logout
+00:01 +36: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT09 late initial load cannot restore the old connection
+00:01 +37: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT11 notification failure cannot interrupt credential deletion
+00:01 +38: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT12 old synchronization cannot overwrite a fresh connection
+00:01 +39: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT10 storage deletion failure is surfaced after memory is cleared
+00:01 +40: All tests passed!

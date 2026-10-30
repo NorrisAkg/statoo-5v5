@@ -120,7 +120,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
           SnackBar(
             content: Text(
               'Restauration réussie : ${result.importedPlayersCount} joueurs et ${result.importedSessionsCount} séances restaurés.'
-              '${result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.'}',
+              '${result.normalizedSessionsCount == 0 ? '' : '\n${result.normalizedSessionsCount} séance(s) récupérée(s) en brouillon : résultat incomplet ou incohérent. Vérifiez-les avant clôture.'}${result.photoWarning}',
             ),
           ),
         );
@@ -161,6 +161,7 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
         elevation: 0,
         leading: Navigator.of(context).canPop()
             ? IconButton(
+                tooltip: 'Retour',
                 icon: const Icon(Remix.arrow_left_s_line),
                 onPressed: () => Navigator.of(context).pop(),
               )

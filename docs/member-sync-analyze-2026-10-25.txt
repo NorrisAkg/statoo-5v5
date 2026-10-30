@@ -1,0 +1,7 @@
+Analyzing 2 items...                                            
+
+   info • Place 'package:' imports before relative imports. Try sorting the directives • lib/features/shared/data/shared_service.dart:6:1 • directives_ordering
+   info • Place 'package:' imports before relative imports. Try sorting the directives • lib/features/shared/data/shared_service.dart:7:1 • directives_ordering
+   info • Sort directive sections alphabetically. Try sorting the directives • lib/features/shared/data/shared_service.dart:9:1 • directives_ordering
+
+3 issues found. (ran in 11.6s)

@@ -1,0 +1,33 @@
+- group: Application
+- button "Retour"
+- heading "Nouvelle séance" [level=2]
+- group:
+  - 'group "Composition des équipes Sélectionnez les joueurs présents (minimum 6) et assignez-les à l''équipe A ou B. Équipe A: 1 Équipe B: 0 Équipes & couleurs Noms attribués au hasard · Choisissez les couleurs. Olympique Valmont Sporting du Nord 1/3 présents A Alice B Bob J Jean-Pierre au nom particulièrement long"':
+    - button "Réinitialiser Équipe A"
+    - button "Bleu · Équipe A"
+    - button "Orange · Équipe A"
+    - button "Vert · Équipe A"
+    - button "Rouge · Équipe A"
+    - button "Violet · Équipe A"
+    - button "Rose · Équipe A"
+    - button "Jaune · Équipe A"
+    - button "Turquoise · Équipe A"
+    - button "Réinitialiser Équipe B"
+    - button "Bleu · Équipe B"
+    - button "Orange · Équipe B"
+    - button "Vert · Équipe B"
+    - button "Rouge · Équipe B"
+    - button "Violet · Équipe B"
+    - button "Rose · Équipe B"
+    - button "Jaune · Équipe B"
+    - button "Turquoise · Équipe B"
+    - textbox "Rechercher un joueur Nom ou surnom":
+      - /placeholder: Nom ou surnom
+    - button "Tout cocher"
+    - button "Équipe A pour Alice"
+    - button "Équipe B pour Alice"
+    - button "Retirer Alice de la séance"
+    - button "Marquer Bob présent"
+    - button "Marquer Jean-Pierre au nom particulièrement long présent"
+  - button "Précédent"
+  - button "Débuter la séance"

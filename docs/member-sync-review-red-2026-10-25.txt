@@ -1,0 +1,42 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart
+00:00 +0: MEM11 boolean web activity stays compatible with SQLite integers
+*** WARNING ***
+
+Invalid argument true with type bool.
+Only num, String and Uint8List are supported. See https://github.com/tekartik/sqflite/blob/master/sqflite/doc/supported_types.md for details
+
+This will throw an exception in the future. For now it is displayed once per type.
+
+    
+#0      _checkArg (package:sqflite_common/src/value_utils.dart:31:7)
+#1      checkNonNullValue (package:sqflite_common/src/value_utils.dart:52:5)
+#2      new SqlBuilder.update (package:sqflite_common/src/sql_builder.dart:245:9)
+#3      SqfliteDatabaseExecutorMixin.update (package:sqflite_common/src/database_mixin.dart:240:32)
+#4      SharedService.importSnapshot.<anonymous closure> (package:statoo/features/shared/data/shared_service.dart:620:21)
+<asynchronous suspension>
+#5      SqfliteDatabaseMixinExt._txnTransaction (package:sqflite_common/src/database_mixin.dart:390:16)
+<asynchronous suspension>
+#6      BasicLock.synchronized (package:synchronized/src/basic_lock.dart:38:16)
+<asynchronous suspension>
+#7      SqfliteDatabaseMixin.txnSynchronized (package:sqflite_common/src/database_mixin.dart:591:14)
+<asynchronous suspension>
+#8      SharedService.importSnapshot (package:statoo/features/shared/data/shared_service.dart:521:5)
+<asynchronous suspension>
+#9      main.<anonymous closure> (file:///home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart:202:5)
+<asynchronous suspension>
+#10     Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:15)
+<asynchronous suspension>
+#11     Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#12     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:00 +0 -1: MEM11 boolean web activity stays compatible with SQLite integers [E]
+  SqfliteFfiException(error, Invalid argument(s): Invalid sql argument type 'bool': true}) DatabaseException(Invalid argument(s): Invalid sql argument type 'bool': true)
+  package:sqflite_common_ffi/src/method_call.dart 126:9  responseToResultOrThrow
+  package:sqflite_common_ffi/src/isolate_io.dart 84:12   SqfliteIsolate.handle
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM11 boolean web activity stays compatible with SQLite integers

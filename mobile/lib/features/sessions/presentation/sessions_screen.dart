@@ -87,6 +87,7 @@ class SessionsScreen extends ConsumerWidget {
       ),
       floatingActionButton: ref.watch(canWriteProvider('sport'))
           ? FloatingActionButton(
+              tooltip: 'Nouvelle séance',
               onPressed: () => context.push('/seances/nouvelle'),
               backgroundColor: context.colors.primary500,
               foregroundColor: context.colors.background950,

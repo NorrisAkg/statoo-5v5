@@ -1,0 +1,53 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: (setUpAll)
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y01 back has a name and pops CreateTeamScreen
+00:03 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:04 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen UX06-03 late players selection does not offer member creation to SG
+00:04 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:05 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:05 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:06 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:06 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:06 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/team/create_team_restore_test.dart: UX01-01/02 replacement needs informed confirmation and cancel never restores
+00:06 +9: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=false
+00:07 +10: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=false
+00:08 +11: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=false
+00:09 +12: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=false
+00:09 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:10 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Checking player as present does not automatically assign team
+00:11 +15: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=true
+00:12 +16: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y04/05/06 contextual composition actions tournament=true
+00:12 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:13 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: NewSessionScreen Toggle all presence checks and unchecks all players
+00:14 +19: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y11 step transition resets scroll and keyboard leaves content reachable
+00:15 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:16 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:17 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: tournament displays three stable club names
+00:17 +23: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y12 narrow previous label fits on one line
+00:18 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/sessions/new_session_screen_test.dart: creation assigns club names without inputs and keeps color validation
+00:19 +26: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.0/dark=false/tournament=true with keyboard
+00:21 +27: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.0/dark=true/tournament=false with keyboard
+00:22 +28: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.0/dark=true/tournament=true with keyboard
+00:24 +29: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.3/dark=false/tournament=false with keyboard
+00:25 +30: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.3/dark=false/tournament=true with keyboard
+00:27 +31: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.3/dark=true/tournament=false with keyboard
+00:28 +32: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/1.3/dark=true/tournament=true with keyboard
+00:30 +33: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/2.0/dark=false/tournament=false with keyboard
+00:31 +34: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/2.0/dark=false/tournament=true with keyboard
+00:33 +35: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/2.0/dark=true/tournament=false with keyboard
+00:35 +36: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 320.0/2.0/dark=true/tournament=true with keyboard
+00:36 +37: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.0/dark=false/tournament=false with keyboard
+00:37 +38: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.0/dark=false/tournament=true with keyboard
+00:39 +39: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.0/dark=true/tournament=false with keyboard
+00:40 +40: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.0/dark=true/tournament=true with keyboard
+00:42 +41: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=false/tournament=false with keyboard
+00:43 +42: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=false/tournament=true with keyboard
+00:45 +43: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=true/tournament=false with keyboard
+00:46 +44: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/1.3/dark=true/tournament=true with keyboard
+00:48 +45: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/2.0/dark=false/tournament=false with keyboard
+00:50 +46: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/2.0/dark=false/tournament=true with keyboard
+00:51 +47: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/2.0/dark=true/tournament=false with keyboard
+00:52 +48: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: A11Y08/10 framing 393.0/2.0/dark=true/tournament=true with keyboard
+00:54 +49: /home/norris/my-projects/statoo-5v5/mobile/test/accessibility/commands_test.dart: (tearDownAll)
+00:54 +49: All tests passed!

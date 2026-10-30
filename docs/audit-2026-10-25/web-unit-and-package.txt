@@ -1,0 +1,111 @@
+
+> build:web
+> node scripts/app.mjs build-web
+
+TAP version 13
+# Subtest: web/tests/audit-fixes.test.mjs
+ok 1 - web/tests/audit-fixes.test.mjs
+  ---
+  duration_ms: 640.02022
+  type: 'test'
+  ...
+# Subtest: web/tests/client-validation.test.mjs
+ok 2 - web/tests/client-validation.test.mjs
+  ---
+  duration_ms: 476.671475
+  type: 'test'
+  ...
+# Subtest: web/tests/client.test.mjs
+ok 3 - web/tests/client.test.mjs
+  ---
+  duration_ms: 475.491441
+  type: 'test'
+  ...
+# Subtest: web/tests/config.test.mjs
+ok 4 - web/tests/config.test.mjs
+  ---
+  duration_ms: 209.413171
+  type: 'test'
+  ...
+# Subtest: web/tests/desktop.test.mjs
+ok 5 - web/tests/desktop.test.mjs
+  ---
+  duration_ms: 194.577065
+  type: 'test'
+  ...
+# Subtest: web/tests/domain.test.mjs
+ok 6 - web/tests/domain.test.mjs
+  ---
+  duration_ms: 466.328908
+  type: 'test'
+  ...
+# Subtest: web/tests/offline-registration.test.mjs
+ok 7 - web/tests/offline-registration.test.mjs
+  ---
+  duration_ms: 221.425707
+  type: 'test'
+  ...
+# Subtest: web/tests/pwa.test.mjs
+ok 8 - web/tests/pwa.test.mjs
+  ---
+  duration_ms: 290.530011
+  type: 'test'
+  ...
+# Subtest: web/tests/registration.test.mjs
+ok 9 - web/tests/registration.test.mjs
+  ---
+  duration_ms: 296.065597
+  type: 'test'
+  ...
+# Subtest: web/tests/summary.test.mjs
+ok 10 - web/tests/summary.test.mjs
+  ---
+  duration_ms: 147.876826
+  type: 'test'
+  ...
+# Subtest: web/tests/transparent-logo.test.mjs
+ok 11 - web/tests/transparent-logo.test.mjs
+  ---
+  duration_ms: 161.840015
+  type: 'test'
+  ...
+# Subtest: web/tests/universal-packaging.test.mjs
+ok 12 - web/tests/universal-packaging.test.mjs
+  ---
+  duration_ms: 173.738064
+  type: 'test'
+  ...
+# Subtest: web/tests/universal-pwa.test.mjs
+ok 13 - web/tests/universal-pwa.test.mjs
+  ---
+  duration_ms: 169.071291
+  type: 'test'
+  ...
+# Subtest: web/tests/update-button.test.mjs
+ok 14 - web/tests/update-button.test.mjs
+  ---
+  duration_ms: 179.611465
+  type: 'test'
+  ...
+# Subtest: web/tests/vercel.test.mjs
+ok 15 - web/tests/vercel.test.mjs
+  ---
+  duration_ms: 170.072036
+  type: 'test'
+  ...
+# Subtest: web/tests/welcome.test.mjs
+ok 16 - web/tests/welcome.test.mjs
+  ---
+  duration_ms: 207.09298
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 760.97312
+PWA tests passed and static portal packaged.

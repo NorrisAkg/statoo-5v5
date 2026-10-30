@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
+import '../../../core/widgets/player_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
@@ -594,17 +595,7 @@ class _AddLatePlayersBottomSheetState extends ConsumerState<AddLatePlayersBottom
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              radius: 17,
-              backgroundColor: avatarBg,
-              backgroundImage: player.avatarUrl != null ? NetworkImage(player.avatarUrl!) : null,
-              child: player.avatarUrl == null
-                  ? Text(
-                      player.name.isNotEmpty ? player.name[0].toUpperCase() : '?',
-                      style: TextStyle(color: avatarFg, fontWeight: FontWeight.bold, fontSize: 13),
-                    )
-                  : null,
-            ),
+            PlayerAvatar(source: player.avatarUrl, initial: player.name.isEmpty ? '?' : player.name[0], baseColor: avatarFg, backgroundColor: avatarBg, size: 34),
             const SizedBox(width: 10),
             Expanded(
               child: Column(

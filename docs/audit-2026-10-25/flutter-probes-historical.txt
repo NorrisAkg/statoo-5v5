@@ -1,0 +1,38 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_flutter_test.dart
+00:00 +0: AUD-09 future backup version must be rejected
+00:00 +0 -1: AUD-09 future backup version must be rejected [E]
+  Expected: throws <Instance of 'FormatException'>
+    Actual: <Closure: () => BackupPayload>
+     Which: returned <Instance of 'BackupPayload'>
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  ../docs/audit-2026-10-25/probe_flutter_test.dart 27:5  main.<fn>
+  
+00:00 +0 -1: AUD-11 offline disconnect must erase local token and identity
+00:00 +0 -2: AUD-11 offline disconnect must erase local token and identity [E]
+  Expected: null
+    Actual: 'fake-audit-token'
+  local token must not depend on network logout
+  
+  package:matcher                                        expect
+  package:flutter_test/src/widget_tester.dart 473:18     expect
+  ../docs/audit-2026-10-25/probe_flutter_test.dart 36:5  main.<fn>
+  
+00:00 +0 -2: AUD-10 actual v6 to v8 migration preserves participations
+error SqfliteFfiException(sqlite_error: 1, , SqliteException(1): while executing, error in view v_player_match_results: no such table: main.sessions, SQL logic error (code 1)
+  Causing statement: ALTER TABLE sessions_new RENAME TO sessions;, parameters: }) DatabaseException(SqliteException(1): while executing, error in view v_player_match_results: no such table: main.sessions, SQL logic error (code 1)
+  Causing statement: ALTER TABLE sessions_new RENAME TO sessions;, parameters: ) sql 'ALTER TABLE sessions_new RENAME TO sessions;' {details: {database: {path: /tmp/statoo-audit-migration-KRZUGW/statoo.db, id: 2, readOnly: false, singleInstance: true}}} during open, closing...
+00:00 +0 -3: AUD-10 actual v6 to v8 migration preserves participations [E]
+  SqfliteFfiException(sqlite_error: 1, , SqliteException(1): while executing, error in view v_player_match_results: no such table: main.sessions, SQL logic error (code 1)
+    Causing statement: ALTER TABLE sessions_new RENAME TO sessions;, parameters: }) DatabaseException(SqliteException(1): while executing, error in view v_player_match_results: no such table: main.sessions, SQL logic error (code 1)
+    Causing statement: ALTER TABLE sessions_new RENAME TO sessions;, parameters: ) sql 'ALTER TABLE sessions_new RENAME TO sessions;' {details: {database: {path: /tmp/statoo-audit-migration-KRZUGW/statoo.db, id: 2, readOnly: false, singleInstance: true}}}
+  package:sqflite_common_ffi/src/method_call.dart 126:9  responseToResultOrThrow
+  package:sqflite_common_ffi/src/isolate_io.dart 84:12   SqfliteIsolate.handle
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_flutter_test.dart: AUD-09 future backup version must be rejected
+  /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_flutter_test.dart: AUD-10 actual v6 to v8 migration preserves participations
+  /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_flutter_test.dart: AUD-11 offline disconnect must erase local token and identity

@@ -49,10 +49,20 @@ class SharedService {
   );
   Timer? _timer;
   bool _syncing = false;
+  int _connectionGeneration = 0;
+  Future<void> _connectionStorage = Future<void>.value();
   void Function()? onChanged;
   void dispose() => _timer?.cancel();
 
+  // Serialize credential writes/deletion so an in-flight save cannot undo logout.
+  Future<void> _updateConnectionStorage(Future<void> Function() action) {
+    final operation = _connectionStorage.then((_) => action());
+    _connectionStorage = operation.catchError((Object _) {});
+    return operation;
+  }
+
   Future<void> load() async {
+    final generation = _connectionGeneration;
     final localDb = await database.database;
     final sharedGroups = await localDb.query(
       'meta',
@@ -63,6 +73,7 @@ class SharedService {
       sharedGroups.map((r) => (r['key']! as String).substring(13)),
     );
     final value = await storage.read(key: 'statoo_connection');
+    if (generation != _connectionGeneration) return;
     if (value != null) {
       final saved = jsonDecode(value) as Map<String, dynamic>;
       identity = saved['identity'] as Map<String, dynamic>;
@@ -74,11 +85,13 @@ class SharedService {
         where: 'key = ?',
         whereArgs: ['shared_snapshot_$groupId'],
       );
+      if (generation != _connectionGeneration) return;
       if (rows.isNotEmpty) {
         snapshot =
             jsonDecode(rows.single['value']! as String) as Map<String, dynamic>;
       }
       await _refreshSyncWarning(db);
+      if (generation != _connectionGeneration) return;
       startAutomaticSync();
     }
   }
@@ -111,6 +124,12 @@ class SharedService {
         'Utilisez une adresse HTTPS (HTTP seulement en développement local).',
       );
     }
+    final generation = ++_connectionGeneration;
+    void requireCurrentConnection() {
+      if (generation != _connectionGeneration) {
+        throw StateError('Connexion annulée.');
+      }
+    }
     baseUrl = url.trim().replaceAll(RegExp(r'/$'), '');
     token = null;
     final result = await request(
@@ -119,19 +138,24 @@ class SharedService {
       registration ??
           {'group_id': group, 'username': username, 'password': password},
     );
+    requireCurrentConnection();
     identity = result;
     token = result['token'] as String;
-    await storage.write(
-      key: 'statoo_connection',
-      value: jsonEncode({'identity': result, 'url': baseUrl, 'token': token}),
-    );
+    final saved = jsonEncode({'identity': result, 'url': baseUrl, 'token': token});
+    await _updateConnectionStorage(() async {
+      if (generation != _connectionGeneration) return;
+      await storage.write(key: 'statoo_connection', value: saved);
+    });
+    requireCurrentConnection();
     protectedGroups.add(groupId!);
     final db = await database.database;
+    requireCurrentConnection();
     await db.insert('meta', {
       'key': 'shared_group_$groupId',
       'value': '1',
     }, conflictAlgorithm: ConflictAlgorithm.replace);
     await synchronize();
+    requireCurrentConnection();
     startAutomaticSync();
   }
 
@@ -143,19 +167,52 @@ class SharedService {
   }
 
   Future<void> disconnect() async {
-    final accessKey = collectiveAccessKey(baseUrl, groupId, accountId);
-    if (connected) await request('POST', '/auth/logout');
+    var accessKey = collectiveAccessKey(baseUrl, groupId, accountId);
+    if (groupId != null) protectedGroups.add(groupId!);
+    // Capture the old transport context before clearing it. Revocation is best
+    // effort; local logout must also complete when the server never responds.
+    if (connected) {
+      unawaited(() async {
+        try {
+          await request('POST', '/auth/logout');
+        } on Object {
+          // No credential is retained for retrying a remote logout.
+        }
+      }());
+    }
+    _connectionGeneration++;
+    _timer?.cancel();
+    identity = null;
+    token = null;
+    baseUrl = null;
+    snapshot = null;
+    syncWarning = null;
+    await _updateConnectionStorage(() async {
+      try {
+        // Initial loading may not have populated the in-memory identity yet.
+        if (accessKey == null) {
+          final value = await storage.read(key: 'statoo_connection');
+          if (value != null) {
+            final saved = jsonDecode(value) as Map<String, dynamic>;
+            final savedIdentity = saved['identity'] as Map<String, dynamic>;
+            accessKey = collectiveAccessKey(
+              saved['url'] as String?,
+              savedIdentity['group_id'] as String?,
+              (savedIdentity['account'] as Map?)?['id'] as String?,
+            );
+          }
+        }
+      } finally {
+        await storage.delete(key: 'statoo_connection');
+      }
+    });
     if (accessKey != null) {
       final values = await storage.readAll();
       for (final key in values.keys.where((k) => k == accessKey || k.startsWith('${accessKey}_manager_')).toList()) {
         await storage.delete(key: key);
       }
     }
-    await storage.delete(key: 'statoo_connection');
-    identity = null;
-    token = null;
-    snapshot = null;
-    _timer?.cancel();
+    onChanged?.call();
   }
 
   Future<void> requireWrite(
@@ -405,22 +462,31 @@ class SharedService {
 
   Future<void> synchronize() async {
     if (!connected || _syncing) return;
+    final generation = _connectionGeneration;
+    bool isCurrent() => connected && generation == _connectionGeneration;
     _syncing = true;
     try {
       final db = await database.database;
-      snapshot = await request('GET', '/groups/$groupId');
+      if (!isCurrent()) return;
+      final firstSnapshot = await request('GET', '/groups/$groupId');
+      if (!isCurrent()) return;
+      snapshot = firstSnapshot;
       identity!['account'] = snapshot!['account'];
       await importSnapshot(snapshot!);
+      if (!isCurrent()) return;
       final pending = await db.query(
         'meta',
         where: 'substr(key,1,7) = ?',
         whereArgs: ['outbox_'],
         orderBy: 'rowid',
       );
+      final refusedDocuments = <String>{};
       for (final row in pending) {
+        if (!isCurrent()) return;
         final event =
             jsonDecode(row['value']! as String) as Map<String, dynamic>;
-        if (event['status'] != 'pending' ||
+        final documentKey = '${event['domain']}:${event['occurrence_id']}';
+        if (event['status'] != 'pending' || refusedDocuments.contains(documentKey) ||
             event['group_id'] != groupId ||
             event['actor'] != accountId) {
           continue;
@@ -433,6 +499,7 @@ class SharedService {
               'shared_revision_${event['domain']}_${event['local_session_id']}',
             ],
           );
+          if (!isCurrent()) return;
           if (rows.isNotEmpty) {
             event['base_revision'] = int.parse(rows.single['value']! as String);
           }
@@ -449,27 +516,46 @@ class SharedService {
           ..remove('group_id')
           ..remove('status')
           ..remove('actor')
-          ..remove('attempted');
+          ..remove('attempted')
+          ..remove('error')
+          ..remove('error_status');
         Map<String, dynamic> result;
+        if (!isCurrent()) return;
         try {
           result = await request('POST', '/groups/$groupId/sync', wire);
-        } on SharedApiException catch (error) {
-          if (error.statusCode != 409 || error.code != 'active_session_conflict' ||
-              event['domain'] != 'sport' || (event['payload'] as Map)['is_active'] != true) {
-            rethrow;
+        } on Object catch (error) {
+          if (!isCurrent()) return;
+          final apiError = error is SharedApiException ? error : null;
+          final activeConflict = apiError?.statusCode == 409 &&
+              apiError?.code == 'active_session_conflict' &&
+              event['domain'] == 'sport' && (event['payload'] as Map)['is_active'] == true;
+          final permanent = apiError != null &&
+              const [400, 403, 404, 409, 410, 422].contains(apiError.statusCode);
+          event['status'] = activeConflict ? 'blocked' : permanent ? 'rejected' : 'pending';
+          event['error'] = apiError?.message ?? '$error';
+          if (apiError != null) {
+            event['error_status'] = apiError.statusCode;
+          } else {
+            event.remove('error_status');
           }
-          event['status'] = 'blocked';
-          event['error'] = error.message;
           await db.update('meta', {'value': jsonEncode(event)}, where: 'key = ?', whereArgs: [row['key']]);
+          if (!isCurrent()) return;
+          if (!permanent) rethrow;
+          refusedDocuments.add(documentKey);
           continue;
         }
-        event['status'] = result['status'];
+        if (!isCurrent()) return;
+        event
+          ..['status'] = result['status']
+          ..remove('error')
+          ..remove('error_status');
         await db.update(
           'meta',
           {'value': jsonEncode(event)},
           where: 'key = ?',
           whereArgs: [row['key']],
         );
+        if (!isCurrent()) return;
         if (result['status'] == 'conflict' && event['domain'] == 'sport') {
           await db.update(
             'sessions',
@@ -487,38 +573,87 @@ class SharedService {
         }
       }
       await _refreshSyncWarning(db);
-      snapshot = await request('GET', '/groups/$groupId');
+      if (!isCurrent()) return;
+      final finalSnapshot = await request('GET', '/groups/$groupId');
+      if (!isCurrent()) return;
+      snapshot = finalSnapshot;
       identity!['account'] = snapshot!['account'];
-      await storage.write(
-        key: 'statoo_connection',
-        value: jsonEncode({
-          'identity': identity,
-          'url': baseUrl,
-          'token': token,
-        }),
-      );
+      final saved = jsonEncode({
+        'identity': identity,
+        'url': baseUrl,
+        'token': token,
+      });
+      await _updateConnectionStorage(() async {
+        if (!isCurrent()) return;
+        await storage.write(key: 'statoo_connection', value: saved);
+      });
+      if (!isCurrent()) return;
       await importSnapshot(snapshot!);
+    } on Object catch (error) {
+      if (isCurrent()) {
+        syncWarning = '$error';
+        onChanged?.call();
+        rethrow;
+      }
     } finally {
       _syncing = false;
     }
   }
 
   Future<void> _refreshSyncWarning(DatabaseExecutor db) async {
+    final generation = _connectionGeneration;
     final rows = await db.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_'], orderBy: 'rowid DESC');
     final latest = <String, Map<String, dynamic>>{};
     for (final row in rows) {
       final event = jsonDecode(row['value']! as String) as Map<String, dynamic>;
       if (event['group_id'] == groupId && event['actor'] == accountId) {
-        latest.putIfAbsent('${event['domain']}:${event['local_session_id']}', () => event);
+        // A queued correction is not yet an acknowledgement of an older refusal.
+        if (event['status'] == 'pending' && event['error'] == null) continue;
+        latest.putIfAbsent('${event['domain']}:${event['occurrence_id']}', () => event);
       }
     }
-    final blocked = latest.values.where((event) => event['status'] == 'blocked');
+    final blocked = latest.values.where((event) =>
+        event['status'] == 'blocked' || event['status'] == 'rejected' ||
+        (event['status'] == 'pending' && event['error'] != null));
+    if (generation != _connectionGeneration) return;
     syncWarning = blocked.isEmpty ? null : '${blocked.first['error']}';
   }
 
+  Set<String> _unpublishedDocuments(List<Map<String, Object?>> rows, String? group) {
+    final latest = <String, Map<String, dynamic>>{};
+    for (final row in rows) {
+      final event = jsonDecode(row['value']! as String) as Map<String, dynamic>;
+      if (event['group_id'] != group) continue;
+      latest[jsonEncode([event['actor'], event['domain'], event['occurrence_id']])] = event;
+    }
+    return latest.values
+        .where((event) => event['status'] == 'pending' || event['status'] == 'rejected')
+        .map((event) => '${event['domain']}:${event['occurrence_id']}')
+        .toSet();
+  }
+
   Future<void> importSnapshot(Map<String, dynamic> data) async {
+    final groupId = this.groupId;
+    Object activityValue(Object? value) => value is bool
+        ? (value ? 1 : 0)
+        : value ?? 1;
     final db = await database.database;
     await db.transaction((txn) async {
+      // Keep the server baseline separate from the editable local roster. Read it
+      // inside the same transaction as the merge, before replacing the snapshot.
+      final previous = await txn.query(
+        'meta',
+        where: 'key = ?',
+        whereArgs: ['shared_snapshot_$groupId'],
+      );
+      final previousMembers = <String, Map<String, dynamic>>{};
+      if (previous.isNotEmpty) {
+        final baseline = jsonDecode(previous.single['value']! as String) as Map;
+        for (final member in baseline['members'] as List) {
+          final row = Map<String, dynamic>.from(member as Map);
+          previousMembers[row['id'] as String] = row;
+        }
+      }
       await txn.insert('teams', {
         'id': groupId,
         'name': data['name'],
@@ -567,9 +702,13 @@ class SharedService {
               'updated_at',
             }.contains(key),
           );
-        row['team_id'] = groupId;
-        row.putIfAbsent('created_at', () => DateTime.now().toIso8601String());
-        row.putIfAbsent('updated_at', () => row['created_at']);
+        row
+          ..['team_id'] = groupId
+          ..putIfAbsent('nickname', () => null)
+          ..putIfAbsent('avatar_url', () => null)
+          ..['is_active'] = activityValue(row['is_active'])
+          ..putIfAbsent('created_at', () => DateTime.now().toIso8601String())
+          ..putIfAbsent('updated_at', () => row['created_at']);
         final existing = await txn.query(
           'players',
           where: 'id = ?',
@@ -581,6 +720,23 @@ class SharedService {
         if (existing.isEmpty) {
           await txn.insert('players', row);
         } else {
+          final baseline = previousMembers[row['id']];
+          var hasLocalChanges = false;
+          if (baseline != null) {
+            for (final field in ['name', 'nickname', 'avatar_url', 'is_active']) {
+              final oldValue = field == 'is_active'
+                  ? activityValue(baseline[field])
+                  : baseline[field];
+              final localValue = existing.single[field];
+              if (localValue != oldValue && localValue != row[field]) {
+                row[field] = localValue;
+                hasLocalChanges = true;
+              }
+            }
+          }
+          if (hasLocalChanges) {
+            row['updated_at'] = existing.single['updated_at'];
+          }
           await txn.update(
             'players',
             row,
@@ -651,8 +807,10 @@ class SharedService {
           'meta',
           where: 'substr(key,1,7) = ?',
           whereArgs: ['outbox_'],
+          orderBy: 'rowid',
         );
-        var pending = false;
+        final unpublished = _unpublishedDocuments(events, groupId)
+            .contains('$domain:$occurrence');
         for (final row in events) {
           final event =
               jsonDecode(row['value']! as String) as Map<String, dynamic>;
@@ -661,7 +819,6 @@ class SharedService {
               event['occurrence_id'] != occurrence) {
             continue;
           }
-          if (event['status'] == 'pending') pending = true;
           if (event['status'] == 'conflict') {
             final unresolved = (document['candidates'] as List<dynamic>? ?? [])
                 .cast<Map<String, dynamic>>()
@@ -688,7 +845,7 @@ class SharedService {
             }
           }
         }
-        if (pending) continue;
+        if (unpublished) continue;
         if (domain == 'sport') {
           final session = Map<String, dynamic>.from(payload['session'] as Map)
             ..['team_id'] = groupId;
@@ -747,11 +904,9 @@ class SharedService {
         }
       }
       if (data.containsKey('active_session_id')) {
-        final events = await txn.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_']);
-        final hasPendingSport = events.any((row) {
-          final event = jsonDecode(row['value']! as String) as Map;
-          return event['group_id'] == groupId && event['domain'] == 'sport' && event['status'] == 'pending';
-        });
+        final events = await txn.query('meta', where: 'substr(key,1,7) = ?', whereArgs: ['outbox_'], orderBy: 'rowid');
+        final hasPendingSport = _unpublishedDocuments(events, groupId)
+            .any((key) => key.startsWith('sport:'));
         if (!hasPendingSport) {
           final active = data['active_session_id'] as String?;
           final key = 'active_session_id_$groupId';

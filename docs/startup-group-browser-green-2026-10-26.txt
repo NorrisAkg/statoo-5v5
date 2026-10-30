@@ -1,0 +1,16 @@
+TAP version 13
+# Subtest: F11 real Flutter web preserves active-group statistics on direct reload and new tab
+ok 1 - F11 real Flutter web preserves active-group statistics on direct reload and new tab
+  ---
+  duration_ms: 28535.519574
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29833.844225

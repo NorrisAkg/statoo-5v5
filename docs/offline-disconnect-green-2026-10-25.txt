@@ -1,0 +1,32 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart
+00:00 +0: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT01 successful logout clears local state and uses the previous token
+00:00 +1: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. does not prevent durable logout
+00:00 +2: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 401: Expired does not prevent durable logout
+00:00 +3: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 403: Forbidden does not prevent durable logout
+00:00 +4: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 500: Unavailable does not prevent durable logout
+00:00 +5: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure FormatException: Invalid remote response does not prevent durable logout
+00:00 +6: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT04 local logout finishes while remote revocation is suspended
+00:00 +7: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/collective_access_test.dart: ACC01/04/05 remembers verified access across instances and checks current username on copy
+00:00 +8: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/collective_access_test.dart: ACC01/04/05 remembers verified access across instances and checks current username on copy
+00:00 +9: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +10: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +11: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +12: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +13: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +14: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +15: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +16: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +17: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +18: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +19: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +20: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT06 repeated logout cancels the automatic timer
+00:00 +21: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT07 late snapshot GET 1 cannot revive credentials
+00:00 +22: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT07 late snapshot GET 2 cannot revive credentials
+00:00 +23: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT08 pending secure write cannot resurrect the saved connection
+00:00 +24: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT09 late login response is cancelled by logout
+00:00 +25: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT09 late initial load cannot restore the old connection
+00:00 +26: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT11 notification failure cannot interrupt credential deletion
+00:00 +27: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT12 old synchronization cannot overwrite a fresh connection
+00:00 +28: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT10 storage deletion failure is surfaced after memory is cleared
+00:01 +29: /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/lifecycle_sync_test.dart: PAR22 competing offline start is recoverable and does not block the outbox
+00:01 +30: All tests passed!

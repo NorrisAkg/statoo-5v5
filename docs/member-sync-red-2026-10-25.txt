@@ -1,0 +1,91 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart
+00:00 +0: MEM01 repeated imports retain rename, cleared nickname and archive
+00:00 +0 -1: MEM01 repeated imports retain rename, cleared nickname and archive [E]
+  Expected: {
+              'id': 'a',
+              'team_id': 'g',
+              'name': 'Alice corrigée',
+              'nickname': null,
+              'avatar_url': 'avatar',
+              'is_active': 0,
+              'created_at': '2026-10-01T10:00:00',
+              'updated_at': '2026-10-25T11:56:19.765268'
+            }
+    Actual: {
+              'id': 'a',
+              'team_id': 'g',
+              'name': 'Alice',
+              'nickname': 'Surnom',
+              'avatar_url': 'avatar',
+              'is_active': 1,
+              'created_at': '2026-10-01T10:00:00',
+              'updated_at': '2026-10-01T10:00:00'
+            }
+     Which: at location ['name'] is 'Alice' instead of 'Alice corrigée'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/member_sync_test.dart 38:5     main.<fn>
+  
+00:00 +0 -1: MEM02 clean fields and other members still receive remote updates
+00:00 +0 -2: MEM02 clean fields and other members still receive remote updates [E]
+  Expected: 'Local'
+    Actual: 'Alice'
+     Which: is different.
+            Expected: Local
+              Actual: Alice
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/member_sync_test.dart 45:5     main.<fn>
+  
+00:00 +0 -2: MEM03 conflicting remote edits never overwrite the local field
+00:00 +0 -3: MEM03 conflicting remote edits never overwrite the local field [E]
+  Expected: 'Local'
+    Actual: 'Distant'
+     Which: is different.
+            Expected: Local
+              Actual: Distant
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/member_sync_test.dart 54:5     main.<fn>
+  
+00:00 +0 -3: MEM04 remote acknowledgement releases the field for later changes
+00:00 +1 -3: MEM05 persisted baseline protects edits after service recreation
+00:00 +1 -4: MEM05 persisted baseline protects edits after service recreation [E]
+  Expected: 'Local'
+    Actual: 'Alice'
+     Which: is different.
+            Expected: Local
+              Actual: Alice
+                      ^
+             Differ at offset 0
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/member_sync_test.dart 67:5     main.<fn>
+  
+00:00 +1 -4: MEM06 local and remote additions coexist and other groups stay intact
+00:00 +2 -4: MEM07 unchanged fields import remote values and optional defaults
+00:00 +2 -5: MEM07 unchanged fields import remote values and optional defaults [E]
+  Expected: null
+    Actual: 'Surnom'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/member_sync_test.dart 83:5     main.<fn>
+  
+00:00 +2 -5: MEM08 foreign ID rolls back rows and persisted baseline
+00:00 +3 -5: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM01 repeated imports retain rename, cleared nickname and archive
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM02 clean fields and other members still receive remote updates
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM03 conflicting remote edits never overwrite the local field
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM05 persisted baseline protects edits after service recreation
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/member_sync_test.dart: MEM07 unchanged fields import remote values and optional defaults

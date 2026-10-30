@@ -1,0 +1,28 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_sync_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: AUD-15 local member edits survive automatic snapshot until explicit publication
+00:00 +0 -1: AUD-15 local member edits survive automatic snapshot until explicit publication [E]
+  Expected: 'Alice corrigée'
+    Actual: 'Alice'
+     Which: is different. Both strings start the same, but the actual value is missing the following trailing characters:  corrigée
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  ../docs/audit-2026-10-25/probe_sync_test.dart 43:5  main.<fn>
+  
+00:00 +0 -1: AUD-16 refused first operation does not silently block independent next operation
+00:00 +0 -2: AUD-16 refused first operation does not silently block independent next operation [E]
+  Expected: contains 'second'
+    Actual: ['first']
+     Which: does not contain 'second'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  ../docs/audit-2026-10-25/probe_sync_test.dart 56:5  main.<fn>
+  
+00:00 +0 -2: (tearDownAll)
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_sync_test.dart: AUD-15 local member edits survive automatic snapshot until explicit publication
+  /home/norris/my-projects/statoo-5v5/docs/audit-2026-10-25/probe_sync_test.dart: AUD-16 refused first operation does not silently block independent next operation

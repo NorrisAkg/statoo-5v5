@@ -1,0 +1,5 @@
+{
+  version: 'c60a1d72295a4b15',
+  assets: 52,
+  output: 'web/universal-dist'
+}

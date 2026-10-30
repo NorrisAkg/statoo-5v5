@@ -1,0 +1,2 @@
+Formatted test/features/shared/player_sync_refresh_test.dart
+Formatted 1 file (1 changed) in 0.12 seconds.

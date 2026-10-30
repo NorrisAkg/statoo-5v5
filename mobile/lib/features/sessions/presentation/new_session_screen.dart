@@ -7,6 +7,7 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/player_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
@@ -285,6 +286,9 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
     ref.watch(nextSessionReferenceProvider(_selectedDate));
 
     final writable = ref.watch(canWriteProvider('sport'));
+    final scrollChrome = MediaQuery.sizeOf(context).width < 360 ||
+        MediaQuery.viewInsetsOf(context).bottom > 0 ||
+        MediaQuery.textScalerOf(context).scale(16) > 20;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
@@ -306,19 +310,28 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
       body: !writable ? const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('Consultation uniquement. Le rôle Admin, Président, Vice-président, SG ou SGA et une connexion valide sont requis pour gérer les séances du groupe partagé.')))
       : Column(
         children: [
-          const SizedBox(height: 16),
-          _buildStepper(),
-          const SizedBox(height: 24),
+          if (!scrollChrome) ...[
+            const SizedBox(height: 16),
+            _buildStepper(),
+            const SizedBox(height: 24),
+          ],
           Expanded(
+            key: const ValueKey('session-scroll-content'),
             child: ListView(
+              key: ValueKey('session-step-$_currentStep'),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
+                // Keep the content indices stable when the keyboard opens.
+                SizedBox(height: scrollChrome ? 16 : 0),
+                if (scrollChrome) _buildStepper() else const SizedBox.shrink(),
+                SizedBox(height: scrollChrome ? 24 : 0),
                 if (_currentStep == 1) _buildStep1(),
                 if (_currentStep == 2) _buildStep2(),
+                if (scrollChrome) _buildBottomBar(),
               ],
             ),
           ),
-          _buildBottomBar(),
+          if (!scrollChrome) _buildBottomBar(),
         ],
       ),
     ),
@@ -326,16 +339,23 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   }
 
   Widget _buildStepper() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      runSpacing: 8,
+      spacing: 12,
       children: [
         _buildStepCircle(1, 'Date & Options', _currentStep >= 1),
-        Container(
-          width: 48,
-          height: 2,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          color: _currentStep >= 2 ? context.colors.primary500 : context.colors.background800,
-        ),
+        if (MediaQuery.sizeOf(context).width >= 400 &&
+            MediaQuery.textScalerOf(context).scale(13) <= 17)
+          Container(
+            width: 48,
+            height: 2,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            color: _currentStep >= 2
+                ? context.colors.primary500
+                : context.colors.background800,
+          ),
         _buildStepCircle(2, 'Composition', _currentStep >= 2),
       ],
     );
@@ -343,34 +363,45 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
 
   Widget _buildStepCircle(int step, String label, bool isActive) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 28,
-          height: 28,
+          width: MediaQuery.textScalerOf(context).scale(28),
+          height: MediaQuery.textScalerOf(context).scale(28),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isActive ? context.colors.primary500 : context.colors.background800,
+            color: isActive
+                ? context.colors.primary500
+                : context.colors.background800,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isActive ? context.colors.primary500 : context.colors.foreground600,
+              color: isActive
+                  ? context.colors.primary500
+                  : context.colors.foreground600,
             ),
           ),
           child: Text(
             '$step',
             style: TextStyle(
-              color: isActive ? context.colors.background950 : context.colors.foreground500,
+              color: isActive
+                  ? context.colors.background950
+                  : context.colors.foreground500,
               fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         const SizedBox(width: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: isActive ? context.colors.foreground50 : context.colors.foreground500,
-            fontSize: 13,
-            fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+        Flexible(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isActive
+                  ? context.colors.foreground50
+                  : context.colors.foreground500,
+              fontSize: 13,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+            ),
           ),
         ),
       ],
@@ -378,6 +409,50 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   }
 
   Widget _buildBottomBar() {
+    final previous = OutlinedButton.icon(
+      icon: const Icon(Remix.arrow_left_line, size: 18),
+      label: const Text('Précédent'),
+      onPressed: _isSubmitting ? null : _prevStep,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: context.colors.foreground300,
+        side: BorderSide(color: context.colors.background700),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
+    final primary = Builder(
+      builder: (context) {
+        final activeDraft = ref.watch(activeDraftSessionProvider).value;
+        String label = 'Continuer';
+        IconData icon = Remix.arrow_right_line;
+        if (_currentStep == 2) {
+          if (activeDraft != null) {
+            label = 'Enregistrer en brouillon';
+            icon = Remix.file_list_line;
+          } else {
+            label = 'Débuter la séance';
+            icon = Remix.play_fill;
+          }
+        }
+        return PrimaryButton(
+          label: label,
+          icon: icon,
+          onPressed:
+              _isSubmitting ||
+                  (_currentStep == 2 &&
+                      teamAppearanceError(
+                            _sessionType,
+                            _teamNames,
+                            _teamColors,
+                          ) !=
+                          null)
+              ? null
+              : _nextStep,
+        );
+      },
+    );
+    final stackActions = MediaQuery.sizeOf(context).width < 360 ||
+        MediaQuery.textScalerOf(context).scale(16) > 20;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -386,50 +461,27 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
       ),
       child: SafeArea(
         top: false,
-        child: Row(
-          children: [
-            if (_currentStep > 1) ...[
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Remix.arrow_left_line, size: 18),
-                  label: const Text('Précédent'),
-                  onPressed: _isSubmitting ? null : _prevStep,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: context.colors.foreground300,
-                    side: BorderSide(color: context.colors.background700),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                ),
+        child: stackActions
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (_currentStep > 1) ...[
+                    previous,
+                    const SizedBox(height: 12),
+                  ],
+                  primary,
+                ],
+              )
+            : Row(
+                children: [
+                  if (_currentStep > 1) ...[
+                    Expanded(child: previous),
+                    const SizedBox(width: 12),
+                  ],
+                  Expanded(flex: 2, child: primary),
+                ],
               ),
-              const SizedBox(width: 12),
-            ],
-            Expanded(
-              flex: 2,
-              child: Builder(
-                builder: (context) {
-                  final activeDraft = ref.watch(activeDraftSessionProvider).value;
-                  String label = 'Continuer';
-                  IconData icon = Remix.arrow_right_line;
-                  if (_currentStep == 2) {
-                    if (activeDraft != null) {
-                      label = 'Enregistrer en brouillon';
-                      icon = Remix.file_list_line;
-                    } else {
-                      label = 'Débuter la séance';
-                      icon = Remix.play_fill;
-                    }
-                  }
-                  return PrimaryButton(
-                    label: label,
-                    icon: icon,
-                    onPressed: _isSubmitting || (_currentStep == 2 && teamAppearanceError(_sessionType, _teamNames, _teamColors) != null) ? null : _nextStep,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -853,12 +905,16 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                   const SizedBox(height: 16),
                 ],
                 // Search bar
-                TextField(
+                Semantics(container: true, child: TextField(
                   controller: _searchController,
                   style: TextStyle(color: context.colors.foreground50, fontSize: 14),
                   decoration: InputDecoration(
-                    hintText: 'Rechercher un joueur par nom...',
+                    labelText: 'Rechercher un joueur',
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    floatingLabelStyle: TextStyle(color: context.colors.foreground300, fontSize: 14),
+                    hintText: 'Nom ou surnom',
                     hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
+                    prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 48),
                     prefixIcon: Icon(Remix.search_line, size: 18, color: context.colors.foreground400),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? IconButton(
@@ -890,18 +946,21 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                     ),
                   ),
                   onChanged: (val) => setState(() => _searchQuery = val),
-                ),
+                )),
                 const SizedBox(height: 10),
 
                 // Presence counter & Toggle all (cocher/décocher tout)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runSpacing: 4,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Remix.user_follow_line, size: 16, color: context.colors.primary400),
                         const SizedBox(width: 6),
-                        Text(
+                        Flexible(child: Text(
                           isSearching
                               ? '${filteredPlayers.where((p) => _selectedPlayerIds.contains(p.id)).length}/${filteredPlayers.length} affichés présents (${_selectedPlayerIds.length} au total)'
                               : '${_selectedPlayerIds.length}/${activePlayers.length} présents',
@@ -910,7 +969,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
-                        ),
+                        )),
                       ],
                     ),
                     TextButton.icon(
@@ -1024,6 +1083,100 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                     avatarFg = context.colors.primary400;
                   }
 
+                  final controls = !isSelected
+                      ? TextButton.icon(
+                          icon: const Icon(Remix.add_line, size: 16),
+                          label: Text(
+                            'Présent',
+                            semanticsLabel: 'Marquer ${player.name} présent',
+                          ),
+                          style: TextButton.styleFrom(
+                            foregroundColor: context.colors.primary400,
+                            backgroundColor: context.colors.primary500.withValues(alpha: 0.1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _selectedPlayerIds.add(player.id);
+                            });
+                          },
+                        )
+                      : Wrap(
+                          alignment: WrapAlignment.end,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 6,
+                          children: [
+                            SegmentedButton<String>(
+                              segments: [
+                                ButtonSegment(
+                                  value: 'A',
+                                  label: Text(
+                                    'A',
+                                    semanticsLabel: 'Équipe A pour ${player.name}',
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                ButtonSegment(
+                                  value: 'B',
+                                  label: Text(
+                                    'B',
+                                    semanticsLabel: 'Équipe B pour ${player.name}',
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                if (_sessionType == SessionType.tournament3)
+                                  ButtonSegment(
+                                    value: 'C',
+                                    label: Text(
+                                      'C',
+                                      semanticsLabel: 'Équipe C pour ${player.name}',
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                              ],
+                              selected: team != null ? {team} : <String>{},
+                              emptySelectionAllowed: true,
+                              style: SegmentedButton.styleFrom(
+                                backgroundColor: context.colors.background800,
+                                selectedBackgroundColor: team == 'A'
+                                    ? context.colors.accent500.withValues(alpha: 0.3)
+                                    : team == 'B'
+                                    ? context.colors.secondary500.withValues(alpha: 0.3)
+                                    : context.colors.primary500.withValues(alpha: 0.3),
+                                selectedForegroundColor: team == 'A'
+                                    ? context.colors.accent400
+                                    : team == 'B'
+                                    ? context.colors.secondary400
+                                    : context.colors.primary400,
+                                visualDensity: VisualDensity.compact,
+                              ),
+                              onSelectionChanged: (newSelection) {
+                                setState(() {
+                                  if (newSelection.isEmpty) {
+                                    _playerTeamAssignments.remove(player.id);
+                                  } else {
+                                    _playerTeamAssignments[player.id] = newSelection.first;
+                                  }
+                                });
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Remix.close_circle_line),
+                              color: context.colors.foreground500,
+                              iconSize: 20,
+                              tooltip: 'Retirer ${player.name} de la séance',
+                              onPressed: () {
+                                setState(() {
+                                  _selectedPlayerIds.remove(player.id);
+                                  _playerTeamAssignments.remove(player.id);
+                                });
+                              },
+                            ),
+                          ],
+                        );
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Container(
@@ -1051,100 +1204,62 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
                                           : context.colors.background700,
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: avatarBg,
-                            backgroundImage: player.avatarUrl != null ? NetworkImage(player.avatarUrl!) : null,
-                            child: player.avatarUrl == null
-                                ? Text(player.name.substring(0, 1).toUpperCase(), style: TextStyle(color: avatarFg, fontWeight: FontWeight.bold, fontSize: 13))
-                                : null,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(player.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                                if (player.nickname != null)
-                                  Text('« ${player.nickname} »', style: TextStyle(color: context.colors.foreground500, fontSize: 12))
-                                else if (isSelected && team == null)
-                                  Text(
-                                    _sessionType == SessionType.tournament3 ? 'Choisir A, B ou C' : 'Choisir A ou B',
-                                    style: TextStyle(color: context.colors.warning, fontSize: 11, fontWeight: FontWeight.w500),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          final stacked =
+                              constraints.maxWidth < 400 ||
+                              MediaQuery.textScalerOf(context).scale(14) > 18;
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                children: [
+                                  PlayerAvatar(source: player.avatarUrl, initial: player.name.isEmpty ? '?' : player.name[0], baseColor: avatarFg, backgroundColor: avatarBg, size: 36),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          player.name,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        if (player.nickname != null)
+                                          Text(
+                                            '« ${player.nickname} »',
+                                            style: TextStyle(
+                                              color: context.colors.foreground500,
+                                              fontSize: 12,
+                                            ),
+                                          )
+                                        else if (isSelected && team == null)
+                                          Text(
+                                            _sessionType == SessionType.tournament3
+                                                ? 'Choisir A, B ou C'
+                                                : 'Choisir A ou B',
+                                            style: TextStyle(
+                                              color: context.colors.warning,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                   ),
-                              ],
-                            ),
-                          ),
-                          if (!isSelected)
-                            TextButton.icon(
-                              icon: const Icon(Remix.add_line, size: 16),
-                              label: const Text('Présent'),
-                              style: TextButton.styleFrom(
-                                foregroundColor: context.colors.primary400,
-                                backgroundColor: context.colors.primary500.withValues(alpha: 0.1),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                  if (!stacked) controls,
+                                ],
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  _selectedPlayerIds.add(player.id);
-                                });
-                              },
-                            )
-                          else
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SegmentedButton<String>(
-                                  segments: [
-                                    const ButtonSegment(value: 'A', label: Text('A', style: TextStyle(fontWeight: FontWeight.bold))),
-                                    const ButtonSegment(value: 'B', label: Text('B', style: TextStyle(fontWeight: FontWeight.bold))),
-                                    if (_sessionType == SessionType.tournament3)
-                                      const ButtonSegment(value: 'C', label: Text('C', style: TextStyle(fontWeight: FontWeight.bold))),
-                                  ],
-                                  selected: team != null ? {team} : <String>{},
-                                  emptySelectionAllowed: true,
-                                  style: SegmentedButton.styleFrom(
-                                    backgroundColor: context.colors.background800,
-                                    selectedBackgroundColor: team == 'A'
-                                        ? context.colors.accent500.withValues(alpha: 0.3)
-                                        : team == 'B'
-                                            ? context.colors.secondary500.withValues(alpha: 0.3)
-                                            : context.colors.primary500.withValues(alpha: 0.3),
-                                    selectedForegroundColor: team == 'A'
-                                        ? context.colors.accent400
-                                        : team == 'B'
-                                            ? context.colors.secondary400
-                                            : context.colors.primary400,
-                                    visualDensity: VisualDensity.compact,
-                                  ),
-                                  onSelectionChanged: (newSelection) {
-                                    setState(() {
-                                      if (newSelection.isEmpty) {
-                                        _playerTeamAssignments.remove(player.id);
-                                      } else {
-                                        _playerTeamAssignments[player.id] = newSelection.first;
-                                      }
-                                    });
-                                  },
-                                ),
-                                const SizedBox(width: 6),
-                                IconButton(
-                                  icon: const Icon(Remix.close_circle_line),
-                                  color: context.colors.foreground500,
-                                  iconSize: 20,
-                                  tooltip: 'Retirer',
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedPlayerIds.remove(player.id);
-                                      _playerTeamAssignments.remove(player.id);
-                                    });
-                                  },
-                                ),
+                              if (stacked) ...[
+                                const SizedBox(height: 8),
+                                Align(alignment: Alignment.centerRight, child: controls),
                               ],
-                            ),
-                        ],
+                            ],
+                          );
+                        },
                       ),
                     ),
                   );

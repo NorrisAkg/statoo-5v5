@@ -1,0 +1,14 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart
+00:00 +0: OUT11 notification failure cannot interrupt credential deletion
+00:00 +0 -1: OUT11 notification failure cannot interrupt credential deletion [E]
+  Expected: null
+    Actual: '{"identity":{"group_id":"g","expires_at":"2099-01-01T00:00:00Z","account":{"id":"admin","roles":["ADMIN"],"shared":false}},"url":"https://example.test","token":"synthetic-token"}'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 131:5     main.assertCleared
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT11 notification failure cannot interrupt credential deletion

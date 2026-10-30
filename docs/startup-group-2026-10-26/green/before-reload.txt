@@ -1,0 +1,10 @@
+- group: Application
+- heading "Statistiques" [level=2]
+- group: 0 Séances jouées 0 classées 6 Joueurs actifs Sur 6 inscrits au total ATTAQUE & EFFICACITÉ 0 Buts totaux Score global des séances 0.0 Moyenne / séance Buts par rencontre Passes décisives Enregistrées lors des séances 0 DISCIPLINE & ARBITRAGE 0 Cartons jaunes Avertissements 0 Cartons rouges Expulsions INTÉGRITÉ DES DONNÉES Cohérence parfaite 100% des buts marqués sont correctement attribués aux joueurs (0 buts au total).
+- text: Bienvenue sur Statoo ! Votre effectif est prêt.
+- group:
+  - button "Accueil"
+  - button "Séances"
+  - button "Joueurs"
+  - button "Classement"
+  - button "Stats"

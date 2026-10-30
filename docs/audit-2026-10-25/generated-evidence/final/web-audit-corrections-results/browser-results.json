@@ -1,0 +1,52 @@
+[
+  {
+    "id": "AUD-01",
+    "draftBaseRevision": 1,
+    "serverRevision": 5,
+    "serverContribution": 900,
+    "restoredContribution": "150"
+  },
+  {
+    "id": "AUD-02",
+    "entered": "450",
+    "reopened": "450",
+    "confirmation": false
+  },
+  {
+    "id": "AUD-07",
+    "contentWhileCataloguePending": "VOTRE GROUPE\n\nGroupe audit PWA\n\nIdentifiant du groupe : g\n\nAdmin · Secrétaire général · Trésorier\n\nActualiser\nSe déconnecter\nNouvelle séance\nNouveau point financier\nGérer le groupe\nAccueil\nSéances\nMembres\nClassement\nFinances\nDernière séance\nLe terrain vous attend\n\nAucune séance publiée pour le moment.\n\nMembres\n3\nSéances terminées\n0\nCaisse\n0 F\nPréparer votre groupe\n\nAttribuez les rôles Président et Trésorier dans Gérer le groupe. Votre accès Admin permet de gérer les séances ; vous pouvez aussi déléguer au Secrétaire général ou à son adjoint. Les soldes initiaux seront proposés par le Trésorier et approuvés par le Président.\n\nDernière actualisation : 25 oct. 2026, 11:15"
+  },
+  {
+    "id": "AUD-08",
+    "editorOpen": true,
+    "message": ""
+  },
+  {
+    "id": "AUD-09",
+    "body": "Aller au contenu\nstatoo.\n◐\n\nLe stockage local est indisponible. La conservation des saisies et la connexion nécessitent un stockage autorisé.\n\nLE FOOT, ENSEMBLE.\n\nVotre groupe.\nVotre terrain.\n\nLes séances, les performances et les comptes du groupe, réunis au même endroit.\n\n⚽ Matchs & tournois\n↗ Classement\n◈ Finances\nRetrouver votre groupe\n\nMembre : utilisez l’accès collectif. Responsable : utilisez vos identifiants personnels.\n\nIdentifiant du groupe\nIdentifiant de connexion\nMot de passe\nSe connecter\n\nLa préparation locale est illisible ou inaccessible. Ne l’effacez qu’après avoir vérifié vos informations.\n\nCréer un groupe\n\nLe stockage local est indisponible. Libérez de la place avant de poursuivre.\n\nStatoo · Le foot entre amis, les comptes au clair.",
+    "errors": []
+  },
+  {
+    "id": "AUD-10",
+    "ratios": [
+      {
+        "name": "Racing Atlas",
+        "foreground": "rgb(15, 23, 42)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 17.85253496299567
+      },
+      {
+        "name": "Union des Cèdres",
+        "foreground": "rgb(15, 23, 42)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 17.85253496299567
+      },
+      {
+        "name": "Sporting du Port",
+        "foreground": "rgb(15, 23, 42)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 17.85253496299567
+      }
+    ]
+  }
+]

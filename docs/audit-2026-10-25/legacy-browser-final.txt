@@ -1,0 +1,674 @@
+
+> test:web:browser
+> node --test --test-concurrency=2 web/tests/browser.e2e.mjs web/tests/config.e2e.mjs web/tests/registration.e2e.mjs web/tests/offline-registration.e2e.mjs web/tests/desktop.e2e.mjs web/tests/interactions.e2e.mjs web/tests/packaging.e2e.mjs web/tests/audit/browser.audit.mjs web/tests/sport-flow.e2e.mjs web/tests/loading-validation.e2e.mjs web/tests/welcome.e2e.mjs
+
+TAP version 13
+# Subtest: AUD-01 stale financial draft must not silently rebase on a newer server revision
+ok 1 - AUD-01 stale financial draft must not silently rebase on a newer server revision
+  ---
+  duration_ms: 4285.313788
+  type: 'test'
+  ...
+# Subtest: AUD-02 closing the opening-balance form preserves input or confirms abandonment
+ok 2 - AUD-02 closing the opening-balance form preserves input or confirms abandonment
+  ---
+  duration_ms: 2260.261937
+  type: 'test'
+  ...
+# Subtest: AUD-07 delayed optional catalogue must not block login and consultation
+ok 3 - AUD-07 delayed optional catalogue must not block login and consultation
+  ---
+  duration_ms: 1761.743324
+  type: 'test'
+  ...
+# Subtest: AUD-08 existing session remains editable without the team name catalogue
+ok 4 - AUD-08 existing session remains editable without the team name catalogue
+  ---
+  duration_ms: 2281.080831
+  type: 'test'
+  ...
+# Subtest: AUD-09 denied local storage produces an actionable message rather than a frozen shell
+ok 5 - AUD-09 denied local storage produces an actionable message rather than a frozen shell
+  ---
+  duration_ms: 5429.726888
+  type: 'test'
+  ...
+# Subtest: AUD-10 team-name text has at least 4.5:1 contrast in light theme
+ok 6 - AUD-10 team-name text has at least 4.5:1 contrast in light theme
+  ---
+  duration_ms: 1400.700586
+  type: 'test'
+  ...
+# Subtest: FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+ok 7 - FIX-01 old-generation and legacy drafts require explicit abandonment before current version
+  ---
+  duration_ms: 6750.278955
+  type: 'test'
+  ...
+# Subtest: FIX-02 opening draft persists all fields across reload and is removed after accepted write
+ok 8 - FIX-02 opening draft persists all fields across reload and is removed after accepted write
+  ---
+  duration_ms: 4478.486003
+  type: 'test'
+  ...
+# Subtest: FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+ok 9 - FIX-03 accepted administrative write shows refresh warning and permits read-only retry
+  ---
+  duration_ms: 2785.709456
+  type: 'test'
+  ...
+# Subtest: FIX-10 all team palette colors remain readable in both themes
+ok 10 - FIX-10 all team palette colors remain readable in both themes
+  ---
+  duration_ms: 4165.237413
+  type: 'test'
+  ...
+# Subtest: WEB-03 collective identity cannot expose manager actions even with elevated role labels
+ok 11 - WEB-03 collective identity cannot expose manager actions even with elevated role labels
+  ---
+  duration_ms: 2495.95679
+  type: 'test'
+  ...
+# Subtest: WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+ok 12 - WEB-15/18/19 Admin adds a member, renews access and configures future contribution
+  ---
+  duration_ms: 3469.50729
+  type: 'test'
+  ...
+# Subtest: WEB-12/14 sport cancellation requires a reason and sends current revision
+ok 13 - WEB-12/14 sport cancellation requires a reason and sends current revision
+  ---
+  duration_ms: 2719.354171
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix MEMBER
+ok 14 - WEB-03/04 action matrix MEMBER
+  ---
+  duration_ms: 1843.326324
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix CENSOR
+ok 15 - WEB-03/04 action matrix CENSOR
+  ---
+  duration_ms: 1476.0826
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix ADMIN
+ok 16 - WEB-03/04 action matrix ADMIN
+  ---
+  duration_ms: 1458.957331
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SG
+ok 17 - WEB-03/04 action matrix SG
+  ---
+  duration_ms: 1876.18846
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix SGA
+ok 18 - WEB-03/04 action matrix SGA
+  ---
+  duration_ms: 1746.839561
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TR
+ok 19 - WEB-03/04 action matrix TR
+  ---
+  duration_ms: 1351.345286
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix TGA
+ok 20 - WEB-03/04 action matrix TGA
+  ---
+  duration_ms: 1848.901796
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix PDT
+ok 21 - WEB-03/04 action matrix PDT
+  ---
+  duration_ms: 1841.679236
+  type: 'test'
+  ...
+# Subtest: WEB-03/04 action matrix VP
+ok 22 - WEB-03/04 action matrix VP
+  ---
+  duration_ms: 1693.963499
+  type: 'test'
+  ...
+# Subtest: WEB-07/08/09 sport form creates balanced tournament with three club names
+ok 23 - WEB-07/08/09 sport form creates balanced tournament with three club names
+  ---
+  duration_ms: 2643.817898
+  type: 'test'
+  ...
+# Subtest: WEB-22 finance includes every member, separates donations and expenses
+ok 24 - WEB-22 finance includes every member, separates donations and expenses
+  ---
+  duration_ms: 2280.742483
+  type: 'test'
+  ...
+# Subtest: WEB-15/16 Admin manages members and cannot create plain individual member
+ok 25 - WEB-15/16 Admin manages members and cannot create plain individual member
+  ---
+  duration_ms: 2286.927947
+  type: 'test'
+  ...
+# Subtest: WEB-21 proposal approval submits exactly the displayed balances
+ok 26 - WEB-21 proposal approval submits exactly the displayed balances
+  ---
+  duration_ms: 2585.666947
+  type: 'test'
+  ...
+# Subtest: WEB-27 drafts survive reload; WEB-34 content is rendered as text
+ok 27 - WEB-27 drafts survive reload; WEB-34 content is rendered as text
+  ---
+  duration_ms: 3210.787163
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 320
+ok 28 - WEB-35 page fits viewport 320
+  ---
+  duration_ms: 1777.759608
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 360
+ok 29 - WEB-35 page fits viewport 360
+  ---
+  duration_ms: 1665.500571
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 390
+ok 30 - WEB-35 page fits viewport 390
+  ---
+  duration_ms: 1986.019775
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 768
+ok 31 - WEB-35 page fits viewport 768
+  ---
+  duration_ms: 2019.451137
+  type: 'test'
+  ...
+# Subtest: WEB-35 page fits viewport 1440
+ok 32 - WEB-35 page fits viewport 1440
+  ---
+  duration_ms: 1853.312197
+  type: 'test'
+  ...
+# Subtest: WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+ok 33 - WEB-02/17/20/21/09/22 real API journey from group creation to sport and finances
+  ---
+  duration_ms: 10017.390888
+  type: 'test'
+  ...
+# Subtest: WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+ok 34 - WEB-25/26 conflict decision and explicit responsibility transfer use displayed revision
+  ---
+  duration_ms: 3452.912603
+  type: 'test'
+  ...
+# Subtest: PWA-03/04 offline reload retains shell and own snapshot
+ok 35 - PWA-03/04 offline reload retains shell and own snapshot
+  ---
+  duration_ms: 3127.388875
+  type: 'test'
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme dark
+ok 36 - WEB-35 populated tournament and narrow form, theme dark
+  ---
+  duration_ms: 2046.785515
+  type: 'test'
+  ...
+# Subtest: WEB-35 populated tournament and narrow form, theme light
+ok 37 - WEB-35 populated tournament and narrow form, theme light
+  ---
+  duration_ms: 2231.418786
+  type: 'test'
+  ...
+# Subtest: CFG-01 configured API receives login and registration without server fields
+ok 38 - CFG-01 configured API receives login and registration without server fields
+  ---
+  duration_ms: 3749.560797
+  type: 'test'
+  ...
+# Subtest: DESK-06 tournament uses three columns on desktop and stacked teams on mobile
+ok 39 - DESK-06 tournament uses three columns on desktop and stacked teams on mobile
+  ---
+  duration_ms: 3575.644829
+  type: 'test'
+  ...
+# Subtest: DESK-01/02/03/04/07 responsive branded registration in both themes
+ok 40 - DESK-01/02/03/04/07 responsive branded registration in both themes
+  ---
+  duration_ms: 21283.223853
+  type: 'test'
+  ...
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 390px
+ok 41 - STAB-01/02 filters, focus and text selection survive refresh at 390px
+  ---
+  duration_ms: 2339.721034
+  type: 'test'
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+ok 42 - STAB-03 sport composition keeps focus, values and dialog scroll at 390px
+  ---
+  duration_ms: 2932.590332
+  type: 'test'
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+ok 43 - STAB-04 finance recomposition keeps action focus and entered amounts at 390px
+  ---
+  duration_ms: 2950.765095
+  type: 'test'
+  ...
+# Subtest: STAB-01/02 filters, focus and text selection survive refresh at 1440px
+ok 44 - STAB-01/02 filters, focus and text selection survive refresh at 1440px
+  ---
+  duration_ms: 2011.970689
+  type: 'test'
+  ...
+# Subtest: STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+ok 45 - STAB-03 sport composition keeps focus, values and dialog scroll at 1440px
+  ---
+  duration_ms: 3679.301442
+  type: 'test'
+  ...
+# Subtest: STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+ok 46 - STAB-04 finance recomposition keeps action focus and entered amounts at 1440px
+  ---
+  duration_ms: 2526.763028
+  type: 'test'
+  ...
+# Subtest: STAB-05 late background refresh does not rebuild behind a newly opened dialog
+ok 47 - STAB-05 late background refresh does not rebuild behind a newly opened dialog
+  ---
+  duration_ms: 2003.620701
+  type: 'test'
+  ...
+# Subtest: STAB-01 an empty search result survives periodic refresh
+ok 48 - STAB-01 an empty search result survives periodic refresh
+  ---
+  duration_ms: 1677.470094
+  type: 'test'
+  ...
+# Subtest: STAB-04 removing the last expense returns focus to adding an expense
+ok 49 - STAB-04 removing the last expense returns focus to adding an expense
+  ---
+  duration_ms: 2054.239522
+  type: 'test'
+  ...
+# Subtest: STAB-06 changing account resets in-memory session filters
+ok 50 - STAB-06 changing account resets in-memory session filters
+  ---
+  duration_ms: 2247.029122
+  type: 'test'
+  ...
+# Subtest: STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+ok 51 - STAB-07 a previously loaded PWA keeps interactive forms available offline after reload
+  ---
+  duration_ms: 3557.868596
+  type: 'test'
+  ...
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=200
+ok 52 - LOAD-01 refresh loading state, duplicate protection and reset status=200
+  ---
+  duration_ms: 1903.190508
+  type: 'test'
+  ...
+# Subtest: LOAD-01 refresh loading state, duplicate protection and reset status=503
+ok 53 - LOAD-01 refresh loading state, duplicate protection and reset status=503
+  ---
+  duration_ms: 1861.549944
+  type: 'test'
+  ...
+# Subtest: LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+ok 54 - LOAD-02 login loader blocks repeated Enter and resets after authentication failure
+  ---
+  duration_ms: 1600.13431
+  type: 'test'
+  ...
+# Subtest: LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+ok 55 - LOAD-03 modal locks concurrent actions, restores inputs after refusal and allows retry
+  ---
+  duration_ms: 3647.260671
+  type: 'test'
+  ...
+# Subtest: LOAD-04 loader for Se déconnecter
+ok 56 - LOAD-04 loader for Se déconnecter
+  ---
+  duration_ms: 1918.624656
+  type: 'test'
+  ...
+# Subtest: LOAD-04 loader for Réessayer les envois
+ok 57 - LOAD-04 loader for Réessayer les envois
+  ---
+  duration_ms: 1496.327298
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 320
+ok 58 - LOAD-06 stable dimensions and reduced-motion loading 320
+  ---
+  duration_ms: 1878.095582
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 390
+ok 59 - LOAD-06 stable dimensions and reduced-motion loading 390
+  ---
+  duration_ms: 1900.716846
+  type: 'test'
+  ...
+# Subtest: LOAD-06 stable dimensions and reduced-motion loading 1440
+ok 60 - LOAD-06 stable dimensions and reduced-motion loading 1440
+  ---
+  duration_ms: 1784.326882
+  type: 'test'
+  ...
+# Subtest: ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+ok 61 - ZOD-06 client validation is French, field-linked, corrected and sends nothing invalid
+  ---
+  duration_ms: 1860.790373
+  type: 'test'
+  ...
+# Subtest: OFF-09 abandoning a preparation requires confirmation
+ok 62 - OFF-09 abandoning a preparation requires confirmation
+  ---
+  duration_ms: 1710.861947
+  type: 'test'
+  ...
+# Subtest: OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+ok 63 - OFF-01/02/03/04/05 offline preparation, reload, lost response and safe publication retry
+  ---
+  duration_ms: 7731.967525
+  type: 'test'
+  ...
+# Subtest: STAB-08 a clean static package contains every application module
+ok 64 - STAB-08 a clean static package contains every application module
+  ---
+  duration_ms: 171.756561
+  type: 'test'
+  ...
+# Subtest: GRP-06/07/08/09 creation separates members and explains collective access
+ok 65 - GRP-06/07/08/09 creation separates members and explains collective access
+  ---
+  duration_ms: 2357.863416
+  type: 'test'
+  ...
+# Subtest: SPORT-14 a storage failure never claims the current preparation is saved
+ok 66 - SPORT-14 a storage failure never claims the current preparation is saved
+  ---
+  duration_ms: 2708.869261
+  type: 'test'
+  ...
+# Subtest: SPORT-14 storage recovery restores the preparation status after typing
+ok 67 - SPORT-14 storage recovery restores the preparation status after typing
+  ---
+  duration_ms: 2080.961211
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 390px dark
+ok 68 - SPORT-01/02/05 progressive layout 390px dark
+  ---
+  duration_ms: 2592.059711
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 390px light
+ok 69 - SPORT-01/02/05 progressive layout 390px light
+  ---
+  duration_ms: 2753.432515
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px dark
+ok 70 - SPORT-01/02/05 progressive layout 1440px dark
+  ---
+  duration_ms: 3117.960999
+  type: 'test'
+  ...
+# Subtest: SPORT-01/02/05 progressive layout 1440px light
+ok 71 - SPORT-01/02/05 progressive layout 1440px light
+  ---
+  duration_ms: 3160.252211
+  type: 'test'
+  ...
+# Subtest: SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+ok 72 - SPORT-03/04 search is accent-insensitive, scoped bulk selection preserves hidden selections
+  ---
+  duration_ms: 2404.424884
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+ok 73 - SPORT-07 distribution preserves participants and balances 6 players in 2 teams
+  ---
+  duration_ms: 2469.140471
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+ok 74 - SPORT-07 distribution preserves participants and balances 7 players in 2 teams
+  ---
+  duration_ms: 2472.469004
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+ok 75 - SPORT-07 distribution preserves participants and balances 6 players in 3 teams
+  ---
+  duration_ms: 2509.275152
+  type: 'test'
+  ...
+# Subtest: SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+ok 76 - SPORT-07 distribution preserves participants and balances 8 players in 3 teams
+  ---
+  duration_ms: 2586.352175
+  type: 'test'
+  ...
+# Subtest: SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+ok 77 - SPORT-06/09 counters are local, targeted and reversible; deselection retains a player’s work
+  ---
+  duration_ms: 2805.404653
+  type: 'test'
+  ...
+# Subtest: SPORT-08/10 format change never hides C players; validation guides back before any send
+ok 78 - SPORT-08/10 format change never hides C players; validation guides back before any send
+  ---
+  duration_ms: 2900.056706
+  type: 'test'
+  ...
+# Subtest: SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+ok 79 - SPORT-10/11 classic closure keeps the API contract, confirms and removes only the published draft
+  ---
+  duration_ms: 2893.458804
+  type: 'test'
+  ...
+# Subtest: SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+ok 80 - SPORT-10 minimum and incoherent goals stop publication, retaining data for correction
+  ---
+  duration_ms: 2597.943253
+  type: 'test'
+  ...
+# Subtest: SPORT-11 refused write retains local preparation and no automatic retry occurs
+ok 81 - SPORT-11 refused write retains local preparation and no automatic retry occurs
+  ---
+  duration_ms: 2946.846861
+  type: 'test'
+  ...
+# Subtest: SPORT-12 stage, composition and scores survive Escape, reload and offline use
+ok 82 - SPORT-12 stage, composition and scores survive Escape, reload and offline use
+  ---
+  duration_ms: 5808.881242
+  type: 'test'
+  ...
+# Subtest: SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+ok 83 - SPORT-12/13/14 existing session opens on match without catalogue, includes its archived participant
+  ---
+  duration_ms: 2788.996424
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SGA"]}
+ok 84 - SPORT-13 permissions remain explicit {"roles":["SGA"]}
+  ---
+  duration_ms: 1658.022731
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["TR"]}
+ok 85 - SPORT-13 permissions remain explicit {"roles":["TR"]}
+  ---
+  duration_ms: 1659.452981
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+ok 86 - SPORT-13 permissions remain explicit {"roles":["ADMIN"]}
+  ---
+  duration_ms: 1373.018249
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+ok 87 - SPORT-13 permissions remain explicit {"roles":["SG"],"shared":true}
+  ---
+  duration_ms: 1781.189866
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+ok 88 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"owner":"other"}
+  ---
+  duration_ms: 1639.411465
+  type: 'test'
+  ...
+# Subtest: SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+ok 89 - SPORT-13 permissions remain explicit {"roles":["SG"],"existing":true,"conflict":true}
+  ---
+  duration_ms: 1683.387524
+  type: 'test'
+  ...
+# Subtest: SPORT-14 empty roster has an actionable state rather than empty composition
+ok 90 - SPORT-14 empty roster has an actionable state rather than empty composition
+  ---
+  duration_ms: 1947.565911
+  type: 'test'
+  ...
+# Subtest: SPORT-02/10 invalid options and duplicate colors guide correction without any request
+ok 91 - SPORT-02/10 invalid options and duplicate colors guide correction without any request
+  ---
+  duration_ms: 2526.796697
+  type: 'test'
+  ...
+# Subtest: SPORT-10 tournament refuses zero wins then keeps a draw and the chosen format on publication
+ok 92 - SPORT-10 tournament refuses zero wins then keeps a draw and the chosen format on publication
+  ---
+  duration_ms: 2838.360172
+  type: 'test'
+  ...
+# Subtest: SPORT-10 unequal teams need the existing explicit option, and invalid numeric input is never published
+ok 93 - SPORT-10 unequal teams need the existing explicit option, and invalid numeric input is never published
+  ---
+  duration_ms: 2909.799731
+  type: 'test'
+  ...
+# Subtest: SPORT-11/13 correcting a closed session keeps the original revision and requires a reason
+ok 94 - SPORT-11/13 correcting a closed session keeps the original revision and requires a reason
+  ---
+  duration_ms: 2580.24637
+  type: 'test'
+  ...
+# Subtest: SPORT-12 a legacy draft without a step retains data, and a stale sport draft still cannot publish
+ok 95 - SPORT-12 a legacy draft without a step retains data, and a stale sport draft still cannot publish
+  ---
+  duration_ms: 3110.538071
+  type: 'test'
+  ...
+# Subtest: SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+ok 96 - SPORT-16 clicking a counter caption focuses its number input rather than a neighboring button
+  ---
+  duration_ms: 2006.943113
+  type: 'test'
+  ...
+# Subtest: SPORT-17 legacy invalid draw points guide back to the Options field
+ok 97 - SPORT-17 legacy invalid draw points guide back to the Options field
+  ---
+  duration_ms: 4626.891808
+  type: 'test'
+  ...
+# Subtest: SPORT-18 narrow action bars keep complete words and visible actions
+ok 98 - SPORT-18 narrow action bars keep complete words and visible actions
+  ---
+  duration_ms: 3963.820719
+  type: 'test'
+  ...
+# Subtest: SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+ok 99 - SPORT-19 a player archived during an unpublished preparation can be explicitly restored with their statistics
+  ---
+  duration_ms: 3125.991664
+  type: 'test'
+  ...
+# Subtest: PRES-02 ADMIN creates and reopens their session from the web
+ok 100 - PRES-02 ADMIN creates and reopens their session from the web
+  ---
+  duration_ms: 2490.785131
+  type: 'test'
+  ...
+# Subtest: PRES-02 PDT creates and reopens their session from the web
+ok 101 - PRES-02 PDT creates and reopens their session from the web
+  ---
+  duration_ms: 2448.2365
+  type: 'test'
+  ...
+# Subtest: PRES-02 VP creates and reopens their session from the web
+ok 102 - PRES-02 VP creates and reopens their session from the web
+  ---
+  duration_ms: 2481.061561
+  type: 'test'
+  ...
+# Subtest: PRES-04 ADMIN is offered as a sport transfer recipient
+ok 103 - PRES-04 ADMIN is offered as a sport transfer recipient
+  ---
+  duration_ms: 1948.52181
+  type: 'test'
+  ...
+# Subtest: PRES-04 PDT is offered as a sport transfer recipient
+ok 104 - PRES-04 PDT is offered as a sport transfer recipient
+  ---
+  duration_ms: 2074.154544
+  type: 'test'
+  ...
+# Subtest: PRES-04 VP is offered as a sport transfer recipient
+ok 105 - PRES-04 VP is offered as a sport transfer recipient
+  ---
+  duration_ms: 1891.956607
+  type: 'test'
+  ...
+# Subtest: ADM-08 Admin with President and Treasurer needs no Secretary to start
+ok 106 - ADM-08 Admin with President and Treasurer needs no Secretary to start
+  ---
+  duration_ms: 1660.134063
+  type: 'test'
+  ...
+# Subtest: ACC09/10 short name is submitted and locked for uncertain publication
+ok 107 - ACC09/10 short name is submitted and locked for uncertain publication
+  ---
+  duration_ms: 4092.85483
+  type: 'test'
+  ...
+# Subtest: ACC03 skipping onboarding still works with unavailable storage
+ok 108 - ACC03 skipping onboarding still works with unavailable storage
+  ---
+  duration_ms: 1932.593606
+  type: 'test'
+  ...
+# Subtest: ACC03/04/05/06/11 returning visit and responsive forms
+ok 109 - ACC03/04/05/06/11 returning visit and responsive forms
+  ---
+  duration_ms: 2523.470614
+  type: 'test'
+  ...
+# Subtest: ACC01/02/04/05/06 onboarding, fields and sticky navigation
+ok 110 - ACC01/02/04/05/06 onboarding, fields and sticky navigation
+  ---
+  duration_ms: 3912.828978
+  type: 'test'
+  ...
+1..110
+# tests 110
+# suites 0
+# pass 110
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 205830.880373

@@ -1,0 +1,113 @@
+00:00 +0: loading /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart
+00:00 +0: OUT01 successful logout clears local state and uses the previous token
+00:00 +0 -1: OUT01 successful logout clears local state and uses the previous token [E]
+  Expected: null
+    Actual: 'https://example.test'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 94:5      main.assertCleared
+  test/features/shared/disconnect_test.dart 125:11    main.<fn>
+  
+00:00 +0 -1: OUT02/03 remote failure Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. does not prevent durable logout
+00:00 +0 -2: OUT02/03 remote failure Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil. does not prevent durable logout [E]
+  Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez dans quelques instants. Votre groupe reste conservé sur cet appareil.
+  test/features/shared/disconnect_test.dart 136:41                main.<fn>.<fn>
+  test/features/shared/disconnect_test.dart 65:66                 DisconnectService.request
+  package:statoo/features/shared/data/shared_service.dart 147:26  SharedService.disconnect
+  test/features/shared/disconnect_test.dart 137:21                main.<fn>
+  
+00:00 +0 -2: OUT02/03 remote failure 401: Expired does not prevent durable logout
+00:00 +0 -3: OUT02/03 remote failure 401: Expired does not prevent durable logout [E]
+  401: Expired
+  test/features/shared/disconnect_test.dart 136:41                main.<fn>.<fn>
+  test/features/shared/disconnect_test.dart 65:66                 DisconnectService.request
+  package:statoo/features/shared/data/shared_service.dart 147:26  SharedService.disconnect
+  test/features/shared/disconnect_test.dart 137:21                main.<fn>
+  
+00:00 +0 -3: OUT02/03 remote failure 403: Forbidden does not prevent durable logout
+00:00 +0 -4: OUT02/03 remote failure 403: Forbidden does not prevent durable logout [E]
+  403: Forbidden
+  test/features/shared/disconnect_test.dart 136:41                main.<fn>.<fn>
+  test/features/shared/disconnect_test.dart 65:66                 DisconnectService.request
+  package:statoo/features/shared/data/shared_service.dart 147:26  SharedService.disconnect
+  test/features/shared/disconnect_test.dart 137:21                main.<fn>
+  
+00:00 +0 -4: OUT02/03 remote failure 500: Unavailable does not prevent durable logout
+00:00 +0 -5: OUT02/03 remote failure 500: Unavailable does not prevent durable logout [E]
+  500: Unavailable
+  test/features/shared/disconnect_test.dart 136:41                main.<fn>.<fn>
+  test/features/shared/disconnect_test.dart 65:66                 DisconnectService.request
+  package:statoo/features/shared/data/shared_service.dart 147:26  SharedService.disconnect
+  test/features/shared/disconnect_test.dart 137:21                main.<fn>
+  
+00:00 +0 -5: OUT02/03 remote failure FormatException: Invalid remote response does not prevent durable logout
+00:00 +0 -6: OUT02/03 remote failure FormatException: Invalid remote response does not prevent durable logout [E]
+  FormatException: Invalid remote response
+  test/features/shared/disconnect_test.dart 136:41                main.<fn>.<fn>
+  test/features/shared/disconnect_test.dart 65:66                 DisconnectService.request
+  package:statoo/features/shared/data/shared_service.dart 147:26  SharedService.disconnect
+  test/features/shared/disconnect_test.dart 137:21                main.<fn>
+  
+00:00 +0 -6: OUT04 local logout finishes while remote revocation is suspended
+00:00 +0 -7: OUT04 local logout finishes while remote revocation is suspended [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 154:5     main.<fn>
+  
+00:00 +0 -7: OUT05 other contexts, local data and protected outbox survive
+00:00 +1 -7: OUT06 repeated logout cancels the automatic timer
+00:00 +2 -7: OUT07 late snapshot GET 1 cannot revive credentials
+00:00 +2 -8: OUT07 late snapshot GET 1 cannot revive credentials [E]
+  Null check operator used on a null value
+  package:statoo/features/shared/data/shared_service.dart 412:15  SharedService.synchronize
+  
+00:00 +2 -8: OUT07 late snapshot GET 2 cannot revive credentials
+00:00 +2 -9: OUT07 late snapshot GET 2 cannot revive credentials [E]
+  Null check operator used on a null value
+  package:statoo/features/shared/data/shared_service.dart 491:15  SharedService.synchronize
+  
+00:00 +2 -9: OUT08 pending secure write cannot resurrect the saved connection
+00:00 +2 -10: OUT08 pending secure write cannot resurrect the saved connection [E]
+  Null check operator used on a null value
+  package:statoo/features/shared/data/shared_service.dart 500:36  SharedService.synchronize
+  
+00:00 +2 -10: OUT09 late login response is cancelled by logout
+00:00 +2 -11: OUT09 late login response is cancelled by logout [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 232:5     main.<fn>
+  
+00:00 +2 -11: OUT09 late initial load cannot restore the old connection
+00:00 +2 -12: OUT09 late initial load cannot restore the old connection [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 91:5      main.assertCleared
+  test/features/shared/disconnect_test.dart 245:11    main.<fn>
+  
+00:00 +2 -12: OUT10 storage deletion failure is surfaced after memory is cleared
+00:00 +2 -13: OUT10 storage deletion failure is surfaced after memory is cleared [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test/features/shared/disconnect_test.dart 251:5     main.<fn>
+  
+00:00 +2 -13: Some tests failed.
+
+Failing tests:
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT01 successful logout clears local state and uses the previous token
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 401: Expired does not prevent durable logout
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 403: Forbidden does not prevent durable logout
+  /home/norris/my-projects/statoo-5v5/mobile/test/features/shared/disconnect_test.dart: OUT02/03 remote failure 500: Unavailable does not prevent durable logout
+  ... and 9 more

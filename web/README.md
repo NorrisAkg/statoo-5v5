@@ -27,6 +27,13 @@ Depuis la racine du dépôt. Ouvrir `http://localhost:8080`.
 
 `npm start` sert l'API et la PWA sur `http://127.0.0.1:8000/portal/`. Un hébergement statique peut servir `web/dist/` après `npm run build` ; renseigner alors son origine dans `CORS_ORIGINS` du backend et l'adresse HTTPS de l'API dans `STATOO_PUBLIC_API_URL` avant compilation. Les chemins relatifs fonctionnent sous `/portal/` ou à la racine.
 
+Le serveur API limite `/portal/` aux ressources publiques listées dans
+`backend/app/portal.py` : tests, prototypes, documentation et builds imbriqués
+ne sont pas accessibles. Ajouter explicitement toute nouvelle ressource utilisée
+par ce portail à la liste et aux vérifications de chargement. Cette restriction
+concerne le montage FastAPI ; un serveur statique lancé directement sur `web/`
+pour le développement ne l'applique pas.
+
 ## Parcours
 
 - Membres et Censeur : consultation, via accès collectif ou compte existant. Les nouveaux comptes individuels sont réservés aux responsables.
