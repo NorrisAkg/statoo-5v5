@@ -107,7 +107,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final goal = find.text('Ajouter un but');
+    final goal = find.byTooltip('Ajouter un but');
     await tester.scrollUntilVisible(
       goal,
       200,

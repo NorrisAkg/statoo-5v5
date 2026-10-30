@@ -4,6 +4,7 @@ import 'package:remixicon/remixicon.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/soccer_shoe_icon.dart';
 import '../application/sessions_provider.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
@@ -141,40 +142,111 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
               ),
           ],
         ),
-        const SizedBox(height: 16),
-        Text(
-          s.teamName(selected),
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        const SizedBox(height: 12),
         if (widget.editable) ...[
-          const SizedBox(height: 12),
-          FilledButton(
-            style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
-            onPressed: writable ? () => pick('goal') : null,
-            child: const Text('Ajouter un but'),
-          ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          Row(
             children: [
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(48, 48),
+              Expanded(
+                child: Tooltip(
+                  message: 'Ajouter un but',
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                    ),
+                    onPressed: writable ? () => pick('goal') : null,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Remix.football_line,
+                            size: 20,
+                            color: context.colors.foreground50,
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Remix.add_line,
+                            size: 16,
+                            color: context.colors.foreground50,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                onPressed: writable ? () => pick('yellow') : null,
-                icon: Icon(Remix.rectangle_fill, color: context.colors.card),
-                label: const Text('Carton jaune'),
               ),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(48, 48),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Tooltip(
+                  message: 'Carton jaune',
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                    ),
+                    onPressed: writable ? () => pick('yellow') : null,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Remix.rectangle_fill,
+                            size: 20,
+                            color: context.colors.card,
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Remix.add_line,
+                            size: 16,
+                            color: context.colors.card,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                onPressed: writable ? () => pick('red') : null,
-                icon: Icon(Remix.rectangle_fill, color: context.colors.danger),
-                label: const Text('Carton rouge'),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Tooltip(
+                  message: 'Carton rouge',
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(48, 48),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                    ),
+                    onPressed: writable ? () => pick('red') : null,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Remix.rectangle_fill,
+                            size: 20,
+                            color: context.colors.danger,
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Remix.add_line,
+                            size: 16,
+                            color: context.colors.danger,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
+          const SizedBox(height: 8),
           OutlinedButton(
             style: OutlinedButton.styleFrom(minimumSize: const Size(48, 48)),
             onPressed: writable && operations.isNotEmpty && !journal.hasError
@@ -214,9 +286,61 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
-                              '${p.participation.goals} buts · ${p.participation.assists} passes · ${p.participation.yellowCards} jaune · ${p.participation.redCards} rouge',
-                              style: Theme.of(context).textTheme.bodySmall,
+                            const SizedBox(height: 3),
+                            Semantics(
+                              label:
+                                  '${p.playerName}: ${p.participation.goals} buts, ${p.participation.assists} passes, ${p.participation.yellowCards} cartons jaunes, ${p.participation.redCards} cartons rouges',
+                              excludeSemantics: true,
+                              child: Wrap(
+                                spacing: 8,
+                                runSpacing: 4,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  _buildStatItem(
+                                    icon: Icon(
+                                      Remix.football_line,
+                                      size: 13,
+                                      color: context.colors.primary400,
+                                    ),
+                                    count: p.participation.goals,
+                                    color: context.colors.primary400,
+                                  ),
+                                  _buildStatItem(
+                                    icon: SoccerShoeIcon(
+                                      size: 13,
+                                      color: context.colors.secondary400,
+                                    ),
+                                    count: p.participation.assists,
+                                    color: context.colors.secondary400,
+                                  ),
+                                  _buildStatItem(
+                                    icon: Container(
+                                      width: 7,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: context.colors.card,
+                                        borderRadius:
+                                            BorderRadius.circular(1.5),
+                                      ),
+                                    ),
+                                    count: p.participation.yellowCards,
+                                    color: context.colors.card,
+                                  ),
+                                  _buildStatItem(
+                                    icon: Container(
+                                      width: 7,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: context.colors.danger,
+                                        borderRadius:
+                                            BorderRadius.circular(1.5),
+                                      ),
+                                    ),
+                                    count: p.participation.redCards,
+                                    color: context.colors.danger,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -281,6 +405,28 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
               },
             ),
         ],
+      ],
+    );
+  }
+
+  Widget _buildStatItem({
+    required Widget icon,
+    required int count,
+    required Color color,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        icon,
+        const SizedBox(width: 4),
+        Text(
+          '$count',
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
       ],
     );
   }
