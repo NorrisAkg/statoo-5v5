@@ -112,7 +112,13 @@ test(
       const errors = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.goto(base);
-      await page.getByRole("button", {name: "Rejoindre un groupe", exact: true}).click();
+      await page
+        .getByRole("button", { name: "Passer", exact: true })
+        .waitFor({ timeout: 45000 });
+      await page.getByRole("button", { name: "Passer", exact: true }).click();
+      await page
+        .getByRole("button", { name: "Rejoindre un groupe", exact: true })
+        .click();
       await enter(page.getByRole("textbox").nth(0), admin.group_id);
       await enter(page.getByRole("textbox").nth(1), "SG");
       await enter(page.getByRole("textbox").nth(2), password);

@@ -28,11 +28,13 @@ test(
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       await page.goto(base);
-      await page.getByRole("button", {name: "Créer un groupe", exact: true}).click();
       await page
         .getByRole("button", { name: "Passer", exact: true })
         .waitFor({ timeout: 45000 });
       await page.getByRole("button", { name: "Passer", exact: true }).click();
+      await page
+        .getByRole("button", { name: "Créer un groupe", exact: true })
+        .click();
       await page.getByText("Créez votre équipe", { exact: true }).waitFor();
       await enter(page
         .getByRole("textbox", {
@@ -159,12 +161,14 @@ test(
       });
       const restoredPage = await restored.newPage();
       await restoredPage.goto(base);
-      await restoredPage.getByRole("button", {name: "Créer un groupe", exact: true}).click();
       await restoredPage
         .getByRole("button", { name: "Passer", exact: true })
         .waitFor({ timeout: 30000 });
       await restoredPage
         .getByRole("button", { name: "Passer", exact: true })
+        .click();
+      await restoredPage
+        .getByRole("button", { name: "Créer un groupe", exact: true })
         .click();
       const [chooser] = await Promise.all([
         restoredPage.waitForEvent("filechooser"),
