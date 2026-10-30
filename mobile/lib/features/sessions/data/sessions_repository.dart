@@ -6,6 +6,7 @@ import '../../../core/data/occurrence_registry.dart';
 import '../domain/goal_score_sync.dart';
 import '../domain/participation.dart';
 import '../domain/session.dart';
+import '../domain/session_close_rules.dart';
 import '../domain/session_summary.dart';
 
 abstract class SessionsRepository {
@@ -742,12 +743,74 @@ class SqliteSessionsRepository implements SessionsRepository {
     final db = await _appDatabase.database;
     final key = _activeSessionKey(teamId);
     return await db.transaction((txn) async {
+      final sessionRows = await txn.query(
+        'sessions',
+        where: 'id = ? AND team_id = ?',
+        whereArgs: [sessionId, teamId],
+        limit: 1,
+      );
+      if (sessionRows.isEmpty) return false;
+
+      final rawSession = _mapSessionRow(sessionRows.first);
+      if (rawSession.status != SessionStatus.draft) return false;
+
+      final partRows = await txn.query(
+        'participations',
+        where: 'session_id = ?',
+        whereArgs: [sessionId],
+      );
+      final parts = partRows
+          .map(
+            (r) => Participation(
+              id: r['id']! as String,
+              sessionId: r['session_id']! as String,
+              playerId: r['player_id']! as String,
+              team: _parseTeam(r['team']! as String),
+              goals: (r['goals'] as num?)?.toInt() ?? 0,
+              assists: (r['assists'] as num?)?.toInt() ?? 0,
+              yellowCards: (r['yellow_cards'] as num?)?.toInt() ?? 0,
+              redCards: (r['red_cards'] as num?)?.toInt() ?? 0,
+            ),
+          )
+          .toList();
+
+      final isTournament = rawSession.sessionType == SessionType.tournament3;
+      final effectiveResult = isTournament
+          ? (computeTournamentResult(
+                rawSession.winsA,
+                rawSession.winsB,
+                rawSession.winsC,
+              ) ??
+              rawSession.result)
+          : rawSession.result;
+      final session = rawSession.copyWith(result: effectiveResult);
+
+      final teamAParts = parts.where((p) => p.team == Team.a);
+      final teamBParts = parts.where((p) => p.team == Team.b);
+      final teamCParts = parts.where((p) => p.team == Team.c);
+      final blockers = closeBlockers(
+        session: session,
+        teamACount: teamAParts.length,
+        teamBCount: teamBParts.length,
+        teamCCount: isTournament ? teamCParts.length : null,
+        playerGoalsA: teamAParts.fold<int>(0, (s, p) => s + p.goals),
+        playerGoalsB: teamBParts.fold<int>(0, (s, p) => s + p.goals),
+        playerGoalsC: teamCParts.fold<int>(0, (s, p) => s + p.goals),
+        playerAssistsA: teamAParts.fold<int>(0, (s, p) => s + p.assists),
+        playerAssistsB: teamBParts.fold<int>(0, (s, p) => s + p.assists),
+        playerAssistsC: teamCParts.fold<int>(0, (s, p) => s + p.assists),
+        participations: parts,
+      );
+      if (blockers.isNotEmpty) return false;
+
       // A CLOSED session must carry a result, and scores (for classic) or result (for tournament).
       final updated = await txn.update(
         'sessions',
-        {'status': 'CLOSED'},
-        where:
-            "id = ? AND team_id = ? AND status = ? AND result IS NOT NULL AND ((session_type = 'TOURNAMENT_3') OR (score_a IS NOT NULL AND score_b IS NOT NULL))",
+        {
+          'status': 'CLOSED',
+          if (effectiveResult != null) 'result': _resultToString(effectiveResult),
+        },
+        where: 'id = ? AND team_id = ? AND status = ?',
         whereArgs: [sessionId, teamId, 'DRAFT'],
       );
       if (updated == 0) return false;

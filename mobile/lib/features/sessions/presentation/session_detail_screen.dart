@@ -1343,6 +1343,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       'Clôture impossible : le nombre de passes décisives dépasse le nombre de buts marqués par les joueurs.',
     CloseBlocker.selfAssist =>
       'Clôture impossible : un joueur ne peut pas se faire de passe décisive à lui-même.',
+    CloseBlocker.duplicatePlayer =>
+      'Clôture impossible : un même joueur est inscrit plusieurs fois dans la séance.',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {

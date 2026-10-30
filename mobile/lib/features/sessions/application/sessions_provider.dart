@@ -484,25 +484,21 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
-  /// Closes the session if no blocking rule applies. Returns the blockers found
-  /// (empty when closed), re-checked on fresh data rather than on what the screen showed.
-  Future<List<CloseBlocker>> closeSession(String sessionId) async {
-    final teamId = _ref.read(activeTeamIdProvider);
-    if (teamId == null) throw StateError('No active team selected');
-    await _ref
-        .read(sharedServiceProvider)
-        .requireWrite(teamId, 'sport', sessionId: sessionId);
-
-    final session = await _repo.getSession(sessionId, teamId: teamId);
-    if (session == null) {
-      throw SessionCloseException('Session $sessionId not found');
-    }
-    final participants = await _repo.getSessionParticipants(
-      sessionId,
-      teamId: teamId,
-    );
-
+  List<CloseBlocker> _evaluateCloseBlockers(
+    Session session,
+    List<SessionParticipantDetail> participants,
+  ) {
     final isTournament = session.sessionType == SessionType.tournament3;
+    final effectiveResult = isTournament
+        ? (computeTournamentResult(
+              session.winsA,
+              session.winsB,
+              session.winsC,
+            ) ??
+            session.result)
+        : session.result;
+    final effectiveSession = session.copyWith(result: effectiveResult);
+
     final teamAParts = participants.where(
       (p) => p.participation.team == Team.a,
     );
@@ -513,8 +509,8 @@ class SessionsController {
       (p) => p.participation.team == Team.c,
     );
 
-    final blockers = closeBlockers(
-      session: session,
+    return closeBlockers(
+      session: effectiveSession,
       teamACount: teamAParts.length,
       teamBCount: teamBParts.length,
       teamCCount: isTournament ? teamCParts.length : null,
@@ -544,9 +540,33 @@ class SessionsController {
       ),
       participations: participants.map((p) => p.participation),
     );
+  }
+
+  /// Closes the session if no blocking rule applies. Returns the blockers found
+  /// (empty when closed), re-checked on fresh data rather than on what the screen showed.
+  Future<List<CloseBlocker>> closeSession(String sessionId) async {
+    final teamId = _ref.read(activeTeamIdProvider);
+    if (teamId == null) throw StateError('No active team selected');
+    await _ref
+        .read(sharedServiceProvider)
+        .requireWrite(teamId, 'sport', sessionId: sessionId);
+
+    final session = await _repo.getSession(sessionId, teamId: teamId);
+    if (session == null || session.status != SessionStatus.draft) {
+      throw SessionCloseException('Session $sessionId not found or not in DRAFT');
+    }
+    final participants = await _repo.getSessionParticipants(
+      sessionId,
+      teamId: teamId,
+    );
+
+    final blockers = _evaluateCloseBlockers(session, participants);
     if (blockers.isNotEmpty) return blockers;
 
-    if (isTournament) {
+    // SqliteSessionsRepository computes and persists the tournament result
+    // atomically inside closeSession's single SQLite transaction.
+    if (_repo is! SqliteSessionsRepository &&
+        session.sessionType == SessionType.tournament3) {
       final tournamentResult = computeTournamentResult(
         session.winsA,
         session.winsB,
@@ -566,6 +586,18 @@ class SessionsController {
 
     final closed = await _repo.closeSession(sessionId, teamId: teamId);
     if (!closed) {
+      final freshSession = await _repo.getSession(sessionId, teamId: teamId);
+      if (freshSession != null && freshSession.status == SessionStatus.draft) {
+        final freshParticipants = await _repo.getSessionParticipants(
+          sessionId,
+          teamId: teamId,
+        );
+        final freshBlockers = _evaluateCloseBlockers(
+          freshSession,
+          freshParticipants,
+        );
+        if (freshBlockers.isNotEmpty) return freshBlockers;
+      }
       throw SessionCloseException('Session $sessionId could not be closed');
     }
     await _ref.read(sharedServiceProvider).queueSport(teamId, sessionId);
