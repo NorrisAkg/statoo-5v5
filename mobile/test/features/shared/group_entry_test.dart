@@ -225,7 +225,7 @@ void main() {
       if (admin) {
         await tester.tap(find.text('Ajouter un gestionnaire'));
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(DropdownButtonFormField<String>));
+        await tester.tap(find.widgetWithText(TextField, 'Membre'));
         await tester.pumpAndSettle();
         expect(find.text('Alice'), findsOneWidget);
         await tester.tap(find.text('Alice'));
@@ -299,7 +299,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Ajouter un gestionnaire'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(DropdownButtonFormField<String>));
+      await tester.tap(find.widgetWithText(TextField, 'Membre'));
       await tester.pumpAndSettle();
       expect(find.text('Alice'), findsOneWidget);
     },

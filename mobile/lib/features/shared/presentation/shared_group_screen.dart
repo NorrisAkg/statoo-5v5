@@ -10,12 +10,14 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/data/app_database.dart';
 import '../../../core/data/shared_http_error.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../finance/application/finance_providers.dart';
 import '../../onboarding/application/onboarding_provider.dart';
 import '../../players/application/players_provider.dart';
+import '../../players/domain/player.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../settings/presentation/collective_access_section.dart';
 import '../../team/application/team_provider.dart';
@@ -191,65 +193,253 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       await ref.read(playersListProvider.future);
       if (mounted) await _showAddAccount();
     } on Object catch (error) {
-      if (mounted)
+      if (mounted) {
         setState(() {
           _failed = true;
           _message = 'Impossible de charger ou créer le compte : $error';
         });
+      }
     } finally {
       _decisionOpen = false;
     }
   }
 
+  static String _normalizePlayerSearch(String input) {
+    var result = input.trim().toLowerCase();
+    const diacritics = <String, String>{
+      'à': 'a',
+      'â': 'a',
+      'ä': 'a',
+      'á': 'a',
+      'ã': 'a',
+      'é': 'e',
+      'è': 'e',
+      'ê': 'e',
+      'ë': 'e',
+      'î': 'i',
+      'ï': 'i',
+      'í': 'i',
+      'ô': 'o',
+      'ö': 'o',
+      'ó': 'o',
+      'õ': 'o',
+      'ù': 'u',
+      'û': 'u',
+      'ü': 'u',
+      'ú': 'u',
+      'ÿ': 'y',
+      'ç': 'c',
+      'ñ': 'n',
+      'œ': 'oe',
+      'æ': 'ae',
+    };
+    diacritics.forEach((accented, plain) {
+      result = result.replaceAll(accented, plain);
+    });
+    return result;
+  }
+
   Future<void> _showAddAccount() async {
+    final memberSearch = TextEditingController();
     final name = TextEditingController();
     String? nameError;
     String? requestError;
     String? createdWarning;
     var sending = false;
+    var pickerOpen = false;
     String? member;
     final roles = <String>{};
-    final players = ref.read(playersListProvider).value ?? [];
+    final players = [
+      ...(ref.read(playersListProvider).value ?? const <Player>[]),
+    ]..sort(comparePlayersAlphabetically);
     final result = await showAppFormDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, update) => PopScope(
-          canPop: !sending,
-          child: _dialog(
-            ctx,
-            title: const Text('Compte individuel et rôles'),
-            content: SizedBox(
-              width: 400,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      initialValue: member,
-                      decoration: const InputDecoration(labelText: 'Membre'),
-                      items: players
-                          .map(
-                            (p) => DropdownMenuItem(
-                              value: p.id,
-                              child: Text(p.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: sending
-                          ? null
-                          : (value) => update(() => member = value),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: name,
-                      enabled: !sending,
-                      decoration: InputDecoration(
-                        labelText: 'Identifiant',
-                        hintText: 'Ex. : alice',
-                        errorText: nameError,
+        builder: (ctx, update) {
+          final query = _normalizePlayerSearch(memberSearch.text);
+          final filteredPlayers = query.isEmpty
+              ? players
+              : players.where((p) {
+                  final nameMatch =
+                      _normalizePlayerSearch(p.name).contains(query);
+                  final nickMatch = p.nickname != null &&
+                      _normalizePlayerSearch(p.nickname!).contains(query);
+                  return nameMatch || nickMatch;
+                }).toList();
+          return PopScope(
+            canPop: !sending,
+            child: _dialog(
+              ctx,
+              title: const Text('Compte individuel et rôles'),
+              content: SizedBox(
+                width: 400,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: memberSearch,
+                        enabled: !sending,
+                        onTap: () => update(() => pickerOpen = true),
+                        onChanged: (_) => update(() {
+                          member = null;
+                          pickerOpen = true;
+                        }),
+                        onSubmitted: (_) {
+                          if (filteredPlayers.isNotEmpty) {
+                            final first = filteredPlayers.first;
+                            memberSearch.text = first.name;
+                            update(() {
+                              member = first.id;
+                              pickerOpen = false;
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Membre',
+                          hintText: 'Rechercher un joueur par nom…',
+                          prefixIcon: Icon(
+                            Remix.search_line,
+                            color: ctx.colors.foreground400,
+                            size: 20,
+                          ),
+                          suffixIcon: memberSearch.text.isNotEmpty
+                              ? IconButton(
+                                  tooltip: 'Effacer la recherche',
+                                  onPressed: sending
+                                      ? null
+                                      : () => update(() {
+                                            memberSearch.clear();
+                                            member = null;
+                                            pickerOpen = true;
+                                          }),
+                                  icon: Icon(
+                                    Remix.close_line,
+                                    color: ctx.colors.foreground400,
+                                    size: 20,
+                                  ),
+                                )
+                              : IconButton(
+                                  tooltip: pickerOpen
+                                      ? 'Masquer la liste des membres'
+                                      : 'Afficher la liste des membres',
+                                  onPressed: sending
+                                      ? null
+                                      : () =>
+                                          update(() => pickerOpen = !pickerOpen),
+                                  icon: Icon(
+                                    pickerOpen
+                                        ? Remix.arrow_up_s_line
+                                        : Remix.arrow_down_s_line,
+                                    color: ctx.colors.foreground400,
+                                    size: 20,
+                                  ),
+                                ),
+                        ),
                       ),
-                    ),
+                      if (pickerOpen) ...[
+                        const SizedBox(height: 8),
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 180),
+                          decoration: BoxDecoration(
+                            color: ctx.colors.background800,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: ctx.colors.background700),
+                          ),
+                          child: filteredPlayers.isEmpty
+                              ? ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(minHeight: 48),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Aucun joueur trouvé',
+                                        style: TextStyle(
+                                          color: ctx.colors.foreground400,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      for (final p in filteredPlayers)
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          onTap: sending
+                                              ? null
+                                              : () {
+                                                  memberSearch.text = p.name;
+                                                  update(() {
+                                                    member = p.id;
+                                                    pickerOpen = false;
+                                                  });
+                                                },
+                                          child: ConstrainedBox(
+                                            constraints: const BoxConstraints(
+                                              minHeight: 48,
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 12,
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      p.name,
+                                                      style: TextStyle(
+                                                        color: ctx
+                                                            .colors.foreground50,
+                                                        fontWeight:
+                                                            member == p.id
+                                                                ? FontWeight
+                                                                    .w600
+                                                                : FontWeight
+                                                                    .w400,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  if (member == p.id)
+                                                    Icon(
+                                                      Remix.check_line,
+                                                      color:
+                                                          ctx.colors.primary400,
+                                                      size: 18,
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                        ),
+                      ],
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: name,
+                        enabled: !sending,
+                        decoration: InputDecoration(
+                          labelText: 'Identifiant',
+                          hintText: 'Ex. : alice',
+                          errorText: nameError,
+                        ),
+                      ),
                     const SizedBox(height: 12),
                     const Text(
                       'Un mot de passe de 8 caractères sera généré automatiquement.',
@@ -358,9 +548,11 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               ),
             ],
           ),
-        ),
+        );
+        },
       ),
     );
+    memberSearch.dispose();
     name.dispose();
     if (result == true && mounted) {
       await _perform(() async {
@@ -1449,8 +1641,9 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
 
   List<Widget> _management() {
     final service = ref.watch(sharedServiceProvider);
-    if (widget.setup && service.roles.contains('ADMIN'))
+    if (widget.setup && service.roles.contains('ADMIN')) {
       return _responsibilitySetup();
+    }
     final documents =
         (service.snapshot?['documents'] as Map<String, dynamic>? ?? {}).values
             .cast<Map<String, dynamic>>()

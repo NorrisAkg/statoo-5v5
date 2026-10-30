@@ -41,8 +41,9 @@ test('GES browser: create generated manager access, copy, login, persistence and
     await page.goto(base+'#/groupe-partage');
     const add=page.getByRole('button',{name:/Ajouter un gestionnaire/});
     await visible(page,add);await add.click();
-    assert.equal(await page.getByRole('textbox').count(),1);
-    await page.getByText('Membre',{exact:true}).click();await page.keyboard.press('Home');await page.keyboard.press('Enter');
+    assert.equal(await page.getByRole('textbox').count(),2);
+    await enter(page.getByRole('textbox',{name:/Membre/}),'Ali');
+    await page.getByText('Alice',{exact:true}).last().click();
     await enter(page.getByRole('textbox',{name:/Identifiant/}),'sportqa');
     await page.getByRole('checkbox',{name:'Secrétaire général',exact:true}).check();
     await page.screenshot({path:'docs/manager-access-captures/create-light.png'});

@@ -4,11 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:statoo/core/data/app_database.dart';
 import 'package:statoo/core/theme/app_theme.dart';
+import 'package:statoo/features/players/application/players_provider.dart';
+import 'package:statoo/features/players/domain/player.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/shared/presentation/shared_group_screen.dart';
-import 'package:statoo/features/players/application/players_provider.dart';
-import 'package:statoo/features/players/domain/player.dart';
 
 class _AccountPlayers extends PlayersNotifier {
   @override
@@ -82,9 +82,12 @@ void main() {
       await container.read(playersListProvider.future);
       await tester.tap(find.text('Ajouter un gestionnaire'));
       await tester.pumpAndSettle();
-      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byType(TextField), findsNWidgets(2));
       expect(find.text('Un mot de passe de 8 caractères sera généré automatiquement.'), findsOneWidget);
-      await tester.enterText(find.byType(TextField), 'alice');
+      await tester.enterText(
+        find.widgetWithText(TextField, 'Identifiant'),
+        'alice',
+      );
       final create = find.widgetWithText(FilledButton, 'Créer');
       expect(tester.widget<FilledButton>(create).onPressed, isNull);
       expect(
@@ -94,7 +97,7 @@ void main() {
       await tester.tap(find.text('Secrétaire général').first);
       await tester.pumpAndSettle();
       expect(tester.widget<FilledButton>(create).onPressed, isNull);
-      await tester.tap(find.byType(DropdownButtonFormField<String>));
+      await tester.tap(find.widgetWithText(TextField, 'Membre'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Alice').last);
       await tester.pumpAndSettle();
