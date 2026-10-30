@@ -6,6 +6,12 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ## Stories Terminées
 
+### [PERF-01] Gestion du cycle de vie de connexion SQLite en arrière-plan — ✅ LIVRÉ (Sprint 2)
+- **En tant qu'** utilisateur mobile,  
+  **je veux** que l'application libère les verrous et mette en sommeil propre sa connexion SQLite lors du passage en arrière-plan (`AppLifecycleState.paused` / `detached`),  
+  **afin d'** éviter toute corruption de base de données ou verrouillage persistant (recommandation CDC).
+- **Points** : 3 | **Statut** : Complété (commit `0d1e1ba`)
+
 ### [PARITY-01] Typage strict des fixtures et suppression des appels dynamiques dans l'import PWA — ✅ LIVRÉ (Sprint 2)
 - **En tant que** développeur parité web-mobile,  
   **je veux** remplacer les types `dynamic` par des modèles typés dans `pwa_wire_import_test.dart`,  
@@ -32,18 +38,20 @@ Formule de priorité : $\text{Priorité} = \frac{\text{Valeur Métier} \times \t
 
 ---
 
-## Sprint 2 en Cours (3 points restants)
+## Backlog à Planifier (Sprint 3)
 
-### [PERF-01] Gestion du cycle de vie de connexion SQLite en arrière-plan
-- **En tant qu'** utilisateur mobile,  
-  **je veux** que l'application libère les verrous et mette en sommeil propre sa connexion SQLite lors du passage en arrière-plan (`AppLifecycleState.paused` / `detached`),  
-  **afin d'** éviter toute corruption de base de données ou verrouillage persistant (recommandation CDC).
-- **Critères d'acceptation** :
-  - *Given* l'application mobile en cours d'exécution avec une connexion active,
-  - *When* l'OS bascule l'application en arrière-plan (`paused`),
-  - *Then* les transactions en cours sont flushées et la connexion SQLite est mise en veille sécurisée.
-  - *When* l'application revient au premier plan (`resumed`),
-  - *Then* la connexion est instantanément réactivée sans perturber les providers Riverpod.
-- **Points** : 3
-- **Priorité** : Moyenne (Valeur 3 × Risque 4 ÷ Effort 3 = 4)
-- **Rôles mobilisés** : `test-engineer`, `implementer`, `reviewer`, `mobile`
+### [API-01] Élimination de la dépréciation Starlette httpx sur les tests API
+- **En tant que** développeur backend,  
+  **je veux** moderniser le client de test Starlette (`httpx` -> test client asynchrone / `httpx2`),  
+  **afin d'** éliminer le warning de dépréciation Starlette dans pytest.
+- **Points** : 1
+- **Priorité** : Basse (Valeur 2 × Risque 1 ÷ Effort 1 = 2)
+- **Rôles mobilisés** : `backend-api`, `reviewer`
+
+### [DOC-01] Synchronisation de la documentation d'architecture avec les flux outbox
+- **En tant que** nouveau contributeur,  
+  **je veux** une documentation à jour des mécanismes d'outbox et de retry offline,  
+  **afin de** comprendre immédiatement la tuyauterie de synchronisation mobile/web.
+- **Points** : 1
+- **Priorité** : Basse (Valeur 2 × Risque 1 ÷ Effort 1 = 2)
+- **Rôles mobilisés** : `architect`, `reviewer`
