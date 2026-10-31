@@ -24,6 +24,8 @@ import '../data/registration_operation.dart';
 import '../domain/registration_members.dart';
 import 'add_manager_bottom_sheet.dart';
 import 'decision_details.dart';
+import 'recovery_confirmation_sheet.dart';
+import 'recovery_request_sheet.dart';
 
 const roleLabels = <String, String>{
   'ADMIN': 'Admin',
@@ -219,6 +221,51 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           _message = result.warning;
         });
       }
+    }
+  }
+
+  Future<void> _openRecoveryFlow() async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.colors.background900,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        side: BorderSide(color: context.colors.background700),
+      ),
+      builder: (sheetContext) => RecoveryRequestSheet(
+        initialGroupId:
+            _group.text.trim().isNotEmpty ? _group.text.trim() : null,
+        initialUsername:
+            _user.text.trim().isNotEmpty ? _user.text.trim() : null,
+        apiUrl: _apiUrl,
+        onSuccess: (newCode) => Navigator.of(sheetContext).pop(newCode),
+      ),
+    );
+
+    if (result != null && result.isNotEmpty && mounted) {
+      await showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        isDismissible: false,
+        enableDrag: false,
+        backgroundColor: context.colors.background900,
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          side: BorderSide(color: context.colors.background700),
+        ),
+        builder: (confirmContext) => RecoveryConfirmationSheet(
+          newRecoveryCode: result,
+          onCompleted: () {
+            Navigator.of(confirmContext).pop();
+            if (widget.setup) {
+              unawaited(_finishSetup());
+            } else {
+              context.go('/');
+            }
+          },
+        ),
+      );
     }
   }
 
@@ -1233,6 +1280,17 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
             password: true,
             icon: Remix.lock_line,
           ),
+          if (!_create) ...[
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                icon: const Icon(Remix.key_line, size: 16),
+                label: const Text('Mot de passe oublié ?'),
+                onPressed: _busy ? null : _openRecoveryFlow,
+              ),
+            ),
+          ],
         ],
       ),
     ),

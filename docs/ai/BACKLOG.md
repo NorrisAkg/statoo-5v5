@@ -166,7 +166,7 @@ Toutes les stories de dette technique identifiées lors de la prise en main (Spr
 - **Priorité** : Haute (Valeur 5 × Risque 4 ÷ Effort 5 = 4)
 - **Rôles mobilisés** : `architect`, `test-engineer`, `implementer`, `mobile`, `web-parity`, `reviewer`
 
-### [ACCESS-07] Récupération d'accès depuis l'écran de connexion
+### [ACCESS-07] Récupération d'accès depuis l'écran de connexion ✅ Terminé (3 pts)
 - **En tant qu'** administrateur ayant oublié son mot de passe,  
   **je veux** utiliser mon code de secours depuis l'écran « Rejoindre »,  
   **afin de** reprendre l'administration sans support.

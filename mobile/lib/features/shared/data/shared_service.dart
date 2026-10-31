@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'collective_access_key.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
 import '../../../core/data/occurrence_registry.dart';
 import '../../../core/data/shared_http.dart';
+import 'collective_access_key.dart';
 
 class SharedService {
   SharedService(this.database, {FlutterSecureStorage? storage})
@@ -154,6 +154,85 @@ class SharedService {
       'key': 'shared_group_$groupId',
       'value': '1',
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await synchronize();
+    requireCurrentConnection();
+    startAutomaticSync();
+  }
+
+  Future<Map<String, dynamic>> recover({
+    required String url,
+    required String groupId,
+    required String username,
+    required String recoveryCode,
+    required String newPassword,
+    required String newRecoveryCode,
+  }) async {
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null ||
+        (uri.scheme != 'https' &&
+            !(uri.scheme == 'http' &&
+                ['localhost', '127.0.0.1', '10.0.2.2'].contains(uri.host)))) {
+      throw const FormatException(
+        'Utilisez une adresse HTTPS (HTTP seulement en développement local).',
+      );
+    }
+    final cleanUrl = url.trim().replaceAll(RegExp(r'/+$'), '');
+    final payload = <String, dynamic>{
+      'group_id': groupId.trim(),
+      'username': username.trim(),
+      'recovery_code': recoveryCode,
+      'new_password': newPassword,
+      'new_recovery_code': newRecoveryCode,
+    };
+    return await sendSharedRequest(
+      'POST',
+      Uri.parse('$cleanUrl/auth/recover'),
+      null,
+      payload,
+    );
+  }
+
+  Future<void> establishSession(
+    String url,
+    Map<String, dynamic> result,
+  ) async {
+    final generation = ++_connectionGeneration;
+    void requireCurrentConnection() {
+      if (generation != _connectionGeneration) {
+        throw StateError('Connexion annulée.');
+      }
+    }
+
+    baseUrl = url.trim().replaceAll(RegExp(r'/+$'), '');
+    token = result['token'] as String;
+    identity = result;
+
+    final saved = jsonEncode({
+      'identity': result,
+      'url': baseUrl,
+      'token': token,
+    });
+    await _updateConnectionStorage(() async {
+      if (generation != _connectionGeneration) return;
+      await storage.write(key: 'statoo_connection', value: saved);
+    });
+    requireCurrentConnection();
+
+    final currentGroupId = groupId;
+    if (currentGroupId != null) {
+      protectedGroups.add(currentGroupId);
+      final db = await database.database;
+      requireCurrentConnection();
+      await db.insert(
+        'meta',
+        <String, Object?>{
+          'key': 'shared_group_$currentGroupId',
+          'value': '1',
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+
     await synchronize();
     requireCurrentConnection();
     startAutomaticSync();
