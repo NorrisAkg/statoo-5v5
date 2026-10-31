@@ -103,20 +103,20 @@ Toutes les stories de dette technique identifiées lors de la prise en main (Spr
   - *Given* un mot de passe acceptable à l'inscription mais refusé à la réinitialisation (ou l'inverse), *Then* il n'existe plus d'écart : une seule politique documentée et testée.
 
 
-### [ACCESS-01] Code de secours administrateur à usage unique
+### [ACCESS-01] Code de secours administrateur à usage unique — ✅ LIVRÉ (Commit 5e86c25)
 - **En tant qu'** administrateur,  
   **je veux** un code de secours généré à l'activation du partage, utilisable une seule fois pour reprendre la main si j'oublie mon mot de passe,  
   **afin de** ne jamais bloquer mon groupe.
-- **Décision à trancher par l'`architect`** : code généré côté client et envoyé dans `Registration` (inclus dans le fingerprint, rejeu idempotent) **ou** généré côté serveur (ré-affichage impossible au rejeu).
-- **Critères d'acceptation** :
-  - *Given* une création de groupe réussie, *When* l'admin est créé, *Then* seul le **hash** du code est stocké (jamais le clair) et le code est présenté une seule fois.
-  - *Given* un `operation_id` rejoué après une coupure réseau, *When* le serveur répond, *Then* l'admin conserve un code de secours valide et connu (aucune perte, aucune duplication).
-  - *Given* un identifiant, le groupe et un code valides, *When* `POST /auth/recover` reçoit un nouveau mot de passe conforme, *Then* le mot de passe est remplacé, **tous** les jetons du compte sont révoqués, un **nouveau** code est émis, l'action est auditée.
-  - *Given* un code déjà utilisé, incorrect, ou un groupe/identifiant inconnu, *When* la récupération est tentée, *Then* 401 avec message générique (aucune fuite d'existence du compte) et la limitation de débit s'applique.
-  - *Given* un groupe existant sans code, *When* l'admin connecté demande la génération, *Then* un code est créé ; une régénération invalide l'ancien.
+- **Décision d'architecture validée** : code généré côté client et envoyé dans `Registration` (hash PBKDF2 stocké sur le serveur, rejeu idempotent via `canonical_body.pop('recovery_code', None)` si absent).
+- **Points** : 5 | **Statut** : Complété (commit `5e86c25`)
+- **Critères d'acceptation validés** :
+  - *Given* une création de groupe réussie, *When* l'admin est créé avec un code de secours, *Then* seul le **hash** PBKDF2 du code est stocké dans `admin['recovery']` (jamais le clair) et masqué dans le snapshot (`{'configured': bool, 'created_at': ...}`).
+  - *Given* un `operation_id` rejoué après une coupure réseau, *When* le serveur répond, *Then* l'admin conserve un code de secours valide et connu (aucune perte, aucune duplication, empreinte canonique préservée).
+  - *Given* un identifiant, le groupe et un code valides, *When* `POST /auth/recover` reçoit un nouveau mot de passe et un nouveau code de secours, *Then* le mot de passe est remplacé, **tous** les jetons du compte sont révoqués, le nouveau code remplace l'ancien (rotation obligatoire), un nouveau jeton Bearer est émis avec `recovery_rotated: True`, l'action est auditée `account_recovered`.
+  - *Given* un code déjà utilisé, incorrect, ou un groupe/identifiant inconnu, *When* la récupération est tentée, *Then* 401 avec message générique (aucune fuite d'existence du compte, timing constant via hash factice PBKDF2) et la limitation de débit s'applique (10/min par IP, 5/15min par compte).
+  - *Given* un groupe existant, *When* l'admin connecté demande la régénération via `PUT /groups/{id}/account/recovery-code`, *Then* son mot de passe actuel est vérifié, l'opération est idempotente et auditée.
   - *Given* le compte collectif ou un gestionnaire, *Then* aucun code de secours n'est exposé.
   - Isolation multi-tenant : un code d'un groupe ne fonctionne pas sur un autre.
-- **Points** : 5
 - **Priorité** : Haute (Valeur 5 × Risque 5 ÷ Effort 5 = 5)
 - **Rôles mobilisés** : `architect`, `test-engineer`, `implementer`, `backend-api`, `reviewer`
 
