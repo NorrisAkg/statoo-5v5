@@ -85,10 +85,9 @@ def test_responsible_individual_account_keeps_member_role(role, monkeypatch):
         admin = {'Authorization': 'Bearer ' + response.json()['token']}
         response = c.post('/groups/%2300000001/accounts', headers=admin, json={
             'username': 'responsible', 'password': PASSWORD, 'member_id': 'a', 'roles': [role]})
-        assert response.status_code == (409 if role == 'ADMIN' else 201)
-        if role != 'ADMIN':
-            assert set(response.json()['roles']) == {role, 'MEMBER'}
-            assert response.json()['member_id'] == 'a'
+        assert response.status_code == 201
+        assert set(response.json()['roles']) == {role, 'MEMBER'}
+        assert response.json()['member_id'] == 'a'
 
 
 @pytest.mark.parametrize('roles', [['UNKNOWN'], ['CENSOR', 'CENSOR']])
@@ -200,7 +199,7 @@ def test_opening_requires_approval_and_is_not_a_receipt(system):
 def test_rotation_revokes_existing_shared_sessions(system):
     c, t, _ = system
     r = c.put("/groups/%2300000001/shared-access", headers=t["admin"], json={
-      "group_id": "#00000001", "username": "members", "password": "Changed-Password"})
+      "group_id": "#00000001", "username": "members", "password": "Changed-Password-2026"})
     assert r.status_code == 200
     assert c.get("/groups/%2300000001", headers=t["members"]).status_code == 401
 

@@ -28,7 +28,8 @@ from .portal import PortalFiles
 from .security import password_hash, password_matches, token_digest
 
 ROLES = ["ADMIN", "PDT", "VP", "TR", "TGA", "SG", "SGA", "CENSOR", "MEMBER"]
-SINGULAR = set(ROLES) - {"MEMBER"}
+RESPONSIBLE = set(ROLES) - {"MEMBER"}
+SINGULAR = set(ROLES) - {"MEMBER", "ADMIN"}
 AUTHORS = {"sport": {"ADMIN", "PDT", "VP", "SG", "SGA"}, "finance": {"TR", "TGA"}}
 VALIDATION_MESSAGE = "Les données saisies sont invalides. Vérifiez les champs requis et leur format."
 RECOVERY_CODE_RE = re.compile(r"^[A-Z0-9]{16,64}$")
@@ -538,7 +539,7 @@ def create_app(url: str | None = None):
         _, group, state, actor = scoped(group_id, auth)
         require(actor, {"ADMIN"})
         roles = check_roles(body.roles)
-        if not set(roles) & SINGULAR:
+        if not set(roles) & RESPONSIBLE:
             fail(422, "Un compte individuel nécessite au moins un rôle de responsable. Les membres utilisent l’accès collectif.")
         if body.member_id not in {m["id"] for m in state["members"]}:
             fail(422, "Membre inconnu")
@@ -644,6 +645,8 @@ def create_app(url: str | None = None):
                 account["roles"] = sorted(set(account["roles"]) - occupied)
         previous = set(target["roles"])
         target["roles"] = desired
+        if "ADMIN" in previous and "ADMIN" not in desired:
+            target.pop("recovery", None)
         assigned = {r for a in state["accounts"] for r in a["roles"]}
         for role in previous & {"ADMIN", "PDT", "TR"}:
             if role not in assigned:
