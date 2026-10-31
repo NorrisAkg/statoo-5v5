@@ -120,18 +120,19 @@ Toutes les stories de dette technique identifiées lors de la prise en main (Spr
 - **Priorité** : Haute (Valeur 5 × Risque 5 ÷ Effort 5 = 5)
 - **Rôles mobilisés** : `architect`, `test-engineer`, `implementer`, `backend-api`, `reviewer`
 
-### [ACCESS-02] Co-administrateurs et réinitialisation d'un admin par un autre admin
+### [ACCESS-02] Co-administrateurs et réinitialisation d'un admin par un autre admin — ✅ LIVRÉ (Commit 25f7962)
 - **En tant qu'** administrateur,  
   **je veux** pouvoir nommer un ou plusieurs co-administrateurs capables de réinitialiser mon accès,  
   **afin que** le groupe ne dépende pas d'un seul compte ni d'un code papier.
-- **Décision à valider** : lever la contrainte « rôle singulier » pour `ADMIN` uniquement (les autres rôles de bureau restent uniques).
-- **Critères d'acceptation** :
-  - *Given* un ADMIN, *When* il attribue `ADMIN` à un second compte individuel, *Then* c'est accepté sans transfert ; les autres rôles singuliers restent refusés en double.
-  - *Given* deux ADMIN, *When* l'un réinitialise le mot de passe de l'autre, *Then* c'est accepté, les jetons de la cible sont révoqués, l'action est auditée avec l'acteur.
-  - *Given* un seul ADMIN, *When* on tente de lui retirer le rôle, *Then* 409 (dernier admin protégé, comportement actuel conservé).
+- **Décision d'architecture validée** : séparation de `RESPONSIBLE` (rôles individuels valides) et `SINGULAR` (rôles de bureau à unicité stricte, excluant `ADMIN`).
+- **Points** : 3 | **Statut** : Complété (commit `25f7962`)
+- **Critères d'acceptation validés** :
+  - *Given* un ADMIN, *When* il attribue `ADMIN` à un second compte individuel (via `POST /groups/{id}/accounts` ou `PUT /groups/{id}/accounts/{id}/roles`), *Then* c'est accepté sans transfert forcé ; les autres rôles singuliers restent refusés en double (409).
+  - *Given* deux ADMIN, *When* l'un réinitialise le mot de passe de l'autre via `POST /groups/{id}/accounts/{id}/password`, *Then* c'est accepté (200), les jetons de la cible sont révoqués, l'action est auditée `manager_password_reset` avec l'acteur.
+  - *Given* un seul ADMIN, *When* on tente de lui retirer le rôle, *Then* 409 (dernier admin protégé, `Transférez le rôle obligatoire avant de le retirer`).
   - *Given* un non-ADMIN (PDT, VP, TR…), *When* il tente de nommer ou réinitialiser un admin, *Then* 403.
-  - Aucune régression sur `ready()` (rôles obligatoires ADMIN/PDT/TR) ni sur les 406 tests backend.
-- **Points** : 3
+  - Nettoyage automatique : retrait du rôle `ADMIN` supprime la configuration de code de secours du compte.
+  - Aucune régression sur `ready()` ni sur la suite de tests backend.
 - **Priorité** : Moyenne (Valeur 3 × Risque 3 ÷ Effort 3 = 3)
 - **Rôles mobilisés** : `architect`, `test-engineer`, `implementer`, `backend-api`, `reviewer`
 
