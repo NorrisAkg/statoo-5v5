@@ -31,6 +31,15 @@ ROLES = ["ADMIN", "PDT", "VP", "TR", "TGA", "SG", "SGA", "CENSOR", "MEMBER"]
 SINGULAR = set(ROLES) - {"MEMBER"}
 AUTHORS = {"sport": {"ADMIN", "PDT", "VP", "SG", "SGA"}, "finance": {"TR", "TGA"}}
 VALIDATION_MESSAGE = "Les données saisies sont invalides. Vérifiez les champs requis et leur format."
+RECOVERY_CODE_RE = re.compile(r"^[A-Z0-9]{16,64}$")
+DUMMY_RECOVERY_HASH = password_hash("DUMMY-RECOVERY-CODE-1234")
+
+
+def normalize_recovery_code(code: str) -> str:
+    cleaned = re.sub(r"[\s-]", "", code or "").upper()
+    if not RECOVERY_CODE_RE.match(cleaned):
+        raise ValueError("Code de secours invalide (16 à 64 caractères alphanumériques)")
+    return cleaned
 
 
 class SharedPasswordCheck(BaseModel):
@@ -40,6 +49,26 @@ class SharedPasswordCheck(BaseModel):
 class PasswordChange(BaseModel):
     current_password: str = Field(min_length=1, max_length=200)
     new_password: str = Field(min_length=1, max_length=200)
+
+
+class RecoverInput(BaseModel):
+    group_id: str = Field(min_length=1, max_length=100)
+    username: str = Field(min_length=1, max_length=100)
+    recovery_code: str = Field(min_length=1, max_length=100)
+    new_password: str = Field(min_length=1, max_length=200)
+    new_recovery_code: str = Field(min_length=1, max_length=100)
+
+    @field_validator('username')
+    @classmethod
+    def non_blank_username(cls, value):
+        if not value.strip():
+            raise ValueError('Identifiant requis')
+        return value
+
+
+class RecoveryRegenerate(BaseModel):
+    current_password: str = Field(min_length=1, max_length=200)
+    recovery_code: str = Field(min_length=1, max_length=100)
 
 
 class Credentials(BaseModel):
@@ -68,7 +97,15 @@ class Registration(Credentials):
         return value.strip() if isinstance(value, str) else value
     shared_username: str = Field(min_length=1, max_length=100)
     shared_password: str = Field(min_length=8, max_length=200)
+    recovery_code: str | None = Field(default=None, max_length=100)
     members: list[dict] = Field(default_factory=list, max_length=1000)
+
+    @field_validator('recovery_code')
+    @classmethod
+    def validate_recovery_code(cls, value):
+        if value is not None:
+            normalize_recovery_code(value)
+        return value
 
     @field_validator('shared_username')
     @classmethod
@@ -148,6 +185,13 @@ class OpeningApproval(BaseModel):
 
 def fail(code, message):
     raise HTTPException(code, message)
+
+
+def clean_recovery_code(code: str) -> str:
+    try:
+        return normalize_recovery_code(code)
+    except ValueError as e:
+        fail(422, str(e))
 
 
 def validate_user_password(password: str, username: str | None = None):
@@ -239,6 +283,8 @@ def create_app(url: str | None = None):
     lock = threading.Lock()
     attempts = {}
     password_change_attempts = {}
+    recover_ip_attempts = {}
+    recover_account_attempts = {}
 
     def throttle(bucket, key, limit, window=60.0):
         now = time.monotonic()
@@ -302,6 +348,8 @@ def create_app(url: str | None = None):
     @app.post("/groups", status_code=201)
     def register(body: Registration, session: Session = Depends(db)):
         canonical_body = body.model_dump(exclude={'operation_id', 'group_id'})
+        if canonical_body.get('recovery_code') is None:
+            canonical_body.pop('recovery_code', None)
         # Preserve fingerprints of attempts started before short names existed.
         if not canonical_body['short_name']:
             canonical_body.pop('short_name')
@@ -331,13 +379,23 @@ def create_app(url: str | None = None):
             fail(422, "Identifiants de membres invalides")
         if None in ids or len(set(ids)) != len(ids) or any(not m.get("name") for m in body.members):
             fail(422, "Membres invalides")
+        norm_recovery_code = None
+        if body.recovery_code is not None:
+            norm_recovery_code = clean_recovery_code(body.recovery_code)
         admin = {"id": str(uuid.uuid4()), "username": body.username.strip(), "password": password_hash(body.password),
                  "roles": ["ADMIN", "MEMBER"], "member_id": None, "shared": False}
+        if norm_recovery_code:
+            admin["recovery"] = {
+                "hash": password_hash(norm_recovery_code),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
         shared = {"id": str(uuid.uuid4()), "username": body.shared_username.strip(),
                   "password": password_hash(body.shared_password), "roles": ["MEMBER"], "member_id": None, "shared": True}
         state = {"name": body.name, "short_name": body.short_name, "roles": ROLES, "accounts": [admin, shared],
                     "members": body.members, "documents": {}, "operations": {}, "audit": [], "opening": None,
                     "opening_proposal": None, "obligations": {}}
+        if norm_recovery_code:
+            audit(state, admin, "recovery_code_created")
         for _ in range(20):
             group_id = f"#{secrets.randbelow(100_000_000):08d}"
             if session.get(Group, group_id):
@@ -381,6 +439,69 @@ def create_app(url: str | None = None):
         session.delete(session.get(Token, token_digest(authorization[7:])))
         return {"ok": True}
 
+    @app.post("/auth/recover")
+    def recover(body: RecoverInput, request: Request, session: Session = Depends(db)):
+        client_ip = request.client.host if request.client else "unknown"
+        account_key = f"{body.group_id.strip()}:{body.username.strip().casefold()}"
+        now = time.monotonic()
+
+        ip_hits = [t for t in recover_ip_attempts.get(client_ip, []) if now - t < 60.0]
+        if len(ip_hits) >= 10:
+            recover_ip_attempts[client_ip] = ip_hits
+            fail(429, "Trop de tentatives de récupération. Veuillez patienter.")
+
+        acc_hits = [t for t in recover_account_attempts.get(account_key, []) if now - t < 900.0]
+        if len(acc_hits) >= 5:
+            recover_account_attempts[account_key] = acc_hits
+            fail(429, "Trop de tentatives pour ce compte. Réessayez plus tard.")
+
+        validate_user_password(body.new_password, username=body.username)
+        norm_code = clean_recovery_code(body.recovery_code)
+        norm_new_code = clean_recovery_code(body.new_recovery_code)
+        if norm_code == norm_new_code:
+            fail(422, "Le nouveau code de secours doit être différent de l'actuel")
+
+        def record_failure_and_fail():
+            now_fail = time.monotonic()
+            recover_ip_attempts[client_ip] = [t for t in recover_ip_attempts.get(client_ip, []) if now_fail - t < 60.0] + [now_fail]
+            recover_account_attempts[account_key] = [t for t in recover_account_attempts.get(account_key, []) if now_fail - t < 900.0] + [now_fail]
+            fail(401, "Récupération impossible. Vérifiez vos informations.")
+
+        group = session.scalar(select(Group).where(Group.id == body.group_id.strip()).with_for_update())
+        if group is None:
+            password_matches(norm_code, DUMMY_RECOVERY_HASH)
+            record_failure_and_fail()
+
+        state = copy.deepcopy(group.state)
+        account = next((a for a in state["accounts"] if a["username"].strip().casefold() == body.username.strip().casefold()), None)
+        if (
+            account is None
+            or account.get("shared")
+            or "ADMIN" not in account.get("roles", [])
+            or "recovery" not in account
+            or not account["recovery"].get("hash")
+        ):
+            password_matches(norm_code, DUMMY_RECOVERY_HASH)
+            record_failure_and_fail()
+
+        if not password_matches(norm_code, account["recovery"]["hash"]):
+            record_failure_and_fail()
+
+        target_account = next(a for a in state["accounts"] if a["id"] == account["id"])
+        target_account["password"] = password_hash(body.new_password)
+        target_account["recovery"] = {
+            "hash": password_hash(norm_new_code),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        for token in session.scalars(select(Token).where(Token.group_id == group.id, Token.account_id == account["id"])):
+            session.delete(token)
+        audit(state, target_account, "account_recovered")
+        group.state = state
+        recover_account_attempts[account_key] = []
+        result = issue(session, group, target_account)
+        result["recovery_rotated"] = True
+        return result
+
     @app.get("/groups/{group_id}")
     def snapshot(group_id: str, auth=Depends(authenticate)):
         _, group, state, account = scoped(group_id, auth)
@@ -400,6 +521,12 @@ def create_app(url: str | None = None):
                 doc["candidates"] = []
         if "ADMIN" in account["roles"]:
             result["accounts"] = [public_account(a) for a in state["accounts"]]
+            if not account["shared"]:
+                recovery_info = account.get("recovery")
+                result["recovery"] = {
+                    "configured": bool(recovery_info and "hash" in recovery_info),
+                    "created_at": recovery_info.get("created_at") if recovery_info else None,
+                }
         if set(account["roles"]) & {"PDT", "VP", "TR", "TGA"}:
             result["opening_proposal"] = state["opening_proposal"]
         points = financial_points(state)
@@ -480,6 +607,26 @@ def create_app(url: str | None = None):
         audit(state, actor, 'password_changed')
         group.state = state
         return {'ok': True}
+
+    @app.put('/groups/{group_id}/account/recovery-code')
+    def regenerate_recovery_code(group_id: str, body: RecoveryRegenerate, auth=Depends(authenticate)):
+        session, group, state, account = scoped(group_id, auth)
+        if account.get('shared') or "ADMIN" not in account.get("roles", []):
+            fail(403, "Droit insuffisant")
+        if not password_matches(body.current_password, account["password"]):
+            fail(400, "Mot de passe actuel incorrect")
+        norm_code = clean_recovery_code(body.recovery_code)
+        target_account = next(a for a in state["accounts"] if a["id"] == account["id"])
+        current_recovery = target_account.get("recovery")
+        if current_recovery and password_matches(norm_code, current_recovery.get("hash", "")):
+            return {"ok": True}
+        target_account["recovery"] = {
+            "hash": password_hash(norm_code),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        audit(state, account, "recovery_code_regenerated")
+        group.state = state
+        return {"ok": True}
 
     @app.put("/groups/{group_id}/accounts/{account_id}/roles")
     def roles(group_id: str, account_id: str, body: RoleInput, auth=Depends(authenticate)):

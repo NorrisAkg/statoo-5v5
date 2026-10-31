@@ -10,7 +10,7 @@ def test_registration_retry_returns_same_group_and_rejects_changed_request():
         second = c.post('/groups', json=body)
         assert second.status_code == 201
         assert second.json()['group_id'] == first.json()['group_id']
-        for change in [{'password': 'Changed-Password'}, {'name': 'Changed'}, {'members': []}]:
+        for change in [{'password': 'Changed-Password-2026'}, {'name': 'Changed'}, {'members': []}]:
             rejected = c.post('/groups', json={**body, **change})
             assert rejected.status_code == 409
             assert 'token' not in rejected.json()

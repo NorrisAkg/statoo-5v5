@@ -4,8 +4,8 @@ from urllib.parse import quote
 from fastapi.testclient import TestClient
 from app.main import create_app
 
-BODY = {'name': 'Test', 'username': 'admin', 'password': 'Test-Password',
-        'shared_username': 'members', 'shared_password': 'Members-Password',
+BODY = {'name': 'Test', 'username': 'admin', 'password': 'Test-Password-2026',
+        'shared_username': 'members', 'shared_password': 'Members-Password-2026',
         'members': [{'id': 'a', 'name': 'Alice'}]}
 
 
