@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/home/presentation/home_screen.dart';
+import 'package:statoo/features/home/presentation/home_session_result.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
@@ -52,6 +54,8 @@ SessionParticipantDetail player(
 );
 
 Finder block(Team team) => find.byKey(ValueKey('home-team-${team.name}'));
+Finder scorerRow(Team team, String name) =>
+    find.byKey(ValueKey('home-scorer-${team.name}-$name'));
 Finder inside(Team team, String text) =>
     find.descendant(of: block(team), matching: find.text(text));
 
@@ -108,15 +112,45 @@ void main() {
           () => game(active: active, tournament: tournament),
           (_) async => [
             player('Karim', Team.a, 3),
+            player('Lucas', Team.a, 1),
             player('Amine', Team.b, 2),
             player('Samir', Team.c, 4),
           ],
         );
         expect(inside(Team.a, 'Karim'), findsOneWidget);
-        expect(inside(Team.a, '3 buts'), findsOneWidget);
+        expect(inside(Team.a, 'Lucas'), findsOneWidget);
+        expect(inside(Team.a, 'x3'), findsOneWidget);
+        expect(find.text('1 but'), findsNothing);
+        expect(find.text('2 buts'), findsNothing);
+        expect(find.text('3 buts'), findsNothing);
+        expect(find.text('x1'), findsNothing);
+        expect(find.text('x2'), findsNothing);
+
+        // 1 goal -> 1 ball icon, no multiplier text
+        final lucasBalls = find.descendant(
+          of: scorerRow(Team.a, 'Lucas'),
+          matching: find.byIcon(Remix.football_fill),
+        );
+        expect(lucasBalls, findsOneWidget);
+
+        // 3 goals -> 1 ball icon + 'x3'
+        final karimBalls = find.descendant(
+          of: scorerRow(Team.a, 'Karim'),
+          matching: find.byIcon(Remix.football_fill),
+        );
+        expect(karimBalls, findsOneWidget);
+
+        // 2 goals -> 2 ball icons, no multiplier text
         expect(inside(Team.b, 'Amine'), findsOneWidget);
+        final amineBalls = find.descendant(
+          of: scorerRow(Team.b, 'Amine'),
+          matching: find.byIcon(Remix.football_fill),
+        );
+        expect(amineBalls, findsNWidgets(2));
+
         if (tournament) {
           expect(inside(Team.c, 'Samir'), findsOneWidget);
+          expect(inside(Team.c, 'x4'), findsOneWidget);
           expect(inside(Team.c, '2 V'), findsOneWidget);
           expect(
             tester.getTopLeft(block(Team.a)).dy,
@@ -135,18 +169,57 @@ void main() {
           );
         } else {
           expect(find.text('Samir'), findsNothing);
-          expect(inside(Team.a, '5'), findsOneWidget);
-          expect(inside(Team.b, '2'), findsOneWidget);
+          // Classic mode: centered scoreboard between Team A and Team B
+          final resultCard = find.byType(HomeSessionResult);
+          final score5 = find.descendant(
+            of: resultCard,
+            matching: find.text('5'),
+          );
+          final score2 = find.descendant(
+            of: resultCard,
+            matching: find.text('2'),
+          );
+          expect(score5, findsOneWidget);
+          expect(score2, findsOneWidget);
+
+          final teamAName = find.descendant(
+            of: resultCard,
+            matching: find.text('Racing Atlas'),
+          );
+          final teamBName = find.descendant(
+            of: resultCard,
+            matching: find.text('Union des Cèdres'),
+          );
+          expect(teamAName, findsOneWidget);
+          expect(teamBName, findsOneWidget);
+          // Team shields like on session detail screen
+          expect(
+            find.descendant(
+              of: resultCard,
+              matching: find.byIcon(Remix.shield_fill),
+            ),
+            findsNWidgets(2),
+          );
+          // Score is horizontally centered between Team A identity and Team B identity
+          expect(
+            tester.getCenter(teamAName).dx,
+            lessThan(tester.getCenter(score5).dx),
+          );
+          expect(
+            tester.getCenter(score2).dx,
+            lessThan(tester.getCenter(teamBName).dx),
+          );
         }
-        if (active)
+        if (active) {
           expect(find.text('Reprendre le match en direct'), findsOneWidget);
+        }
         expect(tester.takeException(), isNull);
       });
     }
   }
 
   testWidgets(
-    'BUT-04/05/06/07 session isolation, sorting, empty and unassigned',
+    'BUT-04/05/06/07 session isolation, sorting, empty without placeholder text and unassigned',
     (tester) async {
       await mount(
         tester,
@@ -169,10 +242,15 @@ void main() {
         tester.getTopLeft(find.text('Amine')).dy,
         lessThan(tester.getTopLeft(find.text('Zaki')).dy),
       );
-      expect(inside(Team.b, 'Aucun but enregistré'), findsOneWidget);
+      // "Aucun but enregistré" must never appear
+      expect(find.text('Aucun but enregistré'), findsNothing);
       expect(inside(Team.c, 'Non attribués'), findsOneWidget);
-      expect(inside(Team.c, '2 buts'), findsOneWidget);
-      expect(inside(Team.c, 'Aucun but enregistré'), findsNothing);
+      final unassignedBalls = find.descendant(
+        of: scorerRow(Team.c, 'Non attribués'),
+        matching: find.byIcon(Remix.football_fill),
+      );
+      expect(unassignedBalls, findsNWidgets(2));
+      expect(find.text('2 buts'), findsNothing);
     },
   );
 
@@ -203,22 +281,99 @@ void main() {
     );
   }
 
-  testWidgets('BUT-09 loading does not claim no goals', (tester) async {
-    final pending = Completer<List<SessionParticipantDetail>>();
-    await mount(tester, () => game(), (_) => pending.future);
-    expect(find.text('Chargement des buteurs…'), findsOneWidget);
-    expect(find.text('Aucun but enregistré'), findsNothing);
-    pending.complete([]);
-    await tester.pumpAndSettle();
-    expect(find.text('Aucun but enregistré'), findsNWidgets(2));
-  });
+  testWidgets(
+    'BUT-08b HomeSessionResult classic mode fits at 320px with 1.5x text scale and long team/player names',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 900);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final s = Session(
+        id: 's-long',
+        playedAt: DateTime(2026, 11, 6),
+        teamNames: const {
+          'A': 'Olympique de la Plaine',
+          'B': 'Olympique Saint-Roch',
+        },
+        scoreA: 12,
+        scoreB: 10,
+      );
+      final container = ProviderContainer(
+        overrides: [
+          sessionParticipantsProvider.overrideWith(
+            (ref, id) async => [
+              player(
+                'Alexandre Benali au nom très long',
+                Team.a,
+                1,
+                sessionId: 's-long',
+              ),
+              player(
+                'Souleymane Diallo au nom très long',
+                Team.a,
+                2,
+                sessionId: 's-long',
+              ),
+              player(
+                'Maximilien Koulibaly au nom très long',
+                Team.b,
+                4,
+                sessionId: 's-long',
+              ),
+            ],
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            builder: (context, child) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: const TextScaler.linear(1.5),
+              ),
+              child: child!,
+            ),
+            home: Scaffold(
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: HomeSessionResult(session: s),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Olympique de la Plaine'), findsOneWidget);
+      expect(find.text('Olympique Saint-Roch'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('10'), findsOneWidget);
+      expect(find.text('x4'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'BUT-09 loading does not claim no goals and empty session hides empty text',
+    (tester) async {
+      final pending = Completer<List<SessionParticipantDetail>>();
+      await mount(tester, game, (_) => pending.future);
+      expect(find.text('Chargement des buteurs…'), findsOneWidget);
+      expect(find.text('Aucun but enregistré'), findsNothing);
+      pending.complete([]);
+      await tester.pumpAndSettle();
+      expect(find.text('Aucun but enregistré'), findsNothing);
+    },
+  );
 
   testWidgets(
     'BUT-10 failure preserves score and indicates unavailable scorers',
     (tester) async {
       await mount(
         tester,
-        () => game(),
+        game,
         (_) async => throw StateError('unavailable'),
       );
       expect(find.text('Buteurs indisponibles'), findsOneWidget);
@@ -228,7 +383,7 @@ void main() {
     },
   );
 
-  testWidgets('BUT-11/12 updates scorers and discards previous session', (
+  testWidgets('BUT-11/12 updates scorers (1 -> 2 -> 3 balls) and discards previous session', (
     tester,
   ) async {
     var current = game();
@@ -240,11 +395,41 @@ void main() {
         player(id == 's' ? 'Karim' : 'Samir', Team.a, goals, sessionId: id),
       ],
     );
-    expect(find.text('1 but'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: scorerRow(Team.a, 'Karim'),
+        matching: find.byIcon(Remix.football_fill),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('1 but'), findsNothing);
+
+    goals = 2;
+    container.invalidate(sessionParticipantsProvider('s'));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: scorerRow(Team.a, 'Karim'),
+        matching: find.byIcon(Remix.football_fill),
+      ),
+      findsNWidgets(2),
+    );
+    expect(find.text('2 buts'), findsNothing);
+    expect(find.text('x2'), findsNothing);
+
     goals = 3;
     container.invalidate(sessionParticipantsProvider('s'));
     await tester.pumpAndSettle();
-    expect(find.text('3 buts'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: scorerRow(Team.a, 'Karim'),
+        matching: find.byIcon(Remix.football_fill),
+      ),
+      findsOneWidget,
+    );
+    expect(inside(Team.a, 'x3'), findsOneWidget);
+    expect(find.text('3 buts'), findsNothing);
+
     current = game(id: 'next');
     container.invalidate(allSessionsProvider);
     await tester.pumpAndSettle();
