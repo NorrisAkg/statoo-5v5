@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:statoo/core/theme/app_theme.dart';
+import 'package:statoo/core/widgets/initial_avatar.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
@@ -208,6 +209,28 @@ void main() {
       expect(find.byType(PlayerDisciplineSheet), findsNothing);
       // A ouvert le dialog But avec étape de passe pour Karim
       expect(find.text('Qui lui a fait la passe ?'), findsOneWidget);
+    });
+
+    testWidgets('PANEL-05: Chaque joueur affiche son InitialAvatar devant son nom', (tester) async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      final controller = _MockSessionsController(container.read(_refProvider));
+
+      await tester.pumpWidget(
+        _buildPanelHarness(
+          session: testSession,
+          players: testPlayers,
+          controller: controller,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Vérifie que les avatars de Karim ('K') et Youssef ('Y') sont présents
+      final avatars = find.byType(InitialAvatar);
+      expect(avatars, findsNWidgets(2));
+
+      expect(find.widgetWithText(InitialAvatar, 'K'), findsOneWidget);
+      expect(find.widgetWithText(InitialAvatar, 'Y'), findsOneWidget);
     });
   });
 }

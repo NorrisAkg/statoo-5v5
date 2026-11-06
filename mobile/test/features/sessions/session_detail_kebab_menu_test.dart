@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:statoo/core/theme/app_colors.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/core/widgets/primary_button.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
@@ -190,7 +191,7 @@ void main() {
       expect(find.byTooltip('Options de la séance'), findsOneWidget);
     });
 
-    testWidgets("1.2 : L'ouverture du menu kebab affiche les 4 entrées attendues", (tester) async {
+    testWidgets("1.2 : L'ouverture du menu kebab affiche les 4 entrées attendues avec leurs icônes visibles", (tester) async {
       final repo = _FakeSessionDetailRepository(session: activeDraftSession, participants: testParticipants);
       await tester.pumpWidget(createWidget(repo: repo));
       await tester.pumpAndSettle();
@@ -203,6 +204,36 @@ void main() {
       expect(find.text('Point financier'), findsOneWidget);
       expect(find.text('Faits de jeu'), findsOneWidget);
       expect(find.text('Suppression'), findsOneWidget);
+
+      final checkIcon = tester.widget<Icon>(find.byIcon(Remix.check_line));
+      final walletIcon = tester.widget<Icon>(find.byIcon(Remix.wallet_line));
+      final fileListIcon = tester.widget<Icon>(find.byIcon(Remix.file_list_line));
+      final deleteIcon = tester.widget<Icon>(find.byIcon(Remix.delete_bin_line));
+
+      expect(checkIcon.color, AppColors.dark.foreground50);
+      expect(walletIcon.color, AppColors.dark.foreground50);
+      expect(fileListIcon.color, AppColors.dark.foreground50);
+      expect(deleteIcon.color, AppColors.dark.danger);
+    });
+
+    testWidgets('1.2 bis : En thème clair, les icônes du kebab sont bien contrastées (foreground50 clair)', (tester) async {
+      final repo = _FakeSessionDetailRepository(session: activeDraftSession, participants: testParticipants);
+      await tester.pumpWidget(createWidget(repo: repo, theme: AppTheme.lightTheme));
+      await tester.pumpAndSettle();
+
+      final kebabButton = find.byTooltip('Options de la séance');
+      await tester.tap(kebabButton.evaluate().isNotEmpty ? kebabButton : find.byIcon(Remix.more_2_fill));
+      await tester.pumpAndSettle();
+
+      final checkIcon = tester.widget<Icon>(find.byIcon(Remix.check_line));
+      final walletIcon = tester.widget<Icon>(find.byIcon(Remix.wallet_line));
+      final fileListIcon = tester.widget<Icon>(find.byIcon(Remix.file_list_line));
+      final deleteIcon = tester.widget<Icon>(find.byIcon(Remix.delete_bin_line));
+
+      expect(checkIcon.color, AppColors.light.foreground50);
+      expect(walletIcon.color, AppColors.light.foreground50);
+      expect(fileListIcon.color, AppColors.light.foreground50);
+      expect(deleteIcon.color, AppColors.light.danger);
     });
 
     testWidgets("1.3 : Sur séance fermée, le menu kebab est également présent dans l'AppBar", (tester) async {

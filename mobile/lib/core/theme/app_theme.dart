@@ -51,6 +51,11 @@ class AppTheme {
           fontWeight: FontWeight.w600,
         ),
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: colors.background900,
+        surfaceTintColor: Colors.transparent,
+        iconColor: colors.foreground50,
+      ),
       extensions: [colors],
       textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).copyWith(
         titleLarge: GoogleFonts.poppins(color: colors.foreground50, fontSize: 22, fontWeight: FontWeight.bold),
@@ -74,7 +79,6 @@ class AppTheme {
         secondary: colors.secondary500,
         surface: colors.background900,
         error: colors.danger,
-        onPrimary: Colors.white,
         onSurface: colors.foreground50,
       ),
       appBarTheme: AppBarTheme(
@@ -92,6 +96,11 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.w600,
         ),
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: colors.background900,
+        surfaceTintColor: Colors.transparent,
+        iconColor: colors.foreground50,
       ),
       extensions: [colors],
       textTheme: GoogleFonts.poppinsTextTheme(base.textTheme).copyWith(

@@ -251,15 +251,26 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                           onTap: writable ? () => _openDisciplineSheet(p) : null,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                Text(
-                                  p.playerName,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                InitialAvatar(
+                                  initial: p.playerName.trim().isNotEmpty
+                                      ? p.playerName.trim()[0]
+                                      : '?',
+                                  baseColor:
+                                      InitialAvatar.colorForName(p.playerName),
                                 ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        p.playerName,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                 const SizedBox(height: 3),
                                 Semantics(
                                   label:
@@ -319,9 +330,12 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      if (widget.editable)
+                    ),
+                  ),
+                ),
+                if (widget.editable)
                         IconButton(
                           tooltip: 'Ajouter un but pour ${p.playerName}',
                           onPressed: writable
