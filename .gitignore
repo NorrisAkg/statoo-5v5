@@ -1,4 +1,5 @@
 # Monorepo artifacts and secrets
+*.apk
 .dart_tool/
 build/
 .flutter-plugins-dependencies

@@ -10,9 +10,12 @@ import { join, relative, resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
+const projectRoot = resolve(fileURLToPath(import.meta.url), "../..");
+
 export function packageUniversal({
   build = "mobile/build/web",
   legacy = "web/dist",
+  landing = resolve(projectRoot, "web/landing.html"),
   output = "web/universal-dist",
 } = {}) {
   for (const file of [
@@ -29,6 +32,14 @@ export function packageUniversal({
   cpSync(build, output, { recursive: true });
   if (existsSync(legacy))
     cpSync(legacy, join(output, "portal"), { recursive: true });
+  if (existsSync(landing))
+    cpSync(landing, join(output, "landing.html"));
+  const logoSource = resolve(projectRoot, "web/icons/logo-transparent.png");
+  const logoTarget = join(output, "icons/logo-transparent.png");
+  if (existsSync(logoSource) && !existsSync(logoTarget)) {
+    mkdirSync(join(output, "icons"), { recursive: true });
+    cpSync(logoSource, logoTarget);
+  }
   const files = [];
   const hash = createHash("sha256");
   function visit(directory) {
@@ -43,6 +54,17 @@ export function packageUniversal({
     }
   }
   visit(build);
+  if (existsSync(join(output, "landing.html")) && !files.includes("landing.html")) {
+    files.push("landing.html");
+    hash.update(readFileSync(join(output, "landing.html")));
+  }
+  if (
+    existsSync(join(output, "icons/logo-transparent.png")) &&
+    !files.includes("icons/logo-transparent.png")
+  ) {
+    files.push("icons/logo-transparent.png");
+    hash.update(readFileSync(join(output, "icons/logo-transparent.png")));
+  }
   const version = hash.digest("hex").slice(0, 16);
   const worker = `const CACHE='statoo-universal:${version}';
 const ROOT=self.registration.scope;
@@ -51,7 +73,23 @@ const ALLOWED=new Set(FILES.map(f=>new URL(f,ROOT).href));
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([...ALLOWED].map(url=>new Request(url,{cache:'reload'}))))));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k.startsWith('statoo-universal:')&&k!==CACHE)await caches.delete(k);await self.clients.claim();})()));
 self.addEventListener('message',e=>{if(e.data?.type==='SKIP_WAITING')self.skipWaiting();});
-self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET'||r.headers.has('Authorization'))return;const u=new URL(r.url);if(r.mode==='navigate'&&u.href===ROOT){e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',ROOT).href)));return;}if(!ALLOWED.has(u.href))return;e.respondWith(caches.open(CACHE).then(async c=>(await c.match(r))||fetch(r)));});
+self.addEventListener('fetch',e=>{
+  const r=e.request;
+  if(r.method!=='GET'||r.headers.has('Authorization'))return;
+  const u=new URL(r.url);
+  if(r.mode==='navigate'){
+    if(u.pathname==='/app'||u.pathname.startsWith('/app/')){
+      e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',ROOT).href)));
+      return;
+    }
+    if(u.pathname==='/'||u.pathname==='/telecharger'||u.pathname==='/landing.html'){
+      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('landing.html',ROOT).href))||fetch(r)));
+      return;
+    }
+  }
+  if(!ALLOWED.has(u.href))return;
+  e.respondWith(caches.open(CACHE).then(async c=>(await c.match(r))||fetch(r)));
+});
 `;
   writeFileSync(join(output, "sw.js"), worker);
   return { version, assets: files.length, output };

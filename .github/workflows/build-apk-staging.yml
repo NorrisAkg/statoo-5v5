@@ -1,0 +1,78 @@
+name: Build & Release APK (Staging)
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build & Publish APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.5'
+          cache: true
+          cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:'
+
+      - name: Install dependencies & generate code
+        working-directory: mobile
+        run: |
+          flutter config --no-analytics
+          flutter pub get
+          dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build Android APK (Release)
+        working-directory: mobile
+        run: flutter build apk --release
+
+      - name: Prepare APK artifact
+        run: |
+          mkdir -p dist
+          cp mobile/build/app/outputs/flutter-apk/app-release.apk dist/statoo.apk
+
+      - name: Upload APK to workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: statoo-apk
+          path: dist/statoo.apk
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: staging-v${{ github.run_number }}
+          name: "Statoo Staging · Build #${{ github.run_number }}"
+          body: |
+            ### ⚽ Statoo 5v5 — Version Staging Build #${{ github.run_number }}
+            
+            - **Commit** : `${{ github.sha }}`
+            - **Branche** : `${{ github.ref_name }}`
+            - **Déclencheur** : `${{ github.event_name }}`
+            
+            #### 📥 Téléchargement direct :
+            Téléchargez le fichier `statoo.apk` ci-dessous pour installer l'application sur votre smartphone Android.
+            
+            Le lien permanent de téléchargement de la dernière version reste :
+            `https://github.com/${{ github.repository }}/releases/latest/download/statoo.apk`
+          files: dist/statoo.apk
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
