@@ -283,8 +283,11 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
 
                 Text(
                   'Nom court (facultatif)',
-                  style: Theme.of(context).textTheme.bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: context.colors.foreground200,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Semantics(
@@ -292,12 +295,49 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                   child: TextFormField(
                     controller: _shortNameController,
                     maxLength: 30,
-                    decoration: const InputDecoration(hintText: 'Ex. : LI'),
+                    style: TextStyle(color: context.colors.foreground50),
+                    decoration: InputDecoration(
+                      hintText: 'Ex. : LI',
+                      hintStyle: TextStyle(color: context.colors.foreground600),
+                      prefixIcon: Icon(
+                        Remix.font_size_2,
+                        color: context.colors.primary400,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: context.colors.background900,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.primary500,
+                          width: 2,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Text(
                   'Initiales ou surnom ; sinon, le nom complet sera utilisé.',
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: context.colors.foreground400,
+                  ),
                 ),
                 const SizedBox(height: 24),
 

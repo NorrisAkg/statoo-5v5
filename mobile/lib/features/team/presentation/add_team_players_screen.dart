@@ -27,6 +27,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _nameFocusNode = FocusNode();
+  final _rosterScrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
   bool _isAdding = false;
 
@@ -35,6 +36,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
     _nameController.dispose();
     _nicknameController.dispose();
     _nameFocusNode.dispose();
+    _rosterScrollController.dispose();
     super.dispose();
   }
 
@@ -479,9 +481,16 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                 ),
                               )
                             else
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
+                              ConstrainedBox(
+                                key: const ValueKey('team_players_roster_box'),
+                                constraints: const BoxConstraints(maxHeight: 280),
+                                child: Scrollbar(
+                                  controller: _rosterScrollController,
+                                  thumbVisibility: players.length > 3,
+                                  child: ListView.separated(
+                                    controller: _rosterScrollController,
+                                    shrinkWrap: true,
+                                    physics: const ClampingScrollPhysics(),
                                 itemCount: players.length,
                                 separatorBuilder: (_, _) =>
                                     const SizedBox(height: 8),
@@ -560,6 +569,8 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                                   );
                                 },
                               ),
+                            ),
+                          ),
                           ],
                         );
                       },

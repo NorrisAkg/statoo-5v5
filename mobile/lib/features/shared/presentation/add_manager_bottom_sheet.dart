@@ -5,6 +5,7 @@ import 'package:remixicon/remixicon.dart';
 import '../../../core/data/shared_http_error.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
+import '../../../core/widgets/app_toast.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
 import '../application/shared_providers.dart';
@@ -43,7 +44,6 @@ class _AddManagerBottomSheetState extends ConsumerState<AddManagerBottomSheet> {
   late final TextEditingController _memberSearch;
   late final TextEditingController _name;
   String? _nameError;
-  String? _requestError;
   String? _createdWarning;
   var _sending = false;
   var _pickerOpen = false;
@@ -107,7 +107,6 @@ class _AddManagerBottomSheetState extends ConsumerState<AddManagerBottomSheet> {
           : nameTrimmed.length > 100
           ? 'L’identifiant doit contenir au maximum 100 caractères.'
           : null;
-      _requestError = null;
     });
     if (_nameError != null) return;
 
@@ -157,21 +156,22 @@ class _AddManagerBottomSheetState extends ConsumerState<AddManagerBottomSheet> {
       }
     } on Object catch (error) {
       if (!mounted) return;
+      final errorMessage = switch (error) {
+        SharedNetworkException() =>
+          'Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez.',
+        SharedApiException(statusCode: 409) =>
+          'Cet identifiant ou ce membre est déjà associé à un compte. Vérifiez les comptes existants.',
+        SharedApiException(statusCode: 422) =>
+          'Les informations du compte sont invalides. Vérifiez les champs puis réessayez.',
+        SharedApiException(statusCode: 401 || 403) =>
+          'Vous n’avez plus l’autorisation de créer ce compte. Reconnectez-vous avec un accès Admin.',
+        _ =>
+          'Impossible de créer le compte pour le moment. Réessayez dans quelques instants.',
+      };
       setState(() {
         _sending = false;
-        _requestError = switch (error) {
-          SharedNetworkException() =>
-            'Impossible de joindre Statoo. Vérifiez votre connexion puis réessayez.',
-          SharedApiException(statusCode: 409) =>
-            'Cet identifiant ou ce membre est déjà associé à un compte. Vérifiez les comptes existants.',
-          SharedApiException(statusCode: 422) =>
-            'Les informations du compte sont invalides. Vérifiez les champs puis réessayez.',
-          SharedApiException(statusCode: 401 || 403) =>
-            'Vous n’avez plus l’autorisation de créer ce compte. Reconnectez-vous avec un accès Admin.',
-          _ =>
-            'Impossible de créer le compte pour le moment. Réessayez dans quelques instants.',
-        };
       });
+      showTopToast(context, message: errorMessage, type: ToastType.error);
     }
   }
 
@@ -423,15 +423,7 @@ class _AddManagerBottomSheetState extends ConsumerState<AddManagerBottomSheet> {
                                   }
                                 }),
                         ),
-                      if (_requestError != null) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          _requestError!,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                      ],
+
                       const SizedBox(height: 8),
                       const Text('Sélectionnez au moins un rôle de responsable.'),
                     ],

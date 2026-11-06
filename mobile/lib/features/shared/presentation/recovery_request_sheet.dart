@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_toast.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../application/recovery_controller.dart';
 import '../domain/password_policy.dart';
@@ -37,7 +37,11 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
 
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
-  String? _localError;
+  String? _groupError;
+  String? _userError;
+  String? _codeError;
+  String? _newPasswordError;
+  String? _confirmPasswordError;
 
   @override
   void initState() {
@@ -63,7 +67,11 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
 
   Future<void> _submit() async {
     setState(() {
-      _localError = null;
+      _groupError = null;
+      _userError = null;
+      _codeError = null;
+      _newPasswordError = null;
+      _confirmPasswordError = null;
     });
 
     final groupId = _groupController.text.trim();
@@ -72,33 +80,44 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
     final newPassword = _newPasswordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (groupId.isEmpty ||
-        username.isEmpty ||
-        recoveryCode.isEmpty ||
-        newPassword.isEmpty ||
-        confirmPassword.isEmpty) {
-      setState(() {
-        _localError = 'Veuillez renseigner tous les champs obligatoires.';
-      });
-      return;
+    var hasError = false;
+    if (groupId.isEmpty) {
+      _groupError = 'Identifiant du groupe requis';
+      hasError = true;
     }
-
-    if (newPassword != confirmPassword) {
-      setState(() {
-        _localError = 'Les mots de passe ne correspondent pas.';
-      });
-      return;
+    if (username.isEmpty) {
+      _userError = "Nom d'utilisateur requis";
+      hasError = true;
     }
-
-    final policyResult = PasswordPolicy.validate(
-      newPassword,
-      username: username,
-    );
-    if (!policyResult.isValid) {
-      setState(() {
-        _localError =
+    if (recoveryCode.isEmpty) {
+      _codeError = 'Code de secours requis';
+      hasError = true;
+    }
+    if (newPassword.isEmpty) {
+      _newPasswordError = 'Nouveau mot de passe requis';
+      hasError = true;
+    } else {
+      final policyResult = PasswordPolicy.validate(
+        newPassword,
+        username: username,
+      );
+      if (!policyResult.isValid) {
+        _newPasswordError =
             'Le mot de passe ne respecte pas les critères de sécurité.';
-      });
+        hasError = true;
+      }
+    }
+
+    if (confirmPassword.isEmpty) {
+      _confirmPasswordError = 'Confirmation du mot de passe requise';
+      hasError = true;
+    } else if (newPassword != confirmPassword) {
+      _confirmPasswordError = 'Les mots de passe ne correspondent pas.';
+      hasError = true;
+    }
+
+    if (hasError) {
+      setState(() {});
       return;
     }
 
@@ -117,6 +136,17 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
           confirmPassword: confirmPassword,
         );
 
+    if (mounted) {
+      final state = ref.read(recoveryControllerProvider);
+      if (!success && state.errorMessage != null) {
+        showTopToast(
+          context,
+          message: state.errorMessage!,
+          type: ToastType.error,
+        );
+      }
+    }
+
     if (success && mounted) {
       final newCode =
           ref.read(recoveryControllerProvider).newRecoveryCode ?? '';
@@ -127,7 +157,6 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(recoveryControllerProvider);
-    final displayedError = _localError ?? state.errorMessage;
     final mediaQuery = MediaQuery.of(context);
     final bottomInset = mediaQuery.viewInsets.bottom;
 
@@ -186,36 +215,13 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (displayedError != null) ...[
-                  AppCard(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Remix.error_warning_line,
-                          color: context.colors.danger,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            displayedError,
-                            style: TextStyle(
-                              color: context.colors.danger,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+
                 _buildField(
                   controller: _groupController,
                   label: 'Identifiant du groupe',
                   hint: 'Ex. : #00000001',
                   icon: Remix.team_line,
+                  errorText: _groupError,
                 ),
                 const SizedBox(height: 14),
                 _buildField(
@@ -224,6 +230,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   hint: 'Votre nom d’utilisateur',
                   icon: Remix.user_line,
                   onChanged: (_) => setState(() {}),
+                  errorText: _userError,
                 ),
                 const SizedBox(height: 14),
                 _buildField(
@@ -232,6 +239,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   hint: 'XXXX-XXXX-XXXX-XXXX',
                   icon: Remix.shield_keyhole_line,
                   textCapitalization: TextCapitalization.characters,
+                  errorText: _codeError,
                 ),
                 const SizedBox(height: 14),
                 _buildField(
@@ -241,6 +249,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   icon: Remix.lock_line,
                   obscureText: _obscureNewPassword,
                   onChanged: (_) => setState(() {}),
+                  errorText: _newPasswordError,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureNewPassword
@@ -268,6 +277,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   hint: 'Confirmez le nouveau mot de passe',
                   icon: Remix.lock_line,
                   obscureText: _obscureConfirmPassword,
+                  errorText: _confirmPasswordError,
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureConfirmPassword
@@ -308,6 +318,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
     Widget? suffixIcon,
     TextCapitalization textCapitalization = TextCapitalization.none,
     void Function(String)? onChanged,
+    String? errorText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,6 +340,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
           autocorrect: false,
           style: TextStyle(color: context.colors.foreground50, fontSize: 14),
           decoration: InputDecoration(
+            errorText: errorText,
             hintText: hint,
             hintStyle: TextStyle(
               color: context.colors.foreground400,

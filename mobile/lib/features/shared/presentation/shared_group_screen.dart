@@ -11,6 +11,7 @@ import '../../../core/data/app_database.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
+import '../../../core/widgets/app_toast.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../finance/application/finance_providers.dart';
 import '../../onboarding/application/onboarding_provider.dart';
@@ -68,6 +69,68 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   bool _failed = false;
   final Set<TextEditingController> _shownPasswords = {};
   String? _message;
+  String? _groupError;
+  String? _userError;
+  String? _passwordError;
+  String? _sharedUserError;
+  String? _sharedPasswordError;
+
+  bool _validateInputs() {
+    setState(() {
+      _groupError = null;
+      _userError = null;
+      _passwordError = null;
+      _sharedUserError = null;
+      _sharedPasswordError = null;
+    });
+
+    var hasError = false;
+
+    if (!_create) {
+      if (_group.text.trim().isEmpty) {
+        _groupError = "Veuillez renseigner l'identifiant du groupe";
+        hasError = true;
+      }
+      if (_user.text.trim().isEmpty) {
+        _userError = 'Veuillez renseigner votre identifiant';
+        hasError = true;
+      }
+      if (_password.text.isEmpty) {
+        _passwordError = 'Veuillez renseigner votre mot de passe';
+        hasError = true;
+      }
+    } else {
+      if (_user.text.trim().isEmpty) {
+        _userError = 'Veuillez renseigner votre identifiant';
+        hasError = true;
+      }
+      if (_password.text.isEmpty) {
+        _passwordError = 'Veuillez renseigner votre mot de passe';
+        hasError = true;
+      } else if (_password.text.length < 8) {
+        _passwordError = 'Le mot de passe doit comporter au moins 8 caractères';
+        hasError = true;
+      }
+
+      if (_sharedUser.text.trim().isEmpty) {
+        _sharedUserError = "Veuillez renseigner l'identifiant commun";
+        hasError = true;
+      }
+      if (_sharedPassword.text.isEmpty) {
+        _sharedPasswordError = 'Veuillez renseigner le mot de passe commun';
+        hasError = true;
+      } else if (_sharedPassword.text.length < 8) {
+        _sharedPasswordError = 'Le mot de passe commun doit comporter au moins 8 caractères';
+        hasError = true;
+      }
+    }
+
+    if (hasError) {
+      setState(() {});
+      return false;
+    }
+    return true;
+  }
 
   @override
   void initState() {
@@ -111,6 +174,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           _failed = true;
           _message = '$e';
         });
+        showTopToast(context, message: '$e', type: ToastType.error);
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -1045,6 +1109,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
     String? hint,
     bool password = false,
     TextInputType? keyboardType,
+    String? errorText,
   }) => Padding(
     padding: const EdgeInsets.only(bottom: 16),
     child: Column(
@@ -1069,6 +1134,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
             keyboardType: keyboardType,
             style: TextStyle(color: context.colors.foreground50, fontSize: 14),
             decoration: InputDecoration(
+              errorText: errorText,
               hintText:
                   hint ??
                   (password ? 'Au moins 8 caractères' : 'Ex. : membres'),
@@ -1268,17 +1334,20 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               'Identifiant du groupe',
               icon: Remix.team_line,
               hint: 'Communiqué par votre gestionnaire',
+              errorText: _groupError,
             ),
           _field(
             _user,
             _create ? 'Votre identifiant' : 'Identifiant',
             icon: Remix.user_line,
+            errorText: _userError,
           ),
           _field(
             _password,
             'Mot de passe',
             password: true,
             icon: Remix.lock_line,
+            errorText: _passwordError,
           ),
           if (!_create) ...[
             const SizedBox(height: 8),
@@ -1310,12 +1379,13 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            _field(_sharedUser, 'Identifiant commun', icon: Remix.team_line),
+            _field(_sharedUser, 'Identifiant commun', icon: Remix.team_line, errorText: _sharedUserError),
             _field(
               _sharedPassword,
               'Mot de passe commun',
               password: true,
               icon: Remix.lock_line,
+              errorText: _sharedPasswordError,
             ),
           ],
         ),
@@ -1329,7 +1399,12 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
           ? 'Créer le groupe partagé'
           : 'Se connecter',
       icon: Remix.arrow_right_s_line,
-      onPressed: _busy ? null : () => unawaited(_perform(_connect)),
+      onPressed: _busy
+          ? null
+          : () {
+              if (!_validateInputs()) return;
+              unawaited(_perform(_connect));
+            },
     ),
     if (widget.setup && _create) ...[
       const SizedBox(height: 12),
@@ -1687,7 +1762,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               const SizedBox(height: 16),
               const LinearProgressIndicator(),
             ],
-            if (_message != null) ...[
+            if (_message != null && !_failed) ...[
               const SizedBox(height: 16),
               AppCard(
                 child: Row(
