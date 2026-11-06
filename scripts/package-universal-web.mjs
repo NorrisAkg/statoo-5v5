@@ -30,6 +30,12 @@ export function packageUniversal({
   }
   mkdirSync(output, { recursive: true });
   cpSync(build, output, { recursive: true });
+
+  // Expose Flutter web app directly under app.html and app/index.html so Vercel cleanUrls can serve /app
+  cpSync(join(build, "index.html"), join(output, "app.html"));
+  mkdirSync(join(output, "app"), { recursive: true });
+  cpSync(join(build, "index.html"), join(output, "app/index.html"));
+
   if (existsSync(legacy))
     cpSync(legacy, join(output, "portal"), { recursive: true });
   if (existsSync(landing))
@@ -58,6 +64,10 @@ export function packageUniversal({
     files.push("landing.html");
     hash.update(readFileSync(join(output, "landing.html")));
   }
+  if (existsSync(join(output, "app.html")) && !files.includes("app.html")) {
+    files.push("app.html");
+    hash.update(readFileSync(join(output, "app.html")));
+  }
   if (
     existsSync(join(output, "icons/logo-transparent.png")) &&
     !files.includes("icons/logo-transparent.png")
@@ -79,7 +89,7 @@ self.addEventListener('fetch',e=>{
   const u=new URL(r.url);
   if(r.mode==='navigate'){
     if(u.pathname==='/app'||u.pathname.startsWith('/app/')){
-      e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',ROOT).href)));
+      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('app.html',ROOT).href))||(await c.match(new URL('index.html',ROOT).href))||fetch(r)));
       return;
     }
     if(u.pathname==='/'||u.pathname==='/landing'||u.pathname==='/landing.html'||u.pathname==='/telecharger'){

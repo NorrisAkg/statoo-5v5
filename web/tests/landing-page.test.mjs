@@ -103,7 +103,7 @@ test("LND-05 vercel.json routes root to landing and /app to Flutter web", () => 
     (r) => r.source === "/app" || r.source === "/app/:path*",
   );
   assert.ok(appRewrite, "Rewrite for /app must exist");
-  assert.equal(appRewrite.destination, "/index.html");
+  assert.equal(appRewrite.destination, "/app.html");
 
   const downloadRewrite = vercel.rewrites.find((r) => r.source === "/download");
   assert.ok(downloadRewrite, "Rewrite for /download must exist");
@@ -141,6 +141,10 @@ test("LND-06 package-universal packages landing.html into universal-dist", async
     assert.ok(
       existsSync(join(output, "landing.html")),
       "landing.html must be copied to universal-dist",
+    );
+    assert.ok(
+      existsSync(join(output, "app.html")),
+      "app.html must be copied to universal-dist for Vercel cleanUrls",
     );
   } finally {
     rmSync(rootDir, { recursive: true, force: true });
@@ -180,6 +184,10 @@ test("LND-07 sw.js routes /app navigations to index.html and / to landing.html",
     assert.ok(
       worker.includes("landing.html"),
       "sw.js must route / to landing.html",
+    );
+    assert.ok(
+      worker.includes("app.html"),
+      "sw.js must cache/route to app.html",
     );
   } finally {
     rmSync(rootDir, { recursive: true, force: true });
