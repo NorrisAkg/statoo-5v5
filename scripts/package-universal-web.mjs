@@ -82,7 +82,7 @@ self.addEventListener('fetch',e=>{
       e.respondWith(caches.open(CACHE).then(c=>c.match(new URL('index.html',ROOT).href)));
       return;
     }
-    if(u.pathname==='/'||u.pathname==='/telecharger'||u.pathname==='/landing.html'){
+    if(u.pathname==='/'||u.pathname==='/landing'||u.pathname==='/landing.html'||u.pathname==='/telecharger'){
       e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('landing.html',ROOT).href))||fetch(r)));
       return;
     }

@@ -85,15 +85,19 @@ test("LND-04 landing.html contains Android APK download with GitHub Release link
   assert.match(html, /Installer/i, "Step 3: Install required");
 });
 
-test("LND-05 vercel.json routes root to landing.html and /app to Flutter web", () => {
+test("LND-05 vercel.json routes root to landing and /app to Flutter web", () => {
   assert.ok(existsSync(vercelConfigFile), "vercel.json must exist");
   const vercel = JSON.parse(readFileSync(vercelConfigFile, "utf8"));
 
-  assert.ok(Array.isArray(vercel.rewrites), "vercel.json must define rewrites");
+  assert.ok(
+    Array.isArray(vercel.redirects),
+    "vercel.json must define redirects",
+  );
+  const rootRedirect = vercel.redirects.find((r) => r.source === "/");
+  assert.ok(rootRedirect, "Redirect for / must exist");
+  assert.equal(rootRedirect.destination, "/landing");
 
-  const rootRewrite = vercel.rewrites.find((r) => r.source === "/");
-  assert.ok(rootRewrite, "Rewrite for / must exist");
-  assert.equal(rootRewrite.destination, "/landing.html");
+  assert.ok(Array.isArray(vercel.rewrites), "vercel.json must define rewrites");
 
   const appRewrite = vercel.rewrites.find(
     (r) => r.source === "/app" || r.source === "/app/:path*",
