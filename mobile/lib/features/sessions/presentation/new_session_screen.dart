@@ -10,6 +10,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/player_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
+import '../../players/domain/player.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
 import '../../settings/application/settings_provider.dart';
 import '../../shared/application/shared_providers.dart';
@@ -40,6 +41,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   final Set<String> _selectedPlayerIds = {};
   final Map<String, String> _playerTeamAssignments = {};
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   String _searchQuery = '';
   bool _isSubmitting = false;
   final Map<String, String> _teamNames = drawSessionTeamNames(SessionType.tournament3);
@@ -48,6 +50,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -317,19 +320,29 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           ],
           Expanded(
             key: const ValueKey('session-scroll-content'),
-            child: ListView(
-              key: ValueKey('session-step-$_currentStep'),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                // Keep the content indices stable when the keyboard opens.
-                SizedBox(height: scrollChrome ? 16 : 0),
-                if (scrollChrome) _buildStepper() else const SizedBox.shrink(),
-                SizedBox(height: scrollChrome ? 24 : 0),
-                if (_currentStep == 1) _buildStep1(),
-                if (_currentStep == 2) _buildStep2(),
-                if (scrollChrome) _buildBottomBar(),
-              ],
-            ),
+            child: scrollChrome
+                ? ListView(
+                    key: ValueKey('session-step-$_currentStep'),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    children: [
+                      // Keep the content indices stable when the keyboard opens.
+                      const SizedBox(height: 16),
+                      _buildStepper(),
+                      const SizedBox(height: 24),
+                      if (_currentStep == 1) _buildStep1(),
+                      if (_currentStep == 2) _buildStep2(),
+                      _buildBottomBar(),
+                    ],
+                  )
+                : _currentStep == 1
+                    ? ListView(
+                        key: const ValueKey('session-step-1'),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        children: [
+                          _buildStep1(),
+                        ],
+                      )
+                    : _buildStep2Sticky(),
           ),
           if (!scrollChrome) _buildBottomBar(),
         ],
@@ -339,6 +352,7 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
   }
 
   Widget _buildStepper() {
+    final screenWidth = MediaQuery.sizeOf(context).width;
     return Wrap(
       alignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,
@@ -346,15 +360,15 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
       spacing: 12,
       children: [
         _buildStepCircle(1, 'Date & Options', _currentStep >= 1),
-        if (MediaQuery.sizeOf(context).width >= 400 &&
+        if (screenWidth >= 350 &&
             MediaQuery.textScalerOf(context).scale(13) <= 17)
           Container(
-            width: 48,
+            width: screenWidth >= 400 ? 48 : 28,
             height: 2,
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             color: _currentStep >= 2
                 ? context.colors.primary500
-                : context.colors.background800,
+                : context.colors.background700,
           ),
         _buildStepCircle(2, 'Composition', _currentStep >= 2),
       ],
@@ -642,10 +656,91 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
     );
   }
 
-  Widget _buildStep2() {
-    final playersAsync = ref.watch(playersListProvider);
-    final minPlayers = ref.watch(minPlayersPerSessionProvider);
-    final activeDraft = ref.watch(activeDraftSessionProvider).value;
+  Widget _buildEmptyRoster() {
+    return AppCard(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Remix.group_line, size: 64, color: context.colors.primary500.withValues(alpha: 0.5)),
+            const SizedBox(height: 16),
+            Text(
+              "Il n'y a pas encore de joueurs dans l'effectif",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: context.colors.foreground300, fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            if (ref.watch(canWriteProvider('members'))) PrimaryButton(
+              label: 'Ajouter un joueur',
+              icon: Remix.user_add_line,
+              onPressed: () {
+                unawaited(
+                  showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const NewPlayerBottomSheet(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptySearchIndicator() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: context.colors.background900,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.background700),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Remix.user_search_line, size: 40, color: context.colors.foreground500),
+            const SizedBox(height: 12),
+            Text(
+              'Aucun joueur ne correspond à « $_searchQuery »',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: context.colors.foreground300, fontSize: 14),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              icon: const Icon(Remix.close_line, size: 16),
+              label: const Text('Effacer la recherche'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: context.colors.foreground200,
+                side: BorderSide(color: context.colors.background700),
+              ),
+              onPressed: () {
+                setState(() {
+                  _searchController.clear();
+                  _searchQuery = '';
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStep2TopSection(int minPlayers, Session? activeDraft, List<Player> activePlayers) {
+    final countA = _playerTeamAssignments.values.where((v) => v == 'A').length;
+    final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
+    final countC = _playerTeamAssignments.values.where((v) => v == 'C').length;
+    final totalAssignedCount = _sessionType == SessionType.tournament3
+        ? (countA + countB + countC)
+        : (countA + countB);
+    final unassignedCount = _selectedPlayerIds.length - totalAssignedCount;
+    final isTournament = _sessionType == SessionType.tournament3;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -724,553 +819,692 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
           ),
           const SizedBox(height: 16),
         ],
-        playersAsync.when(
-          data: (players) {
-            final activePlayers = players.where((p) => p.isActive).toList()
-              ..sort(comparePlayersAlphabetically);
+        Row(
+          children: [
+            Expanded(
+              child: _buildTeamCounterBadge(
+                context: context,
+                label: isTournament ? 'Éq. A: $countA' : 'Équipe A: $countA',
+                color: context.colors.accent500,
+                textColor: context.colors.accent400,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: _buildTeamCounterBadge(
+                context: context,
+                label: isTournament ? 'Éq. B: $countB' : 'Équipe B: $countB',
+                color: context.colors.secondary500,
+                textColor: context.colors.secondary400,
+              ),
+            ),
+            if (isTournament) ...[
+              const SizedBox(width: 6),
+              Expanded(
+                child: _buildTeamCounterBadge(
+                  context: context,
+                  label: 'Éq. C: $countC',
+                  color: context.colors.primary500,
+                  textColor: context.colors.primary400,
+                ),
+              ),
+            ],
+            if (unassignedCount > 0) ...[
+              const SizedBox(width: 6),
+              Expanded(
+                child: _buildTeamCounterBadge(
+                  context: context,
+                  label: isTournament ? 'Reste: $unassignedCount' : 'À placer: $unassignedCount',
+                  color: context.colors.warning,
+                  textColor: context.colors.warning,
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            if (_selectedPlayerIds.isNotEmpty)
+              Expanded(
+                child: OutlinedButton.icon(
+                  icon: const Icon(Remix.shuffle_line, size: 16),
+                  label: const Text('Tirer au sort'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: context.colors.primary400,
+                    backgroundColor: context.colors.background900,
+                    side: BorderSide(color: context.colors.primary500.withValues(alpha: 0.45)),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      final selected = _selectedPlayerIds.toList()..shuffle();
+                      _playerTeamAssignments.clear();
+                      for (int i = 0; i < selected.length; i++) {
+                        if (_sessionType == SessionType.tournament3) {
+                          _playerTeamAssignments[selected[i]] = const ['A', 'B', 'C'][i % 3];
+                        } else {
+                          _playerTeamAssignments[selected[i]] = i.isEven ? 'A' : 'B';
+                        }
+                      }
+                    });
+                  },
+                ),
+              ),
+            if (_playerTeamAssignments.isNotEmpty) ...[
+              const SizedBox(width: 8),
+              Container(
+                decoration: BoxDecoration(
+                  color: context.colors.background900,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.background700),
+                ),
+                child: IconButton(
+                  icon: const Icon(Remix.refresh_line, size: 20),
+                  tooltip: 'Réinitialiser les équipes',
+                  color: context.colors.foreground400,
+                  onPressed: () => setState(_playerTeamAssignments.clear),
+                ),
+              ),
+            ],
+            if (_selectedPlayerIds.isNotEmpty && ref.watch(canWriteProvider('members')))
+              const SizedBox(width: 8),
+            if (ref.watch(canWriteProvider('members')))
+              if (_selectedPlayerIds.isEmpty)
+                Expanded(
+                  child: OutlinedButton.icon(
+                    icon: const Icon(Remix.user_add_line, size: 18),
+                    label: const Text(
+                      'Nouveau joueur',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: context.colors.primary400,
+                      backgroundColor: context.colors.background900,
+                      side: BorderSide(
+                        color: context.colors.primary500.withValues(alpha: 0.4),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      unawaited(
+                        showModalBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const NewPlayerBottomSheet(),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              else
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.colors.background900,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: context.colors.primary500.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Remix.user_add_line, size: 20),
+                    tooltip: 'Nouveau joueur',
+                    color: context.colors.primary500,
+                    onPressed: () {
+                      unawaited(
+                        showModalBottomSheet<void>(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const NewPlayerBottomSheet(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+          ],
+        ),
+        const SizedBox(height: 14),
 
-            if (activePlayers.isEmpty) {
-              return AppCard(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Remix.group_line, size: 64, color: context.colors.primary500.withValues(alpha: 0.5)),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Il n'y a pas encore de joueurs dans l'effectif",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: context.colors.foreground300, fontSize: 16),
-                      ),
-                      const SizedBox(height: 24),
-                      if (ref.watch(canWriteProvider('members'))) PrimaryButton(
-                        label: 'Ajouter un joueur',
-                        icon: Remix.user_add_line,
+      ],
+    );
+  }
+
+  Widget _buildSearchAndPresenceSection(
+    List<Player> activePlayers,
+    List<Player> filteredPlayers,
+    bool isSearching,
+  ) {
+    final allSelected = activePlayers.isNotEmpty &&
+        activePlayers.every((p) => _selectedPlayerIds.contains(p.id));
+    final allFilteredSelected = filteredPlayers.isNotEmpty &&
+        filteredPlayers.every((p) => _selectedPlayerIds.contains(p.id));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+          const SizedBox(height: 8),
+          ExcludeSemantics(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                'Rechercher un joueur',
+                style: TextStyle(
+                  color: context.colors.foreground300,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          Semantics(
+            label: 'Rechercher un joueur',
+            child: TextField(
+              controller: _searchController,
+              focusNode: _searchFocusNode,
+              style: TextStyle(color: context.colors.foreground50, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: 'Nom ou surnom',
+                hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
+                prefixIconConstraints: const BoxConstraints(minWidth: 40, minHeight: 48),
+                prefixIcon: Icon(Remix.search_line, size: 18, color: context.colors.foreground400),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Remix.close_circle_fill, size: 18),
+                        color: context.colors.foreground500,
+                        tooltip: 'Effacer la recherche',
                         onPressed: () {
-                          unawaited(
-                            showModalBottomSheet<void>(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => const NewPlayerBottomSheet(),
-                            ),
-                          );
+                          setState(() {
+                            _searchController.clear();
+                            _searchQuery = '';
+                          });
                         },
+                      )
+                    : null,
+                filled: true,
+                fillColor: context.colors.background900,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.colors.background700),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.colors.background700),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: context.colors.primary500, width: 1.5),
+                ),
+              ),
+              onChanged: (val) => setState(() => _searchQuery = val),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runSpacing: 4,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Remix.user_follow_line, size: 16, color: context.colors.primary400),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      isSearching
+                          ? '${filteredPlayers.where((p) => _selectedPlayerIds.contains(p.id)).length}/${filteredPlayers.length} affichés présents (${_selectedPlayerIds.length} au total)'
+                          : '${_selectedPlayerIds.length}/${activePlayers.length} présents',
+                      style: TextStyle(
+                        color: context.colors.foreground300,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
                       ),
+                    ),
+                  ),
+                ],
+              ),
+              TextButton.icon(
+                icon: Icon(
+                  (isSearching ? allFilteredSelected : allSelected)
+                      ? Remix.checkbox_blank_circle_line
+                      : Remix.checkbox_circle_line,
+                  size: 16,
+                ),
+                label: Text(
+                  (isSearching ? allFilteredSelected : allSelected)
+                      ? 'Tout décocher'
+                      : 'Tout cocher',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                ),
+                style: TextButton.styleFrom(
+                  foregroundColor: (isSearching ? allFilteredSelected : allSelected)
+                      ? context.colors.foreground400
+                      : context.colors.primary400,
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  visualDensity: VisualDensity.compact,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (isSearching) {
+                      if (allFilteredSelected) {
+                        for (final p in filteredPlayers) {
+                          _selectedPlayerIds.remove(p.id);
+                          _playerTeamAssignments.remove(p.id);
+                        }
+                      } else {
+                        for (final p in filteredPlayers) {
+                          _selectedPlayerIds.add(p.id);
+                        }
+                      }
+                    } else {
+                      if (allSelected) {
+                        _selectedPlayerIds.clear();
+                        _playerTeamAssignments.clear();
+                      } else {
+                        _selectedPlayerIds.addAll(activePlayers.map((p) => p.id));
+                      }
+                    }
+                  });
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildStep2() {
+    final playersAsync = ref.watch(playersListProvider);
+    final minPlayers = ref.watch(minPlayersPerSessionProvider);
+    final activeDraft = ref.watch(activeDraftSessionProvider).value;
+
+    return playersAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => Center(child: Text('Erreur: $err')),
+      data: (players) {
+        final activePlayers = players.where((p) => p.isActive).toList()
+          ..sort(comparePlayersAlphabetically);
+
+        if (activePlayers.isEmpty) {
+          return _buildEmptyRoster();
+        }
+
+        final isSearching = _searchQuery.trim().isNotEmpty;
+        final filteredPlayers = !isSearching
+            ? activePlayers
+            : activePlayers.where((p) {
+                final query = _searchQuery.trim().toLowerCase();
+                final matchName = p.name.toLowerCase().contains(query);
+                final matchNickname = p.nickname?.toLowerCase().contains(query) ?? false;
+                return matchName || matchNickname;
+              }).toList();
+        sortPlayersSelectedFirst(filteredPlayers, selectedIds: _selectedPlayerIds);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildStep2TopSection(minPlayers, activeDraft, activePlayers),
+            _buildSearchAndPresenceSection(activePlayers, filteredPlayers, isSearching),
+            if (filteredPlayers.isEmpty)
+              _buildEmptySearchIndicator()
+            else
+              for (final player in filteredPlayers)
+                _buildPlayerItem(
+                  context,
+                  player,
+                  _selectedPlayerIds.contains(player.id),
+                  _playerTeamAssignments[player.id],
+                ),
+            if (_playerTeamAssignments.isNotEmpty && _playerTeamAssignments.length == _selectedPlayerIds.length) ...[
+              const SizedBox(height: 16),
+              TeamAppearanceEditor(
+                editableNames: false,
+                type: _sessionType,
+                names: _teamNames,
+                colors: _teamColors,
+                onNameChanged: (team, name) => setState(() => _teamNames[teamKey(team)] = name),
+                onColorChanged: (team, color) => setState(() => _teamColors[teamKey(team)] = color),
+                onReset: (team) => setState(() { _teamColors.remove(teamKey(team)); }),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildStep2Sticky() {
+    final playersAsync = ref.watch(playersListProvider);
+    final minPlayers = ref.watch(minPlayersPerSessionProvider);
+    final activeDraft = ref.watch(activeDraftSessionProvider).value;
+
+    return playersAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => Center(child: Text('Erreur: $err')),
+      data: (players) {
+        final activePlayers = players.where((p) => p.isActive).toList()
+          ..sort(comparePlayersAlphabetically);
+
+        if (activePlayers.isEmpty) {
+          return ListView(
+            key: const ValueKey('session-step-2'),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              _buildEmptyRoster(),
+            ],
+          );
+        }
+
+        final isSearching = _searchQuery.trim().isNotEmpty;
+        final filteredPlayers = !isSearching
+            ? activePlayers
+            : activePlayers.where((p) {
+                final query = _searchQuery.trim().toLowerCase();
+                final matchName = p.name.toLowerCase().contains(query);
+                final matchNickname = p.nickname?.toLowerCase().contains(query) ?? false;
+                return matchName || matchNickname;
+              }).toList();
+        sortPlayersSelectedFirst(filteredPlayers, selectedIds: _selectedPlayerIds);
+
+        final textScaler = MediaQuery.textScalerOf(context);
+        final isNarrow = MediaQuery.sizeOf(context).width < 360;
+        final isLargeText = textScaler.scale(13) > 17;
+        final isMultiLinePresence = isNarrow || isLargeText || isSearching;
+
+        final labelHeight = textScaler.scale(13) * 1.4 + 6;
+        final fieldHeight = (textScaler.scale(14) * 1.4 + 28).clamp(52.0, 80.0);
+        final presenceHeight = isMultiLinePresence
+            ? (textScaler.scale(13) * 1.4 + 14) + 4 + (textScaler.scale(13) * 1.4 + 28)
+            : (textScaler.scale(13) * 1.4 + 28).clamp(44.0, 64.0);
+        final headerHeight = 8 + labelHeight + fieldHeight + 10 + presenceHeight + 14;
+
+        return CustomScrollView(
+          key: const ValueKey('session-step-2'),
+                    slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildStep2TopSection(minPlayers, activeDraft, activePlayers),
+              ),
+            ),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _StickySearchHeaderDelegate(
+                height: headerHeight,
+                child: Container(
+                  color: context.colors.background950,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildSearchAndPresenceSection(activePlayers, filteredPlayers, isSearching),
+                ),
+              ),
+            ),
+            if (filteredPlayers.isEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildEmptySearchIndicator(),
+                ),
+              )
+            else
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      for (final player in filteredPlayers)
+                        _buildPlayerItem(
+                          context,
+                          player,
+                          _selectedPlayerIds.contains(player.id),
+                          _playerTeamAssignments[player.id],
+                        ),
                     ],
                   ),
                 ),
-              );
-            }
-
-            final countA = _playerTeamAssignments.values.where((v) => v == 'A').length;
-            final countB = _playerTeamAssignments.values.where((v) => v == 'B').length;
-            final countC = _playerTeamAssignments.values.where((v) => v == 'C').length;
-            final totalAssignedCount = _sessionType == SessionType.tournament3
-                ? (countA + countB + countC)
-                : (countA + countB);
-            final unassignedCount = _selectedPlayerIds.length - totalAssignedCount;
-
-            final isSearching = _searchQuery.trim().isNotEmpty;
-            final filteredPlayers = !isSearching
-                ? activePlayers
-                : activePlayers.where((p) {
-                    final query = _searchQuery.trim().toLowerCase();
-                    final matchName = p.name.toLowerCase().contains(query);
-                    final matchNickname = p.nickname?.toLowerCase().contains(query) ?? false;
-                    return matchName || matchNickname;
-                  }).toList();
-            sortPlayersSelectedFirst(filteredPlayers, selectedIds: _selectedPlayerIds);
-
-            final allSelected = activePlayers.isNotEmpty &&
-                activePlayers.every((p) => _selectedPlayerIds.contains(p.id));
-            final allFilteredSelected = filteredPlayers.isNotEmpty &&
-                filteredPlayers.every((p) => _selectedPlayerIds.contains(p.id));
-
-                final isTournament = _sessionType == SessionType.tournament3;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildTeamCounterBadge(
-                            context: context,
-                            label: isTournament ? 'Éq. A: $countA' : 'Équipe A: $countA',
-                            color: context.colors.accent500,
-                            textColor: context.colors.accent400,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: _buildTeamCounterBadge(
-                            context: context,
-                            label: isTournament ? 'Éq. B: $countB' : 'Équipe B: $countB',
-                            color: context.colors.secondary500,
-                            textColor: context.colors.secondary400,
-                          ),
-                        ),
-                        if (isTournament) ...[
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: _buildTeamCounterBadge(
-                              context: context,
-                              label: 'Éq. C: $countC',
-                              color: context.colors.primary500,
-                              textColor: context.colors.primary400,
-                            ),
-                          ),
-                        ],
-                        if (unassignedCount > 0) ...[
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: _buildTeamCounterBadge(
-                              context: context,
-                              label: isTournament ? 'Reste: $unassignedCount' : 'À placer: $unassignedCount',
-                              color: context.colors.warning,
-                              textColor: context.colors.warning,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    if (_selectedPlayerIds.isNotEmpty)
-                      Expanded(
-                        child: OutlinedButton.icon(
-                           icon: const Icon(Remix.shuffle_line, size: 16),
-                          label: const Text('Tirer au sort'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: context.colors.primary400,
-                            side: BorderSide(color: context.colors.primary500.withValues(alpha: 0.5)),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              final selected = _selectedPlayerIds.toList()..shuffle();
-                              _playerTeamAssignments.clear();
-                              for (int i = 0; i < selected.length; i++) {
-                                if (_sessionType == SessionType.tournament3) {
-                                  _playerTeamAssignments[selected[i]] = const ['A', 'B', 'C'][i % 3];
-                                } else {
-                                  _playerTeamAssignments[selected[i]] = i.isEven ? 'A' : 'B';
-                                }
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    if (_playerTeamAssignments.isNotEmpty) ...[
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(Remix.refresh_line),
-                        tooltip: 'Réinitialiser les équipes',
-                        color: context.colors.foreground500,
-                        onPressed: () => setState(_playerTeamAssignments.clear),
-                      ),
-                    ],
-                    if (_selectedPlayerIds.isNotEmpty) const SizedBox(width: 8),
-                    if (ref.watch(canWriteProvider('members'))) IconButton(
-                      icon: const Icon(Remix.user_add_line),
-                      tooltip: 'Nouveau joueur',
-                      color: context.colors.primary500,
-                      onPressed: () {
-                        unawaited(
-                          showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => const NewPlayerBottomSheet(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-
-                if (_playerTeamAssignments.isNotEmpty && _playerTeamAssignments.length == _selectedPlayerIds.length) ...[
-                  TeamAppearanceEditor(
+              ),
+            if (_playerTeamAssignments.isNotEmpty && _playerTeamAssignments.length == _selectedPlayerIds.length)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                  child: TeamAppearanceEditor(
                     editableNames: false,
-                    type: _sessionType, names: _teamNames, colors: _teamColors,
+                    type: _sessionType,
+                    names: _teamNames,
+                    colors: _teamColors,
                     onNameChanged: (team, name) => setState(() => _teamNames[teamKey(team)] = name),
                     onColorChanged: (team, color) => setState(() => _teamColors[teamKey(team)] = color),
                     onReset: (team) => setState(() { _teamColors.remove(teamKey(team)); }),
                   ),
-                  const SizedBox(height: 16),
-                ],
-                // Search bar
-                Semantics(container: true, child: TextField(
-                  controller: _searchController,
-                  style: TextStyle(color: context.colors.foreground50, fontSize: 14),
-                  decoration: InputDecoration(
-                    labelText: 'Rechercher un joueur',
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    floatingLabelStyle: TextStyle(color: context.colors.foreground300, fontSize: 14),
-                    hintText: 'Nom ou surnom',
-                    hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
-                    prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 48),
-                    prefixIcon: Icon(Remix.search_line, size: 18, color: context.colors.foreground400),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Remix.close_circle_fill, size: 18),
-                            color: context.colors.foreground500,
-                            tooltip: 'Effacer la recherche',
-                            onPressed: () {
-                              setState(() {
-                                _searchController.clear();
-                                _searchQuery = '';
-                              });
-                            },
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: context.colors.background900,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: context.colors.background700),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: context.colors.background700),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: context.colors.primary500),
+                ),
+              ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 16),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildPlayerItem(
+    BuildContext context,
+    Player player,
+    bool isSelected,
+    String? team,
+  ) {
+    Color avatarBg;
+    Color avatarFg;
+    if (team == 'A') {
+      avatarBg = context.colors.accent500.withValues(alpha: 0.2);
+      avatarFg = context.colors.accent400;
+    } else if (team == 'B') {
+      avatarBg = context.colors.secondary500.withValues(alpha: 0.2);
+      avatarFg = context.colors.secondary400;
+    } else if (team == 'C') {
+      avatarBg = context.colors.primary500.withValues(alpha: 0.2);
+      avatarFg = context.colors.primary400;
+    } else if (isSelected) {
+      avatarBg = context.colors.warning.withValues(alpha: 0.2);
+      avatarFg = context.colors.warning;
+    } else {
+      avatarBg = context.colors.primary500.withValues(alpha: 0.15);
+      avatarFg = context.colors.primary400;
+    }
+
+    final controls = !isSelected
+        ? TextButton.icon(
+            icon: const Icon(Remix.add_line, size: 16),
+            label: Text(
+              'Présent',
+              semanticsLabel: 'Marquer ${player.name} présent',
+            ),
+            style: TextButton.styleFrom(
+              foregroundColor: context.colors.primary400,
+              backgroundColor: context.colors.primary500.withValues(alpha: 0.1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () {
+              setState(() {
+                _selectedPlayerIds.add(player.id);
+              });
+            },
+          )
+        : Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 6,
+            children: [
+              SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(
+                    value: 'A',
+                    label: Text(
+                      'A',
+                      semanticsLabel: 'Équipe A pour ${player.name}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  onChanged: (val) => setState(() => _searchQuery = val),
-                )),
-                const SizedBox(height: 10),
-
-                // Presence counter & Toggle all (cocher/décocher tout)
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  runSpacing: 4,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Remix.user_follow_line, size: 16, color: context.colors.primary400),
-                        const SizedBox(width: 6),
-                        Flexible(child: Text(
-                          isSearching
-                              ? '${filteredPlayers.where((p) => _selectedPlayerIds.contains(p.id)).length}/${filteredPlayers.length} affichés présents (${_selectedPlayerIds.length} au total)'
-                              : '${_selectedPlayerIds.length}/${activePlayers.length} présents',
-                          style: TextStyle(
-                            color: context.colors.foreground300,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        )),
-                      ],
+                  ButtonSegment(
+                    value: 'B',
+                    label: Text(
+                      'B',
+                      semanticsLabel: 'Équipe B pour ${player.name}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextButton.icon(
-                      icon: Icon(
-                        (isSearching ? allFilteredSelected : allSelected)
-                            ? Remix.checkbox_blank_circle_line
-                            : Remix.checkbox_circle_line,
-                        size: 16,
-                      ),
+                  ),
+                  if (_sessionType == SessionType.tournament3)
+                    ButtonSegment(
+                      value: 'C',
                       label: Text(
-                        (isSearching ? allFilteredSelected : allSelected)
-                            ? 'Tout décocher'
-                            : 'Tout cocher',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        'C',
+                        semanticsLabel: 'Équipe C pour ${player.name}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      style: TextButton.styleFrom(
-                        foregroundColor: (isSearching ? allFilteredSelected : allSelected)
-                            ? context.colors.foreground400
-                            : context.colors.primary400,
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          if (isSearching) {
-                            if (allFilteredSelected) {
-                              for (final p in filteredPlayers) {
-                                _selectedPlayerIds.remove(p.id);
-                                _playerTeamAssignments.remove(p.id);
-                              }
-                            } else {
-                              for (final p in filteredPlayers) {
-                                _selectedPlayerIds.add(p.id);
-                              }
-                            }
-                          } else {
-                            if (allSelected) {
-                              _selectedPlayerIds.clear();
-                              _playerTeamAssignments.clear();
-                            } else {
-                              _selectedPlayerIds.addAll(activePlayers.map((p) => p.id));
-                            }
-                          }
-                        });
-                      },
                     ),
-                  ],
+                ],
+                selected: team != null ? {team} : <String>{},
+                emptySelectionAllowed: true,
+                style: SegmentedButton.styleFrom(
+                  backgroundColor: context.colors.background800,
+                  selectedBackgroundColor: team == 'A'
+                      ? context.colors.accent500.withValues(alpha: 0.3)
+                      : team == 'B'
+                          ? context.colors.secondary500.withValues(alpha: 0.3)
+                          : context.colors.primary500.withValues(alpha: 0.3),
+                  selectedForegroundColor: team == 'A'
+                      ? context.colors.accent400
+                      : team == 'B'
+                          ? context.colors.secondary400
+                          : context.colors.primary400,
+                  visualDensity: VisualDensity.compact,
                 ),
-                const SizedBox(height: 8),
+                onSelectionChanged: (newSelection) {
+                  setState(() {
+                    if (newSelection.isEmpty) {
+                      _playerTeamAssignments.remove(player.id);
+                    } else {
+                      _playerTeamAssignments[player.id] = newSelection.first;
+                    }
+                  });
+                },
+              ),
+              IconButton(
+                icon: const Icon(Remix.close_circle_line),
+                color: context.colors.foreground500,
+                iconSize: 20,
+                tooltip: 'Retirer ${player.name} de la séance',
+                onPressed: () {
+                  setState(() {
+                    _selectedPlayerIds.remove(player.id);
+                    _playerTeamAssignments.remove(player.id);
+                  });
+                },
+              ),
+            ],
+          );
 
-                if (filteredPlayers.isEmpty)
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 24),
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: context.colors.background900,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: context.colors.background700),
-                    ),
-                    child: Center(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: team == 'A'
+              ? context.colors.accent500.withValues(alpha: 0.05)
+              : team == 'B'
+                  ? context.colors.secondary500.withValues(alpha: 0.05)
+                  : team == 'C'
+                      ? context.colors.primary500.withValues(alpha: 0.05)
+                      : isSelected
+                          ? context.colors.warning.withValues(alpha: 0.05)
+                          : context.colors.background900,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: team == 'A'
+                ? context.colors.accent500.withValues(alpha: 0.35)
+                : team == 'B'
+                    ? context.colors.secondary500.withValues(alpha: 0.35)
+                    : team == 'C'
+                        ? context.colors.primary500.withValues(alpha: 0.35)
+                        : isSelected
+                            ? context.colors.warning.withValues(alpha: 0.35)
+                            : context.colors.background700,
+          ),
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final textScale = MediaQuery.textScalerOf(context).scale(14);
+            final hasLongName = player.name.length > 20 ||
+                (player.nickname != null && player.nickname!.length > 20);
+            final stacked =
+                textScale > 17.5 ||
+                constraints.maxWidth < 250 ||
+                (isSelected &&
+                    (constraints.maxWidth < 300 || hasLongName));
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    PlayerAvatar(source: player.avatarUrl, initial: player.name.isEmpty ? '?' : player.name[0], baseColor: avatarFg, backgroundColor: avatarBg, size: 36),
+                    const SizedBox(width: 12),
+                    Expanded(
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Remix.user_search_line, size: 40, color: context.colors.foreground500),
-                          const SizedBox(height: 12),
                           Text(
-                            'Aucun joueur ne correspond à « $_searchQuery »',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: context.colors.foreground300, fontSize: 14),
-                          ),
-                          const SizedBox(height: 12),
-                          OutlinedButton.icon(
-                            icon: const Icon(Remix.close_line, size: 16),
-                            label: const Text('Effacer la recherche'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: context.colors.foreground200,
-                              side: BorderSide(color: context.colors.background700),
+                            player.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _searchController.clear();
-                                _searchQuery = '';
-                              });
-                            },
                           ),
+                          if (player.nickname != null)
+                            Text(
+                              '« ${player.nickname} »',
+                              style: TextStyle(
+                                color: context.colors.foreground500,
+                                fontSize: 12,
+                              ),
+                            )
+                          else if (isSelected && team == null)
+                            Text(
+                              _sessionType == SessionType.tournament3
+                                  ? 'Choisir A, B ou C'
+                                  : 'Choisir A ou B',
+                              style: TextStyle(
+                                color: context.colors.warning,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                         ],
                       ),
                     ),
-                  )
-                else
-                  ...filteredPlayers.map((player) {
-                  final isSelected = _selectedPlayerIds.contains(player.id);
-                  final team = _playerTeamAssignments[player.id];
-
-                  Color avatarBg;
-                  Color avatarFg;
-                  if (team == 'A') {
-                    avatarBg = context.colors.accent500.withValues(alpha: 0.2);
-                    avatarFg = context.colors.accent400;
-                  } else if (team == 'B') {
-                    avatarBg = context.colors.secondary500.withValues(alpha: 0.2);
-                    avatarFg = context.colors.secondary400;
-                  } else if (team == 'C') {
-                    avatarBg = context.colors.primary500.withValues(alpha: 0.2);
-                    avatarFg = context.colors.primary400;
-                  } else if (isSelected) {
-                    avatarBg = context.colors.warning.withValues(alpha: 0.2);
-                    avatarFg = context.colors.warning;
-                  } else {
-                    avatarBg = context.colors.primary500.withValues(alpha: 0.15);
-                    avatarFg = context.colors.primary400;
-                  }
-
-                  final controls = !isSelected
-                      ? TextButton.icon(
-                          icon: const Icon(Remix.add_line, size: 16),
-                          label: Text(
-                            'Présent',
-                            semanticsLabel: 'Marquer ${player.name} présent',
-                          ),
-                          style: TextButton.styleFrom(
-                            foregroundColor: context.colors.primary400,
-                            backgroundColor: context.colors.primary500.withValues(alpha: 0.1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _selectedPlayerIds.add(player.id);
-                            });
-                          },
-                        )
-                      : Wrap(
-                          alignment: WrapAlignment.end,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 6,
-                          children: [
-                            SegmentedButton<String>(
-                              segments: [
-                                ButtonSegment(
-                                  value: 'A',
-                                  label: Text(
-                                    'A',
-                                    semanticsLabel: 'Équipe A pour ${player.name}',
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                ButtonSegment(
-                                  value: 'B',
-                                  label: Text(
-                                    'B',
-                                    semanticsLabel: 'Équipe B pour ${player.name}',
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                if (_sessionType == SessionType.tournament3)
-                                  ButtonSegment(
-                                    value: 'C',
-                                    label: Text(
-                                      'C',
-                                      semanticsLabel: 'Équipe C pour ${player.name}',
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                              ],
-                              selected: team != null ? {team} : <String>{},
-                              emptySelectionAllowed: true,
-                              style: SegmentedButton.styleFrom(
-                                backgroundColor: context.colors.background800,
-                                selectedBackgroundColor: team == 'A'
-                                    ? context.colors.accent500.withValues(alpha: 0.3)
-                                    : team == 'B'
-                                    ? context.colors.secondary500.withValues(alpha: 0.3)
-                                    : context.colors.primary500.withValues(alpha: 0.3),
-                                selectedForegroundColor: team == 'A'
-                                    ? context.colors.accent400
-                                    : team == 'B'
-                                    ? context.colors.secondary400
-                                    : context.colors.primary400,
-                                visualDensity: VisualDensity.compact,
-                              ),
-                              onSelectionChanged: (newSelection) {
-                                setState(() {
-                                  if (newSelection.isEmpty) {
-                                    _playerTeamAssignments.remove(player.id);
-                                  } else {
-                                    _playerTeamAssignments[player.id] = newSelection.first;
-                                  }
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Remix.close_circle_line),
-                              color: context.colors.foreground500,
-                              iconSize: 20,
-                              tooltip: 'Retirer ${player.name} de la séance',
-                              onPressed: () {
-                                setState(() {
-                                  _selectedPlayerIds.remove(player.id);
-                                  _playerTeamAssignments.remove(player.id);
-                                });
-                              },
-                            ),
-                          ],
-                        );
-
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: team == 'A'
-                            ? context.colors.accent500.withValues(alpha: 0.05)
-                            : team == 'B'
-                                ? context.colors.secondary500.withValues(alpha: 0.05)
-                                : team == 'C'
-                                    ? context.colors.primary500.withValues(alpha: 0.05)
-                                    : isSelected
-                                        ? context.colors.warning.withValues(alpha: 0.05)
-                                        : context.colors.background900,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: team == 'A'
-                              ? context.colors.accent500.withValues(alpha: 0.35)
-                              : team == 'B'
-                                  ? context.colors.secondary500.withValues(alpha: 0.35)
-                                  : team == 'C'
-                                      ? context.colors.primary500.withValues(alpha: 0.35)
-                                      : isSelected
-                                          ? context.colors.warning.withValues(alpha: 0.35)
-                                          : context.colors.background700,
-                        ),
-                      ),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          final stacked =
-                              constraints.maxWidth < 400 ||
-                              MediaQuery.textScalerOf(context).scale(14) > 18;
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                children: [
-                                  PlayerAvatar(source: player.avatarUrl, initial: player.name.isEmpty ? '?' : player.name[0], baseColor: avatarFg, backgroundColor: avatarBg, size: 36),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          player.name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        if (player.nickname != null)
-                                          Text(
-                                            '« ${player.nickname} »',
-                                            style: TextStyle(
-                                              color: context.colors.foreground500,
-                                              fontSize: 12,
-                                            ),
-                                          )
-                                        else if (isSelected && team == null)
-                                          Text(
-                                            _sessionType == SessionType.tournament3
-                                                ? 'Choisir A, B ou C'
-                                                : 'Choisir A ou B',
-                                            style: TextStyle(
-                                              color: context.colors.warning,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                  if (!stacked) controls,
-                                ],
-                              ),
-                              if (stacked) ...[
-                                const SizedBox(height: 8),
-                                Align(alignment: Alignment.centerRight, child: controls),
-                              ],
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                }),
+                    if (!stacked) controls,
+                  ],
+                ),
+                if (stacked) ...[
+                  const SizedBox(height: 8),
+                  Align(alignment: Alignment.centerRight, child: controls),
+                ],
               ],
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text('Erreur: $err')),
         ),
-      ],
+      ),
     );
   }
 
@@ -1312,5 +1546,38 @@ class _NewSessionScreenState extends ConsumerState<NewSessionScreen> {
         ],
       ),
     );
+  }
+}
+
+class _StickySearchHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _StickySearchHeaderDelegate({
+    required this.height,
+    required this.child,
+  });
+
+  final double height;
+  final Widget child;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox(
+      height: height,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _StickySearchHeaderDelegate oldDelegate) {
+    return oldDelegate.height != height || oldDelegate.child != child;
   }
 }
