@@ -36,10 +36,15 @@ export function packageUniversal({
   mkdirSync(join(output, "app"), { recursive: true });
   cpSync(join(build, "index.html"), join(output, "app/index.html"));
 
+  // Serve landing page directly at the root index.html and landing.html (200 OK, no redirect)
+  if (existsSync(landing)) {
+    cpSync(landing, join(output, "landing.html"));
+    cpSync(landing, join(output, "index.html"));
+  }
+
   if (existsSync(legacy))
     cpSync(legacy, join(output, "portal"), { recursive: true });
-  if (existsSync(landing))
-    cpSync(landing, join(output, "landing.html"));
+
   const logoSource = resolve(projectRoot, "web/icons/logo-transparent.png");
   const logoTarget = join(output, "icons/logo-transparent.png");
   if (existsSync(logoSource) && !existsSync(logoTarget)) {
@@ -89,16 +94,16 @@ self.addEventListener('fetch',e=>{
   const u=new URL(r.url);
   if(r.mode==='navigate'){
     if(u.pathname==='/app'||u.pathname.startsWith('/app/')){
-      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('app.html',ROOT).href))||(await c.match(new URL('index.html',ROOT).href))||fetch(r)));
+      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('app.html',ROOT).href))||fetch(r)).catch(()=>fetch(r)));
       return;
     }
     if(u.pathname==='/'||u.pathname==='/landing'||u.pathname==='/landing.html'||u.pathname==='/telecharger'){
-      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('landing.html',ROOT).href))||fetch(r)));
+      e.respondWith(caches.open(CACHE).then(async c=>(await c.match(new URL('index.html',ROOT).href))||(await c.match(new URL('landing.html',ROOT).href))||fetch(r)).catch(()=>fetch(r)));
       return;
     }
   }
   if(!ALLOWED.has(u.href))return;
-  e.respondWith(caches.open(CACHE).then(async c=>(await c.match(r))||fetch(r)));
+  e.respondWith(caches.open(CACHE).then(async c=>(await c.match(r))||fetch(r)).catch(()=>fetch(r)));
 });
 `;
   writeFileSync(join(output, "sw.js"), worker);

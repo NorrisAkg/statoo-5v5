@@ -5,9 +5,6 @@
   "buildCommand": "bash scripts/build-universal-web.sh",
   "outputDirectory": "web/universal-dist",
   "cleanUrls": true,
-  "redirects": [
-    { "source": "/", "destination": "/landing", "permanent": false }
-  ],
   "rewrites": [
     { "source": "/telecharger", "destination": "/landing.html" },
     { "source": "/download", "destination": "https://github.com/NorrisAkg/statoo-5v5/releases/latest/download/statoo.apk" },

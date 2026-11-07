@@ -85,17 +85,9 @@ test("LND-04 landing.html contains Android APK download with GitHub Release link
   assert.match(html, /Installer/i, "Step 3: Install required");
 });
 
-test("LND-05 vercel.json routes root to landing and /app to Flutter web", () => {
+test("LND-05 vercel.json routes /app and downloads cleanly", () => {
   assert.ok(existsSync(vercelConfigFile), "vercel.json must exist");
   const vercel = JSON.parse(readFileSync(vercelConfigFile, "utf8"));
-
-  assert.ok(
-    Array.isArray(vercel.redirects),
-    "vercel.json must define redirects",
-  );
-  const rootRedirect = vercel.redirects.find((r) => r.source === "/");
-  assert.ok(rootRedirect, "Redirect for / must exist");
-  assert.equal(rootRedirect.destination, "/landing");
 
   assert.ok(Array.isArray(vercel.rewrites), "vercel.json must define rewrites");
 
@@ -110,7 +102,7 @@ test("LND-05 vercel.json routes root to landing and /app to Flutter web", () => 
   assert.match(downloadRewrite.destination, /statoo\.apk/);
 });
 
-test("LND-06 package-universal packages landing.html into universal-dist", async () => {
+test("LND-06 package-universal packages landing.html into universal-dist index.html and app.html", async () => {
   const moduleUrl = new URL(
     "../../scripts/package-universal-web.mjs",
     import.meta.url,
@@ -141,6 +133,10 @@ test("LND-06 package-universal packages landing.html into universal-dist", async
     assert.ok(
       existsSync(join(output, "landing.html")),
       "landing.html must be copied to universal-dist",
+    );
+    assert.ok(
+      existsSync(join(output, "index.html")),
+      "index.html must be the landing page",
     );
     assert.ok(
       existsSync(join(output, "app.html")),
