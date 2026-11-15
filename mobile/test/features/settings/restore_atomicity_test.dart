@@ -15,6 +15,8 @@ class _FailCommit implements Database {
   @override
   final Database database;
   @override
+  bool get isOpen => database.isOpen;
+  @override
   Future<T> transaction<T>(
     Future<T> Function(Transaction) action, {
     bool? exclusive,

@@ -59,6 +59,9 @@ class _DatabaseProbe extends _ReadProbe implements Database {
   final Database database;
 
   @override
+  bool get isOpen => database.isOpen;
+
+  @override
   Future<T> transaction<T>(
     Future<T> Function(Transaction txn) action, {
     bool? exclusive,
