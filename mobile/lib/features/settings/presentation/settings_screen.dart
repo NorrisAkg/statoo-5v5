@@ -59,6 +59,30 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           _buildSectionTitle(context, 'Groupe & Équipes'),
           _buildTeamSection(context, ref),
+          if (group != null) ...[
+            AppCard(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(Remix.group_line, color: context.colors.foreground50),
+                title: Text(
+                  shared.groupId == group ? 'Gérer le groupe partagé' : 'Activer le groupe partagé',
+                  style: TextStyle(color: context.colors.foreground50),
+                ),
+                subtitle: Text(
+                  shared.groupId == group
+                      ? 'Accès membres, responsables et synchronisation'
+                      : 'Publier ce groupe pour le partager en ligne',
+                  style: TextStyle(color: context.colors.foreground400, fontSize: 12),
+                ),
+                trailing: Icon(Remix.arrow_right_s_line, color: context.colors.foreground400),
+                onTap: () => context.push(
+                  shared.groupId == group ? '/groupe-partage' : '/groupe-partage?creation=1',
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
           if (group != null && CollectiveAccess(shared, group).allowed) ...[
             const SizedBox(height: 24),
             CollectiveAccessSection(

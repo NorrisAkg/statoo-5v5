@@ -47,9 +47,7 @@ class GroupEntryScreen extends ConsumerWidget {
                     PrimaryButton(
                       label: 'Créer un groupe',
                       icon: Remix.add_line,
-                      onPressed: () => context.push(
-                        '/creer-equipe?partage=1',
-                      ),
+                      onPressed: () => context.push('/creer-equipe'),
                     ),
                   ],
                 ),

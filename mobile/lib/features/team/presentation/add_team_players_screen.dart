@@ -82,9 +82,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         ),
       ),
     );
-    context.go(
-      widget.setupShared ? '/groupe-partage?creation=1&installation=1' : '/',
-    );
+    context.go('/');
   }
 
   @override
@@ -617,9 +615,7 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
         child: SizedBox(
           width: double.infinity,
           child: PrimaryButton(
-            label: widget.setupShared
-                ? 'Continuer vers l’accès Admin'
-                : "Terminer et aller à l'Accueil",
+            label: "Terminer et aller à l'Accueil",
             icon: Remix.arrow_right_line,
             onPressed: _finish,
           ),

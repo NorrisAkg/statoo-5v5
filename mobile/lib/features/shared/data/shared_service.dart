@@ -110,13 +110,35 @@ class SharedService {
     );
   }
 
+  Future<void> joinReadonly(String url, String group) => _authenticateWith(
+        url,
+        '/groups/join-readonly',
+        {'group_id': normalizeGroupId(group)},
+      );
+
   Future<void> connect(
     String url,
     String group,
     String username,
     String password, {
     Map<String, dynamic>? registration,
-  }) async {
+  }) =>
+      _authenticateWith(
+        url,
+        registration == null ? '/auth/login' : '/groups',
+        registration ??
+            {
+              'group_id': normalizeGroupId(group),
+              'username': username,
+              'password': password,
+            },
+      );
+
+  Future<void> _authenticateWith(
+    String url,
+    String path,
+    Map<String, dynamic> body,
+  ) async {
     final uri = Uri.parse(url.trim());
     if (uri.scheme != 'https' &&
         !(uri.scheme == 'http' &&
@@ -133,16 +155,7 @@ class SharedService {
     }
     baseUrl = url.trim().replaceAll(RegExp(r'/$'), '');
     token = null;
-    final result = await request(
-      'POST',
-      registration == null ? '/auth/login' : '/groups',
-      registration ??
-          {
-            'group_id': normalizeGroupId(group),
-            'username': username,
-            'password': password,
-          },
-    );
+    final result = await request('POST', path, body);
     requireCurrentConnection();
     identity = result;
     token = result['token'] as String;

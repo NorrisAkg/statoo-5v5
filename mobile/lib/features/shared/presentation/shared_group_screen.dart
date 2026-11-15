@@ -65,6 +65,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
   final _sharedUser = TextEditingController(text: 'membres');
   final _sharedPassword = TextEditingController();
   bool _create = false;
+  bool _readonly = false;
   bool _connectionFailed = false;
   bool _busy = false;
   bool _failed = false;
@@ -234,13 +235,17 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
         'members': registrationMembers(group, members),
       };
     }
-    await service.connect(
+    if (!_create && _readonly) {
+      await service.joinReadonly(url, _group.text);
+    } else {
+      await service.connect(
       url,
       _create ? group! : targetGroup,
       username,
       password,
       registration: registration,
     );
+    }
     await container
         .read(activeTeamIdProvider.notifier)
         .selectTeam(service.groupId!);
@@ -1338,6 +1343,16 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               hint: 'Ex. : #13120987, le # est facultatif',
               errorText: _groupError,
             ),
+          if (!_create)
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              value: _readonly,
+              onChanged: _busy ? null : (v) => setState(() => _readonly = v ?? false),
+              title: const Text('Accès membre (lecture seule)'),
+              subtitle: const Text('Consulter les données avec le numéro du groupe uniquement'),
+              controlAffinity: ListTileControlAffinity.leading,
+            ),
+          if (_create || !_readonly) ...[
           _field(
             _user,
             _create ? 'Votre identifiant' : 'Identifiant',
@@ -1351,6 +1366,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
             icon: Remix.lock_line,
             errorText: _passwordError,
           ),
+          ],
           if (!_create) ...[
             const SizedBox(height: 8),
             Align(
