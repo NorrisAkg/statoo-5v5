@@ -51,12 +51,12 @@ Le test distant `backend/.venv/Scripts/python.exe scripts/neon_smoke.py` vérifi
 création, persistance PostgreSQL, connexion, lecture et révocation d'accès ;
 il nettoie uniquement les données de son propre groupe de test.
 
-Python 3.12 ou supérieur :
+Python 3.12 (version fixée pour Render, voir `render.yaml`) :
 
 ```powershell
 cd backend
 python -m venv .venv
-.venv/Scripts/python.exe -m pip install -r requirements-dev.txt
+.venv/Scripts/python.exe -m pip install --require-hashes -r requirements-dev.lock
 .venv/Scripts/python.exe -m uvicorn app.main:app --reload
 .venv/Scripts/python.exe -m pytest
 ```

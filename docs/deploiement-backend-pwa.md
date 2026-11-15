@@ -20,8 +20,11 @@ Sources : backend/app/main.py et backend/app/models.py. Le backend inclut la gé
 Service existant : https://statoo-api.onrender.com. Conserver le service et la base existants.
 
 - Root Directory : backend
-- Build Command : pip install -r requirements.txt
-- Start Command : uvicorn app.main:app --host 0.0.0.0 --port $PORT
+- Plan : gratuit (`plan: free`), **risque accepté le 15/11/2026 (OPS-006)** : mise en veille après inactivité, premier appel d'environ une minute, aucun engagement de disponibilité. L'application (mobile et web) attend jusqu'à 90 s et n'affiche « Impossible de joindre Statoo » que si le réveil dépasse ce délai. Les compteurs de tentatives sont remis à zéro à chaque mise en veille ou redémarrage. À revoir avant d'accueillir des groupes réels ; compensation prévue : sonde externe (OPS-003, non faite).
+- Une seule instance, un seul processus uvicorn : les compteurs de tentatives sont en mémoire. `numInstances: 1` et `--workers 1` sont explicites ; ne pas activer la mise à l'échelle ni définir `WEB_CONCURRENCY` (vérifié par `backend/tests/test_dependency_lock.py`).
+- Build Command : pip install --require-hashes -r requirements.lock (lockfile avec empreintes, voir `backend/README.md`)
+- PYTHON_VERSION : 3.12.3, déclaré dans `render.yaml`.
+- Start Command : uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
 - Health Check : /health
 - DATABASE_URL : conserver la valeur existante.
 - DATABASE_URL_UNPOOLED : conserver la valeur existante si configurée, pour la création du schéma.

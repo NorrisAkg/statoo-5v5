@@ -3,12 +3,29 @@ services:
     name: statoo-api
     runtime: python
     rootDir: backend
+    # OPS-006, décision du 15/11/2026 : plan gratuit conservé, risque accepté (mise en
+    # veille après inactivité, démarrage à froid d'environ une minute, pas d'engagement
+    # de disponibilité). À revoir avant d'accueillir des groupes réels. Une seule instance
+    # et un seul processus : les compteurs de tentatives sont en mémoire, et donc remis à
+    # zéro à chaque mise en veille ou redémarrage (fenêtre d'une heure des inscriptions
+    # ramenée en pratique à environ 15 minutes d'inactivité).
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    numInstances: 1
+    # Lockfile avec empreintes (DEP-001) : régénération décrite dans backend/README.md.
+    buildCommand: pip install --require-hashes -r requirements.lock
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
     healthCheckPath: /health
     envVars:
+      # Même version mineure que l'environnement de test (OPS-005), vérifié par
+      # backend/tests/test_dependency_lock.py. Render exige une version complète.
+      - key: PYTHON_VERSION
+        value: 3.12.3
       - key: DATABASE_URL
         sync: false
       - key: CORS_ORIGINS
         sync: false
+      # Source de l'IP client pour les limites de tentatives (SEC-002). Obligatoire : l'API
+      # refuse de démarrer sur Render sans l'une des deux. Valeur à vérifier sur Render
+      # (nombre d'entrées ajoutées à droite de X-Forwarded-For par les proxys de confiance).
+      - key: STATOO_TRUSTED_PROXY_HOPS
+        value: "1"
