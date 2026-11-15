@@ -466,7 +466,6 @@ void main() {
         {'type': 'goal', 'team': 'A', 'player': 'part2', 'assist': null, 'delta': 1},
       ]);
       expect(controller.edits, ['dummy']);
->>>>>>> fix/mobile-red-tests
     });
   });
 }
