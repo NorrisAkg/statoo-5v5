@@ -9,6 +9,7 @@ enum CloseBlocker {
   assistsExceedGoals,
   selfAssist,
   duplicatePlayer,
+  belowMinimumPlayers,
 }
 
 /// The session vanished or changed between the check and the write.
@@ -50,17 +51,11 @@ List<CloseBlocker> closeBlockers({
   int playerAssistsB = 0,
   int playerAssistsC = 0,
   Iterable<Participation>? participations,
+  int minimumPlayers = 0,
 }) {
-  final bool uneven;
-  if (session.sessionType == SessionType.tournament3) {
-    final cCount = teamCCount ?? 0;
-    final counts = [teamACount, teamBCount, cCount];
-    final maxCount = counts.reduce((a, b) => a > b ? a : b);
-    final minCount = counts.reduce((a, b) => a < b ? a : b);
-    uneven = (maxCount - minCount) > 1;
-  } else {
-    uneven = (teamACount - teamBCount).abs() > 1;
-  }
+  final uneven = _uneven(session, teamACount, teamBCount, teamCCount);
+  final belowMinimum =
+      teamACount + teamBCount + (teamCCount ?? 0) < minimumPlayers;
 
   var hasDuplicatePlayer = false;
   if (participations != null) {
@@ -89,6 +84,7 @@ List<CloseBlocker> closeBlockers({
   return [
     if (!hasScore(session)) CloseBlocker.missingScore,
     if (hasDuplicatePlayer) CloseBlocker.duplicatePlayer,
+    if (belowMinimum) CloseBlocker.belowMinimumPlayers,
     if (!session.allowUnevenTeams && uneven) CloseBlocker.unevenTeams,
     if (session.scoreA != null && session.scoreB != null &&
         (playerGoalsA + session.unassignedGoalsA != session.scoreA! ||
@@ -102,4 +98,29 @@ List<CloseBlocker> closeBlockers({
       CloseBlocker.assistsExceedGoals,
     if (hasSelfAssist) CloseBlocker.selfAssist,
   ];
+}
+
+/// MET-002 : conditions de démarrage d'une séance, identiques à celles de
+/// l'API (`validate_sport`, `is_active`) : minimum de joueurs du groupe et
+/// équilibre des équipes. Le score n'est pas exigé (il part de 0-0).
+List<CloseBlocker> startBlockers({
+  required Session session,
+  required int teamACount,
+  required int teamBCount,
+  required int minimumPlayers,
+  int? teamCCount,
+}) => [
+  if (teamACount + teamBCount + (teamCCount ?? 0) < minimumPlayers)
+    CloseBlocker.belowMinimumPlayers,
+  if (!session.allowUnevenTeams &&
+      _uneven(session, teamACount, teamBCount, teamCCount))
+    CloseBlocker.unevenTeams,
+];
+
+bool _uneven(Session session, int a, int b, int? c) {
+  if (session.sessionType != SessionType.tournament3) return (a - b).abs() > 1;
+  final counts = [a, b, c ?? 0];
+  final maxCount = counts.reduce((x, y) => x > y ? x : y);
+  final minCount = counts.reduce((x, y) => x < y ? x : y);
+  return maxCount - minCount > 1;
 }

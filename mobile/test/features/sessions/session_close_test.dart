@@ -8,6 +8,7 @@ import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_close_rules.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
+import 'package:statoo/features/settings/application/settings_provider.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
@@ -28,11 +29,26 @@ class _FakeSessionsRepository implements SessionsRepository {
   @override
   Future<List<SessionParticipantDetail>> getSessionParticipants(String sessionId, {required String teamId}) async => participants;
 
-  @override
-  Future<String?> getActiveSessionId({required String teamId}) async => null;
+  String? activeId;
+  final List<String> removed = [];
 
   @override
-  Future<void> setActiveSessionId(String? sessionId, {required String teamId}) async {}
+  Future<String?> getActiveSessionId({required String teamId}) async => activeId;
+
+  @override
+  Future<void> setActiveSessionId(String? sessionId, {required String teamId}) async {
+    activeId = sessionId;
+  }
+
+  @override
+  Future<void> removeParticipation({
+    required String sessionId,
+    required String participationId,
+    required String teamId,
+  }) async {
+    removed.add(participationId);
+    participants.removeWhere((p) => p.participation.id == participationId);
+  }
 
   @override
   Future<void> saveSession(
@@ -313,6 +329,8 @@ void main() {
           sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+          // Fixtures à 4 joueurs : minimum du groupe fixé à 4 (MET-002 testé à part).
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 4)),
         ],
       );
       addTearDown(container.dispose);
@@ -405,6 +423,8 @@ void main() {
           sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+          // Fixtures à 4 joueurs : minimum du groupe fixé à 4 (MET-002 testé à part).
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 4)),
         ],
       );
       addTearDown(container.dispose);
@@ -421,7 +441,8 @@ void main() {
         playedAt: playedAt,
         isRanked: true,
         allowUnevenTeams: false,
-        playerTeamAssignments: {'a1': 'A', 'b1': 'B'},
+        // Au minimum du conteneur (4) : la création démarre la séance (MET-002).
+        playerTeamAssignments: {'a1': 'A', 'a2': 'A', 'b1': 'B', 'b2': 'B'},
       );
 
       expect(savedSession, isNotNull);
@@ -438,6 +459,8 @@ void main() {
           sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+          // Fixtures à 4 joueurs : minimum du groupe fixé à 4 (MET-002 testé à part).
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 4)),
         ],
       );
       addTearDown(container.dispose);
@@ -454,6 +477,226 @@ void main() {
       expect(repo.session.scoreA, 0);
       expect(repo.session.scoreB, 0);
       expect(repo.session.result, MatchResult.draw);
+    });
+  });
+
+  group('MET-002 minimum de joueurs (parité main.py / web/domain.mjs)', () {
+    final draw = unscored.copyWith(scoreA: 0, scoreB: 0, result: MatchResult.draw);
+    List<SessionParticipantDetail> roster(int a, int b, [int c = 0]) => [
+      for (var i = 0; i < a; i++) _participant('a$i', Team.a),
+      for (var i = 0; i < b; i++) _participant('b$i', Team.b),
+      for (var i = 0; i < c; i++) _participant('c$i', Team.c),
+    ];
+    ProviderContainer containerFor(SessionsRepository repo, int minimum) {
+      final container = ProviderContainer(
+        overrides: [
+          sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
+          sessionsRepositoryProvider.overrideWithValue(repo),
+          activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 't1')),
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: minimum)),
+        ],
+      );
+      addTearDown(container.dispose);
+      return container;
+    }
+
+    test('closeBlockers : sous le minimum, au minimum, sans minimum', () {
+      expect(
+        closeBlockers(session: draw, teamACount: 3, teamBCount: 2, minimumPlayers: 6),
+        [CloseBlocker.belowMinimumPlayers],
+      );
+      expect(closeBlockers(session: draw, teamACount: 3, teamBCount: 3, minimumPlayers: 6), isEmpty);
+      expect(closeBlockers(session: draw, teamACount: 3, teamBCount: 2), isEmpty);
+    });
+
+    test('closeBlockers : le tournoi compte les trois équipes', () {
+      final tournament = Session(
+        id: 's1',
+        playedAt: playedAt,
+        isRanked: true,
+        sessionType: SessionType.tournament3,
+        winsA: 1,
+        result: MatchResult.teamA,
+      );
+      expect(
+        closeBlockers(session: tournament, teamACount: 2, teamBCount: 2, teamCCount: 2, minimumPlayers: 6),
+        isEmpty,
+      );
+      expect(
+        closeBlockers(session: tournament, teamACount: 2, teamBCount: 2, teamCCount: 1, minimumPlayers: 6),
+        [CloseBlocker.belowMinimumPlayers],
+      );
+    });
+
+    test('closeBlockers : les équipes inégales autorisées ne dispensent pas du minimum', () {
+      expect(
+        closeBlockers(
+          session: draw.copyWith(allowUnevenTeams: true),
+          teamACount: 4,
+          teamBCount: 1,
+          minimumPlayers: 6,
+        ),
+        [CloseBlocker.belowMinimumPlayers],
+      );
+    });
+
+    test('startBlockers : minimum et équilibre, comme au démarrage côté serveur', () {
+      expect(startBlockers(session: draw, teamACount: 3, teamBCount: 2, minimumPlayers: 6),
+          [CloseBlocker.belowMinimumPlayers]);
+      expect(startBlockers(session: draw, teamACount: 5, teamBCount: 2, minimumPlayers: 6),
+          [CloseBlocker.unevenTeams]);
+      expect(startBlockers(session: draw, teamACount: 4, teamBCount: 1, minimumPlayers: 6),
+          [CloseBlocker.belowMinimumPlayers, CloseBlocker.unevenTeams]);
+      expect(startBlockers(session: draw.copyWith(allowUnevenTeams: true), teamACount: 5, teamBCount: 2, minimumPlayers: 6),
+          isEmpty);
+      // Un score absent ne bloque pas le démarrage (il est initialisé à 0-0).
+      expect(startBlockers(session: unscored, teamACount: 3, teamBCount: 3, minimumPlayers: 6), isEmpty);
+    });
+
+    test('clôture refusée à 5 joueurs pour un minimum de 6 (cas de l’audit)', () async {
+      final repo = _FakeSessionsRepository(draw, roster(3, 2));
+      final blockers = await containerFor(repo, 6).read(sessionsControllerProvider).closeSession('s1');
+      expect(blockers, [CloseBlocker.belowMinimumPlayers]);
+      expect(repo.closeCalls, 0);
+      expect(repo.session.status, SessionStatus.draft);
+    });
+
+    test('clôture acceptée au minimum du groupe (réglé à 4)', () async {
+      final repo = _FakeSessionsRepository(draw, roster(2, 2));
+      final blockers = await containerFor(repo, 4).read(sessionsControllerProvider).closeSession('s1');
+      expect(blockers, isEmpty);
+      expect(repo.session.status, SessionStatus.closed);
+    });
+
+    test('démarrage refusé sous le minimum, séance non activée', () async {
+      final repo = _FakeSessionsRepository(unscored, roster(3, 2));
+      final controller = containerFor(repo, 6).read(sessionsControllerProvider);
+      await expectLater(
+        controller.startSession('s1'),
+        throwsA(isA<StateError>().having((e) => e.message, 'message',
+            'Sélectionnez au minimum 6 joueurs pour débuter la séance.')),
+      );
+      expect(repo.activeId, isNull);
+      expect(repo.session.scoreA, isNull);
+    });
+
+    test('démarrage refusé si les équipes sont déséquilibrées', () async {
+      final repo = _FakeSessionsRepository(unscored, roster(5, 2));
+      final controller = containerFor(repo, 6).read(sessionsControllerProvider);
+      await expectLater(
+        controller.startSession('s1'),
+        throwsA(isA<StateError>().having((e) => e.message, 'message', contains('déséquilibrées'))),
+      );
+      expect(repo.activeId, isNull);
+    });
+
+    test('démarrage accepté au minimum', () async {
+      final repo = _FakeSessionsRepository(unscored, roster(3, 3));
+      expect(await containerFor(repo, 6).read(sessionsControllerProvider).startSession('s1'), isTrue);
+      expect(repo.activeId, 's1');
+    });
+
+    test('clôture d’un brouillon jamais démarré : minimum exigé aussi (CLOSED côté API)', () async {
+      final repo = _FakeSessionsRepository(draw, roster(2, 2));
+      expect(repo.activeId, isNull);
+      final blockers = await containerFor(repo, 6).read(sessionsControllerProvider).closeSession('s1');
+      expect(blockers, [CloseBlocker.belowMinimumPlayers]);
+      expect(repo.closeCalls, 0);
+    });
+
+    test('clôture d’un tournoi sous le minimum refusée par le contrôleur', () async {
+      final tournament = Session(
+        id: 's1',
+        playedAt: playedAt,
+        isRanked: true,
+        sessionType: SessionType.tournament3,
+        winsA: 1,
+        result: MatchResult.teamA,
+      );
+      final repo = _FakeSessionsRepository(tournament, roster(2, 2, 1));
+      final blockers = await containerFor(repo, 6).read(sessionsControllerProvider).closeSession('s1');
+      expect(blockers, [CloseBlocker.belowMinimumPlayers]);
+      expect(repo.closeCalls, 0);
+    });
+
+    test('création avec démarrage immédiat refusée sous le minimum, rien n’est enregistré', () async {
+      Session? saved;
+      final repo = _FakeSessionsRepository(draw, [])..onSaveSession = (s) => saved = s;
+      final controller = containerFor(repo, 6).read(sessionsControllerProvider);
+      await expectLater(
+        controller.createDraftSession(
+          playedAt: playedAt,
+          isRanked: true,
+          allowUnevenTeams: false,
+          playerTeamAssignments: {'a1': 'A', 'a2': 'A', 'a3': 'A', 'b1': 'B', 'b2': 'B'},
+        ),
+        throwsA(isA<StateError>().having((e) => e.message, 'message',
+            'Sélectionnez au minimum 6 joueurs pour débuter la séance.')),
+      );
+      expect(saved, isNull);
+      expect(repo.activeId, isNull);
+    });
+
+    test('création avec démarrage immédiat refusée si les équipes sont déséquilibrées', () async {
+      Session? saved;
+      final repo = _FakeSessionsRepository(draw, [])..onSaveSession = (s) => saved = s;
+      final controller = containerFor(repo, 6).read(sessionsControllerProvider);
+      await expectLater(
+        controller.createDraftSession(
+          playedAt: playedAt,
+          isRanked: true,
+          allowUnevenTeams: false,
+          playerTeamAssignments: {for (var i = 0; i < 5; i++) 'a$i': 'A', 'b1': 'B', 'b2': 'B'},
+        ),
+        throwsA(isA<StateError>().having((e) => e.message, 'message', contains('déséquilibrées'))),
+      );
+      expect(saved, isNull);
+    });
+
+    test('brouillon sans démarrage, ou pendant une autre séance en cours : pas de contrôle', () async {
+      final idle = _FakeSessionsRepository(draw, []);
+      await containerFor(idle, 6).read(sessionsControllerProvider).createDraftSession(
+            playedAt: playedAt,
+            isRanked: true,
+            allowUnevenTeams: false,
+            startImmediately: false,
+            playerTeamAssignments: {'a1': 'A', 'b1': 'B'},
+          );
+      expect(idle.activeId, isNull);
+
+      final busy = _FakeSessionsRepository(draw, [])..activeId = 'other';
+      await containerFor(busy, 6).read(sessionsControllerProvider).createDraftSession(
+            playedAt: playedAt,
+            isRanked: true,
+            allowUnevenTeams: false,
+            playerTeamAssignments: {'a1': 'A', 'b1': 'B'},
+          );
+      expect(busy.activeId, 'other');
+    });
+
+    test('retrait refusé s’il fait passer une séance en cours sous le minimum', () async {
+      final repo = _FakeSessionsRepository(draw, roster(3, 3))..activeId = 's1';
+      final controller = containerFor(repo, 6).read(sessionsControllerProvider);
+      await expectLater(
+        controller.removeParticipation(sessionId: 's1', participationId: 'p_a0', playerTeam: Team.a),
+        throwsA(isA<StateError>().having((e) => e.message, 'message',
+            'Ce retrait laisserait 5 joueurs : une séance en cours exige au minimum 6 joueurs.')),
+      );
+      expect(repo.removed, isEmpty);
+    });
+
+    test('retrait accepté au-dessus du minimum ou sur un brouillon non démarré', () async {
+      final active = _FakeSessionsRepository(draw, roster(4, 3))..activeId = 's1';
+      await containerFor(active, 6)
+          .read(sessionsControllerProvider)
+          .removeParticipation(sessionId: 's1', participationId: 'p_a0', playerTeam: Team.a);
+      expect(active.removed, ['p_a0']);
+
+      final draft = _FakeSessionsRepository(draw, roster(3, 3));
+      await containerFor(draft, 6)
+          .read(sessionsControllerProvider)
+          .removeParticipation(sessionId: 's1', participationId: 'p_a0', playerTeam: Team.a);
+      expect(draft.removed, ['p_a0']);
     });
   });
 
@@ -525,6 +768,8 @@ void main() {
           activeTeamIdProvider.overrideWith(
             () => ActiveTeamIdNotifier(initialValue: activeTeamId),
           ),
+          // Effectifs réduits dans ces fixtures : minimum au plus bas autorisé (MET-002 testé à part).
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 2)),
         ],
       );
       addTearDown(container.dispose);

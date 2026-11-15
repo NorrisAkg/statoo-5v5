@@ -19,6 +19,8 @@ import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
+import '../../support/field_labels.dart';
+
 class _MockPlayersNotifier extends PlayersNotifier {
   _MockPlayersNotifier(this._players);
   final List<Player> _players;
@@ -82,6 +84,10 @@ void main() {
     return ProviderScope(
       overrides: [
         if (repoOverride != null) sessionsRepositoryProvider.overrideWithValue(repoOverride),
+        // L'écran observe la séance active (493d62d) : sans surcharge, une vraie
+        // requête sqflite démarre sous FakeAsync et laisse un Timer en attente.
+        if (repoOverride == null)
+          activeDraftSessionProvider.overrideWith((ref) async => null),
         if (referenceOverride != null)
           nextSessionReferenceProvider.overrideWith(
             (ref, date) async => referenceOverride,
@@ -112,6 +118,154 @@ void main() {
   }
 
   group('NewSessionScreen', () {
+    // A11Y-004 (revues) : libellé de la recherche entier, et feuille utilisable
+    // (aucun débordement, joueur sélectionnable, action principale atteignable)
+    // à 320/393 dp, 568/852 px, texte 100/130/200 %, clavier ouvert ou fermé.
+    for (final width in [320.0, 393.0]) {
+      for (final height in [568.0, 852.0]) {
+        for (final scale in [1.0, 1.3, 2.0]) {
+          for (final keyboard in [0.0, 260.0]) {
+            for (final tournament in [false, true]) {
+              testWidgets(
+                'A11Y004 ajout tardif $width×$height texte $scale '
+                'clavier $keyboard tournoi $tournament',
+                (tester) async {
+                  tester.view.physicalSize = Size(width, height);
+                  tester.view.devicePixelRatio = 1;
+                  tester.platformDispatcher.textScaleFactorTestValue = scale;
+                  addTearDown(tester.view.reset);
+                  addTearDown(
+                    tester.platformDispatcher.clearTextScaleFactorTestValue,
+                  );
+                  await tester.pumpWidget(
+                    createWidget(
+                      role: 'SG',
+                      home: Builder(
+                        builder: (context) => TextButton(
+                          // Ouverture réelle : session_detail_screen.dart.
+                          onPressed: () => showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => AddLatePlayersBottomSheet(
+                              sessionId: 's',
+                              currentTeamACount: 1,
+                              currentTeamBCount: 1,
+                              currentTeamCCount: tournament ? 1 : null,
+                              alreadyAssignedPlayerIds: const {},
+                            ),
+                          ),
+                          child: const Text('Ouvrir'),
+                        ),
+                      ),
+                    ),
+                  );
+                  await tester.tap(find.text('Ouvrir'));
+                  await tester.pumpAndSettle();
+                  tester.view.viewInsets = FakeViewPadding(bottom: keyboard);
+                  await tester.pumpAndSettle();
+                  expect(tester.takeException(), isNull);
+                  await expectWholeFieldLabel(
+                    tester,
+                    'Rechercher un joueur',
+                    scrollable: find.byType(Scrollable).first,
+                  );
+                  final sheet = find.byType(AddLatePlayersBottomSheet);
+                  Finder scrollable() => find
+                      .descendant(of: sheet, matching: find.byType(Scrollable))
+                      .first;
+                  // Fait défiler la feuille jusqu'à [target] (plusieurs éléments
+                  // possibles ; `.first` d'un finder vide lève une erreur).
+                  Future<void> reveal(Finder target) async {
+                    for (var i = 0; i < 40 && target.hitTestable().evaluate().isEmpty; i++) {
+                      if (target.evaluate().isNotEmpty) {
+                        await tester.ensureVisible(target.first);
+                      } else {
+                        await tester.drag(scrollable(), const Offset(0, -60));
+                      }
+                      await tester.pumpAndSettle();
+                    }
+                  }
+
+                  final present = find.text('Présent');
+                  await reveal(present);
+                  await tester.tap(present.hitTestable().first);
+                  await tester.pumpAndSettle();
+                  expect(find.textContaining('Sélectionnez un joueur'), findsNothing);
+                  final action = find.textContaining('Attribuez une équipe');
+                  await reveal(action);
+                  expect(action.hitTestable(), findsOneWidget);
+                  expect(tester.takeException(), isNull);
+                },
+              );
+            }
+          }
+        }
+      }
+    }
+    // Revue A11Y-004 : l'ouverture puis la fermeture du clavier conservent l'éditeur
+    // de recherche et son focus (arbitrage du 26/10), même si la feuille change de
+    // mise en page.
+    for (final scale in [1.0, 2.0]) {
+      testWidgets('A11Y004 ajout tardif : le clavier garde le focus (texte $scale)', (
+        tester,
+      ) async {
+        tester.view.physicalSize = const Size(393, 852);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = scale;
+        addTearDown(tester.view.reset);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await tester.pumpWidget(
+          createWidget(
+            role: 'SG',
+            home: Builder(
+              builder: (context) => TextButton(
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => const AddLatePlayersBottomSheet(
+                    sessionId: 's',
+                    currentTeamACount: 1,
+                    currentTeamBCount: 1,
+                    alreadyAssignedPlayerIds: {},
+                  ),
+                ),
+                child: const Text('Ouvrir'),
+              ),
+            ),
+          ),
+        );
+        await tester.tap(find.text('Ouvrir'));
+        await tester.pumpAndSettle();
+        Finder editor() => find.descendant(
+          of: find.byType(AddLatePlayersBottomSheet),
+          matching: find.byType(EditableText),
+        );
+        await tester.tap(editor());
+        await tester.pumpAndSettle();
+        bool focused() =>
+            tester.widget<EditableText>(editor()).focusNode.hasFocus;
+        expect(focused(), isTrue);
+
+        tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+        await tester.pumpAndSettle();
+        expect(focused(), isTrue, reason: 'clavier ouvert');
+        expect(tester.testTextInput.hasAnyClients, isTrue);
+        tester.testTextInput.enterText('Alice');
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<EditableText>(editor()).controller.text,
+          'Alice',
+        );
+
+        tester.view.viewInsets = FakeViewPadding.zero;
+        await tester.pumpAndSettle();
+        expect(focused(), isTrue, reason: 'clavier fermé');
+        expect(tester.widget<EditableText>(editor()).controller.text, 'Alice');
+        expect(tester.takeException(), isNull);
+      });
+    }
     testWidgets(
       'UX06-03 late players selection does not offer member creation to SG',
       (tester) async {

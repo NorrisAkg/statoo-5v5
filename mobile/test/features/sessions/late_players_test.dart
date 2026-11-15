@@ -1,13 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:statoo/features/shared/application/shared_providers.dart';
-import '../../support/local_shared_service.dart';
 import 'package:statoo/features/sessions/application/sessions_provider.dart';
 import 'package:statoo/features/sessions/data/sessions_repository.dart';
 import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
+import 'package:statoo/features/settings/application/settings_provider.dart';
+import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
+
+import '../../support/local_shared_service.dart';
 
 class _FakeSessionsRepository implements SessionsRepository {
   _FakeSessionsRepository(this.session, this.participants);
@@ -74,6 +76,8 @@ void main() {
           sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
           sessionsRepositoryProvider.overrideWithValue(repo),
           activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: teamId)),
+          // Fixture sans base de réglages ; minimum au plus bas autorisé (MET-002 testé dans session_close_test).
+          minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 2)),
         ],
       );
       addTearDown(container.dispose);

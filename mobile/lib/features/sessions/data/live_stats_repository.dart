@@ -238,14 +238,14 @@ class LiveStatsRepository {
     }
   }
 
-  Future<void> apply(
+  Future<String> apply(
     String group,
     String session,
     Map<String, dynamic> action, {
     String? edit,
   }) async {
     final db = await database.database;
-    await db.transaction((txn) async {
+    return await db.transaction((txn) async {
       final before = await _snapshot(txn, group, session);
       final entries = await _read(txn, group, session);
       final after = Map<String, dynamic>.from(
@@ -288,6 +288,68 @@ class LiveStatsRepository {
         'after': after,
       });
       await _write(txn, session, after);
+      await _saveJournal(txn, group, session, entries);
+      return id;
+    });
+  }
+
+  /// Annule un carton précis du journal (UX-001), même si d'autres actions
+  /// ont été saisies depuis : vraie annulation s'il est encore la dernière
+  /// entrée, sinon action inverse journalisée. Les autres actions sont
+  /// conservées.
+  Future<void> revert(String group, String session, String entryId) async {
+    final db = await database.database;
+    await db.transaction((txn) async {
+      final current = await _snapshot(txn, group, session);
+      final entries = await _read(txn, group, session);
+      final index = entries.indexWhere((e) => e['id'] == entryId);
+      if (index < 0 || entries.any((e) => e['reverts'] == entryId)) {
+        throw StateError('Ce carton a déjà été annulé.');
+      }
+      final entry = entries[index];
+      final card = Map<String, dynamic>.from(entry['action'] as Map);
+      if (!['yellow', 'red'].contains(card['type'])) {
+        throw StateError('Seul un carton peut être annulé ici.');
+      }
+      if (entry['stale'] == true) {
+        throw StateError(
+          'Ce carton appartient à un historique modifié sur un autre appareil.',
+        );
+      }
+      _same(current, entries.last['after']);
+      if (index == entries.length - 1) {
+        entries.removeLast();
+        await _write(
+          txn,
+          session,
+          Map<String, dynamic>.from(entry['before'] as Map),
+        );
+      } else {
+        final inverse = {...card, 'delta': -((card['delta'] as int?) ?? 1)};
+        final after = Map<String, dynamic>.from(
+          jsonDecode(jsonEncode(current)) as Map,
+        );
+        if (inverse['delta'] == -1) {
+          final field = card['type'] == 'yellow' ? 'yellow_cards' : 'red_cards';
+          final row = (current['players'] as List)
+              .cast<Map<String, dynamic>>()
+              .where((p) => p['id'] == card['player'])
+              .firstOrNull;
+          if (((row?[field] as int?) ?? 0) < 1) {
+            throw StateError('Ce carton a déjà été retiré.');
+          }
+        }
+        _delta(after, inverse, 1);
+        entries.add({
+          'id': '${DateTime.now().microsecondsSinceEpoch}_${entries.length}',
+          'target': null,
+          'reverts': entryId,
+          'action': inverse,
+          'before': current,
+          'after': after,
+        });
+        await _write(txn, session, after);
+      }
       await _saveJournal(txn, group, session, entries);
     });
   }

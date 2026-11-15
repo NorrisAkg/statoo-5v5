@@ -42,14 +42,22 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
           .firstOrNull
           ?.playerName ??
       'Non attribué';
-  Future<void> mutate(Map<String, dynamic>? action, {String? edit}) async {
-    if (!writable) return;
+  /// Enregistre [action] (ou annule la dernière si `null`) et renvoie
+  /// l'identifiant de l'entrée créée dans le journal.
+  Future<String?> mutate(Map<String, dynamic>? action, {String? edit}) =>
+      _write<String?>(
+        (live) => live.recordLive(widget.session.id, action, edit: edit),
+      );
+
+  Future<T?> _write<T>(
+    Future<T> Function(SessionsController controller) write,
+  ) async {
+    if (!writable) return null;
     setState(() => busy = true);
     try {
-      await ref
-          .read(sessionsControllerProvider)
-          .recordLive(widget.session.id, action, edit: edit);
+      final result = await write(ref.read(sessionsControllerProvider));
       if (mounted) setState(() => message = 'Enregistré sur cet appareil');
+      return result;
     } on Object catch (e) {
       if (mounted) {
         setState(
@@ -61,10 +69,12 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
     } finally {
       if (mounted) setState(() => busy = false);
     }
+    return null;
   }
 
-  Future<void> pick(
-    String type, {
+  /// Saisie d'un but (buteur puis passeur). Les cartons passent par
+  /// [_openDisciplineSheet].
+  Future<void> pickGoal({
     String? player,
     String? edit,
     Team? eventTeam,
@@ -77,7 +87,6 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
     final action = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (context) => _LivePicker(
-        type: type,
         team: team,
         teamName: widget.session.teamName(team),
         teamColor: widget.session.teamColor(context, team),
@@ -103,27 +112,54 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
       ),
     );
     if (action != null && mounted) {
-      await mutate(action);
-      if (mounted) {
+      final entry = await mutate(action);
+      if (entry != null && mounted) {
         final isYellow = action['type'] == 'yellow';
         final isDecrement = action['delta'] == -1;
         final cardName = isYellow ? 'Carton jaune' : 'Carton rouge';
         final verb = isDecrement ? 'retiré pour' : 'attribué à';
         final msg = '$cardName $verb ${p.playerName}';
 
-        ScaffoldMessenger.of(context)
+        // Le SnackBar survit au panneau : contrôleur et messagerie sont
+        // capturés maintenant pour que « Annuler » marche après un retour
+        // ou pendant une autre écriture.
+        final controller = ref.read(sessionsControllerProvider);
+        final messenger = ScaffoldMessenger.of(context);
+        final sessionId = widget.session.id;
+        messenger
           ..hideCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
               content: Text(msg),
               action: SnackBarAction(
                 label: 'Annuler',
-                onPressed: () => mutate(null),
+                // UX-001 : annule ce carton précis, pas la dernière action.
+                onPressed: () =>
+                    _revertCard(controller, messenger, sessionId, entry),
               ),
             ),
           );
       }
     }
+  }
+
+  Future<void> _revertCard(
+    SessionsController controller,
+    ScaffoldMessengerState messenger,
+    String sessionId,
+    String entry,
+  ) async {
+    String feedback;
+    try {
+      await controller.revertLive(sessionId, entry);
+      feedback = 'Carton annulé';
+    } on Object catch (e) {
+      feedback = e is StateError ? e.message : 'Annulation impossible : $e';
+    }
+    if (mounted) setState(() => message = feedback);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(feedback)));
   }
 
   @override
@@ -179,7 +215,7 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                       minimumSize: const Size(48, 48),
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                     ),
-                    onPressed: writable ? () => pick('goal') : null,
+                    onPressed: writable ? pickGoal : null,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Row(
@@ -325,7 +361,7 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                         IconButton(
                           tooltip: 'Ajouter un but pour ${p.playerName}',
                           onPressed: writable
-                              ? () => pick('goal', player: p.participation.id)
+                              ? () => pickGoal(player: p.participation.id)
                               : null,
                           icon: const Icon(Remix.add_line),
                         ),
@@ -371,8 +407,7 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
                       if (widget.editable && type == 'goal')
                         TextButton(
                           onPressed: writable
-                              ? () =>
-                                    pick('goal', edit: entry.key, eventTeam: t)
+                              ? () => pickGoal(edit: entry.key, eventTeam: t)
                               : null,
                           child: const Text('Modifier ce but'),
                         ),
@@ -411,7 +446,6 @@ class _LiveStatsPanelState extends ConsumerState<LiveStatsPanel> {
 
 class _LivePicker extends StatefulWidget {
   const _LivePicker({
-    required this.type,
     required this.team,
     required this.teamName,
     required this.players,
@@ -419,7 +453,6 @@ class _LivePicker extends StatefulWidget {
     this.initial,
     this.editing = false,
   });
-  final String type;
   final String teamName;
   final Team team;
   final List<SessionParticipantDetail> players;
@@ -439,7 +472,7 @@ class _LivePickerState extends State<_LivePicker> {
   }
 
   void finish(String? player, [String? assist]) => Navigator.pop(context, {
-    'type': widget.type,
+    'type': 'goal',
     'team': widget.team.name.toUpperCase(),
     'player': player,
     'assist': assist,
@@ -450,8 +483,7 @@ class _LivePickerState extends State<_LivePicker> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final teamColor = widget.teamColor ?? colors.primary500;
-    final goal = widget.type == 'goal';
-    final assistStep = goal && scorer != null;
+    final assistStep = scorer != null;
     final scorerName = widget.players
         .where((p) => p.participation.id == scorer)
         .firstOrNull
@@ -468,7 +500,7 @@ class _LivePickerState extends State<_LivePicker> {
       titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       scrollable: true,
-      title: _buildTitle(context, goal, assistStep, scorerName, teamColor),
+      title: _buildTitle(context, assistStep, scorerName, teamColor),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
@@ -495,13 +527,11 @@ class _LivePickerState extends State<_LivePicker> {
                 player: p,
                 onTap: () => assistStep
                     ? finish(scorer, p.participation.id)
-                    : goal
-                    ? setState(() => scorer = p.participation.id)
-                    : finish(p.participation.id),
+                    : setState(() => scorer = p.participation.id),
               ),
               const SizedBox(height: 8),
             ],
-            if (goal && !assistStep) ...[
+            if (!assistStep) ...[
               const SizedBox(height: 4),
               Divider(color: colors.background700, height: 16),
               const SizedBox(height: 4),
@@ -532,11 +562,7 @@ class _LivePickerState extends State<_LivePicker> {
             foregroundColor: colors.foreground400,
           ),
           child: Text(
-            widget.editing
-                ? 'Annuler la modification'
-                : goal
-                ? 'Annuler le but'
-                : 'Annuler le carton',
+            widget.editing ? 'Annuler la modification' : 'Annuler le but',
           ),
         ),
       ],
@@ -545,7 +571,6 @@ class _LivePickerState extends State<_LivePicker> {
 
   Widget _buildTitle(
     BuildContext context,
-    bool goal,
     bool assistStep,
     String? scorerName,
     Color teamColor,
@@ -562,7 +587,7 @@ class _LivePickerState extends State<_LivePicker> {
       );
       titleText = scorerName != null ? 'But de $scorerName' : 'But';
       subtitleText = 'Qui lui a fait la passe ?';
-    } else if (goal) {
+    } else {
       headerIcon = Icon(
         Remix.football_line,
         size: 20,
@@ -570,18 +595,6 @@ class _LivePickerState extends State<_LivePicker> {
       );
       titleText = 'Qui a marqué ?';
       subtitleText = "Sélectionnez le buteur de l'action";
-    } else {
-      final isYellow = widget.type == 'yellow';
-      headerIcon = Container(
-        width: 14,
-        height: 18,
-        decoration: BoxDecoration(
-          color: isYellow ? colors.card : colors.danger,
-          borderRadius: BorderRadius.circular(3),
-        ),
-      );
-      titleText = 'Quel joueur reçoit le carton ?';
-      subtitleText = isYellow ? 'Carton jaune' : 'Carton rouge direct';
     }
 
     return Column(

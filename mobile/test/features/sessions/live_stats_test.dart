@@ -260,6 +260,205 @@ void main() {
     },
   );
 
+  test('UX001-11 contrôleur : revertLive exige le droit sport et met en file', () async {
+    final service = SharedService(AppDatabase.forTesting(db))
+      ..identity = {
+        'group_id': 't',
+        'expires_at': '2099-01-01T00:00:00Z',
+        'account': {
+          'id': 'account',
+          'roles': ['ADMIN'],
+          'shared': false,
+        },
+      };
+    final container = ProviderContainer(
+      overrides: [
+        activeTeamIdProvider.overrideWith(
+          () => ActiveTeamIdNotifier(initialValue: 't'),
+        ),
+        sharedServiceProvider.overrideWith((ref) => service),
+      ],
+    );
+    addTearDown(container.dispose);
+    addTearDown(service.dispose);
+    final controller = container.read(sessionsControllerProvider);
+    final id = await controller.recordLive('s', {
+      'type': 'yellow',
+      'team': 'A',
+      'player': 'p',
+    });
+    expect(id, isNotNull);
+    await controller.recordLive('s', {'type': 'goal', 'team': 'B', 'player': 'r'});
+    service.identity!['account'] = {
+      'id': 'account',
+      'roles': ['MEMBER'],
+      'shared': true,
+    };
+    await expectLater(controller.revertLive('s', id!), throwsStateError);
+    expect((await player('p'))['yellow_cards'], 1);
+    service.identity!['account'] = {
+      'id': 'account',
+      'roles': ['SG'],
+      'shared': false,
+    };
+    await controller.revertLive('s', id);
+    expect((await player('p'))['yellow_cards'], 0);
+    expect((await session())['score_b'], 1);
+    final queued = await db.query(
+      'meta',
+      where: 'substr(key,1,7) = ?',
+      whereArgs: ['outbox_'],
+    );
+    expect(queued, hasLength(1));
+    expect(queued.single['value'], contains('"yellow_cards":0'));
+  });
+
+  group('UX-001 annulation ciblée d’un carton (revert)', () {
+    Future<String> card(String type, String player, {int delta = 1}) =>
+        repo.apply('t', 's', {
+          'type': type,
+          'team': 'A',
+          'player': player,
+          'delta': delta,
+        });
+
+    test('UX001-01 apply renvoie l’identifiant de l’entrée du journal', () async {
+      final id = await card('yellow', 'p');
+      expect((await repo.journal('t', 's')).single['id'], id);
+    });
+
+    test('UX001-02 carton puis but adverse : annuler le carton garde le but', () async {
+      final id = await card('yellow', 'p');
+      await add('goal', player: 'r', team: 'B');
+      await repo.revert('t', 's', id);
+      expect((await player('p'))['yellow_cards'], 0);
+      expect((await player('r'))['goals'], 1);
+      expect((await session())['score_b'], 1);
+      expect((await session())['result'], 'B');
+      final entries = await repo.journal('t', 's');
+      expect(entries, hasLength(3));
+      expect(entries.last['action'], {
+        'type': 'yellow',
+        'team': 'A',
+        'player': 'p',
+        'delta': -1,
+      });
+      // Le but reste annulable : « Annuler la dernière action » retire la compensation, pas le but.
+      await repo.undo('t', 's');
+      expect((await player('p'))['yellow_cards'], 1);
+      expect((await session())['score_b'], 1);
+    });
+
+    test('UX001-03 carton encore dernier : vraie annulation, journal nettoyé', () async {
+      await add('goal', player: 'p');
+      final id = await card('red', 'q');
+      await repo.revert('t', 's', id);
+      expect((await player('q'))['red_cards'], 0);
+      expect((await session())['score_a'], 1);
+      expect(await repo.journal('t', 's'), hasLength(1));
+    });
+
+    test('UX001-04 annuler un retrait de carton remet le carton', () async {
+      await card('yellow', 'p');
+      final removal = await card('yellow', 'p', delta: -1);
+      await add('goal', player: 'q');
+      await repo.revert('t', 's', removal);
+      expect((await player('p'))['yellow_cards'], 1);
+      expect((await player('q'))['goals'], 1);
+    });
+
+    test('UX001-05 double annulation refusée sans écriture', () async {
+      final id = await card('yellow', 'p');
+      await add('goal', player: 'q');
+      await repo.revert('t', 's', id);
+      final before = await repo.journal('t', 's');
+      await expectLater(repo.revert('t', 's', id), throwsStateError);
+      expect((await player('p'))['yellow_cards'], 0);
+      expect(await repo.journal('t', 's'), before);
+    });
+
+    test('UX001-06 double annulation du dernier carton refusée', () async {
+      final id = await card('yellow', 'p');
+      await repo.revert('t', 's', id);
+      await expectLater(repo.revert('t', 's', id), throwsStateError);
+      expect(await repo.journal('t', 's'), isEmpty);
+    });
+
+    test('UX001-07 identifiant inconnu ou but : refus sans écriture', () async {
+      await add('goal', player: 'p');
+      final goal = (await repo.journal('t', 's')).single['id']! as String;
+      await card('yellow', 'q');
+      await expectLater(repo.revert('t', 's', 'inconnu'), throwsStateError);
+      await expectLater(repo.revert('t', 's', goal), throwsStateError);
+      expect((await session())['score_a'], 1);
+      expect((await player('q'))['yellow_cards'], 1);
+      expect(await repo.journal('t', 's'), hasLength(2));
+    });
+
+    test('UX001-08 autre groupe, séance clôturée : refus', () async {
+      final id = await card('yellow', 'p');
+      await add('goal', player: 'q');
+      await expectLater(repo.revert('other', 's', id), throwsStateError);
+      await db.update('sessions', {'status': 'CLOSED'});
+      await expectLater(repo.revert('t', 's', id), throwsStateError);
+      expect((await player('p'))['yellow_cards'], 1);
+    });
+
+    test('UX001-09 carton déjà retiré ailleurs : refus sans compteur négatif', () async {
+      final id = await card('yellow', 'p');
+      await card('yellow', 'p', delta: -1);
+      await add('goal', player: 'q');
+      await expectLater(
+        repo.revert('t', 's', id),
+        throwsA(
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            'Ce carton a déjà été retiré.',
+          ),
+        ),
+      );
+      expect((await player('p'))['yellow_cards'], 0);
+      expect(await repo.journal('t', 's'), hasLength(3));
+    });
+
+    test('UX001-16 but et annulation du carton simultanés : rien ne se perd', () async {
+      for (final goalFirst in [true, false]) {
+        await db.delete('meta', where: 'key = ?', whereArgs: ['live_stats_t_s']);
+        await db.update('sessions', {'score_a': 0, 'score_b': 0, 'result': null});
+        await db.update('participations', {'goals': 0, 'yellow_cards': 0});
+        final id = await card('yellow', 'p');
+        final goal = add('goal', player: 'r', team: 'B');
+        final revert = repo.revert('t', 's', id);
+        await Future.wait(goalFirst ? [goal, revert] : [revert, goal]);
+        expect((await player('p'))['yellow_cards'], 0);
+        expect((await player('r'))['goals'], 1);
+        expect((await session())['score_b'], 1);
+        final entries = await repo.journal('t', 's');
+        for (var i = 1; i < entries.length; i++) {
+          expect(entries[i]['before'], entries[i - 1]['after']);
+        }
+      }
+    });
+
+    test('UX001-10 historique devenu obsolète : refus', () async {
+      final id = await card('yellow', 'p');
+      await db.update(
+        'participations',
+        {'goals': 9},
+        where: 'id = ?',
+        whereArgs: ['q'],
+      );
+      // Carton toujours dernier mais séance modifiée ailleurs : pas de restauration aveugle.
+      await expectLater(repo.revert('t', 's', id), throwsStateError);
+      await add('goal', player: 'r', team: 'B');
+      // L’entrée du carton est marquée obsolète : pas de compensation non plus.
+      await expectLater(repo.revert('t', 's', id), throwsStateError);
+      expect((await player('p'))['yellow_cards'], 1);
+      expect((await player('q'))['goals'], 9);
+    });
+  });
+
   group('LiveStatsRepository - Card deltas and discipline', () {
     test('DISC-01: delta 1 increments cards, delta -1 decrements cards', () async {
       // Yellow cards
