@@ -170,6 +170,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                       ),
                     ),
                     IconButton(
+                      tooltip: 'Fermer',
                       icon: const Icon(Remix.close_line),
                       color: context.colors.foreground400,
                       onPressed: () => Navigator.of(context).pop(),
@@ -242,6 +243,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   obscureText: _obscureNewPassword,
                   onChanged: (_) => setState(() {}),
                   suffixIcon: IconButton(
+                    tooltip: _obscureNewPassword ? 'Afficher le nouveau mot de passe' : 'Masquer le nouveau mot de passe',
                     icon: Icon(
                       _obscureNewPassword
                           ? Remix.eye_line
@@ -269,6 +271,7 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
                   icon: Remix.lock_line,
                   obscureText: _obscureConfirmPassword,
                   suffixIcon: IconButton(
+                    tooltip: _obscureConfirmPassword ? 'Afficher la confirmation du mot de passe' : 'Masquer la confirmation du mot de passe',
                     icon: Icon(
                       _obscureConfirmPassword
                           ? Remix.eye_line
@@ -321,37 +324,40 @@ class _RecoveryRequestSheetState extends ConsumerState<RecoveryRequestSheet> {
           ),
         ),
         const SizedBox(height: 6),
-        TextField(
-          controller: controller,
-          obscureText: obscureText,
-          textCapitalization: textCapitalization,
-          onChanged: onChanged,
-          autocorrect: false,
-          style: TextStyle(color: context.colors.foreground50, fontSize: 14),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(
-              color: context.colors.foreground400,
-              fontSize: 14,
+        Semantics(
+          label: label,
+          child: TextField(
+            controller: controller,
+            obscureText: obscureText,
+            textCapitalization: textCapitalization,
+            onChanged: onChanged,
+            autocorrect: false,
+            style: TextStyle(color: context.colors.foreground50, fontSize: 14),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(
+                color: context.colors.foreground400,
+                fontSize: 14,
+              ),
+              filled: true,
+              fillColor: context.colors.background800,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: context.colors.background700),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: context.colors.background700),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: context.colors.primary500, width: 2),
+              ),
+              prefixIcon: Icon(icon, color: context.colors.foreground400, size: 20),
+              suffixIcon: suffixIcon,
             ),
-            filled: true,
-            fillColor: context.colors.background800,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: context.colors.background700),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: context.colors.background700),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: context.colors.primary500, width: 2),
-            ),
-            prefixIcon: Icon(icon, color: context.colors.foreground400, size: 20),
-            suffixIcon: suffixIcon,
           ),
         ),
       ],

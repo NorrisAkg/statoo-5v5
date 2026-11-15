@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:remixicon/remixicon.dart';
 
 import '../../../core/data/app_database.dart';
+import '../../../core/data/shared_http_error.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
@@ -109,7 +110,8 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
       if (mounted) {
         setState(() {
           _failed = true;
-          _message = '$e';
+          // UX-003 : le message de l'API, sans le code HTTP (« 401: … »).
+          _message = e is SharedApiException ? e.message : '$e';
         });
       }
     } finally {
@@ -1267,7 +1269,7 @@ class _SharedGroupScreenState extends ConsumerState<SharedGroupScreen> {
               _group,
               'Identifiant du groupe',
               icon: Remix.team_line,
-              hint: 'Communiqué par votre gestionnaire',
+              hint: 'Ex. : #13120987, le # est facultatif',
             ),
           _field(
             _user,
