@@ -34,6 +34,11 @@ test("PAR17/20 universal package includes SQLite, offline shell and legacy porta
       "sqflite_sw.js",
     ])
       writeFileSync(join(build, file), "test");
+    // Un vrai build contient toujours la configuration du loader (PERF-005).
+    writeFileSync(
+      join(build, "flutter_bootstrap.js"),
+      '_flutter.buildConfig = {"builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};',
+    );
     writeFileSync(join(legacy, "index.html"), "legacy");
     writeFileSync(join(root, ".env"), "PRIVATE=secret");
     packageUniversal({ build, legacy, output });
