@@ -586,6 +586,21 @@ def create_app(url: str | None = None):
             login_account_attempts.pop(account_key, None)
         return issue(session, group, account)
 
+    readonly_join_attempts: dict[str, list[float]] = {}
+
+    @app.post("/groups/join-readonly")
+    def join_readonly(body: dict, request: Request, session: Session = Depends(db)):
+        raw_id = body.get("group_id") if isinstance(body, dict) else None
+        if not isinstance(raw_id, str) or not raw_id.strip().lstrip("#").strip():
+            fail(422, "Numéro de groupe invalide.")
+        reserve(readonly_join_attempts, client_ip(request), 10, 60.0, "Trop de tentatives, réessayez dans une minute")
+        candidates = group_id_candidates(raw_id)
+        group = next((g for g in (session.get(Group, c) for c in candidates) if g is not None), None)
+        shared_account = None if group is None else next((a for a in group.state["accounts"] if a.get("shared") is True), None)
+        if shared_account is None:
+            fail(404, "Groupe introuvable.")
+        return issue(session, group, shared_account)
+
     @app.post("/auth/logout")
     def logout(authorization: str = Header(default=""), auth=Depends(authenticate)):
         session = auth[0]
