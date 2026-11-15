@@ -26,6 +26,8 @@ def test_deployment_contract_and_local_portal_cors(monkeypatch):
 def test_render_staging_allows_local_portal_without_dashboard_change(monkeypatch, render, branch, allowed):
     monkeypatch.setenv('RENDER', render)
     monkeypatch.setenv('RENDER_GIT_BRANCH', branch)
+    # Sur Render, une source d'IP client est obligatoire (SEC-002) ; sans effet sur le CORS testé ici.
+    monkeypatch.setenv('STATOO_TRUSTED_PROXY_HOPS', '1')
     monkeypatch.setenv('CORS_ORIGINS', 'https://existing.example')
     with TestClient(create_app('sqlite:///:memory:')) as client:
         for origin in ['http://127.0.0.1:18085','http://localhost:18085','http://127.0.0.1:19095','http://localhost:19095','https://existing.example','https://unrelated.example','http://127.0.0.1:19096','http://127.0.0.1.evil.example:19095']:
