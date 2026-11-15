@@ -21,6 +21,8 @@ class NewPlayerBottomSheet extends ConsumerStatefulWidget {
       _NewPlayerBottomSheetState();
 }
 
+const _createAnotherLabel = 'Créer et ajouter un autre joueur';
+
 class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
   final _nameController = TextEditingController();
   final _nicknameController = TextEditingController();
@@ -226,32 +228,35 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              enabled: writable && !_submitting,
-              controller: _nameController,
-              focusNode: _nameFocusNode,
-              autofocus: true,
-              textCapitalization: TextCapitalization.words,
-              textInputAction: TextInputAction.next,
-              decoration: InputDecoration(
-                hintText: 'Karim Benali',
-                hintStyle: TextStyle(color: context.colors.foreground600),
-                filled: true,
-                fillColor: context.colors.background900,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.background700),
+            Semantics(
+              label: 'Nom (obligatoire)',
+              child: TextField(
+                enabled: writable && !_submitting,
+                controller: _nameController,
+                focusNode: _nameFocusNode,
+                autofocus: true,
+                textCapitalization: TextCapitalization.words,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  hintText: 'Karim Benali',
+                  hintStyle: TextStyle(color: context.colors.foreground600),
+                  filled: true,
+                  fillColor: context.colors.background900,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.background700),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.background700),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.primary500),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.background700),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.primary500),
-                ),
+                onChanged: (_) => setState(() => _nameError = null),
               ),
-              onChanged: (_) => setState(() => _nameError = null),
             ),
             if (_nameError != null) ...[
               const SizedBox(height: 6),
@@ -284,32 +289,35 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              enabled: writable && !_submitting,
-              controller: _nicknameController,
-              textCapitalization: TextCapitalization.words,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) {
-                if (isFormValid) {
-                  unawaited(_submit(createAnother: true));
-                }
-              },
-              decoration: InputDecoration(
-                hintText: 'Kaka',
-                hintStyle: TextStyle(color: context.colors.foreground600),
-                filled: true,
-                fillColor: context.colors.background900,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.background700),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.background700),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.colors.primary500),
+            Semantics(
+              label: 'Surnom (facultatif)',
+              child: TextField(
+                enabled: writable && !_submitting,
+                controller: _nicknameController,
+                textCapitalization: TextCapitalization.words,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  if (isFormValid) {
+                    unawaited(_submit(createAnother: true));
+                  }
+                },
+                decoration: InputDecoration(
+                  hintText: 'Kaka',
+                  hintStyle: TextStyle(color: context.colors.foreground600),
+                  filled: true,
+                  fillColor: context.colors.background900,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.background700),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.background700),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: context.colors.primary500),
+                  ),
                 ),
               ),
             ),
@@ -347,27 +355,33 @@ class _NewPlayerBottomSheetState extends ConsumerState<NewPlayerBottomSheet> {
                 const SizedBox(width: 8),
                 Expanded(
                   flex: 2,
-                  child: OutlinedButton(
-                    onPressed: isFormValid
-                        ? () => _submit(createAnother: true)
-                        : null,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: context.colors.primary500,
-                      side: BorderSide(
+                  // A11Y-003 : nom porté par le bouton (icône seule), infobulle pour la souris.
+                  child: Tooltip(
+                    message: _createAnotherLabel,
+                    excludeFromSemantics: true,
+                    child: OutlinedButton(
+                      onPressed: isFormValid
+                          ? () => _submit(createAnother: true)
+                          : null,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: context.colors.primary500,
+                        side: BorderSide(
+                          color: isFormValid
+                              ? context.colors.primary500
+                              : context.colors.background700,
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9999),
+                        ),
+                      ),
+                      child: Icon(
+                        Remix.add_line,
+                        semanticLabel: _createAnotherLabel,
                         color: isFormValid
                             ? context.colors.primary500
-                            : context.colors.background700,
+                            : context.colors.foreground600,
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9999),
-                      ),
-                    ),
-                    child: Icon(
-                      Remix.add_line,
-                      color: isFormValid
-                          ? context.colors.primary500
-                          : context.colors.foreground600,
                     ),
                   ),
                 ),

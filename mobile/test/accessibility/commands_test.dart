@@ -462,4 +462,51 @@ void main() {
       }
     }
   }
+
+  // A11Y-004 (audit 14/11/2026) : nom du champ = libellé visible, avant et après saisie.
+  for (final (screen, field, name, value) in [
+    (const CreateTeamScreen(), 0, "Nom de l'équipe ou du groupe", 'FC Test'),
+    (const CreateTeamScreen(), 2, 'Complexe ou terrain habituel', 'Le Five'),
+    (const AddTeamPlayersScreen(), 0, 'Nom ou prénom', 'Lucas'),
+    (const AddTeamPlayersScreen(), 1, 'Surnom', 'Lulu'),
+  ]) {
+    testWidgets('A11Y004 ${screen.runtimeType} champ $field nommé « $name »', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(fixture(screen));
+      await tester.pumpAndSettle();
+      final finder = find.byType(TextField).at(field);
+      await tester.ensureVisible(finder);
+      await tester.pumpAndSettle();
+      // Nœud de saisie lui-même (isTextField), quel que soit le motif utilisé.
+      String label() => tester
+          .getSemantics(
+            find.descendant(of: finder, matching: find.byType(EditableText)),
+          )
+          .label;
+      expect(label(), startsWith(name));
+      await tester.enterText(finder, value);
+      await tester.pumpAndSettle();
+      expect(label(), startsWith(name));
+      handle.dispose();
+    });
+  }
+
+  // Revue A11Y-004 : l'ajout rapide n'avait aucun libellé visible ; une fois les deux
+  // champs remplis, rien n'indiquait lequel était le nom et lequel le surnom.
+  testWidgets('A11Y004 ajout rapide : libellés visibles après saisie', (
+    tester,
+  ) async {
+    await tester.pumpWidget(fixture(const AddTeamPlayersScreen()));
+    await tester.pumpAndSettle();
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), 'Lucas');
+    await tester.enterText(fields.at(1), 'Lulu');
+    await tester.pumpAndSettle();
+    // Libellés visibles hors du champ : ils ne dépendent pas de la saisie.
+    for (final label in ['Nom ou prénom *', 'Surnom (facultatif)']) {
+      expect(find.text(label).hitTestable(), findsOneWidget, reason: label);
+    }
+  });
 }

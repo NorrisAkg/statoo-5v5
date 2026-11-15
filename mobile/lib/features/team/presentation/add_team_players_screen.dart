@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_step_title.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/labeled_field.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/presentation/new_player_bottom_sheet.dart';
@@ -233,104 +234,110 @@ class _AddTeamPlayersScreenState extends ConsumerState<AddTeamPlayersScreen> {
                               ),
                             ),
                             const SizedBox(height: 14),
-                            TextFormField(
-                              controller: _nameController,
-                              focusNode: _nameFocusNode,
-                              textCapitalization: TextCapitalization.words,
-                              textInputAction: TextInputAction.next,
-                              style: TextStyle(
-                                color: context.colors.foreground50,
+                            LabeledField(
+                              label: 'Nom ou prénom *',
+                              semanticLabel: 'Nom ou prénom (obligatoire)',
+                              child: TextFormField(
+                                controller: _nameController,
+                                focusNode: _nameFocusNode,
+                                textCapitalization: TextCapitalization.words,
+                                textInputAction: TextInputAction.next,
+                                style: TextStyle(
+                                  color: context.colors.foreground50,
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: 'ex : Lucas, Karim…',
+                                  hintStyle: TextStyle(
+                                    color: context.colors.foreground600,
+                                  ),
+                                  prefixIcon: Icon(
+                                    Remix.user_3_line,
+                                    color: context.colors.primary400,
+                                    size: 20,
+                                  ),
+                                  filled: true,
+                                  fillColor: context.colors.background800,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 14,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.background700,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.background700,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.primary500,
+                                      width: 2,
+                                    ),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Veuillez saisir le prénom ou nom du joueur';
+                                  }
+                                  return null;
+                                },
                               ),
-                              decoration: InputDecoration(
-                                hintText:
-                                    'Nom ou prénom (ex: Lucas, Karim...) *',
-                                hintStyle: TextStyle(
-                                  color: context.colors.foreground600,
-                                ),
-                                prefixIcon: Icon(
-                                  Remix.user_3_line,
-                                  color: context.colors.primary400,
-                                  size: 20,
-                                ),
-                                filled: true,
-                                fillColor: context.colors.background800,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 14,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.background700,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.background700,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.primary500,
-                                    width: 2,
-                                  ),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Veuillez saisir le prénom ou nom du joueur';
-                                }
-                                return null;
-                              },
                             ),
                             const SizedBox(height: 12),
-                            TextFormField(
-                              controller: _nicknameController,
-                              textCapitalization: TextCapitalization.words,
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (_) {
-                                if (!_isAdding) {
-                                  unawaited(_addPlayer());
-                                }
-                              },
-                              style: TextStyle(
-                                color: context.colors.foreground50,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: 'Surnom (facultatif, ex: Lulu)',
-                                hintStyle: TextStyle(
-                                  color: context.colors.foreground600,
+                            LabeledField(
+                              label: 'Surnom (facultatif)',
+                              child: TextFormField(
+                                controller: _nicknameController,
+                                textCapitalization: TextCapitalization.words,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) {
+                                  if (!_isAdding) {
+                                    unawaited(_addPlayer());
+                                  }
+                                },
+                                style: TextStyle(
+                                  color: context.colors.foreground50,
                                 ),
-                                prefixIcon: Icon(
-                                  Remix.at_line,
-                                  color: context.colors.foreground500,
-                                  size: 20,
-                                ),
-                                filled: true,
-                                fillColor: context.colors.background800,
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 14,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.background700,
+                                decoration: InputDecoration(
+                                  hintText: 'ex : Lulu',
+                                  hintStyle: TextStyle(
+                                    color: context.colors.foreground600,
                                   ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.background700,
+                                  prefixIcon: Icon(
+                                    Remix.at_line,
+                                    color: context.colors.foreground500,
+                                    size: 20,
                                   ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(
-                                    color: context.colors.primary500,
-                                    width: 2,
+                                  filled: true,
+                                  fillColor: context.colors.background800,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 14,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.background700,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.background700,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                      color: context.colors.primary500,
+                                      width: 2,
+                                    ),
                                   ),
                                 ),
                               ),

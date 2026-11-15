@@ -169,3 +169,22 @@ Les captures hors de l’application, les données privées, les arbres UI péri
   le formulaire existant, nom conservé ; même image intégrée sur web et mobile.
 - Une restauration contenant uniquement d'anciens chemins signale le nombre de photos
   indisponibles dans son résultat. Scénarios et limites : `tdd-portable-photos-2026-10-27.md`.
+
+## Arbitrage du 15 novembre — focus clavier et noms des champs (audit A11Y-001/003/004)
+
+- Focus clavier : anneau commun `FocusRing` (`lib/core/widgets/focus_ring.dart`, posé par
+  `BrowserAppFrame`), trait de 2 px à 2 px de l'élément, couleur `foreground50`. Il n'apparaît
+  qu'en navigation clavier, s'arrête au bord des zones de défilement et ne double pas la
+  bordure de focus des champs. Aucun style de focus à ajouter écran par écran.
+- Toute icône isolée (`IconButton`, FAB, bouton à icône seule) porte un `tooltip` ou un
+  `semanticLabel` en français ; un test parcourt `lib/` (`accessible_names_source_test.dart`).
+- Champ de saisie : nom permanent obligatoire. Libellé visible au-dessus du champ
+  (`LabeledField`, ou `Text` + `Semantics(label:)`) quand il doit rester entier à 320 dp et
+  texte 200 % ; `labelText` seulement pour un libellé court dans un conteneur large (dialogue).
+  Le texte d'exemple (`hintText`) ne nomme jamais le champ.
+- Recherches des listes Joueurs, Finances, Point financier et ajout tardif : libellé visible
+  au-dessus (« Rechercher un joueur/membre »), exemple « Nom ou surnom ». La recherche de
+  composition garde le libellé flottant de l'arbitrage du 26 octobre.
+- Preuves et limites : tests `test/accessibility/` et vérifications de libellés de
+  `small_screen_responsive_test`, `layout_audit_test`, `financial_point_screen_test`,
+  `new_session_screen_test`. Lecteurs d'écran réels (TalkBack, VoiceOver, NVDA) non testés.

@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/labeled_field.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
@@ -527,6 +528,9 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
     String? suffix,
     Widget? icon,
   }) => InputDecoration(
+    prefixIconConstraints: icon == null
+        ? null
+        : const BoxConstraints(minWidth: 32, minHeight: 48),
     hintText: hint,
     suffixText: suffix,
     prefixIcon: icon,
@@ -638,6 +642,8 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
           controller: c,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          // A11Y-004 : nom permanent, la valeur pré-remplie ne nomme pas le champ.
+          decoration: const InputDecoration(labelText: 'Montant par membre (F)'),
         ),
         actions: [
           TextButton(
@@ -688,12 +694,15 @@ class _FinancialPointScreenState extends ConsumerState<FinancialPointScreen> {
             _overview(
               ref.read(sharedServiceProvider).canWrite(_group, 'finance'),
             ),
-            TextField(
-              controller: _search,
-              onChanged: (_) => setState(() {}),
-              decoration: _fieldDecoration(
-                hint: 'Rechercher un membre',
-                icon: const Icon(Remix.search_line),
+            LabeledField(
+              label: 'Rechercher un membre',
+              child: TextField(
+                controller: _search,
+                onChanged: (_) => setState(() {}),
+                decoration: _fieldDecoration(
+                  hint: 'Nom ou surnom',
+                  icon: const Icon(Remix.search_line),
+                ),
               ),
             ),
             const SizedBox(height: 12),

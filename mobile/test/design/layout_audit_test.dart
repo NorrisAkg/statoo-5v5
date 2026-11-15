@@ -17,6 +17,8 @@ import 'package:statoo/features/players/presentation/edit_player_bottom_sheet.da
 import 'package:statoo/features/settings/presentation/financial_defaults_section.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
+import '../support/field_labels.dart';
+
 final _player = Player(
   id: 'a',
   teamId: 'g',
@@ -104,6 +106,16 @@ void main() {
             }
             expect(tester.takeException(), isNull);
             if (page == 'finance') {
+              await expectWholeFieldLabel(
+                tester,
+                'Rechercher un membre',
+                scrollable: find
+                    .descendant(
+                      of: find.byType(ListView).first,
+                      matching: find.byType(Scrollable),
+                    )
+                    .first,
+              );
               final row = find.byKey(const ValueKey('member-a'));
               await tester.scrollUntilVisible(
                 row,

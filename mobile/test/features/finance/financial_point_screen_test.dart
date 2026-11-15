@@ -20,6 +20,8 @@ import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/shared/data/shared_service.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
+import '../../support/field_labels.dart';
+
 final _date = DateTime(2026, 10, 14);
 
 class _Players extends PlayersNotifier {
@@ -400,6 +402,16 @@ void main() {
             dark: dark,
             scale: scale,
             name: 'Alice au nom de famille particulièrement long',
+          );
+          await expectWholeFieldLabel(
+            tester,
+            'Rechercher un membre',
+            scrollable: find
+                .descendant(
+                  of: find.byType(ListView).first,
+                  matching: find.byType(Scrollable),
+                )
+                .first,
           );
           await tester.scrollUntilVisible(
             find.text('Cotisation reçue'),
