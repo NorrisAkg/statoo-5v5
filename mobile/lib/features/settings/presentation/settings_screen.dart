@@ -14,6 +14,7 @@ import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../sessions/application/sessions_provider.dart';
 import '../../shared/application/shared_providers.dart';
+import '../../shared/data/collective_access.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../../team/presentation/team_switcher_bottom_sheet.dart';
@@ -21,11 +22,10 @@ import '../application/home_preferences.dart';
 import '../application/settings_provider.dart';
 import '../data/backup_service.dart';
 import '../domain/backup_payload.dart';
+import 'collective_access_section.dart';
 import 'confirm_replacement.dart';
 import 'financial_defaults_section.dart';
 import 'mvp_weights_section.dart';
-import 'collective_access_section.dart';
-import '../../shared/data/collective_access.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -48,6 +48,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          tooltip: 'Retour',
           icon: const Icon(Remix.arrow_left_s_line),
           onPressed: () => context.pop(),
         ),
@@ -106,6 +107,7 @@ class SettingsScreen extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
+                          tooltip: 'Diminuer le nombre minimal de joueurs',
                           icon: const Icon(Remix.subtract_line, size: 18),
                           color: minPlayers > 2 ? context.colors.foreground200 : context.colors.foreground600,
                           onPressed: !sharedSportSettings && minPlayers > 2
@@ -131,6 +133,7 @@ class SettingsScreen extends ConsumerWidget {
                           ),
                         ),
                         IconButton(
+                          tooltip: 'Augmenter le nombre minimal de joueurs',
                           icon: const Icon(Remix.add_line, size: 18),
                           color: minPlayers < 30 ? context.colors.primary500 : context.colors.foreground600,
                           onPressed: !sharedSportSettings && minPlayers < 30
@@ -221,10 +224,11 @@ class SettingsScreen extends ConsumerWidget {
                                     .read(showPlayerOfMonthProvider.notifier)
                                     .setVisible(value);
                               } on Object catch (e) {
-                                if (context.mounted)
+                                if (context.mounted) {
                                   ScaffoldMessenger.of(
                                     context,
                                   ).showSnackBar(SnackBar(content: Text('$e')));
+                                }
                               }
                             },
                     ),

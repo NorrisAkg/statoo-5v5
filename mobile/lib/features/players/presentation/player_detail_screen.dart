@@ -41,6 +41,7 @@ class PlayerDetailScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
+                tooltip: 'Retour',
                 icon: const Icon(Remix.arrow_left_s_line),
                 onPressed: () {
                   if (context.canPop()) {
@@ -80,6 +81,7 @@ class PlayerDetailScreen extends ConsumerWidget {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
+              tooltip: 'Retour',
               icon: const Icon(Remix.arrow_left_s_line),
               onPressed: () {
                 if (context.canPop()) {
@@ -129,6 +131,7 @@ class PlayerDetailScreen extends ConsumerWidget {
       loading: () => Scaffold(
         appBar: AppBar(
           leading: IconButton(
+            tooltip: 'Retour',
             icon: const Icon(Remix.arrow_left_s_line),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
@@ -141,6 +144,7 @@ class PlayerDetailScreen extends ConsumerWidget {
       error: (err, _) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
+            tooltip: 'Retour',
             icon: const Icon(Remix.arrow_left_s_line),
             onPressed: () => Navigator.of(context).maybePop(),
           ),

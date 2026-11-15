@@ -9,23 +9,24 @@
 ## 2. Stack Technique et Versions
 - **Mobile & Flutter Web** : Flutter 3.47.5, Dart 3.13.4, Riverpod 3.4.3, GoRouter 18.0.1, Freezed 3.1.0, sqflite 2.4.4.
 - **Web PWA Shell** : Node.js v22.23.2, Zod 4.6.7, esbuild 0.28.2, Playwright, Service Worker offline.
-- **Backend API** : Python 3.13.5, FastAPI 0.143.0, SQLAlchemy 2.1.4, Uvicorn, PostgreSQL (Neon) / SQLite dev.
+- **Backend API** : Python 3.12.3 (fixé sur Render, `render.yaml`), versions des paquets dans `backend/requirements.lock` (FastAPI 0.163.0, SQLAlchemy 2.1.8), Uvicorn, PostgreSQL (Neon) / SQLite dev.
 
 ## 3. Commandes Exactes
 ```bash
 # Mobile (Flutter)
 cd mobile && flutter pub get
 dart run build_runner build --delete-conflicting-outputs
-flutter test                        # 836 tests unitaires & widgets
+flutter test                        # 1482 tests mesurés le 15/11/2026, tous verts sur fix/mobile-red-tests
 dart analyze lib test               # Analyse statique rapide (~10s)
 
 # Web (PWA / Tests d'intégration)
-npm run test:web                    # 61 tests unitaires ES modules
+npm run test:web                    # 72 tests unitaires ES modules (15/11/2026)
 npm run build:web                   # Build PWA & vérification package
 npm run format:web                  # Formatage prettier
 
 # Backend (FastAPI / Pytest)
-& "backend/.venv/Scripts/pytest.exe" backend/tests   # 89 tests API
+& "backend/.venv/Scripts/pytest.exe" backend/tests   # Windows ; 442 tests mesurés le 14/11/2026
+cd backend && .venv/bin/pytest -q                     # Linux / macOS (pytest.ini est dans backend/)
 ```
 
 ## 4. Architecture et Règle de Dépendance

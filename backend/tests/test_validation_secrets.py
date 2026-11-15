@@ -201,7 +201,7 @@ def test_financial_model_errors_do_not_get_stringified_with_inputs(api, invalid)
     assert state(api) == before
 
 
-@pytest.mark.parametrize('kind,status,word', [('login', 401, 'Identifiants'),
+@pytest.mark.parametrize('kind,status,word', [('login', 401, 'Identifiant du groupe'),
                                             ('permission', 403, 'Droit'),
                                             ('password', 400, 'incorrect')])
 def test_safe_business_authentication_errors_keep_their_contract(api, kind, status, word):

@@ -233,51 +233,54 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextFormField(
-                  controller: _nameController,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  style: TextStyle(color: context.colors.foreground50),
-                  decoration: InputDecoration(
-                    hintText: 'ex: FC Urban, Les Galactiques...',
-                    hintStyle: TextStyle(color: context.colors.foreground600),
-                    prefixIcon: Icon(
-                      Remix.team_line,
-                      color: context.colors.primary400,
-                      size: 20,
-                    ),
-                    filled: true,
-                    fillColor: context.colors.background900,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.background700,
+                Semantics(
+                  label: "Nom de l'équipe ou du groupe (obligatoire)",
+                  child: TextFormField(
+                    controller: _nameController,
+                    autofocus: true,
+                    textCapitalization: TextCapitalization.words,
+                    style: TextStyle(color: context.colors.foreground50),
+                    decoration: InputDecoration(
+                      hintText: 'ex: FC Urban, Les Galactiques...',
+                      hintStyle: TextStyle(color: context.colors.foreground600),
+                      prefixIcon: Icon(
+                        Remix.team_line,
+                        color: context.colors.primary400,
+                        size: 20,
+                      ),
+                      filled: true,
+                      fillColor: context.colors.background900,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.primary500,
+                          width: 2,
+                        ),
                       ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.background700,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.primary500,
-                        width: 2,
-                      ),
-                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Veuillez renseigner le nom de votre équipe';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'Veuillez renseigner le nom de votre équipe';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 24),
 
@@ -409,41 +412,44 @@ class _CreateTeamScreenState extends ConsumerState<CreateTeamScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextFormField(
-                  controller: _locationController,
-                  textCapitalization: TextCapitalization.sentences,
-                  style: TextStyle(color: context.colors.foreground50),
-                  decoration: InputDecoration(
-                    hintText: 'ex: Urban Soccer, Le Five...',
-                    hintStyle: TextStyle(color: context.colors.foreground600),
-                    prefixIcon: Icon(
-                      Remix.map_pin_2_line,
-                      color: context.colors.foreground500,
-                      size: 20,
-                    ),
-                    filled: true,
-                    fillColor: context.colors.background900,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.background700,
+                Semantics(
+                  label: 'Complexe ou terrain habituel (facultatif)',
+                  child: TextFormField(
+                    controller: _locationController,
+                    textCapitalization: TextCapitalization.sentences,
+                    style: TextStyle(color: context.colors.foreground50),
+                    decoration: InputDecoration(
+                      hintText: 'ex: Urban Soccer, Le Five...',
+                      hintStyle: TextStyle(color: context.colors.foreground600),
+                      prefixIcon: Icon(
+                        Remix.map_pin_2_line,
+                        color: context.colors.foreground500,
+                        size: 20,
                       ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.background700,
+                      filled: true,
+                      fillColor: context.colors.background900,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(
-                        color: context.colors.primary500,
-                        width: 2,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.background700,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                          color: context.colors.primary500,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),

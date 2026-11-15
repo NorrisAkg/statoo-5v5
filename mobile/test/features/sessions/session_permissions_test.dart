@@ -15,7 +15,7 @@ import 'package:statoo/features/team/application/team_provider.dart';
 class _DeniedController extends SessionsController {
   _DeniedController(super._ref);
   @override
-  Future<void> recordLive(
+  Future<String?> recordLive(
     String id,
     Map<String, dynamic>? action, {
     String? edit,

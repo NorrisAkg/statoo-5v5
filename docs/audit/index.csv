@@ -1,0 +1,190 @@
+id,severite,domaine,titre,fichier,statut
+MET-001,Majeur,Métier,Supprimer une séance (ou abandonner un brouillon) laisse une cotisation due à tous les membres,mobile/lib/features/sessions/data/sessions_repository.dart,confirmé Phase 4
+MET-002,Majeur,Métier,"Minimum de joueurs non appliqué par le mobile à la clôture et au démarrage, refusé par l'API",mobile/lib/features/sessions/domain/session_close_rules.dart,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 côté mobile (non commité)"
+MET-003,Mineur,Métier,"Cohérence buts/score : trois règles différentes, et le CDC la veut non bloquante",web/domain.mjs,non revérifié (sévérité ≤ Mineur)
+MET-004,Mineur,Métier,resolve ne met pas à jour obligations (confirmé) ; obligations figées à la première synchro,backend/app/main.py,non revérifié (sévérité ≤ Mineur)
+MET-005,Majeur,Métier,Le code de secours n'est jamais créé par un client : récupération ACCESS-07 inutilisable,mobile/lib/features/shared/presentation/shared_group_screen.dart,confirmé Phase 4
+MET-006,Majeur,Métier,"Parité : réglage sport commun, rotation de l'accès collectif, mot de passe et code de secours absents de Flutter",mobile/lib/features/settings/presentation/settings_screen.dart,confirmé Phase 4
+MET-007,Mineur,Métier,"Divergences de validation financière entre Dart, Python et JS",mobile/lib/features/finance/domain/financial_point.dart,non revérifié (sévérité ≤ Mineur)
+MET-008,Mineur,Métier,Messages d'erreur API financiers en anglais ou sans accents,backend/app/finance.py,non revérifié (sévérité ≤ Mineur)
+MET-009,Mineur,Métier,Totaux du groupe : les tournois comptent dans les séances mais pour 0 but,mobile/lib/core/data/app_database.dart,non revérifié (sévérité ≤ Mineur)
+MET-010,Mineur,Métier,Score classique initialisé à 0-0/DRAW : le bloqueur « score absent » ne se déclenche jamais,mobile/lib/features/sessions/application/sessions_provider.dart,non revérifié (sévérité ≤ Mineur)
+MET-011,Mineur,Métier,"Poids MVP stockés par appareil, non synchronisés : joueur du mois différent selon l'appareil",mobile/lib/features/ranking/data/ranking_repository.dart,non revérifié (sévérité ≤ Mineur)
+MET-012,Mineur,Métier,Totaux financiers différents entre mobile et serveur/portail,mobile/lib/features/finance/domain/financial_report.dart,non revérifié (sévérité ≤ Mineur)
+MET-013,Mineur,Métier,"Contrôle à deux personnes (soldes d'ouverture, arbitrage) contournable par cumul de rôles",backend/app/main.py,non revérifié (sévérité ≤ Mineur)
+MET-014,Mineur,Métier,Documentation métier contradictoire avec le code,docs/shared-group-and-finance.md,non revérifié (sévérité ≤ Mineur)
+MET-015,Mineur,Métier,"Préremplissage des cotisations : les impayés sont encaissés par défaut, contrairement à la doc",mobile/lib/features/finance/presentation/financial_point_screen.dart,non revérifié (sévérité ≤ Mineur)
+MET-016,Mineur,Métier,"Divergences sport secondaires (passes en brouillon, tri par nom, buts amicaux)",web/summary.mjs,non revérifié (sévérité ≤ Mineur)
+MET-017,Info,Métier,Code mort ou non branché dans le périmètre métier,mobile/lib/features/finance/application/finance_providers.dart,non revérifié (sévérité ≤ Mineur)
+UX-001,Majeur,Parcours UX,"« Annuler » du snackbar de carton annule la dernière action du journal, pas le carton",mobile/lib/features/sessions/presentation/live_stats_panel.dart:121,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 (non commité, flutter test 1373 verts, puis UX001-16 vert)"
+UX-002,Majeur,Parcours UX,Récupération d'accès impossible : aucun code de secours créé ni régénérable depuis l'app,mobile/lib/features/shared/presentation/shared_group_screen.dart:159,confirmé Phase 4 ; doublon de MET-005
+UX-003,Majeur,Parcours UX,Identifiant de groupe sans # refusé avec « 401: Identifiants incorrects »,mobile/lib/features/shared/presentation/shared_group_screen.dart:136,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 (non commité)"
+UX-004,Mineur,Parcours UX,"Déconnexion sans confirmation, feedback « Données mises à jour. », mot de passe laissé dans le formulaire",shared_group_screen.dart:1651,non revérifié (sévérité ≤ Mineur)
+UX-005,Mineur,Parcours UX,"Création de groupe partagé sans validation client, erreurs génériques préfixées du code HTTP",mobile/lib/core/data/shared_http_error.dart:17,non revérifié (sévérité ≤ Mineur)
+UX-006,Mineur,Parcours UX,Doublon de joueur accepté à l'ajout initial et retrait sans confirmation ni annulation,mobile/lib/features/team/presentation/add_team_players_screen.dart:41,non revérifié (sévérité ≤ Mineur)
+UX-007,Mineur,Parcours UX,Écrans hors onglets sans flèche Retour après rechargement ou lien direct,mobile/lib/core/router/app_router.dart:82,non revérifié (sévérité ≤ Mineur)
+UX-008,Mineur,Parcours UX,Retour navigateur depuis une séance démarrée : assistant « Nouvelle séance » réinitialisé,mobile/lib/features/sessions/presentation/new_session_screen.dart:213,non revérifié (sévérité ≤ Mineur)
+UX-009,Mineur,Parcours UX,"Point financier : cotisations préremplies « payées » par défaut, montant 0 non sélectionné",mobile/lib/features/finance/presentation/financial_point_screen.dart,non revérifié (sévérité ≤ Mineur)
+UX-010,Mineur,Parcours UX,"Onboarding : « Étape 2 sur 2 » suivie d'une 3e étape, libellés trompeurs",add_team_players_screen.dart:98,non revérifié (sévérité ≤ Mineur)
+UX-011,Mineur,Parcours UX,"320x640 : onglet « Stats » tronqué, actions de l'assistant non collantes, bande fixe de 64 px",mobile/lib/core/widgets/browser_app_frame.dart:21,non revérifié (sévérité ≤ Mineur)
+UX-012,Mineur,Parcours UX,"Saisie en direct : cartons non découvrables, résumé de clôture « Équipe A », zone vide dans la célébration",session_detail_screen.dart:1226,non revérifié (sévérité ≤ Mineur)
+UX-013,Mineur,Parcours UX,Classement : égalités départagées par ordre alphabétique avec médailles distinctes,mobile/lib/features/ranking/data/ranking_repository.dart:86,non revérifié (sévérité ≤ Mineur)
+UX-014,Mineur,Parcours UX,"Contrôles sans libellé accessible (retour, FAB, fermer, champs)",mobile/lib/features/players/presentation/player_detail_screen.dart:82,non revérifié (sévérité ≤ Mineur)
+UX-015,Mineur,Parcours UX,"Création de gestionnaire : mot de passe généré jamais montré, aucun feedback de création",shared_group_screen.dart (_addAccount),non revérifié (sévérité ≤ Mineur)
+UX-016,Info,Parcours UX,"« Score absent » inatteignable dans l'UI, déséquilibre bloqué dès le démarrage",new_session_screen.dart,non revérifié (sévérité ≤ Mineur)
+UX-017,Mineur,Parcours UX,"Attente réseau de 90 s sans annulation, bouton figé sur « Connexion en cours… »",mobile/lib/core/data/shared_http_browser.dart:21,non revérifié (sévérité ≤ Mineur)
+UX-018,Mineur,Parcours UX,"Fonctions d'accès sans UI (ACCESS-03, régénération du code), minimum de joueurs figé en mode partagé",docs/architecture/vue-densemble.md:52-53,non revérifié (sévérité ≤ Mineur)
+UI-001,Mineur,UI,"Typographie hors thème : 420 tailles littérales, 21 valeurs, micro-textes 9/10 px",mobile/lib/core/theme/app_theme.dart,requalifié Phase 4 (Majeur → Mineur)
+UI-002,Mineur,UI,"Captures de référence périmées, en partie vides, mais déclarées prioritaires par l'agent design-fidelity",.claude/agents/design-fidelity.md,requalifié Phase 4 (Majeur → Mineur)
+UI-003,Mineur,UI,Aucun thème de composant : champs à rayon 12/16 et dialogues au style Material souligné,mobile/lib/core/theme/app_theme.dart,non revérifié (sévérité ≤ Mineur)
+UI-004,Mineur,UI,Cartes reconstruites à la main (rayon 12/16) au lieu d'AppCard (rayon 20),mobile/lib/features/ranking/presentation/standings_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-005,Mineur,UI,Erreurs techniques brutes (Erreur: $err) sans action ; erreur de l'accueil masquée en état vide,mobile/lib/features/sessions/presentation/session_detail_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-006,Mineur,UI,"Contrastes résiduels insuffisants (or clair, argent du podium, indications, petits textes verts)",mobile/lib/features/home/presentation/home_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-007,Mineur,UI,"Thème clair : foreground300, foreground400 et foreground600 identiques, donc hiérarchie de gris écrasée",mobile/lib/core/theme/app_colors.dart,non revérifié (sévérité ≤ Mineur)
+UI-008,Mineur,UI,Couleurs du podium divergentes entre l'accueil (valeurs en dur) et le classement (tokens),mobile/lib/features/home/presentation/home_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-009,Mineur,UI,"Badges de statut de séance : composant partagé contourné, casse incohérente",mobile/lib/features/sessions/presentation/sessions_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-010,Mineur,UI,"Filtres Séances et lien « Sauvegarder » : GestureDetector sans sémantique, cible inférieure à 48 dp (UX15 non corrigé)",mobile/lib/features/sessions/presentation/sessions_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-011,Mineur,UI,Les dialogues de saisie se ferment en silence quand la saisie est invalide (UX11 non corrigé),mobile/lib/features/finance/presentation/financial_point_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-012,Mineur,UI,La liste Séances ignore les couleurs personnalisées des équipes (UX13 partiellement corrigé),mobile/lib/features/sessions/presentation/sessions_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-013,Mineur,UI,"Terminologie divergente du glossaire (match / séance, équipe / groupe) et microcopie contradictoire",mobile/lib/features/sessions/presentation/new_session_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-014,Mineur,UI,"Typographie française irrégulière (« : » sans espace, « Ex: » / « ex: » / « Ex. : », apostrophes mêlées)",plusieurs écrans,non revérifié (sévérité ≤ Mineur)
+UI-015,Mineur,UI,"Flutter web sur grand écran : aucune largeur maximale, écrans étirés [déduit]",mobile/lib/core/widgets/browser_app_frame.dart,non revérifié (sévérité ≤ Mineur)
+UI-016,Mineur,UI,Pied d'accueil « Aucune sauvegarde cloud » constant (UX18 non corrigé) ; « Mentions légales » sans effet (UX19 non corrigé),mobile/lib/features/home/presentation/home_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-017,Info,UI,"Code mort ou non conforme : PlaceholderScreen (couleurs en dur, Material Icons), AppCard.onTap, variantes inutilisées de StatusBadge",mobile/lib/core/widgets/placeholder_screen.dart,non revérifié (sévérité ≤ Mineur)
+UI-018,Info,UI,Portail : tokens CSS proches mais pas identiques à ceux de Flutter,web/styles.css,non revérifié (sévérité ≤ Mineur)
+A11Y-001,Majeur,Accessibilité,"Indicateur de focus clavier quasi invisible sur Flutter web (1,15:1)",mobile/lib/core/theme/app_theme.dart,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 : anneau de focus ≥ 3:1 (non commité)"
+A11Y-002,Majeur,Accessibilité,Commandes GestureDetector exposées comme boutons mais hors de l'ordre de tabulation,mobile/lib/features/onboarding/presentation/onboarding_screen.dart,confirmé Phase 4
+A11Y-003,Majeur,Accessibilité,"16 IconButton, 1 FAB et 1 bouton « + » sans nom accessible",mobile/lib/features/players/presentation/players_screen.dart,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 : tooltips + test de non-régression (non commité)"
+A11Y-004,Majeur,Accessibilité,"Champs nommés seulement par leur hintText, nom perdu une fois le champ rempli",mobile/lib/features/players/presentation/new_player_bottom_sheet.dart,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 : libellés permanents, entiers à 200 % (non commité)"
+A11Y-005,Mineur,Accessibilité,Le focus sort des feuilles modales vers la navigation basse,mobile/lib/features/players/presentation/players_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-006,Mineur,Accessibilité,"Messages d'état non annoncés (score, but enregistré, erreur de saisie)",mobile/lib/features/sessions/presentation/session_detail_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-007,Mineur,Accessibilité,"États sélectionnés non exposés (format de jeu, mode de restauration, page d'onboarding)",mobile/lib/features/team/presentation/create_team_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-008,Mineur,Accessibilité,"Titres de section non balisés, titre d'accueil dupliqué",mobile/lib/features/home/presentation/home_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-009,Mineur,Accessibilité,Animations infinies de l'onboarding sans pause ni respect de la réduction de mouvement,mobile/lib/features/onboarding/presentation/onboarding_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-010,Mineur,Accessibilité,"Paires de contraste sous 4,5:1 non couvertes par UI-006 et bordures de champs sous 3:1",mobile/lib/core/theme/app_colors.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-011,Mineur,Accessibilité,"Noms ambigus ou répétitifs (« Supprimer ce joueur » ×N, « Stats 0 0 », « 1 buts »)",mobile/lib/features/players/presentation/players_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-012,Mineur,Accessibilité,"Contenu décoratif lu par le lecteur d'écran, statistiques de la fiche joueur sans structure",mobile/lib/features/onboarding/presentation/onboarding_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-013,Mineur,Accessibilité,Cibles compactes sous la règle interne de 48 dp (WCAG 2.5.8 respecté sur les mesures),mobile/lib/features/settings/presentation/settings_screen.dart,non revérifié (sévérité ≤ Mineur)
+A11Y-014,Mineur,Accessibilité,Aucun test automatisé des règles d'accessibilité Flutter,mobile/test/accessibility/commands_test.dart,non revérifié (sévérité ≤ Mineur)
+ARC-001,Majeur,Architecture,Backend monolithique : 23 routes en fermetures dans une create_app de 638 lignes,backend/app/main.py:244,confirmé Phase 4
+ARC-002,Majeur,Architecture,Verrou threading.Lock global et inconditionnel sur toutes les requêtes,backend/app/main.py:284,"confirmé Phase 4 ; doublon de PERF-001 ; CORRIGÉ 14/11/2026 (non commité, 447 tests verts)"
+ARC-003,Majeur,Architecture,Feature shared : la présentation fait du SQL direct et des requêtes HTTP brutes,mobile/lib/features/shared/presentation/shared_group_screen.dart:143,confirmé Phase 4
+ARC-004,Majeur,Architecture,"Matrice des rôles en six copies, aucune source unique côté mobile",mobile/lib/features/shared/data/shared_service.dart:39,confirmé Phase 4
+ARC-005,Majeur,Architecture,Fichiers et fonctions géants dans les zones à risque,mobile/lib/features/sessions/presentation/new_session_screen.dart:645,confirmé Phase 4
+ARC-006,Mineur,Architecture,"Couplage fort entre features : 110 imports, 12 dépendances mutuelles",mobile/lib/features/sessions/application/sessions_provider.dart:3-12,non revérifié (sévérité ≤ Mineur)
+ARC-007,Mineur,Architecture,Finance : l'UI mute le repository sans contrôleur et déclare un provider,mobile/lib/features/finance/presentation/financial_point_screen.dart:112,non revérifié (sévérité ≤ Mineur)
+ARC-008,Mineur,Architecture,Règle d'écart d'effectif réimplémentée dans deux écrans,mobile/lib/features/sessions/presentation/new_session_screen.dart:158,non revérifié (sévérité ≤ Mineur)
+ARC-009,Mineur,Architecture,"Code mort, dont un calculateur de barème utilisé seulement en test",mobile/lib/features/stats/domain/stats_calculator.dart,non revérifié (sévérité ≤ Mineur)
+ARC-010,Mineur,Architecture,Endpoints backend sans client,backend/app/main.py:590,non revérifié (sévérité ≤ Mineur)
+ARC-011,Mineur,Architecture,Couche data et core qui violent la règle de dépendance,"mobile/lib/features/settings/data/backup_service.dart:5-6,19",non revérifié (sévérité ≤ Mineur)
+ARC-012,Mineur,Architecture,Cycle d'imports entre deux fichiers de shared/presentation,mobile/lib/features/shared/presentation/add_manager_bottom_sheet.dart:13,non revérifié (sévérité ≤ Mineur)
+ARC-013,Mineur,Architecture,"Conventions déclarées non suivies (freezed, Riverpod généré)","AGENTS.md §4, .claude/rules/domain.md",non revérifié (sévérité ≤ Mineur)
+ARC-014,Mineur,Architecture,Aucun garde-fou automatique de l'architecture,mobile/analysis_options.yaml,non revérifié (sévérité ≤ Mineur)
+ARC-015,Mineur,Architecture,docs/ai/ARCHITECTURE.md décrit une architecture qui n'existe pas,docs/ai/ARCHITECTURE.md:46,non revérifié (sévérité ≤ Mineur)
+ARC-016,Info,Architecture,"Analyse statique : 71 infos, 11 // ignore dans lib/",docs/audit/raw/dart-analyze.log,non revérifié (sévérité ≤ Mineur)
+SEC-001,Critique,Sécurité,Verrou global + PBKDF2 sous verrou : déni de service non authentifié,backend/app/main.py:284,"requalifié Phase 4 (Majeur → Critique) ; doublon de PERF-001 ; CORRIGÉ 14/11/2026 (non commité, 447 tests verts)"
+SEC-002,Majeur,Sécurité,"Throttling par IP inopérant derrière le proxy Render, en mémoire et non borné",backend/app/main.py:423,[déduit] non vérifiable (config Render) ; CORRIGÉ 14/11/2026 dans le code (non commité) ; valeur de STATOO_TRUSTED_PROXY_HOPS à vérifier et définir sur Render
+SEC-003,Majeur,Sécurité,POST /groups sans rate limit ni limite de corps,backend/app/main.py:349,"confirmé Phase 4 ; PARTIEL 14/11/2026 (non commité) : quota 5/h/IP fait ; limite de taille de corps différée (photos à l'inscription, DAT-001)"
+SEC-004,Mineur,Sécurité,Prise de contrôle par un co-admin ou un jeton admin volé (sans ré-authentification),backend/app/main.py:577,requalifié Phase 4 (Majeur → Mineur)
+SEC-005,Majeur,Sécurité,"Oracles de mot de passe sans throttling (verify gestionnaire, verify commun, recovery-code)",backend/app/main.py:568,confirmé Phase 4 ; CORRIGÉ 14/11/2026 (non commité)
+SEC-006,Mineur,Sécurité,Un seul compte peut cumuler TR et PDT et approuver ses propres soldes d'ouverture,backend/app/main.py:632,requalifié Phase 4 (Majeur → Mineur)
+SEC-007,Mineur,Sécurité,"Aucune limite de taille de corps, dictionnaires libres et chaînes non bornées",backend/app/main.py:102,non revérifié (sévérité ≤ Mineur)
+SEC-008,Mineur,Sécurité,Mots de passe des gestionnaires et du compte commun conservés en clair sur l'appareil de l'admin,mobile/lib/features/shared/data/collective_access.dart:104,non revérifié (sévérité ≤ Mineur)
+SEC-009,Mineur,Sécurité,Énumération des groupes et identifiants par mesure du temps de /auth/login,backend/app/main.py:430,non revérifié (sévérité ≤ Mineur)
+SEC-010,Mineur,Sécurité,"Jetons de 30 jours sans rotation, sans purge, sans déconnexion globale",backend/app/main.py:329,non revérifié (sévérité ≤ Mineur)
+SEC-011,Mineur,Sécurité,"Aucun en-tête de sécurité HTTP (API, portail, Vercel)",vercel.json:1,non revérifié (sévérité ≤ Mineur)
+SEC-012,Mineur,Sécurité,/docs et /openapi.json exposés en production,backend/app/main.py:263,non revérifié (sévérité ≤ Mineur)
+SEC-013,Mineur,Sécurité,Le compte commun voit les identifiants des responsables et le journal d'audit,backend/app/main.py:509,non revérifié (sévérité ≤ Mineur)
+SEC-014,Mineur,Sécurité,STATOO_API vise la production par défaut,mobile/lib/features/shared/presentation/shared_group_screen.dart:56,non revérifié (sévérité ≤ Mineur)
+SEC-015,Mineur,Sécurité,"Sauvegarde mobile non chiffrée, restauration réinjectant l'outbox",mobile/lib/features/settings/data/backup_service.dart:76,non revérifié (sévérité ≤ Mineur)
+SEC-016,Mineur,Sécurité,Build Android release signé silencieusement avec la clé debug,mobile/android/app/build.gradle.kts:55,non revérifié (sévérité ≤ Mineur)
+SEC-017,Mineur,Sécurité,.gitignore commité ne couvrait pas .env.* ; fichiers locaux suivis,.gitignore:10,non revérifié (sévérité ≤ Mineur)
+SEC-018,Mineur,Sécurité,"Le serveur accepte un code de secours choisi par le client, même trivial",backend/app/main.py:35,non revérifié (sévérité ≤ Mineur)
+SEC-019,Info,Sécurité,Format de hachage sans version d'algorithme ni d'itérations,backend/app/security.py:9,non revérifié (sévérité ≤ Mineur)
+SEC-020,Info,Sécurité,Mot de passe gestionnaire généré sur 8 caractères (≈ 45 bits),mobile/lib/features/shared/data/manager_password.dart:10,non revérifié (sévérité ≤ Mineur)
+DAT-001,Majeur,Données,Photos base64 et lignes players brutes publiées dans groups.state sans schéma,mobile/lib/features/shared/presentation/shared_group_screen.dart,confirmé Phase 4
+DAT-002,Majeur,Données,"Agrégat groups.state à croissance non bornée, relu et verrouillé à chaque requête",backend/app/main.py,confirmé Phase 4
+DAT-003,Majeur,Données,Verrou Python global : toutes les requêtes de tous les groupes sont sérialisées,backend/app/main.py,"confirmé Phase 4 ; doublon de PERF-001 ; CORRIGÉ 14/11/2026 (non commité, 447 tests verts)"
+DAT-004,Majeur,Données,"Outbox jamais purgée, parcours complets répétés de meta",mobile/lib/features/shared/data/shared_service.dart,confirmé Phase 4
+DAT-005,Majeur,Données,La fusion de sauvegarde regroupe tous les groupes du fichier dans un seul,mobile/lib/features/settings/data/backup_service.dart,confirmé Phase 4
+DAT-006,Majeur,Données,Une migration SQLite refusée bloque le démarrage sans voie de reprise,mobile/lib/core/data/app_database.dart,confirmé Phase 4
+DAT-007,Majeur,Données,"Aucun effacement possible : groupe, compte, membre, jetons, données locales après déconnexion",backend/app/main.py,confirmé Phase 4
+DAT-008,Mineur,Données,Schéma divergent entre base neuve et base migrée (sessions.team_id),mobile/lib/core/data/app_database.dart,non revérifié (sévérité ≤ Mineur)
+DAT-009,Mineur,Données,Clés meta orphelines après suppression d'un groupe ou d'une séance,mobile/lib/features/team/data/team_repository.dart,non revérifié (sévérité ≤ Mineur)
+DAT-010,Mineur,Données,Un groupe supprimé peut renaître depuis les SharedPreferences héritées,mobile/lib/features/team/data/team_repository.dart,non revérifié (sévérité ≤ Mineur)
+DAT-011,Mineur,Données,Réglage min_players_per_session non scopé appliqué à tous les groupes,mobile/lib/features/settings/data/group_settings_repository.dart,non revérifié (sévérité ≤ Mineur)
+DAT-012,Mineur,Données,Aucun index secondaire sur les colonnes filtrées,mobile/lib/core/data/app_database.dart,non revérifié (sévérité ≤ Mineur)
+DAT-013,Mineur,Données,"Statut CANCELLED : accepté par l'API, refusé par SQLite, séance supprimée localement",mobile/lib/features/shared/data/shared_service.dart,non revérifié (sévérité ≤ Mineur)
+DAT-014,Mineur,Données,Identifiants de joueurs et de groupes à la milliseconde,mobile/lib/features/players/data/players_repository.dart,non revérifié (sévérité ≤ Mineur)
+DAT-015,Mineur,Données,Import du snapshot : lignes serveur insérées telles quelles dans SQLite,mobile/lib/features/shared/data/shared_service.dart,non revérifié (sévérité ≤ Mineur)
+DAT-016,Mineur,Données,Garde multi-tenant limitée aux participations,mobile/lib/core/data/app_database.dart,non revérifié (sévérité ≤ Mineur)
+DAT-017,Mineur,Données,Backend sans migrations et table tokens sans index ni purge,backend/app/models.py,non revérifié (sévérité ≤ Mineur)
+DAT-018,Mineur,Données,"Snapshot : journal d'audit et responsables exposés à tous les comptes, y compris l'accès collectif",backend/app/main.py,non revérifié (sévérité ≤ Mineur)
+DAT-019,Mineur,Données,"Sauvegarde : un fichier unique contient tous les groupes, photos et métadonnées partagées",mobile/lib/features/settings/data/backup_service.dart,non revérifié (sévérité ≤ Mineur)
+DAT-020,Mineur,Données,Documentation données en écart avec le code,docs/outbox-sync.md,non revérifié (sévérité ≤ Mineur)
+PERF-001,Critique,Performance,Interblocage définitif de l'API dès ~40 requêtes concurrentes (verrou global + pool de threads),backend/app/main.py:298-300,"confirmé Phase 4 ; CORRIGÉ 14/11/2026 (non commité, 447 tests verts)"
+PERF-002,Majeur,Performance,"Verrou global : sérialisation mesurée entre groupes, chiffres complémentaires à SEC-001/DAT-003",backend/app/main.py:284,"confirmé Phase 4 ; doublon de PERF-001 ; CORRIGÉ 14/11/2026 (non commité, 447 tests verts)"
+PERF-003,Majeur,Performance,Coût de chaque requête proportionnel à l'agrégat groups.state ; snapshot de 6 Mo téléchargé 2 fois toutes les 45 s,"backend/app/main.py:309, mobile/lib/features/shared/data/shared_service.dart:243",confirmé Phase 4
+PERF-004,Mineur,Performance,"Premier chargement Flutter web : 11,9 Mo, premier écran à 66 s en Fast 3G et 11,9 s en 4G",mobile/build/web,requalifié Phase 4 (Majeur → Mineur)
+PERF-005,Majeur,Performance,"Le service worker de production précache 47,5 Mo, dont .symbols et 6 variantes du moteur de rendu",scripts/package-universal-web.mjs:33-53,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 : 21,1 Mo précachés (non commité)"
+PERF-006,Majeur,Performance,"Photos stockées en taille d'origine, décodées en pleine résolution et revalidées sur le thread UI à chaque avatar",mobile/lib/core/media/player_photo.dart:47-103,confirmé Phase 4
+PERF-007,Majeur,Performance,"Synchronisation toutes les 45 s : double import complet, réécriture de toutes les participations, 19 invalidations",mobile/lib/features/shared/data/shared_service.dart:542-680,confirmé Phase 4
+PERF-008,Mineur,Performance,Suite pytest de 10 min 50 dominée par le PBKDF2 non paramétrable : frein au TDD,"backend/app/security.py:8,14",requalifié Phase 4 (Majeur → Mineur)
+PERF-009,Mineur,Performance,Police de repli téléchargée depuis fonts.gstatic.com au démarrage,moteur Flutter web,non revérifié (sévérité ≤ Mineur)
+PERF-010,Mineur,Performance,"Client HTTP recréé à chaque requête, lecture du corps hors délai, décodage JSON sur le thread UI",mobile/lib/core/data/shared_http_native.dart:13-20,non revérifié (sévérité ≤ Mineur)
+PERF-011,Mineur,Performance,"Listes non virtualisées (joueurs, finances) et écritures SQLite unitaires en boucle",mobile/lib/features/players/presentation/players_screen.dart:105,non revérifié (sévérité ≤ Mineur)
+PERF-012,Mineur,Performance,Journal des stats en direct réécrit en entier à chaque but (coût quadratique),mobile/lib/features/sessions/data/live_stats_repository.dart:240-291,non revérifié (sévérité ≤ Mineur)
+PERF-013,Mineur,Performance,Poppins Regular téléchargée deux fois ; remix.ttf réduite de 18 % seulement,mobile/web/pwa-shell.css:2-4,non revérifié (sévérité ≤ Mineur)
+PERF-014,Mineur,Performance,vercel.json sans en-têtes de cache : aucune mise en cache longue des ressources du moteur,vercel.json,non revérifié (sévérité ≤ Mineur)
+PERF-015,Mineur,Performance,"Service worker du portail : version de cache manuelle et 1,2 Mo d'images précachées","web/sw.js:3,20-23",non revérifié (sévérité ≤ Mineur)
+PERF-016,Info,Performance,"L'erreur 404 au démarrage est sw.js, absent du build Flutter non packagé",mobile/web/app-shell.js:169,non revérifié (sévérité ≤ Mineur)
+TST-001,Majeur,Tests,Aucune exécution automatique des tests ; staging porte des tests rouges,CLAUDE.md (racine),confirmé Phase 4 ; doublon de OPS-001
+TST-002,Mineur,Tests,"Aucune mesure de couverture, sur aucune des trois applications","backend/requirements.txt, mobile/pubspec.yaml",requalifié Phase 4 (Majeur → Mineur)
+TST-003,Majeur,Tests,Suppression de séance (deleteSession → cancelSport) jamais testée,mobile/lib/features/sessions/application/sessions_provider.dart:769,confirmé Phase 4 ; doublon de MET-001
+TST-004,Majeur,Tests,Parité des trois copies des règles limitée à une fixture sport unique,web/tests/fixtures/mobile-snapshot.json,confirmé Phase 4
+TST-005,Mineur,Tests,"Défauts de sécurité confirmés sans test négatif (cumul de rôles, prise de contrôle, oracles, throttling du login)",backend/tests/,requalifié Phase 4 (Majeur → Mineur)
+TST-006,Mineur,Tests,Garde « séance déjà active » du contrôleur jamais exécutée par un test,mobile/lib/features/sessions/application/sessions_provider.dart:263-271,non revérifié (sévérité ≤ Mineur)
+TST-007,Mineur,Tests,Migrations SQLite testées seulement depuis v6 et v7 (v1 à v5 absentes),mobile/test/core/data/database_migration_test.dart:150,non revérifié (sévérité ≤ Mineur)
+TST-008,Mineur,Tests,Isolation multi-tenant backend testée contre un groupe inexistant seulement,backend/tests/test_api.py:57-63,non revérifié (sévérité ≤ Mineur)
+TST-009,Mineur,Tests,Suite backend de 11 min : PBKDF2 600 000 itérations dans chaque fixture,backend/app/security.py:8,non revérifié (sévérité ≤ Mineur)
+TST-010,Mineur,Tests,"Dix e2e sans script npm, dont les e2e Flutter ; quatre peuvent écrire en production",package.json:9-10,non revérifié (sévérité ≤ Mineur)
+TST-011,Mineur,Tests,Des tests figent des comportements jugés défectueux par d'autres domaines,mobile/test/features/sessions/session_close_test.dart:414,non revérifié (sévérité ≤ Mineur)
+TST-012,Mineur,Tests,Tests web qui assertent le texte source de app.mjs,web/tests/config.test.mjs:4-14,non revérifié (sévérité ≤ Mineur)
+TST-013,Mineur,Tests,Formatage non appliqué : 125 fichiers Dart et 14 fichiers JS non conformes,docs/audit/raw/prettier.log,non revérifié (sévérité ≤ Mineur)
+TST-014,Mineur,Tests,Ni linter ni typage statique pour JavaScript et Python,"package.json, backend/",non revérifié (sévérité ≤ Mineur)
+TST-015,Mineur,Tests,Chiffres de tests faux dans la documentation commitée,"AGENTS.md (commité), docs/ai/DIAGNOSTIC.md:12-15",non revérifié (sévérité ≤ Mineur)
+TST-016,Mineur,Tests,Consigne TDD d'AGENTS.md non vérifiable sur les dernières livraisons,AGENTS.md §1,non revérifié (sévérité ≤ Mineur)
+TST-017,Info,Tests,Aucun test golden ni d'intégration Flutter (integration_test/),mobile/test/,non revérifié (sévérité ≤ Mineur)
+TST-018,Info,Tests,"Analyse statique Dart : 71 infos, dont 60 dans test/",docs/audit/raw/dart-analyze.log,non revérifié (sévérité ≤ Mineur)
+OPS-001,Majeur,DevOps,Aucune CI ni hook git ; les déploiements ne sont conditionnés à aucun test complet,"render.yaml, scripts/build-universal-web.sh",confirmé Phase 4
+OPS-002,Majeur,DevOps,"Pas de séparation d'environnements : staging = production, défaut Flutter = API de production",scripts/build-universal-web.sh:17,confirmé Phase 4
+OPS-003,Majeur,DevOps,"Observabilité absente : aucun log applicatif, métrique, trace, alerte ni crash reporting","backend/app/main.py, mobile/lib/main.dart",confirmé Phase 4
+OPS-004,Majeur,DevOps,"Sauvegarde, restauration et plan de reprise côté serveur inexistants dans le dépôt",docs/deploiement-backend-pwa.md:38,confirmé Phase 4
+OPS-005,Majeur,DevOps,"Backend non reproductible : pas de lockfile, Python non fixé","backend/requirements.txt, render.yaml","confirmé Phase 4 ; doublon de DEP-001 ; CORRIGÉ 15/11/2026 (non commité)"
+OPS-006,Majeur,DevOps,"Production sur le plan gratuit Render, sans garantie de disponibilité",render.yaml:6,"confirmé Phase 4 ; RISQUE ACCEPTÉ 15/11/2026 : plan gratuit conservé, une seule instance (non commité)"
+OPS-007,Majeur,DevOps,Limitation par IP probablement globale derrière le proxy Render,backend/app/main.py:423,"[déduit] non vérifiable (config Render) ; doublon de SEC-002 ; CORRIGÉ 14/11/2026 dans le code (via SEC-002, non commité) ; configuration Render à faire"
+OPS-008,Mineur,DevOps,/health ne vérifie pas la base de données,backend/app/main.py:345,non revérifié (sévérité ≤ Mineur)
+OPS-009,Mineur,DevOps,Versions déclarées dans AGENTS.md différentes des versions réelles ; outillage non épinglé,AGENTS.md §2,non revérifié (sévérité ≤ Mineur)
+OPS-010,Mineur,DevOps,Configuration du portail incohérente avec celle de Flutter sur Vercel,scripts/app.mjs:18,non revérifié (sévérité ≤ Mineur)
+OPS-011,Mineur,DevOps,Origines CORS locales ajoutées en production via la branche staging,backend/app/main.py:277,non revérifié (sévérité ≤ Mineur)
+OPS-012,Mineur,DevOps,Schéma serveur sans outil de migration ; jetons expirés jamais purgés,backend/app/main.py:254,non revérifié (sévérité ≤ Mineur)
+OPS-013,Mineur,DevOps,Réponses d'erreur non JSON mal gérées par le client mobile,mobile/lib/core/data/shared_http_native.dart:21,non revérifié (sévérité ≤ Mineur)
+OPS-014,Mineur,DevOps,"Distribution mobile non prête : repli silencieux sur la clé debug, version jamais incrémentée, iOS non configuré",mobile/android/app/build.gradle.kts:55,non revérifié (sévérité ≤ Mineur)
+OPS-015,Mineur,DevOps,"Artefacts générés versionnés à la racine (android/, ios/)",android/.gradle/…,non revérifié (sévérité ≤ Mineur)
+OPS-016,Mineur,DevOps,docs/ chargé de 401 journaux .txt et 159 images,docs/,non revérifié (sévérité ≤ Mineur)
+OPS-017,Mineur,DevOps,Branche par défaut distante obsolète et 12 branches locales déjà fusionnées,origin/main,non revérifié (sévérité ≤ Mineur)
+OPS-018,Mineur,DevOps,Build Vercel lourd et dépendances npm inutiles au build,scripts/build-universal-web.sh:5,non revérifié (sévérité ≤ Mineur)
+OPS-019,Mineur,DevOps,"Documentation d'exploitation obsolète, sans runbook",README.md:12,non revérifié (sévérité ≤ Mineur)
+DEP-001,Majeur,Dépendances,"Backend sans lockfile : versions de production inconnues, audit pip-audit -r non représentatif",backend/requirements.txt,"confirmé Phase 4 ; CORRIGÉ 15/11/2026 (non commité)"
+DEP-002,Mineur,Dépendances,"opentelemetry-api 1.45.1 vulnérable (CVE-2026-126360), dépendance de production via FastAPI",backend/requirements.txt:1,"non revérifié (sévérité ≤ Mineur) ; CORRIGÉ 15/11/2026 : 1.45.2 verrouillé (non commité)"
+DEP-003,Mineur,Dépendances,"Venv local périmé et pollué par l'outillage d'audit (pip 24.0, 13 avis ; arbre pip-audit)",backend/.venv,non revérifié (sévérité ≤ Mineur)
+DEP-004,Mineur,Dépendances,"@neon/env inutilisé, @neon/config en dependencies : 21 paquets « prod » installés à chaque build",package.json:15-16,non revérifié (sévérité ≤ Mineur)
+DEP-005,Mineur,Dépendances,"Dépendances Flutter inutilisées : cupertino_icons, flutter_lints (doublon de very_good_analysis)","mobile/pubspec.yaml:36,68",non revérifié (sévérité ≤ Mineur)
+DEP-006,Mineur,Dépendances,"Épinglages exacts non justifiés et retards de version (2 majeures Dart, 1 npm, 66 verrous en retard)",mobile/pubspec.yaml:56-57,non revérifié (sévérité ≤ Mineur)
+DEP-007,Mineur,Dépendances,"sqlite3.wasm téléchargé depuis GitHub à chaque build Vercel, sans contrôle d'intégrité",scripts/build-universal-web.sh:16,non revérifié (sévérité ≤ Mineur)
+DEP-008,Mineur,Dépendances,Versions déclarées dans AGENTS.md différentes des lockfiles et de l'environnement,AGENTS.md:10-12,non revérifié (sévérité ≤ Mineur)
+DEP-009,Mineur,Dépendances,Aucune analyse de vulnérabilités automatisée ; dépendances Dart jamais scannées,—,non revérifié (sévérité ≤ Mineur)
+DEP-010,Mineur,Dépendances,Le projet n'a pas de licence ; métadonnées par défaut dans pubspec.yaml,"racine, mobile/pubspec.yaml:2",non revérifié (sévérité ≤ Mineur)
+DEP-011,Mineur,Dépendances,L'app mobile n'expose pas les licences tierces (pas de showLicensePage),mobile/lib/,non revérifié (sévérité ≤ Mineur)
+DEP-012,Info,Dépendances,"Copyleft faible présent : psycopg LGPL-3.0, certifi MPL-2.0, dbus MPL-2.0 ; aucune GPL ni AGPL",backend/requirements.txt:4,non revérifié (sévérité ≤ Mineur)
+DEP-013,Info,Dépendances,SDK Flutter cloné par tag sans vérification de révision,scripts/build-universal-web.sh:8,non revérifié (sévérité ≤ Mineur)

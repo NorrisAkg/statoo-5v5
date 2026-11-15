@@ -12,6 +12,44 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = resolve(fileURLToPath(import.meta.url), "../..");
 
+// PERF-005 : le précache ne contient que ce que l'app peut charger. Les fichiers exclus
+// restent publiés et passent par le réseau. Les choix du loader Flutter
+// (flutter_bootstrap.js) sont relus depuis `_flutter.buildConfig` et la config `load`.
+export function precacheRules(bootstrap) {
+  const match = /_flutter\.buildConfig\s*=\s*(\{.*?\});\s*$/m.exec(bootstrap);
+  let builds;
+  try {
+    builds = JSON.parse(match?.[1] ?? "null")?.builds;
+  } catch {}
+  if (!Array.isArray(builds) || builds.length === 0)
+    throw Error("flutter_bootstrap.js: _flutter.buildConfig introuvable ou illisible");
+  const renderers = new Set(builds.map((build) => build.renderer));
+  // Toute affectation de l'option doit valoir `true` ou `false` littéral : une autre forme
+  // (`!0`, variable…) sortirait des fichiers nécessaires du précache sans signal.
+  const enabled = (option) => {
+    const pattern = new RegExp(`["']?\\b${option}\\b["']?\\s*:\\s*([^,}\\s]*)`, "g");
+    const values = [...bootstrap.matchAll(pattern)].map((match) => match[1]);
+    for (const value of values)
+      if (value !== "true" && value !== "false")
+        throw Error(`flutter_bootstrap.js: ${option} vaut « ${value} », écrire true ou false`);
+    return values.includes("true");
+  };
+  const skwasm = renderers.has("skwasm");
+  const canvaskit = renderers.has("canvaskit");
+  const wimp = enabled("enableWimp");
+  const webParagraph = enabled("preferWebParagraph");
+  return (file) => {
+    if (file.endsWith(".symbols") || file === "assets/NOTICES") return false;
+    if (!file.startsWith("canvaskit/")) return true;
+    const name = file.slice("canvaskit/".length);
+    if (/^skwasm(_heavy)?\.(js|wasm)$/.test(name)) return skwasm;
+    if (/^wimp\.(js|wasm)$/.test(name)) return skwasm && wimp;
+    if (name.startsWith("webparagraph/")) return canvaskit && webParagraph;
+    if (/^(chromium\/)?canvaskit\.(js|wasm)$/.test(name)) return canvaskit;
+    return true;
+  };
+}
+
 export function packageUniversal({
   build = "mobile/build/web",
   legacy = "web/dist",
@@ -28,6 +66,10 @@ export function packageUniversal({
     if (!existsSync(join(build, file)))
       throw Error("Missing Flutter web asset: " + file);
   }
+  // Validée avant toute copie : une configuration refusée ne laisse pas de sortie partielle.
+  const precached = precacheRules(
+    readFileSync(join(build, "flutter_bootstrap.js"), "utf8"),
+  );
   mkdirSync(output, { recursive: true });
   cpSync(build, output, { recursive: true });
 
@@ -59,7 +101,10 @@ export function packageUniversal({
       const path = join(directory, entry.name);
       if (entry.isDirectory()) visit(path);
       else {
-        files.push(relative(build, path).replaceAll("\\", "/"));
+        const file = relative(build, path).replaceAll("\\", "/");
+        if (!precached(file)) continue;
+        files.push(file);
+        hash.update(file + "\0");
         hash.update(readFileSync(path));
       }
     }

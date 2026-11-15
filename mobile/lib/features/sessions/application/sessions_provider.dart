@@ -5,6 +5,7 @@ import '../../../core/data/occurrence_registry.dart';
 import '../../finance/application/finance_providers.dart';
 import '../../players/application/players_provider.dart';
 import '../../ranking/application/ranking_providers.dart';
+import '../../settings/application/settings_provider.dart';
 import '../../shared/application/shared_providers.dart';
 import '../../stats/application/stats_providers.dart';
 import '../../team/application/team_provider.dart';
@@ -131,21 +132,34 @@ class SessionsController {
 
   SessionsRepository get _repo => _ref.read(sessionsRepositoryProvider);
 
-  Future<void> recordLive(
+  Future<String?> recordLive(
     String id,
     Map<String, dynamic>? action, {
     String? edit,
   }) async {
+    return await _live<String?>(id, (live, group) async {
+      if (action != null) {
+        return await live.apply(group, id, action, edit: edit);
+      }
+      await live.undo(group, id);
+      return null;
+    });
+  }
+
+  /// UX-001 : annule le carton [entryId] du journal, sans toucher aux actions
+  /// saisies après lui.
+  Future<void> revertLive(String id, String entryId) =>
+      _live(id, (live, group) => live.revert(group, id, entryId));
+
+  Future<T> _live<T>(
+    String id,
+    Future<T> Function(LiveStatsRepository live, String group) write,
+  ) async {
     final group = _ref.read(activeTeamIdProvider);
     if (group == null) throw StateError('Aucun groupe sélectionné.');
     final shared = _ref.read(sharedServiceProvider);
     await shared.requireWrite(group, 'sport', sessionId: id);
-    final live = _ref.read(liveStatsRepositoryProvider);
-    if (action == null) {
-      await live.undo(group, id);
-    } else {
-      await live.apply(group, id, action, edit: edit);
-    }
+    final result = await write(_ref.read(liveStatsRepositoryProvider), group);
     _invalidateAll(id);
     _ref.invalidate(liveJournalProvider(id));
     try {
@@ -155,6 +169,7 @@ class SessionsController {
         'Action conservée localement. Synchronisation indisponible ; réessayez depuis le groupe partagé.',
       );
     }
+    return result;
   }
 
   void _invalidateAll([String? sessionId]) {
@@ -251,6 +266,15 @@ class SessionsController {
       );
     }).toList();
 
+    // If starting immediately and no session is already active, activate it
+    final currentActiveId = await _repo.getActiveSessionId(teamId: teamId);
+    if (startImmediately && currentActiveId == null) {
+      await _requireStartable(
+        teamId,
+        session,
+        participations.map((p) => p.team),
+      );
+    }
     if (occurrenceId != null && occurrenceId.trim().isNotEmpty) {
       final db = await _ref.read(sharedServiceProvider).database.database;
       await db.insert('meta', {
@@ -260,8 +284,6 @@ class SessionsController {
     }
     await _repo.saveSession(session, participations, teamId: teamId);
 
-    // If starting immediately and no session is already active, activate it
-    final currentActiveId = await _repo.getActiveSessionId(teamId: teamId);
     if (startImmediately && currentActiveId == null) {
       await _repo.setActiveSessionId(sessionId, teamId: teamId);
     }
@@ -286,6 +308,16 @@ class SessionsController {
     }
     final session = await _repo.getSession(sessionId, teamId: teamId);
     if (session == null) return false;
+    // MET-002 : mêmes conditions que l'API au démarrage (minimum, équilibre).
+    final participants = await _repo.getSessionParticipants(
+      sessionId,
+      teamId: teamId,
+    );
+    await _requireStartable(
+      teamId,
+      session,
+      participants.map((p) => p.participation.team),
+    );
     if (session.sessionType == SessionType.classic2 &&
         (session.scoreA == null ||
             session.scoreB == null ||
@@ -496,9 +528,43 @@ class SessionsController {
     _invalidateAll(sessionId);
   }
 
+  /// Minimum de joueurs du groupe [teamId], lu à la source (MET-002).
+  Future<int> _minimumPlayers(String teamId) =>
+      _ref.read(minPlayersPerSessionProvider.notifier).resolve(teamId);
+
+  /// MET-002 : refuse d'activer une séance que l'API rejetterait.
+  Future<void> _requireStartable(
+    String teamId,
+    Session session,
+    Iterable<Team> teams,
+  ) async {
+    int count(Team team) => teams.where((t) => t == team).length;
+    final minimumPlayers = await _minimumPlayers(teamId);
+    final blockers = startBlockers(
+      session: session,
+      teamACount: count(Team.a),
+      teamBCount: count(Team.b),
+      teamCCount: session.sessionType == SessionType.tournament3
+          ? count(Team.c)
+          : null,
+      minimumPlayers: minimumPlayers,
+    );
+    if (blockers.contains(CloseBlocker.belowMinimumPlayers)) {
+      throw StateError(
+        'Sélectionnez au minimum $minimumPlayers joueurs pour débuter la séance.',
+      );
+    }
+    if (blockers.contains(CloseBlocker.unevenTeams)) {
+      throw StateError(
+        "Équipes déséquilibrées : l'écart d'effectif dépasse 1 et l'option équipes inégales n'est pas activée.",
+      );
+    }
+  }
+
   List<CloseBlocker> _evaluateCloseBlockers(
     Session session,
     List<SessionParticipantDetail> participants,
+    int minimumPlayers,
   ) {
     final isTournament = session.sessionType == SessionType.tournament3;
     final effectiveResult = isTournament
@@ -551,6 +617,7 @@ class SessionsController {
         (s, p) => s + p.participation.assists,
       ),
       participations: participants.map((p) => p.participation),
+      minimumPlayers: minimumPlayers,
     );
   }
 
@@ -572,7 +639,12 @@ class SessionsController {
       teamId: teamId,
     );
 
-    final blockers = _evaluateCloseBlockers(session, participants);
+    final minimumPlayers = await _minimumPlayers(teamId);
+    final blockers = _evaluateCloseBlockers(
+      session,
+      participants,
+      minimumPlayers,
+    );
     if (blockers.isNotEmpty) return blockers;
 
     // SqliteSessionsRepository computes and persists the tournament result
@@ -607,6 +679,7 @@ class SessionsController {
         final freshBlockers = _evaluateCloseBlockers(
           freshSession,
           freshParticipants,
+          minimumPlayers,
         );
         if (freshBlockers.isNotEmpty) return freshBlockers;
       }
@@ -722,6 +795,18 @@ class SessionsController {
         .where((p) => p.participation.team == Team.c)
         .length;
     final isTournament = session.sessionType == SessionType.tournament3;
+
+    // MET-002 : l'API refuse toute version d'une séance en cours sous le
+    // minimum ; un brouillon non démarré peut encore être recomposé.
+    if (await _repo.getActiveSessionId(teamId: teamId) == sessionId) {
+      final minimumPlayers = await _minimumPlayers(teamId);
+      final remaining = participants.length - 1;
+      if (remaining < minimumPlayers) {
+        throw StateError(
+          'Ce retrait laisserait $remaining joueurs : une séance en cours exige au minimum $minimumPlayers joueurs.',
+        );
+      }
+    }
 
     final nextA = playerTeam == Team.a ? currentA - 1 : currentA;
     final nextB = playerTeam == Team.b ? currentB - 1 : currentB;

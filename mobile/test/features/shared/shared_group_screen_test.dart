@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:statoo/core/data/app_database.dart';
+import 'package:statoo/core/data/shared_http_error.dart';
 import 'package:statoo/core/theme/app_theme.dart';
 import 'package:statoo/features/players/application/players_provider.dart';
 import 'package:statoo/features/players/domain/player.dart';
@@ -23,8 +24,49 @@ class _AccountPlayers extends PlayersNotifier {
   ];
 }
 
+class _RefusingService extends SharedService {
+  _RefusingService() : super(AppDatabase.instance);
+  @override
+  Future<void> connect(
+    String url,
+    String group,
+    String username,
+    String password, {
+    Map<String, dynamic>? registration,
+  }) async => throw const SharedApiException(
+    401,
+    'Identifiant du groupe, identifiant ou mot de passe incorrect.',
+  );
+}
+
 void main() {
   setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
+  testWidgets('UX-003 refus de connexion : message explicite sans code HTTP', (tester) async {
+    tester.view.physicalSize = const Size(800, 1800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final service = _RefusingService();
+    addTearDown(service.dispose);
+    await tester.pumpWidget(ProviderScope(
+      overrides: [sharedServiceProvider.overrideWithValue(service)],
+      child: MaterialApp(theme: AppTheme.darkTheme, home: const SharedGroupScreen()),
+    ));
+    await tester.pumpAndSettle();
+    // Formulaire « Rejoindre » : identifiant du groupe, identifiant, mot de passe.
+    final fields = find.byType(TextField);
+    expect(tester.widget<TextField>(fields.at(0)).decoration?.hintText, contains('#'));
+    await tester.enterText(fields.at(0), '13120987');
+    await tester.enterText(fields.at(1), 'admin');
+    await tester.enterText(fields.at(2), 'mauvais-mdp');
+    await tester.tap(find.text('Se connecter'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Identifiant du groupe, identifiant ou mot de passe incorrect.'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('401'), findsNothing);
+  });
   testWidgets('PAR18 every connection input keeps an explanatory placeholder', (tester) async {
     final service = SharedService(AppDatabase.instance);
     await tester.pumpWidget(ProviderScope(

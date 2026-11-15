@@ -189,29 +189,9 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Card modal displays rectangle card icon, team badge, and player InitialAvatars',
-      (tester) async {
-        await tester.pumpWidget(
-          _buildTestWidget(
-            session: testSession,
-            players: testPlayers,
-          ),
-        );
-        await tester.pumpAndSettle();
-
-        // Open yellow card modal
-        await tester.tap(find.byTooltip('Carton jaune'));
-        await tester.pumpAndSettle();
-
-        final dialog = find.byType(AlertDialog);
-        expect(find.text('Quel joueur reçoit le carton ?'), findsOneWidget);
-        expect(
-          find.descendant(of: dialog, matching: find.byType(InitialAvatar)),
-          findsNWidgets(2),
-        );
-      },
-    );
+    // Les cartons ne passent plus par ce sélecteur depuis 80d2a00 : ils sont
+    // saisis via PlayerDisciplineSheet (voir live_stats_panel_test.dart
+    // PANEL-01..03 et player_discipline_sheet_test.dart PDS-01..07).
 
     for (final width in [320.0, 393.0]) {
       for (final scale in [1.0, 1.3, 2.0]) {

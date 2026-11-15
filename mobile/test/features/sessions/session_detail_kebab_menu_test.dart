@@ -14,6 +14,7 @@ import 'package:statoo/features/sessions/domain/participation.dart';
 import 'package:statoo/features/sessions/domain/session.dart';
 import 'package:statoo/features/sessions/domain/session_summary.dart';
 import 'package:statoo/features/sessions/presentation/session_detail_screen.dart';
+import 'package:statoo/features/settings/application/settings_provider.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
 import 'package:statoo/features/team/application/team_provider.dart';
 
@@ -157,6 +158,8 @@ void main() {
         sessionsRepositoryProvider.overrideWithValue(repo),
         activeSessionIdProvider.overrideWith((ref) async => activeId),
         activeTeamIdProvider.overrideWith(() => ActiveTeamIdNotifier(initialValue: 'team_test')),
+        // Fixture sans base de réglages ; minimum au plus bas autorisé (MET-002 testé dans session_close_test).
+        minPlayersPerSessionProvider.overrideWith(() => MinPlayersNotifier(initialValue: 2)),
         canWriteSessionProvider((domain: 'sport', sessionId: sessionId))
             .overrideWith((ref) async => writable),
       ],

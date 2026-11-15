@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/player_sort.dart';
 import '../../../core/widgets/app_bar_subtitle.dart';
 import '../../../core/widgets/initial_avatar.dart';
+import '../../../core/widgets/labeled_field.dart';
 import '../../../core/widgets/player_avatar.dart';
 import '../../ranking/application/ranking_providers.dart';
 import '../../ranking/domain/standing_entry.dart';
@@ -184,6 +185,7 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
       ),
       floatingActionButton: writable
           ? FloatingActionButton(
+              tooltip: 'Ajouter un joueur',
               onPressed: () async {
                 await showModalBottomSheet<void>(
                   context: context,
@@ -201,44 +203,49 @@ class _PlayersScreenState extends ConsumerState<PlayersScreen> {
   }
 
   Widget _buildSearchBar(BuildContext context) {
-    return TextField(
-      controller: _searchController,
-      style: TextStyle(color: context.colors.foreground50, fontSize: 15),
-      decoration: InputDecoration(
-        hintText: 'Rechercher un joueur…',
-        hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 15),
-        prefixIcon: Icon(
-          Remix.search_line,
-          color: context.colors.foreground500,
-          size: 20,
-        ),
-        suffixIcon: _searchQuery.isNotEmpty
-            ? IconButton(
-                icon: Icon(
-                  Remix.close_circle_fill,
-                  color: context.colors.foreground500,
-                  size: 18,
-                ),
-                onPressed: _searchController.clear,
-              )
-            : null,
-        filled: true,
-        fillColor: context.colors.background900,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: context.colors.background700),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: context.colors.background700),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: context.colors.primary500),
+    return LabeledField(
+      label: 'Rechercher un joueur',
+      child: TextField(
+        controller: _searchController,
+        style: TextStyle(color: context.colors.foreground50, fontSize: 15),
+        decoration: InputDecoration(
+          hintText: 'Nom ou surnom',
+          hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
+          prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 48),
+          prefixIcon: Icon(
+            Remix.search_line,
+            color: context.colors.foreground500,
+            size: 18,
+          ),
+          suffixIcon: _searchQuery.isNotEmpty
+              ? IconButton(
+                  tooltip: 'Effacer la recherche',
+                  icon: Icon(
+                    Remix.close_circle_fill,
+                    color: context.colors.foreground500,
+                    size: 18,
+                  ),
+                  onPressed: _searchController.clear,
+                )
+              : null,
+          filled: true,
+          fillColor: context.colors.background900,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: context.colors.background700),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: context.colors.background700),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: context.colors.primary500),
+          ),
         ),
       ),
     );

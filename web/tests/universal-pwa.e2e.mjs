@@ -38,6 +38,11 @@ async function fixture({ real = false } = {}) {
       "sqflite_sw.js",
     ])
       writeFileSync(join(build, f), "test-" + version);
+    // Le packaging relit la configuration du loader Flutter (PERF-005).
+    writeFileSync(
+      join(build, "flutter_bootstrap.js"),
+      `_flutter.buildConfig = {"builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};\n// test-${version}`,
+    );
     for (const f of ["app-shell.js", "manifest.json"])
       cpSync(new URL(f, source), join(build, f));
     if (version === "v1")

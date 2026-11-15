@@ -104,6 +104,7 @@ class MvpWeightsSection extends ConsumerWidget {
             ),
           ),
           IconButton(
+            tooltip: 'Diminuer la pondération : $label',
             icon: const Icon(Remix.subtract_line, size: 18),
             color: canDecrease ? colors.foreground200 : colors.foreground600,
             onPressed: canDecrease ? () => onChanged((value - _kStep).clamp(0, _kMax)) : null,
@@ -127,6 +128,7 @@ class MvpWeightsSection extends ConsumerWidget {
             ),
           ),
           IconButton(
+            tooltip: 'Augmenter la pondération : $label',
             icon: const Icon(Remix.add_line, size: 18),
             color: canIncrease ? colors.primary500 : colors.foreground600,
             onPressed: canIncrease ? () => onChanged((value + _kStep).clamp(0, _kMax)) : null,

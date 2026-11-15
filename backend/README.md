@@ -2,12 +2,37 @@
 
 FastAPI + SQLAlchemy. PostgreSQL/Neon pour l’hébergement, SQLite pour le développement et les tests.
 
+Python 3.12, la version fixée pour Render (`PYTHON_VERSION` dans `render.yaml`).
+
 ```powershell
 python -m venv .venv
-.venv/Scripts/python.exe -m pip install -r requirements-dev.txt
+.venv/Scripts/python.exe -m pip install --require-hashes -r requirements-dev.lock
 .venv/Scripts/python.exe -m uvicorn app.main:app --reload
 .venv/Scripts/python.exe -m pytest
 ```
+
+Sous Linux et macOS, remplacer `.venv/Scripts/python.exe` par `.venv/bin/python`.
+
+### Dépendances verrouillées
+
+`requirements.txt` et `requirements-dev.txt` déclarent les bornes. Les versions
+installées viennent de `requirements.lock` (production, utilisé par Render) et
+`requirements-dev.lock` (tests), générés avec empreintes SHA-256 et marqueurs de
+plateforme : le même fichier sert à Render (Linux), Windows et macOS. Après une
+modification des bornes, ou pour monter les versions, régénérer les deux fichiers
+avec uv, depuis un venv d'outillage distinct de `.venv` (Linux ou macOS ;
+sous Windows, `Scripts\uv.exe`) :
+
+```bash
+python3.12 -m venv ~/.cache/statoo-lock-tools && ~/.cache/statoo-lock-tools/bin/pip install uv==0.13.8
+~/.cache/statoo-lock-tools/bin/uv pip compile --universal --python-version 3.12 --generate-hashes --no-emit-index-url --custom-compile-command "voir backend/README.md, « Dépendances verrouillées »" -o requirements.lock requirements.txt
+~/.cache/statoo-lock-tools/bin/uv pip compile --universal --python-version 3.12 --generate-hashes --no-emit-index-url --custom-compile-command "voir backend/README.md, « Dépendances verrouillées »" -o requirements-dev.lock requirements-dev.txt
+```
+
+Sans option, uv conserve les versions déjà verrouillées. Ajouter `--upgrade` pour
+monter toutes les versions, ou `--upgrade-package <nom>` pour une seule. `tests/test_dependency_lock.py` vérifie que les deux fichiers
+sont épinglés, munis d'empreintes et de marqueurs de plateforme, conformes aux bornes et alignés entre eux,
+et que pytest tourne sur la version mineure de Python de Render.
 
 La documentation OpenAPI est disponible sur `/docs`, la santé sur `/health`.
 

@@ -53,6 +53,15 @@ abstract class GroupIntSettingNotifier extends Notifier<int> {
     }
   }
 
+  /// Valeur effective pour [teamId] (groupe actif par défaut), lue à la
+  /// source. À utiliser pour une décision métier : `state` vaut le défaut tant
+  /// que le chargement asynchrone n'est pas terminé (MET-002).
+  Future<int> resolve([String? teamId]) async {
+    if (initialValue != null) return initialValue!;
+    final group = teamId ?? ref.read(activeTeamIdProvider);
+    return group == null ? defaultValue : await _read(group);
+  }
+
   Future<void> reload() async {
     final teamId = ref.read(activeTeamIdProvider);
     if (teamId == null) {
@@ -85,12 +94,26 @@ class MinPlayersNotifier extends GroupIntSettingNotifier {
     final group = ref.watch(activeTeamIdProvider);
     final service = ref.watch(sharedServiceProvider);
     if (initialValue == null && group != null && group == service.groupId) {
-      final settings = service.snapshot?['sport_settings'] as Map?;
-      final minimum = settings?['min_players_per_session'];
-      return minimum is int && minimum >= 2 && minimum <= 30
-          ? minimum : kDefaultMinPlayers;
+      return _sharedMinimum(service.snapshot);
     }
     return super.build();
+  }
+
+  @override
+  Future<int> resolve([String? teamId]) async {
+    final group = teamId ?? ref.read(activeTeamIdProvider);
+    final service = ref.read(sharedServiceProvider);
+    if (initialValue == null && group != null && group == service.groupId) {
+      return _sharedMinimum(service.snapshot);
+    }
+    return await super.resolve(group);
+  }
+
+  int _sharedMinimum(Map<String, dynamic>? snapshot) {
+    final settings = snapshot?['sport_settings'] as Map?;
+    final minimum = settings?['min_players_per_session'];
+    return minimum is int && minimum >= 2 && minimum <= 30
+        ? minimum : kDefaultMinPlayers;
   }
 
   Future<void> setMinPlayers(int count) async {

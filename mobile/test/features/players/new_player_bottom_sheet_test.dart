@@ -371,4 +371,62 @@ void main() {
       },
     );
   });
+
+  // A11Y-003 / A11Y-004 (audit 14/11/2026) : les champs étaient annoncés par leur exemple
+  // (« Karim Benali »), puis sans nom une fois remplis ; le bouton « + » n'avait pas de nom.
+  testWidgets(
+    'A11Y004 la feuille Nouveau joueur nomme ses champs et le bouton +',
+    (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedServiceProvider.overrideWithValue(LocalTestSharedService()),
+            playersRepositoryProvider.overrideWithValue(
+              _MockPlayersRepository(),
+            ),
+            activeTeamIdProvider.overrideWith(
+              () => ActiveTeamIdNotifier(initialValue: 'team_1'),
+            ),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.darkTheme,
+            home: const Scaffold(body: NewPlayerBottomSheet()),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final fields = find.byType(TextField);
+      String label(int i) => tester
+          .getSemantics(
+            find.descendant(
+              of: fields.at(i),
+              matching: find.byType(EditableText),
+            ),
+          )
+          .label;
+
+      for (final (index, name, value) in [
+        (0, 'Nom', 'Alice Martin'),
+        (1, 'Surnom', 'Ali'),
+      ]) {
+        expect(label(index), startsWith(name), reason: 'avant saisie');
+        await tester.enterText(fields.at(index), value);
+        await tester.pumpAndSettle();
+        expect(label(index), startsWith(name), reason: 'après saisie');
+      }
+
+      // Le nom doit être porté par le nœud du bouton lui-même (un Tooltip parent ne suffit pas).
+      final node = tester.getSemantics(
+        find.widgetWithIcon(OutlinedButton, Remix.add_line),
+      );
+      expect(node.label, 'Créer et ajouter un autre joueur');
+      expect(node.getSemanticsData().flagsCollection.isButton, isTrue);
+      expect(
+        find.byTooltip('Créer et ajouter un autre joueur'),
+        findsOneWidget,
+      );
+      handle.dispose();
+    },
+  );
 }

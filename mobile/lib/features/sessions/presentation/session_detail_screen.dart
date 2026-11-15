@@ -9,6 +9,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/initial_avatar.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../settings/application/settings_provider.dart';
 import '../../shared/application/shared_providers.dart';
 import '../../team/application/team_provider.dart';
 import '../application/sessions_provider.dart';
@@ -1079,6 +1080,18 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
   ) async {
     final controller = ref.read(sessionsControllerProvider);
     final isTournament = session.sessionType == SessionType.tournament3;
+    final int minimumPlayers;
+    try {
+      minimumPlayers = await ref.read(minPlayersPerSessionProvider.notifier).resolve();
+    } on Object catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Clôture impossible : réglage du minimum de joueurs illisible ($error).')),
+        );
+      }
+      return;
+    }
+    if (!context.mounted) return;
 
     final teamAPlayers = participants.where((p) => p.participation.team == Team.a).toList();
     final teamBPlayers = participants.where((p) => p.participation.team == Team.b).toList();
@@ -1104,18 +1117,26 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       playerAssistsB: assistsB,
       playerAssistsC: assistsC,
       participations: participants.map((p) => p.participation),
+      minimumPlayers: minimumPlayers,
     );
+
+    if (blockers.contains(CloseBlocker.belowMinimumPlayers)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.belowMinimumPlayers, session, minimumPlayers))),
+      );
+      return;
+    }
 
     if (blockers.contains(CloseBlocker.unevenTeams)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.unevenTeams, session))),
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.unevenTeams, session, minimumPlayers))),
       );
       return;
     }
 
     if (blockers.contains(CloseBlocker.missingScore)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore, session))),
+        SnackBar(content: Text(_closeBlockerMessage(CloseBlocker.missingScore, session, minimumPlayers))),
       );
       return;
     }
@@ -1289,7 +1310,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       closed = remaining.isEmpty;
       message = remaining.isEmpty
           ? 'Séance clôturée avec succès !'
-          : _closeBlockerMessage(remaining.first, session);
+          : _closeBlockerMessage(remaining.first, session, minimumPlayers);
     } on SessionCloseException {
       message = "La séance n'a pas pu être clôturée. Rechargez-la et réessayez.";
     } on Object catch (e) {
@@ -1303,7 +1324,7 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  String _closeBlockerMessage(CloseBlocker blocker, Session session) => switch (blocker) {
+  String _closeBlockerMessage(CloseBlocker blocker, Session session, int minimumPlayers) => switch (blocker) {
     CloseBlocker.missingScore => session.sessionType == SessionType.tournament3
         ? 'Clôture impossible : au moins une victoire doit être enregistrée.'
         : 'Clôture impossible : renseignez le score de la séance.',
@@ -1318,6 +1339,8 @@ class _SessionDetailScreenState extends ConsumerState<SessionDetailScreen> {
       'Clôture impossible : un joueur ne peut pas se faire de passe décisive à lui-même.',
     CloseBlocker.duplicatePlayer =>
       'Clôture impossible : un même joueur est inscrit plusieurs fois dans la séance.',
+    CloseBlocker.belowMinimumPlayers =>
+      'Clôture impossible : il faut au moins $minimumPlayers joueurs dans la séance (réglage du groupe).',
   };
 
   Future<void> _confirmReopen(BuildContext context, WidgetRef ref) async {

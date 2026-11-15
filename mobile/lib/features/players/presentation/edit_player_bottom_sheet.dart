@@ -52,10 +52,11 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
           .read(playersListProvider.notifier)
           .isNameTaken(name, excludePlayerId: widget.player.id);
       if (!mounted) return;
-      if (ref.read(activeTeamIdProvider) != widget.player.teamId)
+      if (ref.read(activeTeamIdProvider) != widget.player.teamId) {
         throw StateError(
           'Le groupe actif a changé. Rouvrez ce joueur dans son groupe.',
         );
+      }
       if (taken) {
         setState(() {
           _nameError =
@@ -81,8 +82,9 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
         ).showSnackBar(SnackBar(content: Text('Joueur "$name" mis à jour.')));
       }
     } on Object catch (error) {
-      if (mounted)
+      if (mounted) {
         setState(() => _nameError = 'Modification impossible : $error');
+      }
     } finally {
       if (mounted) {
         setState(() => _isSaving = false);
@@ -142,6 +144,7 @@ class _EditPlayerBottomSheetState extends ConsumerState<EditPlayerBottomSheet> {
                       ),
                     ),
                     IconButton(
+                      tooltip: 'Fermer',
                       icon: const Icon(Remix.close_line),
                       onPressed: () => Navigator.of(context).pop(false),
                     ),

@@ -172,4 +172,65 @@ void main() {
     expect(find.text('Zinedine Zidane'), findsOneWidget);
     expect(find.text('Luka Modric'), findsOneWidget);
   });
+
+  // A11Y-003 / A11Y-004 (audit 14/11/2026) : le bouton d'ajout, l'effacement de la
+  // recherche et le champ de recherche étaient annoncés sans nom.
+  testWidgets('A11Y003 la liste Joueurs nomme ajout, recherche et effacement', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    final now = DateTime.now();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          activeTeamIdProvider.overrideWith(
+            () => ActiveTeamIdNotifier(initialValue: 't_1'),
+          ),
+          playersRepositoryProvider.overrideWithValue(
+            _FakePlayersRepository([
+              Player(
+                id: 'p_1',
+                teamId: 't_1',
+                name: 'Karim Benzema',
+                createdAt: now,
+                updatedAt: now,
+              ),
+            ]),
+          ),
+          standingsProvider.overrideWith(
+            (ref) => Future.value(const <StandingEntry>[]),
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: const PlayersScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final add = tester.getSemantics(find.byType(FloatingActionButton));
+    expect(add.getSemanticsData().tooltip, 'Ajouter un joueur');
+
+    final search = find.byType(TextField);
+    String label() => tester
+        .getSemantics(
+          find.descendant(of: search, matching: find.byType(EditableText)),
+        )
+        .label;
+    // Revue : nom annoncé une seule fois (pas répété par le texte d'exemple).
+    expect(label(), startsWith('Rechercher un joueur'));
+    expect('Rechercher un joueur'.allMatches(label()).length, 1);
+    await tester.enterText(search, 'Karim');
+    await tester.pumpAndSettle();
+    expect(label(), startsWith('Rechercher un joueur'));
+    // Libellé visible permanent (design system, arbitrage du 26/10).
+    expect(find.text('Rechercher un joueur').hitTestable(), findsOneWidget);
+
+    expect(find.byTooltip('Effacer la recherche'), findsOneWidget);
+    await tester.tap(find.byTooltip('Effacer la recherche'));
+    await tester.pumpAndSettle();
+    expect(find.text('Karim'), findsNothing);
+    handle.dispose();
+  });
 }

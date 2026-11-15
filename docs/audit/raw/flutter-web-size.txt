@@ -1,0 +1,27 @@
+46M	build/web
+-rw-rw-r-- 1 norris norris 4723196 nov.  14 16:47 build/web/main.dart.js
+-rw-rw-r-- 1 norris norris 748686 nov.  14 16:47 build/web/sqlite3.wasm
+-rw-rw-r-- 1 norris norris 264107 nov.  14 16:47 build/web/sqflite_sw.js
+-rw-rw-r-- 1 norris norris 1404765 nov.  14 16:47 build/web/assets/NOTICES
+-rw-rw-r-- 1 norris norris 427505 nov.  14 16:47 build/web/icons/icon-1024.png
+-rw-rw-r-- 1 norris norris 5216217 nov.  14 16:45 build/web/canvaskit/skwasm_heavy.wasm
+-rw-rw-r-- 1 norris norris 1540006 nov.  14 16:45 build/web/canvaskit/skwasm.js.symbols
+-rw-rw-r-- 1 norris norris 1672152 nov.  14 16:45 build/web/canvaskit/skwasm_heavy.js.symbols
+-rw-rw-r-- 1 norris norris 1356926 nov.  14 16:45 build/web/canvaskit/canvaskit.js.symbols
+-rw-rw-r-- 1 norris norris 1813030 nov.  14 16:45 build/web/canvaskit/wimp.js.symbols
+-rw-rw-r-- 1 norris norris 3593715 nov.  14 16:45 build/web/canvaskit/skwasm.wasm
+-rw-rw-r-- 1 norris norris 3581677 nov.  14 16:45 build/web/canvaskit/wimp.wasm
+-rw-rw-r-- 1 norris norris 7284602 nov.  14 16:45 build/web/canvaskit/canvaskit.wasm
+-rw-rw-r-- 1 norris norris 158576 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-Medium.ttf
+-rw-rw-r-- 1 norris norris 157312 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-SemiBold.ttf
+-rw-rw-r-- 1 norris norris 155996 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-Bold.ttf
+-rw-rw-r-- 1 norris norris 153440 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-Black.ttf
+-rw-rw-r-- 1 norris norris 154836 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-ExtraBold.ttf
+-rw-rw-r-- 1 norris norris 160316 nov.  14 16:47 build/web/assets/assets/google_fonts/Poppins-Regular.ttf
+-rw-rw-r-- 1 norris norris 3729129 nov.  14 16:45 build/web/canvaskit/webparagraph/canvaskit.wasm
+-rw-rw-r-- 1 norris norris 963641 nov.  14 16:45 build/web/canvaskit/webparagraph/canvaskit.js.symbols
+-rw-rw-r-- 1 norris norris 5428806 nov.  14 16:45 build/web/canvaskit/chromium/canvaskit.wasm
+-rw-rw-r-- 1 norris norris 1235870 nov.  14 16:45 build/web/canvaskit/chromium/canvaskit.js.symbols
+-rw-rw-r-- 1 norris norris 289085 nov.  14 16:47 build/web/assets/assets/images/logo.jpg
+-rw-rw-r-- 1 norris norris 171676 nov.  14 16:47 build/web/assets/fonts/fallback/Roboto-Regular.ttf
+-rw-rw-r-- 1 norris norris 501712 nov.  14 16:47 build/web/assets/packages/remixicon/fonts/remix.ttf

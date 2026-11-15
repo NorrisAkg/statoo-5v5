@@ -27,7 +27,9 @@ def registration(**changes):
 @pytest.fixture(scope='module')
 def api():
     engine = database('sqlite:///:memory:')
-    with patch('app.main.database', return_value=engine):
+    # Une seule app pour tout le module, qui crée bien plus de 5 groupes : le quota SEC-003
+    # (testé dans test_rate_limits.py) est relevé ici pour ne pas interférer.
+    with patch('app.main.database', return_value=engine), patch('app.main.REGISTRATIONS_PER_HOUR', 10_000):
         app = create_app('sqlite:///:memory:')
         with TestClient(app) as client:
             yield client, engine

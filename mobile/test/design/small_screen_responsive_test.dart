@@ -332,6 +332,28 @@ void main() {
                     findsOneWidget,
                   );
                 }
+                // A11Y-004 (revue) : les libellés de champ restent entiers à 200 %,
+                // au repos comme une fois le champ focalisé (arbitrage du 26/10).
+                bool labelCut(String label) => tester
+                    .renderObjectList<RenderParagraph>(find.text(label))
+                    .any((paragraph) => paragraph.didExceedMaxLines);
+                if (page == 'players') {
+                  // La recherche est le premier élément de la liste : revenir en haut.
+                  tester
+                      .state<ScrollableState>(find.byType(Scrollable).first)
+                      .position
+                      .jumpTo(0);
+                  await tester.pumpAndSettle();
+                  expect(find.text('Rechercher un joueur'), findsOneWidget);
+                  expect(labelCut('Rechercher un joueur'), isFalse);
+                  await tester.tap(find.byType(TextField).first);
+                  await tester.pumpAndSettle();
+                  expect(
+                    labelCut('Rechercher un joueur'),
+                    isFalse,
+                    reason: 'libellé flottant',
+                  );
+                }
                 if (page == 'members') {
                   expect(
                     tester
@@ -341,6 +363,10 @@ void main() {
                         .didExceedMaxLines,
                     isFalse,
                   );
+                  for (final label in ['Nom ou prénom *', 'Surnom (facultatif)']) {
+                    expect(find.text(label), findsWidgets, reason: label);
+                    expect(labelCut(label), isFalse, reason: label);
+                  }
                 }
               },
             );

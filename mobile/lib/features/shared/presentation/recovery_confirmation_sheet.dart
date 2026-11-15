@@ -94,6 +94,7 @@ class _RecoveryConfirmationSheetState
                       ),
                     ),
                     IconButton(
+                      tooltip: 'Fermer',
                       icon: const Icon(Remix.close_line),
                       color: context.colors.foreground400,
                       onPressed: () => Navigator.of(context).pop(),

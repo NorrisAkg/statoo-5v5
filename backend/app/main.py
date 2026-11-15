@@ -1,3 +1,4 @@
+import asyncio
 import copy
 import hashlib
 import json
@@ -7,6 +8,7 @@ import secrets
 import threading
 import time
 import uuid
+import weakref
 from contextlib import asynccontextmanager
 from datetime import date, datetime, timedelta, timezone
 from typing import Literal
@@ -241,6 +243,77 @@ def validate_sport_acceptance(state, occurrence, payload):
             fail(409, 'Corrigez le point financier avant annulation')
 
 
+MAX_THROTTLE_KEYS = 10_000
+REGISTRATIONS_PER_HOUR = 5  # SEC-003, par IP client
+
+
+def _prune(bucket, window, now, cap):
+    """Borne un compteur de tentatives : purge les clés expirées, puis les plus anciennes."""
+    if len(bucket) <= cap:
+        return
+    for stale in [k for k, hits in bucket.items() if not hits or now - hits[-1] >= window]:
+        del bucket[stale]
+    if len(bucket) > cap:
+        # Purge jusqu'à 90 % du plafond : le tri ne se refait pas à chaque nouvelle clé.
+        target = cap - cap // 10
+        for oldest in sorted(bucket, key=lambda k: bucket[k][-1])[:len(bucket) - target]:
+            del bucket[oldest]
+
+
+def _client_ip_resolver():
+    """SEC-002 : IP client utilisée par les limites de tentatives.
+
+    Par défaut, l'adresse du socket : X-Forwarded-For est ignoré, car un client peut le forger.
+    Derrière un proxy, STATOO_CLIENT_IP_HEADER désigne un en-tête posé par l'hébergeur
+    (ex. CF-Connecting-IP), ou STATOO_TRUSTED_PROXY_HOPS le nombre d'entrées ajoutées par les
+    proxys de confiance à droite de X-Forwarded-For. La bonne valeur se vérifie sur l'hébergeur.
+    """
+    header = os.getenv("STATOO_CLIENT_IP_HEADER", "").strip()
+    try:
+        hops = max(0, int(os.getenv("STATOO_TRUSTED_PROXY_HOPS", "0")))
+    except ValueError:
+        hops = 0
+    if header.casefold() == "x-forwarded-for":
+        # Lu en entier, X-Forwarded-For est falsifiable : chaque requête aurait sa propre clé.
+        raise RuntimeError("STATOO_CLIENT_IP_HEADER ne peut pas valoir X-Forwarded-For ; "
+                           "utilisez STATOO_TRUSTED_PROXY_HOPS")
+    if os.getenv("RENDER") and not header and not hops:
+        # Derrière le proxy Render, l'adresse du socket est commune à tous les clients :
+        # les limites par IP deviendraient globales (ex. 5 créations de groupe par heure en tout).
+        raise RuntimeError("Sur Render, définissez STATOO_TRUSTED_PROXY_HOPS ou "
+                           "STATOO_CLIENT_IP_HEADER (source de l'IP client)")
+
+    def client_ip(request: Request) -> str:
+        socket_ip = request.client.host if request.client else "unknown"
+        if header:
+            value = request.headers.get(header, "").strip()
+            return value[:100] if value else socket_ip
+        if hops:
+            chain = [part.strip() for part in request.headers.get("x-forwarded-for", "").split(",") if part.strip()]
+            if len(chain) >= hops:
+                return chain[-hops][:100]
+        return socket_ip
+
+    return client_ip
+
+
+def group_id_candidates(raw):
+    """UX-003 : identifiants à essayer pour une saisie. Les espaces sont ignorés et « # »
+    est facultatif devant les 8 chiffres attribués par le serveur ; un identifiant existant
+    tel quel (groupes créés avant le 15/10/2026) reste prioritaire."""
+    typed = re.sub(r"[\s\u200b\ufeff]+", "", raw)  # + largeur nulle et BOM (copier-coller)
+    return [typed, f"#{typed}"] if re.fullmatch(r"[0-9]{8}", typed) else [typed]
+
+
+def _serialize_sessions(engine) -> bool:
+    """SQLite (dev, tests) partage sa connexion : les sessions doivent être sérialisées.
+
+    Point d'injection pour les tests qui reproduisent le comportement PostgreSQL (aucun
+    verrou applicatif, seuls les verrous de ligne) sur une base SQLite fichier.
+    """
+    return engine.dialect.name == "sqlite"
+
+
 def create_app(url: str | None = None):
     load_environment()
     if url is None and os.getenv("RENDER") and not os.getenv("DATABASE_URL"):
@@ -279,25 +352,72 @@ def create_app(url: str | None = None):
                         "http://127.0.0.1:19095", "http://localhost:19095"])
     app.add_middleware(CORSMiddleware, allow_origins=origins,
                        allow_methods=["GET", "POST", "PUT"], allow_headers=["Authorization", "Content-Type"])
-    # Also serialize SQLite development transactions. PostgreSQL uses row locks across workers.
-    # FastAPI can enter and exit this dependency on different worker threads.
-    lock = threading.Lock()
+    # PERF-001 : aucun verrou ne doit rester pris pendant que la requête attend un thread du
+    # pool AnyIO, sinon ~40 requêtes concurrentes gèlent l'API. PostgreSQL : seuls les verrous
+    # de ligne (FOR UPDATE) sérialisent un même groupe. SQLite (dev, tests) : la connexion est
+    # partagée, on sérialise avec un verrou asyncio, qui n'occupe aucun thread pendant l'attente.
+    sqlite_locks = weakref.WeakKeyDictionary()
+    # Compteurs de tentatives : sections courtes, jamais à cheval sur un saut de thread.
+    counters = threading.Lock()
     attempts = {}
     password_change_attempts = {}
     recover_ip_attempts = {}
     recover_account_attempts = {}
+    login_account_attempts = {}
+    login_pair_attempts = {}
+    registration_attempts = {}
+    verify_attempts = {}
+    client_ip = _client_ip_resolver()
+
+    def prune(bucket, window, now):
+        # Clés choisies par les clients : mémoire bornée (lu à l'appel pour les tests).
+        _prune(bucket, window, now, MAX_THROTTLE_KEYS)
 
     def throttle(bucket, key, limit, window=60.0):
-        now = time.monotonic()
-        recent = [t for t in bucket.get(key, []) if now - t < window]
-        if len(recent) >= limit:
-            bucket[key] = recent
-            fail(429, "Trop de tentatives, réessayez dans une minute")
-        bucket[key] = recent + [now]
+        with counters:
+            now = time.monotonic()
+            prune(bucket, window, now)
+            recent = [t for t in bucket.get(key, []) if now - t < window]
+            if len(recent) >= limit:
+                bucket[key] = recent
+                fail(429, "Trop de tentatives, réessayez dans une minute")
+            bucket[key] = recent + [now]
 
-    def db():
-        with lock, Session(engine) as session, session.begin():
-            yield session
+    def reserve(bucket, key, limit, window, message):
+        """Contrôle et réserve une tentative en une seule section critique ; renvoie le jeton
+        à passer à `forgive` quand la tentative ne doit finalement pas compter."""
+        with counters:
+            now = time.monotonic()
+            prune(bucket, window, now)
+            recent = [t for t in bucket.get(key, []) if now - t < window]
+            if len(recent) >= limit:
+                bucket[key] = recent
+                fail(429, message)
+            bucket[key] = recent + [now]
+            return now
+
+    def forgive(bucket, key, stamp):
+        with counters:
+            hits = bucket.get(key)
+            if hits and stamp in hits:
+                hits.remove(stamp)
+
+    if _serialize_sessions(engine):
+        # Un verrou par boucle d'événements : en production il n'y en a qu'une. Deux TestClient
+        # sur la même app (deux boucles) ne sont donc pas sérialisés entre eux. Le commit SQLite
+        # s'exécute sur la boucle (I/O bloquante brève), acceptable pour le dev et les tests.
+        async def db():
+            loop = asyncio.get_running_loop()
+            lock = sqlite_locks.get(loop)
+            if lock is None:
+                lock = sqlite_locks[loop] = asyncio.Lock()
+            async with lock:
+                with Session(engine) as session, session.begin():
+                    yield session
+    else:
+        def db():
+            with Session(engine) as session, session.begin():
+                yield session
 
     def authenticate(authorization: str = Header(default=""), session: Session = Depends(db)):
         if not authorization.startswith("Bearer "):
@@ -347,7 +467,7 @@ def create_app(url: str | None = None):
         return {"status": "ok"}
 
     @app.post("/groups", status_code=201)
-    def register(body: Registration, session: Session = Depends(db)):
+    def register(body: Registration, request: Request, session: Session = Depends(db)):
         canonical_body = body.model_dump(exclude={'operation_id', 'group_id'})
         if canonical_body.get('recovery_code') is None:
             canonical_body.pop('recovery_code', None)
@@ -371,6 +491,21 @@ def create_app(url: str | None = None):
         previous = replay()
         if previous:
             return previous
+        # SEC-003 : seules les nouvelles créations réussies consomment le quota.
+        ip = client_ip(request)
+        stamp = reserve(registration_attempts, ip, REGISTRATIONS_PER_HOUR, 3600.0,
+                        "Trop de créations de groupe depuis ce réseau. Réessayez dans une heure.")
+        try:
+            created = create_group(body, session, canonical, replay)
+        except BaseException:
+            forgive(registration_attempts, ip, stamp)
+            raise
+        if not created[1]:
+            forgive(registration_attempts, ip, stamp)
+        return created[0]
+
+    def create_group(body, session, canonical, replay):
+        """Renvoie (réponse, nouveau_groupe)."""
         validate_user_password(body.password, username=body.username)
         validate_user_password(body.shared_password, username=body.shared_username)
         if body.username.strip().casefold() == body.shared_username.strip().casefold():
@@ -413,25 +548,42 @@ def create_app(url: str | None = None):
             except IntegrityError:
                 previous = replay()
                 if previous:
-                    return previous
+                    return previous, False
                 continue
-            return issue(session, group, admin)
+            return issue(session, group, admin), True
         fail(503, "Impossible d’attribuer un identifiant de groupe. Réessayez.")
 
     @app.post("/auth/login")
     def login(body: Credentials, request: Request, session: Session = Depends(db)):
-        key = request.client.host if request.client else "unknown"
-        now = time.monotonic()
-        recent = [t for t in attempts.get(key, []) if now - t < 60]
-        attempts[key] = recent + [now]
+        key = client_ip(request)
+        with counters:
+            prune(attempts, 60, time.monotonic())
+            now = time.monotonic()
+            recent = [t for t in attempts.get(key, []) if now - t < 60]
+            attempts[key] = recent + [now]
         if len(recent) >= 20:
             fail(429, "Trop de tentatives, réessayez dans une minute")
-        group = session.get(Group, body.group_id)
+        # SEC-002 : 10 échecs par compte et par IP (un attaquant ne verrouille pas le compte
+        # commun pour les autres membres), plafond de 50 par compte toutes IP confondues.
+        candidates = group_id_candidates(body.group_id)
+        account_key = f"{candidates[-1]}:{body.username.strip().casefold()}"
+        pair_key = f"{account_key}@{key}"
+        message = "Trop de tentatives pour ce compte. Réessayez dans quelques minutes."
+        pair_stamp = reserve(login_pair_attempts, pair_key, 10, 900.0, message)
+        try:
+            reserve(login_account_attempts, account_key, 50, 900.0, message)
+        except HTTPException:
+            forgive(login_pair_attempts, pair_key, pair_stamp)
+            raise
+        group = next((g for g in (session.get(Group, c) for c in candidates) if g is not None), None)
         account = None if group is None else next((a for a in group.state["accounts"]
                       if a["username"].casefold() == body.username.strip().casefold()), None)
         if account is None or not password_matches(body.password, account["password"]):
-            fail(401, "Identifiants incorrects")
-        attempts.pop(key, None)
+            fail(401, "Identifiant du groupe, identifiant ou mot de passe incorrect.")
+        with counters:
+            attempts.pop(key, None)
+            login_pair_attempts.pop(pair_key, None)
+            login_account_attempts.pop(account_key, None)
         return issue(session, group, account)
 
     @app.post("/auth/logout")
@@ -442,33 +594,51 @@ def create_app(url: str | None = None):
 
     @app.post("/auth/recover")
     def recover(body: RecoverInput, request: Request, session: Session = Depends(db)):
-        client_ip = request.client.host if request.client else "unknown"
-        account_key = f"{body.group_id.strip()}:{body.username.strip().casefold()}"
-        now = time.monotonic()
+        ip = client_ip(request)
+        candidates = group_id_candidates(body.group_id)
+        account_key = f"{candidates[-1]}:{body.username.strip().casefold()}"
+        with counters:
+            now = time.monotonic()
+            prune(recover_ip_attempts, 60.0, now)
+            prune(recover_account_attempts, 900.0, now)
 
-        ip_hits = [t for t in recover_ip_attempts.get(client_ip, []) if now - t < 60.0]
-        if len(ip_hits) >= 10:
-            recover_ip_attempts[client_ip] = ip_hits
-            fail(429, "Trop de tentatives de récupération. Veuillez patienter.")
+            ip_hits = [t for t in recover_ip_attempts.get(ip, []) if now - t < 60.0]
+            if len(ip_hits) >= 10:
+                recover_ip_attempts[ip] = ip_hits
+                fail(429, "Trop de tentatives de récupération. Veuillez patienter.")
 
-        acc_hits = [t for t in recover_account_attempts.get(account_key, []) if now - t < 900.0]
-        if len(acc_hits) >= 5:
-            recover_account_attempts[account_key] = acc_hits
-            fail(429, "Trop de tentatives pour ce compte. Réessayez plus tard.")
+            acc_hits = [t for t in recover_account_attempts.get(account_key, []) if now - t < 900.0]
+            if len(acc_hits) >= 5:
+                recover_account_attempts[account_key] = acc_hits
+                fail(429, "Trop de tentatives pour ce compte. Réessayez plus tard.")
+            # Réservation atomique avec le contrôle : des requêtes simultanées ne peuvent pas
+            # toutes passer avant que le premier échec soit compté (PERF-001, sans verrou global).
+            recover_ip_attempts[ip] = ip_hits + [now]
+            recover_account_attempts[account_key] = acc_hits + [now]
 
-        validate_user_password(body.new_password, username=body.username)
-        norm_code = clean_recovery_code(body.recovery_code)
-        norm_new_code = clean_recovery_code(body.new_recovery_code)
-        if norm_code == norm_new_code:
-            fail(422, "Le nouveau code de secours doit être différent de l'actuel")
+        def release(*buckets):
+            with counters:
+                for bucket, key in buckets:
+                    hits = bucket.get(key, [])
+                    if now in hits:
+                        hits.remove(now)
+
+        try:
+            validate_user_password(body.new_password, username=body.username)
+            norm_code = clean_recovery_code(body.recovery_code)
+            norm_new_code = clean_recovery_code(body.new_recovery_code)
+            if norm_code == norm_new_code:
+                fail(422, "Le nouveau code de secours doit être différent de l'actuel")
+        except HTTPException:
+            # Une requête invalide n'a jamais compté comme tentative.
+            release((recover_ip_attempts, ip), (recover_account_attempts, account_key))
+            raise
 
         def record_failure_and_fail():
-            now_fail = time.monotonic()
-            recover_ip_attempts[client_ip] = [t for t in recover_ip_attempts.get(client_ip, []) if now_fail - t < 60.0] + [now_fail]
-            recover_account_attempts[account_key] = [t for t in recover_account_attempts.get(account_key, []) if now_fail - t < 900.0] + [now_fail]
             fail(401, "Récupération impossible. Vérifiez vos informations.")
 
-        group = session.scalar(select(Group).where(Group.id == body.group_id.strip()).with_for_update())
+        group = next((g for g in (session.scalar(select(Group).where(Group.id == c).with_for_update())
+                                  for c in candidates) if g is not None), None)
         if group is None:
             password_matches(norm_code, DUMMY_RECOVERY_HASH)
             record_failure_and_fail()
@@ -498,7 +668,9 @@ def create_app(url: str | None = None):
             session.delete(token)
         audit(state, target_account, "account_recovered")
         group.state = state
-        recover_account_attempts[account_key] = []
+        release((recover_ip_attempts, ip))
+        with counters:
+            recover_account_attempts[account_key] = []
         result = issue(session, group, target_account)
         result["recovery_rotated"] = True
         return result
@@ -567,11 +739,14 @@ def create_app(url: str | None = None):
 
     @app.post('/groups/{group_id}/accounts/{account_id}/password/verify')
     def verify_manager_password(group_id: str, account_id: str, body: SharedPasswordCheck, auth=Depends(authenticate)):
-        _, group, _, _, target = individual_access(group_id, account_id, auth)
+        _, group, _, actor, target = individual_access(group_id, account_id, auth)
         if not 8 <= len(body.password) <= 200:
             fail(422, "Le mot de passe doit contenir entre 8 et 200 caractères.")
+        # SEC-005 : 5 échecs par minute et par acteur ; une vérification réussie ne compte pas.
+        stamp = reserve(verify_attempts, actor['id'], 5, 60.0, "Trop d'essais de mot de passe. Réessayez dans une minute.")
         if not password_matches(body.password, target['password']):
             fail(400, "Le mot de passe du gestionnaire est incorrect.")
+        forgive(verify_attempts, actor['id'], stamp)
         return {'verified': True, 'group_id': group.id, 'username': target['username']}
 
     @app.post('/groups/{group_id}/accounts/{account_id}/password')
@@ -614,8 +789,10 @@ def create_app(url: str | None = None):
         session, group, state, account = scoped(group_id, auth)
         if account.get('shared') or "ADMIN" not in account.get("roles", []):
             fail(403, "Droit insuffisant")
+        stamp = reserve(verify_attempts, account["id"], 5, 60.0, "Trop d'essais de mot de passe. Réessayez dans une minute.")
         if not password_matches(body.current_password, account["password"]):
             fail(400, "Mot de passe actuel incorrect")
+        forgive(verify_attempts, account["id"], stamp)
         norm_code = clean_recovery_code(body.recovery_code)
         target_account = next(a for a in state["accounts"] if a["id"] == account["id"])
         current_recovery = target_account.get("recovery")
@@ -679,8 +856,10 @@ def create_app(url: str | None = None):
         if not 8 <= len(body.password) <= 200:
             fail(422, "Le mot de passe doit contenir entre 8 et 200 caractères.")
         shared = next(a for a in state["accounts"] if a["shared"])
+        stamp = reserve(verify_attempts, actor["id"], 5, 60.0, "Trop d'essais de mot de passe. Réessayez dans une minute.")
         if not password_matches(body.password, shared["password"]):
             fail(400, "Le mot de passe commun est incorrect.")
+        forgive(verify_attempts, actor["id"], stamp)
         return {"verified": True, "group_id": group.id, "username": shared["username"]}
 
     @app.put("/groups/{group_id}/shared-access")

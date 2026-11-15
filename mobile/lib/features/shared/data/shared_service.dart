@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../../core/data/app_database.dart';
 import '../../../core/data/occurrence_registry.dart';
 import '../../../core/data/shared_http.dart';
+import '../domain/group_id.dart';
 import 'collective_access_key.dart';
 
 class SharedService {
@@ -136,7 +137,11 @@ class SharedService {
       'POST',
       registration == null ? '/auth/login' : '/groups',
       registration ??
-          {'group_id': group, 'username': username, 'password': password},
+          {
+            'group_id': normalizeGroupId(group),
+            'username': username,
+            'password': password,
+          },
     );
     requireCurrentConnection();
     identity = result;
@@ -178,7 +183,7 @@ class SharedService {
     }
     final cleanUrl = url.trim().replaceAll(RegExp(r'/+$'), '');
     final payload = <String, dynamic>{
-      'group_id': groupId.trim(),
+      'group_id': normalizeGroupId(groupId),
       'username': username.trim(),
       'recovery_code': recoveryCode,
       'new_password': newPassword,

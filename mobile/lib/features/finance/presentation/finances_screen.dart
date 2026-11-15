@@ -10,6 +10,7 @@ import '../../../core/data/occurrence_registry.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_form_dialog.dart';
+import '../../../core/widgets/labeled_field.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../players/application/players_provider.dart';
 import '../../players/domain/player.dart';
@@ -805,46 +806,47 @@ class _FinancesScreenState extends ConsumerState<FinancesScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: _search,
-            onChanged: (value) => setState(() => _query = value),
-            style: TextStyle(color: context.colors.foreground50, fontSize: 14),
-            decoration: InputDecoration(
-              hintText: 'Rechercher un membre',
-              hintStyle: TextStyle(
-                color: context.colors.foreground400,
-                fontSize: 13,
-              ),
-              prefixIcon: Icon(
-                Remix.search_line,
-                color: context.colors.foreground400,
-                size: 20,
-              ),
-              suffixIcon: _query.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: 'Effacer la recherche',
-                      icon: const Icon(Remix.close_line),
-                      onPressed: () {
-                        _search.clear();
-                        setState(() => _query = '');
-                      },
-                    ),
-              filled: true,
-              fillColor: context.colors.background900,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: context.colors.background700),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: context.colors.background700),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                  color: context.colors.primary500,
-                  width: 2,
+          LabeledField(
+            label: 'Rechercher un membre',
+            child: TextField(
+              controller: _search,
+              onChanged: (value) => setState(() => _query = value),
+              style: TextStyle(color: context.colors.foreground50, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: 'Nom ou surnom',
+                hintStyle: TextStyle(color: context.colors.foreground500, fontSize: 14),
+                prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 48),
+                prefixIcon: Icon(
+                  Remix.search_line,
+                  color: context.colors.foreground400,
+                  size: 18,
+                ),
+                suffixIcon: _query.isEmpty
+                    ? null
+                    : IconButton(
+                        tooltip: 'Effacer la recherche',
+                        icon: const Icon(Remix.close_line),
+                        onPressed: () {
+                          _search.clear();
+                          setState(() => _query = '');
+                        },
+                      ),
+                filled: true,
+                fillColor: context.colors.background900,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: context.colors.background700),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: context.colors.background700),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: context.colors.primary500,
+                    width: 2,
+                  ),
                 ),
               ),
             ),

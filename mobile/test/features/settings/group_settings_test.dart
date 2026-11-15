@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:statoo/features/settings/application/settings_provider.dart';
 import 'package:statoo/features/settings/data/group_settings_repository.dart';
-import 'package:statoo/features/team/application/team_provider.dart';
 import 'package:statoo/features/shared/application/shared_providers.dart';
+import 'package:statoo/features/team/application/team_provider.dart';
 
 class _MemoryGroupSettings implements GroupSettingsRepository {
   final Map<String, int> store = {};
@@ -125,5 +125,51 @@ void main() {
     expect(container.read(minPlayersPerSessionProvider), 8);
     await container.read(minPlayersPerSessionProvider.notifier).setMinPlayers(4);
     expect(repo.store['min_players_per_session_team_1'], 8);
+  });
+
+  group('MET-002 resolve : minimum effectif au moment d’une action', () {
+    test('lit la valeur du groupe sans attendre le chargement asynchrone', () async {
+      repo.store['min_players_per_session_team_1'] = 4;
+      final notifier = container.read(minPlayersPerSessionProvider.notifier);
+      expect(await notifier.resolve(), 4);
+    });
+
+    test('groupe partagé : valeur du serveur', () async {
+      repo.store['min_players_per_session_team_1'] = 4;
+      container.read(sharedServiceProvider)
+        ..identity = {'group_id': 'team_1', 'account': {'roles': ['ADMIN']}}
+        ..snapshot = {'sport_settings': {'min_players_per_session': 8}};
+      expect(await container.read(minPlayersPerSessionProvider.notifier).resolve(), 8);
+    });
+
+    test('ancien réglage global puis défaut', () async {
+      SharedPreferences.setMockInitialValues({kMinPlayersKey: 7});
+      final c = makeContainer(team: 'team_3');
+      expect(await c.read(minPlayersPerSessionProvider.notifier).resolve(), 7);
+      SharedPreferences.setMockInitialValues({});
+      final d = makeContainer(team: 'team_4');
+      expect(await d.read(minPlayersPerSessionProvider.notifier).resolve(), kDefaultMinPlayers);
+    });
+
+    test('groupe partagé sans snapshot : défaut', () async {
+      repo.store['min_players_per_session_team_1'] = 4;
+      container.read(sharedServiceProvider).identity = {'group_id': 'team_1', 'account': {'roles': ['ADMIN']}};
+      expect(await container.read(minPlayersPerSessionProvider.notifier).resolve(), kDefaultMinPlayers);
+    });
+
+    test('groupe explicite : celui de l’action, même si le groupe actif a changé', () async {
+      repo.store['min_players_per_session_team_1'] = 4;
+      repo.store['min_players_per_session_team_2'] = 9;
+      (container.read(activeTeamIdProvider.notifier) as _SwitchableTeam).switchTo('team_2');
+      expect(await container.read(minPlayersPerSessionProvider.notifier).resolve('team_1'), 4);
+    });
+
+    test('n’emprunte jamais la valeur d’un autre groupe', () async {
+      repo.store['min_players_per_session_team_2'] = 3;
+      expect(
+        await container.read(minPlayersPerSessionProvider.notifier).resolve(),
+        kDefaultMinPlayers,
+      );
+    });
   });
 }
